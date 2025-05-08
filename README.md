@@ -4,10 +4,10 @@
 
 This is the working area for the individual Internet-Draft, "TODO - Your title".
 
-* [Editor's Copy](https://nedmsmith.github.io/draft-klspa-wimse-verifiable-geo-fence/#go.draft-lkspa-wimse-verifiable-geo-location.html)
-* [Datatracker Page](https://datatracker.ietf.org/doc/draft-lkspa-wimse-verifiable-geo-location)
-* [Individual Draft](https://datatracker.ietf.org/doc/html/draft-lkspa-wimse-verifiable-geo-location)
-* [Compare Editor's Copy to Individual Draft](https://nedmsmith.github.io/draft-klspa-wimse-verifiable-geo-fence/#go.draft-lkspa-wimse-verifiable-geo-location.diff)
+* [Editor's Copy](https://nedmsmith.github.io/draft-klspa-wimse-verifiable-geo-fence/#go.draft-lkspa-wimse-verifiable-geo-fence.html)
+* [Datatracker Page](https://datatracker.ietf.org/doc/draft-lkspa-wimse-verifiable-geo-fence)
+* [Individual Draft](https://datatracker.ietf.org/doc/html/draft-lkspa-wimse-verifiable-geo-fence)
+* [Compare Editor's Copy to Individual Draft](https://nedmsmith.github.io/draft-klspa-wimse-verifiable-geo-fence/#go.draft-lkspa-wimse-verifiable-geo-fence.diff)
 
 
 ## Contributing
