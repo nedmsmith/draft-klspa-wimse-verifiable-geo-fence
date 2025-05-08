@@ -3,7 +3,7 @@ title: "Trustworthy and Verifiable Geo-fencing for Workloads"
 abbrev: "GeoW"
 category: info
 
-docname: draft-lkspa-wimse-verifiable-geo-location-latest
+docname: draft-lkspa-wimse-verifiable-geo-fence-latest
 submissiontype: IETF
 number:
 date:
@@ -22,7 +22,7 @@ venue:
   mail: "wimse@ietf.org"
   arch: "https://mailarchive.ietf.org/arch/browse/wimse/"
   github: "nedmsmith/draft-klspa-wimse-verifiable-geo-fence"
-  latest: "https://nedmsmith.github.io/draft-klspa-wimse-verifiable-geo-fence/draft-lkspa-wimse-verifiable-geo-location.html"
+  latest: "https://nedmsmith.github.io/draft-klspa-wimse-verifiable-geo-fence/draft-lkspa-wimse-verifiable-geo-fence.html"
 
 author:
 - ins: R. Krishnan
