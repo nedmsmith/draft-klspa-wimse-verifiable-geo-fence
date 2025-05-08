@@ -61,6 +61,11 @@ informative:
   author:
     org: European Commission, EU Space
   target: https://defence-industry-space.ec.europa.eu/eu-space/galileo-satellite-navigation_en
+ alert:
+  title: DOJ and CISA Issue New National Security Program to Regulate Foreign Access to Sensitive Data
+  author:
+    org: Wiley
+  target: https://www.wiley.law/alert-Update-DOJ-and-CISA-Issue-New-National-Security-Program-to-Regulate-Foreign-Access-to-Sensitive-Data?utm_source=chatgpt.com
 
 entity:
   SELF: "RFCthis"
@@ -105,7 +110,7 @@ To meet these requirements, they need to be able to verify the geographic bounda
 
 * Healthcare providers need to ensure that the Host (H) is located in a specific geographic boundary (countries e.g. US) when downloading patient data or performing other sensitive operations.
 
-* U.S. Presidential Executive Order compliance: For example, U.S. Cloud Service Providers (CSPs) may have support personnel located in a restricted geographic boundary (countries e.g., Venezuela, Iran, China, North Korea). However, those personnel should not be allowed to support U.S. customers. Geo-location enforcement can ensure policy compliance.
+* U.S. Presidential Executive Order compliance: For example, U.S. Cloud Service Providers (CSPs) may have support personnel located in a restricted geographic boundary (countries e.g., Venezuela, Iran, China, North Korea). However, those personnel should not be allowed to support U.S. customers. Geo-location enforcement can ensure policy compliance. See [alert].
 
 ## **Category 3**: Security assurance and compliance
 
