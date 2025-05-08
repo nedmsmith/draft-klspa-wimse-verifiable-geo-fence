@@ -57,6 +57,8 @@ normative:
 informative:
  I-D.ietf-wimse-arch: wimse-arch
 
+entity:
+  SELF: "RFCthis"
 
 --- abstract
 
