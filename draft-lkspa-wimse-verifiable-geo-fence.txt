@@ -16,7 +16,7 @@ Expires: 9 November 2025                                      Telefonica
 
 
           Trustworthy and Verifiable Geo-fencing for Workloads
-            draft-lkspa-wimse-verifiable-geo-location-latest
+             draft-lkspa-wimse-verifiable-geo-fence-latest
 
 Abstract
 
@@ -28,9 +28,9 @@ About This Document
 
    The latest revision of this draft can be found at
    https://nedmsmith.github.io/draft-klspa-wimse-verifiable-geo-fence/
-   draft-lkspa-wimse-verifiable-geo-location.html.  Status information
-   for this document may be found at https://datatracker.ietf.org/doc/
-   draft-lkspa-wimse-verifiable-geo-location/.
+   draft-lkspa-wimse-verifiable-geo-fence.html.  Status information for
+   this document may be found at https://datatracker.ietf.org/doc/draft-
+   lkspa-wimse-verifiable-geo-fence/.
 
    Discussion of this document takes place on the Workload Identity in
    Multi System Environments mailing list (mailto:wimse@ietf.org), which
