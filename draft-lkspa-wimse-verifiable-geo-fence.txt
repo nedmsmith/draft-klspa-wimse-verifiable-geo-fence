@@ -3,11 +3,10 @@
 
 
 Workload Identity in Multi System Environments               R. Krishnan
-Internet-Draft                                                     Intel
-Intended status: Informational                                  D. Lopez
-Expires: 9 November 2025                                      Telefonica
-                                                                N. Smith
-                                                                   Intel
+Internet-Draft                                                  N. Smith
+Intended status: Informational                                     Intel
+Expires: 9 November 2025                                        D. Lopez
+                                                              Telefonica
                                                                A. Prasad
                                                                   Oracle
                                                             S. Addepalli
@@ -145,14 +144,14 @@ Authors' Addresses
    Email: ramki.krishnan@intel.com
 
 
-   Diego R. Lopez
-   Telefonica
-   Email: diego.r.lopez@telefonica.com
-
-
    Ned Smith
    Intel
    Email: ned.smith@intel.com
+
+
+   Diego R. Lopez
+   Telefonica
+   Email: diego.r.lopez@telefonica.com
 
 
    A Prasad
