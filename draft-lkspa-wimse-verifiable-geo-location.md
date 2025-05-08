@@ -46,6 +46,12 @@ author:
   org: aryaka
   email: srinivasa.addepalli@aryaka.com
 
+contributor:
+  - ins: G. Arfaoui
+    name: Ghada Arfaoui
+    org: Orange
+    email: ghada.arfaoui@orange.com
+
 normative:
 
 informative:
