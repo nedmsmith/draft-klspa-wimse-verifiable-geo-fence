@@ -29,14 +29,14 @@ author:
   name: Ramki Krishnan
   org: Intel
   email: ramki.krishnan@intel.com
-- ins: D. Lopez
-  name: Diego R. Lopez
-  org: Telefonica
-  email: diego.r.lopez@telefonica.com
 - ins: N. Smith
   name: Ned Smith
   org: Intel
   email: ned.smith@intel.com
+- ins: D. Lopez
+  name: Diego R. Lopez
+  org: Telefonica
+  email: diego.r.lopez@telefonica.com
 - ins: A. Prasad
   name: A Prasad
   org: Oracle
