@@ -5,13 +5,13 @@
 Workload Identity in Multi System Environments               R. Krishnan
 Internet-Draft                                                  N. Smith
 Intended status: Informational                                     Intel
-Expires: 9 November 2025                                        D. Lopez
+Expires: 10 November 2025                                       D. Lopez
                                                               Telefonica
                                                                A. Prasad
                                                                   Oracle
                                                             S. Addepalli
-                                                                  aryaka
-                                                              8 May 2025
+                                                                  Aryaka
+                                                              9 May 2025
 
 
           Trustworthy and Verifiable Geo-fencing for Workloads
@@ -19,7 +19,20 @@ Expires: 9 November 2025                                        D. Lopez
 
 Abstract
 
-   TODO Abstract
+   Financial services, healthcare and government entities have data
+   residency requirements, geo-location affinity and host affinity, to
+   protect sensitive data.  Geo-location affinity necessitates workload
+   being cryptographically bound to a geographic boundary.  Host
+   affinity entails workload being cryptographically bound to a specific
+   execution environment.  These requirements are well described in the
+   Trusted Computing Group keynote and whitepaper on emerging use case
+   and solutions [tcg-geo-loc].  From WIMSE perspective, to address
+   these requirements, workload identity needs to be cryptographically
+   bound to platform identity and domain identity.  Examples of platform
+   identity are Device ID such as TPM [tcg-tpm] endorsement.  Examples
+   of domain identity are Geographic boundary such as Geo-location
+   area/region/country.  This draft aims to address the aforementioned
+   gaps in WIMSE through use cases and high level architectural flows.
 
 About This Document
 
@@ -54,7 +67,7 @@ Status of This Memo
    time.  It is inappropriate to use Internet-Drafts as reference
    material or to cite them other than as "work in progress."
 
-   This Internet-Draft will expire on 9 November 2025.
+   This Internet-Draft will expire on 10 November 2025.
 
 Copyright Notice
 
@@ -453,11 +466,11 @@ Table of Contents
 
 10.2.  Informative References
 
-   [alert]    Wiley, "DOJ and CISA Issue New National Security Program
-              to Regulate Foreign Access to Sensitive Data", n.d.,
-              <https://www.wiley.law/alert-Update-DOJ-and-CISA-Issue-
-              New-National-Security-Program-to-Regulate-Foreign-Access-
-              to-Sensitive-Data?utm_source=chatgpt.com>.
+   [doj-cisa] DOJ and CISA, "DOJ and CISA Issue New National Security
+              Program to Regulate Foreign Access to Sensitive Data",
+              n.d., <https://www.justice.gov/opa/pr/justice-department-
+              implements-critical-national-security-program-protect-
+              americans-sensitive>.
 
    [galileo]  European Commission, EU Space, "Galileo Satellite
               Navigation", n.d., <https://defence-industry-
@@ -471,6 +484,16 @@ Table of Contents
               ietf-wimse-arch-04, 2 March 2025,
               <https://datatracker.ietf.org/doc/html/draft-ietf-wimse-
               arch-04>.
+
+   [tcg-geo-loc]
+              TCG, "TCG keynote and whitepaper-Trusted Computing Future-
+              Emerging Use Cases and Solutions", n.d.,
+              <https://trustedcomputinggroup.org/resource/trusted-
+              computing-future-emerging-use-cases-and-solutions/>.
+
+   [tcg-tpm]  TCG, "Trusted Platform Module 2.0-A Brief Introduction",
+              n.d., <https://trustedcomputinggroup.org/resource/trusted-
+              platform-module-2-0-a-brief-introduction/>.
 
 Acknowledgments
 
@@ -506,5 +529,5 @@ Authors' Addresses
 
 
    Srinivasa Addepalli
-   aryaka
+   Aryaka
    Email: srinivasa.addepalli@aryaka.com

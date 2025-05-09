@@ -11,7 +11,9 @@
 <meta content="A Prasad" name="author">
 <meta content="Srinivasa Addepalli" name="author">
 <meta content="
-       TODO Abstract 
+       Financial services, healthcare and government entities have data residency
+requirements, geo-location affinity and host affinity, to protect sensitive data. Geo-location affinity necessitates workload being cryptographically bound to a geographic boundary. Host affinity entails workload being cryptographically bound to a specific execution environment.
+These requirements are well described in the Trusted Computing Group keynote and whitepaper on emerging use case and solutions  . From WIMSE perspective, to address these requirements, workload identity needs to be cryptographically bound to platform identity and domain identity. Examples of platform identity are Device ID such as TPM   endorsement. Examples of domain identity are Geographic boundary such as Geo-location area/region/country. This draft aims to address the aforementioned gaps in WIMSE through use cases and high level architectural flows. 
     " name="description">
 <meta content="xml2rfc 3.28.1" name="generator">
 <meta content="geo-fence" name="keyword">
@@ -1054,7 +1056,7 @@ svg :is([fill="white"], [fill^="#fff"]) {
 </tr></thead>
 <tfoot><tr>
 <td class="left">Krishnan, et al.</td>
-<td class="center">Expires 9 November 2025</td>
+<td class="center">Expires 10 November 2025</td>
 <td class="right">[Page]</td>
 </tr></tfoot>
 </table>
@@ -1067,12 +1069,12 @@ svg :is([fill="white"], [fill^="#fff"]) {
 <dd class="internet-draft">draft-lkspa-wimse-verifiable-geo-fence-latest</dd>
 <dt class="label-published">Published:</dt>
 <dd class="published">
-<time datetime="2025-05-08" class="published">8 May 2025</time>
+<time datetime="2025-05-09" class="published">9 May 2025</time>
     </dd>
 <dt class="label-intended-status">Intended Status:</dt>
 <dd class="intended-status">Informational</dd>
 <dt class="label-expires">Expires:</dt>
-<dd class="expires"><time datetime="2025-11-09">9 November 2025</time></dd>
+<dd class="expires"><time datetime="2025-11-10">10 November 2025</time></dd>
 <dt class="label-authors">Authors:</dt>
 <dd class="authors">
 <div class="author">
@@ -1093,7 +1095,7 @@ svg :is([fill="white"], [fill^="#fff"]) {
 </div>
 <div class="author">
       <div class="author-name">S. Addepalli</div>
-<div class="org">aryaka</div>
+<div class="org">Aryaka</div>
 </div>
 </dd>
 </dl>
@@ -1101,7 +1103,9 @@ svg :is([fill="white"], [fill^="#fff"]) {
 <h1 id="title">Trustworthy and Verifiable Geo-fencing for Workloads</h1>
 <section id="section-abstract">
       <h2 id="abstract"><a href="#abstract" class="selfRef">Abstract</a></h2>
-<p id="section-abstract-1">TODO Abstract<a href="#section-abstract-1" class="pilcrow">¶</a></p>
+<p id="section-abstract-1">Financial services, healthcare and government entities have data residency
+requirements, geo-location affinity and host affinity, to protect sensitive data. Geo-location affinity necessitates workload being cryptographically bound to a geographic boundary. Host affinity entails workload being cryptographically bound to a specific execution environment.
+These requirements are well described in the Trusted Computing Group keynote and whitepaper on emerging use case and solutions <span>[<a href="#tcg-geo-loc" class="cite xref">tcg-geo-loc</a>]</span>. From WIMSE perspective, to address these requirements, workload identity needs to be cryptographically bound to platform identity and domain identity. Examples of platform identity are Device ID such as TPM <span>[<a href="#tcg-tpm" class="cite xref">tcg-tpm</a>]</span> endorsement. Examples of domain identity are Geographic boundary such as Geo-location area/region/country. This draft aims to address the aforementioned gaps in WIMSE through use cases and high level architectural flows.<a href="#section-abstract-1" class="pilcrow">¶</a></p>
 </section>
 <section class="note rfcEditorRemove" id="section-note.1">
       <h2 id="name-about-this-document">
@@ -1138,7 +1142,7 @@ svg :is([fill="white"], [fill^="#fff"]) {
         time. It is inappropriate to use Internet-Drafts as reference
         material or to cite them other than as "work in progress."<a href="#section-boilerplate.1-3" class="pilcrow">¶</a></p>
 <p id="section-boilerplate.1-4">
-        This Internet-Draft will expire on 9 November 2025.<a href="#section-boilerplate.1-4" class="pilcrow">¶</a></p>
+        This Internet-Draft will expire on 10 November 2025.<a href="#section-boilerplate.1-4" class="pilcrow">¶</a></p>
 </section>
 </div>
 <div id="copyright">
@@ -1359,7 +1363,7 @@ To meet these requirements, they need to be able to verify the geographic bounda
             <p id="section-3.2-1.4.1">Healthcare providers need to ensure that the Host (H) is located in a specific geographic boundary (countries e.g. US) when downloading patient data or performing other sensitive operations.<a href="#section-3.2-1.4.1" class="pilcrow">¶</a></p>
 </li>
           <li class="normal" id="section-3.2-1.5">
-            <p id="section-3.2-1.5.1">U.S. Presidential Executive Order compliance: For example, U.S. Cloud Service Providers (CSPs) may have support personnel located in a restricted geographic boundary (countries e.g., Venezuela, Iran, China, North Korea). However, those personnel should not be allowed to support U.S. customers. Geo-location enforcement can ensure policy compliance. See <span>[<a href="#alert" class="cite xref">alert</a>]</span>.<a href="#section-3.2-1.5.1" class="pilcrow">¶</a></p>
+            <p id="section-3.2-1.5.1">U.S. Presidential Executive Order compliance: For example, U.S. Cloud Service Providers (CSPs) may have support personnel located in a restricted geographic boundary (countries e.g., Venezuela, Iran, China, North Korea). However, those personnel should not be allowed to support U.S. customers. Geo-location enforcement can ensure policy compliance. See [alert].<a href="#section-3.2-1.5.1" class="pilcrow">¶</a></p>
 </li>
         </ul>
 </section>
@@ -1740,17 +1744,25 @@ However, if it is pushed down to, say, K8s or OS process scheduler or JVM class 
 <a href="#section-10.2" class="section-number selfRef">10.2. </a><a href="#name-informative-references" class="section-name selfRef">Informative References</a>
         </h3>
 <dl class="references">
-<dt id="alert">[alert]</dt>
+<dt id="doj-cisa">[doj-cisa]</dt>
         <dd>
-<span class="refAuthor">Wiley</span>, <span class="refTitle">"DOJ and CISA Issue New National Security Program to Regulate Foreign Access to Sensitive Data"</span>, <span>n.d.</span>, <span>&lt;<a href="https://www.wiley.law/alert-Update-DOJ-and-CISA-Issue-New-National-Security-Program-to-Regulate-Foreign-Access-to-Sensitive-Data?utm_source=chatgpt.com">https://www.wiley.law/alert-Update-DOJ-and-CISA-Issue-New-National-Security-Program-to-Regulate-Foreign-Access-to-Sensitive-Data?utm_source=chatgpt.com</a>&gt;</span>. </dd>
+<span class="refAuthor">DOJ and CISA</span>, <span class="refTitle">"DOJ and CISA Issue New National Security Program to Regulate Foreign Access to Sensitive Data"</span>, <span>n.d.</span>, <span>&lt;<a href="https://www.justice.gov/opa/pr/justice-department-implements-critical-national-security-program-protect-americans-sensitive">https://www.justice.gov/opa/pr/justice-department-implements-critical-national-security-program-protect-americans-sensitive</a>&gt;</span>. </dd>
 <dd class="break"></dd>
 <dt id="galileo">[galileo]</dt>
         <dd>
 <span class="refAuthor">European Commission, EU Space</span>, <span class="refTitle">"Galileo Satellite Navigation"</span>, <span>n.d.</span>, <span>&lt;<a href="https://defence-industry-space.ec.europa.eu/eu-space/galileo-satellite-navigation_en">https://defence-industry-space.ec.europa.eu/eu-space/galileo-satellite-navigation_en</a>&gt;</span>. </dd>
 <dd class="break"></dd>
 <dt id="I-D.ietf-wimse-arch">[I-D.ietf-wimse-arch]</dt>
-      <dd>
+        <dd>
 <span class="refAuthor">Salowey, J. A.</span>, <span class="refAuthor">Rosomakho, Y.</span>, and <span class="refAuthor">H. Tschofenig</span>, <span class="refTitle">"Workload Identity in a Multi System Environment (WIMSE) Architecture"</span>, <span class="refContent">Work in Progress</span>, <span class="seriesInfo">Internet-Draft, draft-ietf-wimse-arch-04</span>, <time datetime="2025-03-02" class="refDate">2 March 2025</time>, <span>&lt;<a href="https://datatracker.ietf.org/doc/html/draft-ietf-wimse-arch-04">https://datatracker.ietf.org/doc/html/draft-ietf-wimse-arch-04</a>&gt;</span>. </dd>
+<dd class="break"></dd>
+<dt id="tcg-geo-loc">[tcg-geo-loc]</dt>
+        <dd>
+<span class="refAuthor">TCG</span>, <span class="refTitle">"TCG keynote and whitepaper-Trusted Computing Future-Emerging Use Cases and Solutions"</span>, <span>n.d.</span>, <span>&lt;<a href="https://trustedcomputinggroup.org/resource/trusted-computing-future-emerging-use-cases-and-solutions/">https://trustedcomputinggroup.org/resource/trusted-computing-future-emerging-use-cases-and-solutions/</a>&gt;</span>. </dd>
+<dd class="break"></dd>
+<dt id="tcg-tpm">[tcg-tpm]</dt>
+      <dd>
+<span class="refAuthor">TCG</span>, <span class="refTitle">"Trusted Platform Module 2.0-A Brief Introduction"</span>, <span>n.d.</span>, <span>&lt;<a href="https://trustedcomputinggroup.org/resource/trusted-platform-module-2-0-a-brief-introduction/">https://trustedcomputinggroup.org/resource/trusted-platform-module-2-0-a-brief-introduction/</a>&gt;</span>. </dd>
 <dd class="break"></dd>
 </dl>
 </section>
@@ -1819,7 +1831,7 @@ However, if it is pushed down to, say, K8s or OS process scheduler or JVM class 
 </address>
 <address class="vcard">
         <div dir="auto" class="left"><span class="fn nameRole">Srinivasa Addepalli</span></div>
-<div dir="auto" class="left"><span class="org">aryaka</span></div>
+<div dir="auto" class="left"><span class="org">Aryaka</span></div>
 <div class="email">
 <span>Email:</span>
 <a href="mailto:srinivasa.addepalli@aryaka.com" class="email">srinivasa.addepalli@aryaka.com</a>
