@@ -43,7 +43,7 @@ author:
   email: a.prasad@oracle.com
 - ins: S. Addepalli
   name: Srinivasa Addepalli
-  org: aryaka
+  org: Aryaka
   email: srinivasa.addepalli@aryaka.com
 
 contributor:
@@ -61,19 +61,30 @@ informative:
   author:
     org: European Commission, EU Space
   target: https://defence-industry-space.ec.europa.eu/eu-space/galileo-satellite-navigation_en
- alert:
+ doj-cisa:
   title: DOJ and CISA Issue New National Security Program to Regulate Foreign Access to Sensitive Data
   author:
-    org: Wiley
-  target: https://www.wiley.law/alert-Update-DOJ-and-CISA-Issue-New-National-Security-Program-to-Regulate-Foreign-Access-to-Sensitive-Data?utm_source=chatgpt.com
+    org: DOJ and CISA
+  target: https://www.justice.gov/opa/pr/justice-department-implements-critical-national-security-program-protect-americans-sensitive
+ tcg-geo-loc:
+  title: TCG keynote and whitepaper-Trusted Computing Future-Emerging Use Cases and Solutions
+  author:
+    org: TCG
+  target: https://trustedcomputinggroup.org/resource/trusted-computing-future-emerging-use-cases-and-solutions/
+ tcg-tpm:
+  title: Trusted Platform Module 2.0-A Brief Introduction
+  author:
+    org: TCG
+  target: https://trustedcomputinggroup.org/resource/trusted-platform-module-2-0-a-brief-introduction/
 
 entity:
   SELF: "RFCthis"
 
 --- abstract
 
-TODO Abstract
-
+Financial services, healthcare and government entities have data residency
+requirements, geo-location affinity and host affinity, to protect sensitive data. Geo-location affinity necessitates workload being cryptographically bound to a geographic boundary. Host affinity entails workload being cryptographically bound to a specific execution environment.
+These requirements are well described in the Trusted Computing Group keynote and whitepaper on emerging use case and solutions [tcg-geo-loc]. From WIMSE perspective, to address these requirements, workload identity needs to be cryptographically bound to platform identity and domain identity. Examples of platform identity are Device ID such as TPM [tcg-tpm] endorsement. Examples of domain identity are Geographic boundary such as Geo-location area/region/country. This draft aims to address the aforementioned gaps in WIMSE through use cases and high level architectural flows.
 
 --- middle
 
