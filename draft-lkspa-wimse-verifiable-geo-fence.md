@@ -76,6 +76,11 @@ informative:
   author:
     org: TCG
   target: https://trustedcomputinggroup.org/resource/trusted-platform-module-2-0-a-brief-introduction/
+ spire-tpm:
+  title: SPIFFE/Spire TPM plugin
+  author:
+    org: Spire open source project
+  target: https://github.com/bloomberg/spire-tpm-plugin
 
 entity:
   SELF: "RFCthis"
@@ -205,6 +210,8 @@ Our focus is on W and a virtual-TPM (vTPM) accessible to W, with vTPM transitive
 
 If W is directly on bare metal H, the vTPM = TPM on baremetal.
 
+For the first version of the draft, vTPM = TPM on baremetal. Host OS is Linux.
+
 ## Step 7
 
 Proof of Residency of W on H is obtained using vTPM. W asks its Workload Agent for proof, which in turn asks vTPM for AIK-attested proof.
@@ -222,9 +229,38 @@ Workload Agent sends attested location + W’s parameters to Workload Identity M
 
 ## Step 9
 
-Workload Identity Manager gives signed Workload ID (WID) with location as a field or location-matches boolean result as a field.
-This could be a certificate or a token.
+Workload Identity Manager gives signed Workload ID (WID) with location as a field or location-matches boolean result as a field. This could be a certificate or a token.
 
+The agent (SPIFFE/SPIRE agent) is a daemon running on bare-metal Linux OS as a process with root permissions and direct access to TPM. The agent has a TPM plugin which interacts with the TPM. The server (SPIFFE/SPIRE server) is running in cluster which is isolated from the cluster in which the agent is running.
+
+### Step 9.1 - Boot time attestation of OS and agent
+Measurement Collection: During the boot process, the boot loader collects measurements (hashes) of the boot components and configurations. The boot components are Firmware/BIOS/UEFI, bootloader, OS, drivers and initial programs (includes agent).
+
+Log Creation: These measurements are recorded in a log, often referred to as the TCGLog, and stored in the TPM's Platform Configuration Registers (PCRs).
+
+Attestation Report: The TPM generates an attestation report, which includes the signed measurements and the boot configuration log.
+
+Transmission: The attestation report is then sent to an external verifier (server), usually through a secure channel such as TLS/SSL.
+
+Verification: The server checks the integrity of the attestation report and validates the measurements against known good values. The server also validates that the TPM EK certificate has not been revoked and part of allowed list of TPM EK identifiers. At this point, we can be sure that the agent is running on a trusted platform.
+
+The plugin uses TPM credential activation as the method of attestation. The plugin operates as follows:
+
+<!--
+Agent generates AK (attestation key) using TPM
+Agent sends the AK attestation parameters and EK certificate or public key to the server
+Server inspects EK certificate or public key
+If hash_path exists, and the public key hash matches filename in hash_path, validation passes
+If ca_path exists, and the EK certificate was signed by any chain in ca_path, validation passes
+If validation passed, the server generates a credential activation challenge using
+The EK public key
+The AK attestation parameters
+Server sends challenge to agent
+Agent decrypts the challenge's secret
+Agent sends back decrypted secret
+Server verifies that the decrypted secret is the same it used to build the challenge
+Server creates a SPIFFE ID in the form of spiffe://<trust_domain>/agent/tpm/<sha256sum_of_tpm_pubkey>
+-->
 # Networking Protocol Changes
 
 Workload ID (WID), with location field, in the form of a proof-of-residency certificate or token needs to be conveyed to the peer during connection established. The connection is end-to-end across proxies like
