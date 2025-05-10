@@ -81,6 +81,11 @@ informative:
   author:
     org: Spire open source project
   target: https://github.com/bloomberg/spire-tpm-plugin
+ linux-ima:
+  title: Linux integrity measurement architecture
+  author:
+    org: Sourceforge Linux IMA documentation
+  target: https://linux-ima.sourceforge.net/
 
 entity:
   SELF: "RFCthis"
@@ -126,7 +131,7 @@ To meet these requirements, they need to be able to verify the geographic bounda
 
 * Healthcare providers need to ensure that the Host (H) is located in a specific geographic boundary (countries e.g. US) when downloading patient data or performing other sensitive operations.
 
-* U.S. Presidential Executive Order compliance: For example, U.S. Cloud Service Providers (CSPs) may have support personnel located in a restricted geographic boundary (countries e.g., Venezuela, Iran, China, North Korea). However, those personnel should not be allowed to support U.S. customers. Geo-location enforcement can ensure policy compliance. See [alert].
+* U.S. Presidential Executive Order compliance: For example, U.S. Cloud Service Providers (CSPs) may have support personnel located in a restricted geographic boundary (countries e.g., Venezuela, Iran, China, North Korea). However, those personnel should not be allowed to support U.S. customers. Geo-location enforcement can ensure policy compliance. See [doj-cisa].
 
 ## **Category 3**: Security assurance and compliance
 
@@ -163,7 +168,7 @@ For example, IP address-based L is of lower quality as compared to other sources
 
 ### Geo-location Service
 
-* Geo-location service should check allowed hosts in a shared ledger (TPM EK, mobile-SIM).
+* Geo-location service should check approved hosts in a shared ledger (TPM EK, mobile-SIM).
 
 * Note that the location is a property of H. Other entities on H (e.g., an application) will have to associate with L through proof of residency on H.
 
@@ -171,7 +176,7 @@ For example, IP address-based L is of lower quality as compared to other sources
 
 Geo-fence policies are of various types (rectangular, circular etc.).
 They are available in the form of pre-defined templates or can be configured on demand.
-Enterprises choose the geo-fence policies to be enforced for various hosts. Note that the hosts must belong to the list of allowed hosts in a shared ledger (TPM EK, mobile-SIM).
+Enterprises choose the geo-fence policies to be enforced for various hosts. Note that the hosts must belong to the list of approved hosts in a shared ledger (TPM EK, mobile-SIM).
 The geo-fence policies applied to various hosts are recorded in a shared ledger.
 
 ## Step 4
@@ -233,36 +238,47 @@ Workload Identity Manager gives signed Workload ID (WID) with location as a fiel
 
 The agent (SPIFFE/SPIRE agent) is a daemon running on bare-metal Linux OS as a process with root permissions and direct access to TPM. The agent has a TPM plugin which interacts with the TPM. The server (SPIFFE/SPIRE server) is running in cluster which is isolated from the cluster in which the agent is running.
 
-### Step 9.1 - Boot time attestation of OS and agent
-Measurement Collection: During the boot process, the boot loader collects measurements (hashes) of the boot components and configurations. The boot components are Firmware/BIOS/UEFI, bootloader, OS, drivers and initial programs (includes agent).
+Note on TPM: The EK certificate is a digital certificate signed by the TPM manufacturer's CA. It verifies the identity and trustworthiness of the TPM's Endorsement Key (EK).
+
+### Boot time attestation of OS and agent
+As part of system boot/reboot process, boot loader based measured system boot with remote SPIFFE/SPIRE server verification is used to ensure only approved OS is running on an approved hardware platform.
+
+Measurement Collection: During the boot process, the boot loader collects measurements (hashes) of the boot components and configurations. The boot components are Firmware/BIOS/UEFI, bootloader, OS, drivers and initial programs.
 
 Log Creation: These measurements are recorded in a log, often referred to as the TCGLog, and stored in the TPM's Platform Configuration Registers (PCRs).
 
-Attestation Report: The TPM generates an attestation report, which includes the signed measurements and the boot configuration log.
+Attestation Report: The TPM generates an attestation report, which includes the signed measurements and the boot configuration log. The signature of the attestation report (aka quote) is by a TPM attestation key (AK). This attestation includes data about the TPM's state and can be used to verify that the AK is indeed cryptographically backed by the TPM EK certificate.
 
-Transmission: The attestation report is then sent to an external verifier (server), usually through a secure channel such as TLS/SSL.
+Transmission: The attestation report is then sent to an external verifier (server), through a secure TLS connection.
+Verification: The remote server checks the integrity of the attestation report and validates the measurements against known good values. The server also validates that the TPM EK certificate has not been revoked and part of approved list of TPM EK identifiers associated with hardware platform. At this point, we can be sure that the hardware platform is approved for running workloads and is running an approved OS.
 
-Verification: The server checks the integrity of the attestation report and validates the measurements against known good values. The server also validates that the TPM EK certificate has not been revoked and part of allowed list of TPM EK identifiers. At this point, we can be sure that the agent is running on a trusted platform.
+### Run time attestation of agent
+As part of agent start/restart process, linux integrity measurment architecture (linux-ima) is used to ensure that only approved executable for agent is loaded.
 
-The plugin uses TPM credential activation as the method of attestation. The plugin operates as follows:
+Measurement collection: The agent executable is measured by linux-ima before it is loaded.
+Local Verification: Enforce local validation of a measurement against a approved value stored in an extended attribute of the file.
 
-<!--
-Agent generates AK (attestation key) using TPM
-Agent sends the AK attestation parameters and EK certificate or public key to the server
-Server inspects EK certificate or public key
-If hash_path exists, and the public key hash matches filename in hash_path, validation passes
-If ca_path exists, and the EK certificate was signed by any chain in ca_path, validation passes
-If validation passed, the server generates a credential activation challenge using
-The EK public key
-The AK attestation parameters
-Server sends challenge to agent
-Agent decrypts the challenge's secret
-Agent sends back decrypted secret
-Server verifies that the decrypted secret is the same it used to build the challenge
-Server creates a SPIFFE ID in the form of spiffe://<trust_domain>/agent/tpm/<sha256sum_of_tpm_pubkey>
--->
+TPM attestation and remote server verification:
+
+- Agent generates attestation key (AK) using TPM
+
+- Agent sends the AK attestation parameters (PCR quote etc.) and EK certificate to the server
+
+- Server inspects EK certificate. If ca_path exists, and the EK certificate was signed by any chain in ca_path, validation passes
+
+- If validation passed, the server generates a credential activation challenge. The challenge's secret is encrypted using the EK public key.
+
+- Server sends challenge to agent
+
+- Agent decrypts the challenge's secret
+
+- Agent sends back decrypted secret
+
+- Server verifies that the decrypted secret is the same it used to build the challenge
+
+- Server creates a SPIFFE ID along with the sha256sum of the TPM AK public key
+
 # Networking Protocol Changes
-
 Workload ID (WID), with location field, in the form of a proof-of-residency certificate or token needs to be conveyed to the peer during connection established. The connection is end-to-end across proxies like
 
 ## Using TLS
