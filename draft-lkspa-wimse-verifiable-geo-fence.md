@@ -189,7 +189,7 @@ Geo-location service (GL) runs outside of H -- besides the location from device 
 * GL derives a combined location, including location quality, from various location sensors for a H with multiple location sensors. As an example, GPS is considered less trustworthy as compared to mobile.
 
 * The composite location comprises of combined geo-location (which includes location quality), time and host composition (TPM EK, mobile-SIM etc.). GL signs the composite location with a private key whose public key certificate is a public trusted transparent ledger such as certificate transparency log.
- 
+
 * Other entities on H (e.g., an application) will have to associate with L through proof of residency on H.
 
 ## Step 3
