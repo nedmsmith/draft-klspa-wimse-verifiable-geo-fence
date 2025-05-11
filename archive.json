@@ -1,0 +1,111 @@
+{
+  "magic": "E!vIA5L86J2I",
+  "timestamp": "2025-05-11T01:14:37.478201+00:00",
+  "repo": "nedmsmith/draft-klspa-wimse-verifiable-geo-fence",
+  "labels": [
+    {
+      "name": "bug",
+      "description": "Something isn't working",
+      "color": "d73a4a"
+    },
+    {
+      "name": "documentation",
+      "description": "Improvements or additions to documentation",
+      "color": "0075ca"
+    },
+    {
+      "name": "duplicate",
+      "description": "This issue or pull request already exists",
+      "color": "cfd3d7"
+    },
+    {
+      "name": "enhancement",
+      "description": "New feature or request",
+      "color": "a2eeef"
+    },
+    {
+      "name": "good first issue",
+      "description": "Good for newcomers",
+      "color": "7057ff"
+    },
+    {
+      "name": "help wanted",
+      "description": "Extra attention is needed",
+      "color": "008672"
+    },
+    {
+      "name": "invalid",
+      "description": "This doesn't seem right",
+      "color": "e4e669"
+    },
+    {
+      "name": "question",
+      "description": "Further information is requested",
+      "color": "d876e3"
+    },
+    {
+      "name": "wontfix",
+      "description": "This will not be worked on",
+      "color": "ffffff"
+    }
+  ],
+  "issues": [],
+  "pulls": [
+    {
+      "number": 1,
+      "id": "PR_kwDOOmshaM6VeEgk",
+      "title": "Update draft-lkspa-wimse-verifiable-geo-fence.md",
+      "url": "https://github.com/nedmsmith/draft-klspa-wimse-verifiable-geo-fence/pull/1",
+      "state": "MERGED",
+      "author": "nedmsmith",
+      "authorAssociation": "OWNER",
+      "assignees": [],
+      "labels": [],
+      "body": "Copied content from Google doc.",
+      "createdAt": "2025-05-08T17:28:05Z",
+      "updatedAt": "2025-05-08T17:28:46Z",
+      "baseRepository": "nedmsmith/draft-klspa-wimse-verifiable-geo-fence",
+      "baseRefName": "main",
+      "baseRefOid": "4f3ecf71d66796636de85e5bea5e946b1ae932b9",
+      "headRepository": "nedmsmith/draft-klspa-wimse-verifiable-geo-fence",
+      "headRefName": "initial_draft",
+      "headRefOid": "99e34681c3cbb3c0a8d1c2ad179ec8785d5cd5c4",
+      "closedAt": "2025-05-08T17:28:38Z",
+      "mergedAt": "2025-05-08T17:28:38Z",
+      "mergedBy": "nedmsmith",
+      "mergeCommit": {
+        "oid": "a8c4be6ec84257780b8134fa0a602574b2bd0095"
+      },
+      "comments": [],
+      "reviews": []
+    },
+    {
+      "number": 2,
+      "id": "PR_kwDOOmshaM6VeIyF",
+      "title": "Update draft-lkspa-wimse-verifiable-geo-fence.md",
+      "url": "https://github.com/nedmsmith/draft-klspa-wimse-verifiable-geo-fence/pull/2",
+      "state": "MERGED",
+      "author": "nedmsmith",
+      "authorAssociation": "OWNER",
+      "assignees": [],
+      "labels": [],
+      "body": "add Wiley web reference.",
+      "createdAt": "2025-05-08T17:36:29Z",
+      "updatedAt": "2025-05-08T17:37:02Z",
+      "baseRepository": "nedmsmith/draft-klspa-wimse-verifiable-geo-fence",
+      "baseRefName": "main",
+      "baseRefOid": "a8c4be6ec84257780b8134fa0a602574b2bd0095",
+      "headRepository": "nedmsmith/draft-klspa-wimse-verifiable-geo-fence",
+      "headRefName": "initial_draft",
+      "headRefOid": "f71f420f7662090a7a127bb70b1c1f86615ebf6f",
+      "closedAt": "2025-05-08T17:36:57Z",
+      "mergedAt": "2025-05-08T17:36:57Z",
+      "mergedBy": "nedmsmith",
+      "mergeCommit": {
+        "oid": "afc1e7773ef182ae1cc1e42c25bf4a19470ac077"
+      },
+      "comments": [],
+      "reviews": []
+    }
+  ]
+}
