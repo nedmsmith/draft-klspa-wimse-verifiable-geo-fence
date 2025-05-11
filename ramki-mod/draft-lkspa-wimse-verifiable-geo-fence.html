@@ -1386,7 +1386,7 @@ To meet these requirements, they need to be able to verify the geographic bounda
 <a href="#section-4.1" class="section-number selfRef">4.1. </a><a href="#name-gathering-location-on-host" class="section-name selfRef">Gathering location on Host</a>
         </h3>
 <p id="section-4.1-1">Host (H) contains location Devices (HD) like mobile sensor, GPS sensor, WiFi sensor, GNSS sensor, etc. H is a compute node, including servers, routers, and end-user appliances like smartphones or tablets or PCs. H has a TPM. Note on TPM -- The EK certificate is a digital certificate signed by the TPM manufacturer's CA which verifies the identity and trustworthiness of the TPM's Endorsement Key (EK). For the initial version of the draft H is bare metal Linux OS host.<a href="#section-4.1-1" class="pilcrow">¶</a></p>
-<p id="section-4.1-2">The location agent (modified SPIFFE/SPIRE agent using a geo-location plugin mechnism) is a daemon running on bare-metal Linux OS Host as a process with root permissions (todo: dow we need root permissions for TPM 2.0 access - Ned?) and direct access to TPM. The agent gathers the location from local location sensors (e.g. GPS, GNSS). The agent has a TPM plugin which interacts with the TPM. The server (SPIFFE/SPIRE server) is running in cluster which is isolated from the cluster in which the agent is running.<a href="#section-4.1-2" class="pilcrow">¶</a></p>
+<p id="section-4.1-2">The location agent (modified SPIFFE/SPIRE agent using a geo-location plugin mechnism) is a daemon running on bare-metal Linux OS Host as a process with root permissions (todo: dow we need root permissions for TPM 2.0 access - Ned?) and direct access to TPM. The agent gathers the location from host local location sensors (e.g. GPS, GNSS). The agent has a TPM plugin which interacts with the TPM. The server (SPIFFE/SPIRE server) is running in cluster which is isolated from the cluster in which the agent is running.<a href="#section-4.1-2" class="pilcrow">¶</a></p>
 <div id="boot-time-attestationremote-verification-of-os-for-integrity-and-proof-of-residency-on-h">
 <section id="section-4.1.1">
           <h4 id="name-boot-time-attestation-remot">
@@ -1450,19 +1450,22 @@ Local Verification: Enforce local validation of a measurement against a approved
 <p id="section-4.2-1">Geo-location service (GL) runs outside of H -- besides the location from device location sources (e.g. GPS, GNSS), it will connect to mobile location service providers (e.g., Telefonica) using GSMA APIs (todo - https://www.gsma.com/solutions-and-impact/gsma-open-gateway/gsma-open-gateway-api-descriptions/).<a href="#section-4.2-1" class="pilcrow">¶</a></p>
 <ul class="normal">
 <li class="normal" id="section-4.2-2.1">
-            <p id="section-4.2-2.1.1">Location (L) has a quality associated with it. For example, IP address-based L is of lower quality as compared to other sources.<a href="#section-4.2-2.1.1" class="pilcrow">¶</a></p>
+            <p id="section-4.2-2.1.1">Agent gathers the location from H local location sensors (e.g. GPS, GNSS). Agent connects to GL using secure connection mechanism like TLS. Agent provides the gathered location to GL over the secure connection.<a href="#section-4.2-2.1.1" class="pilcrow">¶</a></p>
 </li>
           <li class="normal" id="section-4.2-2.2">
-            <p id="section-4.2-2.2.1">GL ensures that the device composition of H (reference to H composition table for further details) is intact (e.g. SIM card not plugged out of H) by periodically polling the state of H. Note that e-SIM does not have the plugging out problem like standard SIM but could be subject to e-SIM swap attack. Host composition (HC) comprises of TPM EK, Mobile-SIM etc.<a href="#section-4.2-2.2.1" class="pilcrow">¶</a></p>
+            <p id="section-4.2-2.2.1">Location (L) has a quality associated with it. For example, IP address-based L is of lower quality as compared to other sources.<a href="#section-4.2-2.2.1" class="pilcrow">¶</a></p>
 </li>
           <li class="normal" id="section-4.2-2.3">
-            <p id="section-4.2-2.3.1">GL derives a combined location, including location quality, from various location sensors for a H with multiple location sensors. As an example, GPS is considered less trustworthy as compared to mobile.<a href="#section-4.2-2.3.1" class="pilcrow">¶</a></p>
+            <p id="section-4.2-2.3.1">GL ensures that the device composition of H (reference to H composition table for further details) is intact (e.g. SIM card not plugged out of H) by periodically polling the state of H. Note that e-SIM does not have the plugging out problem like standard SIM but could be subject to e-SIM swap attack. Host composition (HC) comprises of TPM EK, Mobile-SIM etc.<a href="#section-4.2-2.3.1" class="pilcrow">¶</a></p>
 </li>
           <li class="normal" id="section-4.2-2.4">
-            <p id="section-4.2-2.4.1">The composite location comprises of combined geo-location (which includes location quality), time and host composition (TPM EK, mobile-SIM etc.). GL signs the composite location with a private key whose public key certificate is a public trusted transparent ledger such as certificate transparency log.<a href="#section-4.2-2.4.1" class="pilcrow">¶</a></p>
+            <p id="section-4.2-2.4.1">GL derives a combined location, including location quality, from various location sensors for a H with multiple location sensors -- this includes the gathered location from Agent running on H. As an example, GPS is considered less trustworthy as compared to mobile.<a href="#section-4.2-2.4.1" class="pilcrow">¶</a></p>
 </li>
           <li class="normal" id="section-4.2-2.5">
-            <p id="section-4.2-2.5.1">Other entities on H (e.g., an application) will have to associate with L through proof of residency on H.<a href="#section-4.2-2.5.1" class="pilcrow">¶</a></p>
+            <p id="section-4.2-2.5.1">The composite location comprises of combined geo-location (which includes location quality), time and host composition (TPM EK, mobile-SIM etc.). GL signs the composite location with a private key whose public key certificate is a public trusted transparent ledger such as certificate transparency log.<a href="#section-4.2-2.5.1" class="pilcrow">¶</a></p>
+</li>
+          <li class="normal" id="section-4.2-2.6">
+            <p id="section-4.2-2.6.1">Other entities on H (e.g., an application) will have to associate with L through proof of residency on H.<a href="#section-4.2-2.6.1" class="pilcrow">¶</a></p>
 </li>
         </ul>
 </section>

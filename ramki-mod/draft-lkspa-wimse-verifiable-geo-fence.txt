@@ -217,10 +217,10 @@ Table of Contents
    plugin mechnism) is a daemon running on bare-metal Linux OS Host as a
    process with root permissions (todo: dow we need root permissions for
    TPM 2.0 access - Ned?) and direct access to TPM.  The agent gathers
-   the location from local location sensors (e.g. GPS, GNSS).  The agent
-   has a TPM plugin which interacts with the TPM.  The server (SPIFFE/
-   SPIRE server) is running in cluster which is isolated from the
-   cluster in which the agent is running.
+   the location from host local location sensors (e.g. GPS, GNSS).  The
+   agent has a TPM plugin which interacts with the TPM.  The server
+   (SPIFFE/SPIRE server) is running in cluster which is isolated from
+   the cluster in which the agent is running.
 
 4.1.1.  Boot time attestation/remote verification of OS for integrity
         and proof of residency on H
@@ -306,6 +306,11 @@ Table of Contents
    (todo - https://www.gsma.com/solutions-and-impact/gsma-open-gateway/
    gsma-open-gateway-api-descriptions/).
 
+   *  Agent gathers the location from H local location sensors (e.g.
+      GPS, GNSS).  Agent connects to GL using secure connection
+      mechanism like TLS.  Agent provides the gathered location to GL
+      over the secure connection.
+
    *  Location (L) has a quality associated with it.  For example, IP
       address-based L is of lower quality as compared to other sources.
 
@@ -317,8 +322,9 @@ Table of Contents
       composition (HC) comprises of TPM EK, Mobile-SIM etc.
 
    *  GL derives a combined location, including location quality, from
-      various location sensors for a H with multiple location sensors.
-      As an example, GPS is considered less trustworthy as compared to
+      various location sensors for a H with multiple location sensors --
+      this includes the gathered location from Agent running on H.  As
+      an example, GPS is considered less trustworthy as compared to
       mobile.
 
    *  The composite location comprises of combined geo-location (which
