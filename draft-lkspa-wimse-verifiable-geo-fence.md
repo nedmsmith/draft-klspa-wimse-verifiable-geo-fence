@@ -139,42 +139,75 @@ Geographic boundary attestation helps satisfy data residency and data sovereignt
 
 # High-level Approach
 
-## Step 1
+## Gathering location on Host
 
-Host (H) contains location Devices (HD) like mobile sensor, GPS sensor, WiFi sensor, GNSS sensor, etc. H is a compute node, including servers, routers, and end-user appliances like smartphones or tablets or PCs.
+Host (H) contains location Devices (HD) like mobile sensor, GPS sensor, WiFi sensor, GNSS sensor, etc. H is a compute node, including servers, routers, and end-user appliances like smartphones or tablets or PCs. H has a TPM. Note on TPM -- The EK certificate is a digital certificate signed by the TPM manufacturer's CA which verifies the identity and trustworthiness of the TPM's Endorsement Key (EK). For the initial version of the draft H is bare metal Linux OS host.
 
-## Step 2
+The location agent (modified SPIFFE/SPIRE agent) is a daemon running on bare-metal Linux OS Host as a process with root permissions and direct access to TPM. The agent gathers the location from local location sensors (e.g. GPS, GNSS). The agent has a TPM plugin which interacts with the TPM. The server (SPIFFE/SPIRE server) is running in cluster which is isolated from the cluster in which the agent is running.
 
-Location agent on H gets its attested location (L), and signed by, geo-location service (GL). Signed location delivered as a certificate or signed token (e.g., JWT)? Proof of Residency of location agent on H is obtained using vTPM. Location agent asks vTPM for AIK-attested proof.
+### Boot time attestation/remote verification of OS for integrity and proof of residency on H
+As part of system boot/reboot process, boot loader based measured system boot with remote SPIFFE/SPIRE server verification is used to ensure only approved OS is running on an approved hardware platform.
 
-### GL can run inside H or outside of H:
+Measurement Collection: During the boot process, the boot loader collects measurements (hashes) of the boot components and configurations. The boot components are Firmware/BIOS/UEFI, bootloader, OS, drivers and initial programs.
 
-* Inside H: Only GPS/GNSS device location sources are available or would like to maximize location privacy.
+Log Creation: These measurements are recorded in a log, often referred to as the TCGLog, and stored in the TPM's Platform Configuration Registers (PCRs).
+
+Attestation Report: The TPM generates an attestation report, which includes the signed measurements and the boot configuration log. The signature of the attestation report (aka quote) is by a TPM attestation key (AK). This attestation includes data about the TPM's state and can be used to verify that the AK is indeed cryptographically backed by the TPM EK certificate.
+
+Transmission: The attestation report is then sent to an external verifier (server), through a secure TLS connection.
+
+Remote Verification: The remote server checks the integrity of the attestation report and validates the measurements against known good values. The server also validates that the TPM EK certificate has not been revoked and part of approved list of TPM EK identifiers associated with hardware platform. At this point, we can be sure that the hardware platform is approved for running workloads and is running an approved OS.
+
+### Run time attestation/remote verification of agent for integrity and proof of residency on H
+As part of agent start/restart process, linux integrity measurment architecture (linux-ima) is used to ensure that only approved executable for agent is loaded.
+
+Measurement collection: The agent executable is measured by linux-ima before it is loaded.
+Local Verification: Enforce local validation of a measurement against a approved value stored in an extended attribute of the file.
+
+TPM attestation and remote server verification:
+
+- Agent generates attestation key (AK) using TPM
+
+- Agent sends the AK attestation parameters (PCR quote etc.) and EK certificate to the server
+
+- Server inspects EK certificate. If ca_path exists, and the EK certificate was signed by any chain in ca_path, validation passes
+
+- If validation passed, the server generates a credential activation challenge. The challenge's secret is encrypted using the EK public key.
+
+- Server sends challenge to agent
+
+- Agent decrypts the challenge's secret
+
+- Agent sends back decrypted secret
+
+- Server verifies that the decrypted secret is the same it used to build the challenge
+
+- Server creates a SPIFFE ID along with the sha256sum of the TPM AK public key
+
+## Geo-location service
+
+
 
 * Outside H: In turn will connect to mobile location service providers (e.g., Telefonica), and use other sources such as WiFi-based location service providers (e.g., Google) or device location sources (e.g., GNSS).
 
 ### Location Quality
 
-* Location (L) has a quality associated with it.
-For example, IP address-based L is of lower quality as compared to other sources.
+* Location (L) has a quality associated with it. For example, IP address-based L is of lower quality as compared to other sources.
 
 ### Definition of attested location generated by GL
 
-* GL ensures that the composition of H is intact (e.g. SIM card not plugged out from CPE) by periodically polling the state of H. Note that e-SIM does not have the plugging out problem like standard SIM.
+* GL ensures that the composition of H (todo: add reference to H composition table) is intact (e.g. SIM card not plugged out from CPE) by periodically polling the state of H. Note that e-SIM does not have the plugging out problem like standard SIM but could be subject to e-SIM swap attack. Host composition (HC) comprises of TPM EK, Mobile-SIM etc.
 
-* GL derives a composite location, including location quality, from various location sensors for a H with multiple location sensors.
+* GL derives a combined location, including location quality, from various location sensors for a H with multiple location sensors. As an example, GPS is considered less trustworthy as compared to mobile.
 
-* GL signs the composite location, along with a trusted time, with a private key whose public key certificate is a public trusted transparent ledger such as certificate transparency log.
+* GL signs the combined location, along with a time from a trusted source, and host composition (TPM EK, mobile-SIM etc.) with a private key whose public key certificate is a public trusted transparent ledger such as certificate transparency log.
 
-### Geo-location Service
-
-* Geo-location service should check approved hosts in a shared ledger (TPM EK, mobile-SIM).
-
-* Note that the location is a property of H. Other entities on H (e.g., an application) will have to associate with L through proof of residency on H.
+* The composite location comprises of combined geo-location (which includes location quality), time and host composition. Other entities on H (e.g., an application) will have to associate with L through proof of residency on H.
 
 ## Step 3
 
-Geo-fence policies are of various types (rectangular, circular etc.).
+Geo-fence policies are of four flavours - precise location, precise bounding box/circle of location, approximate location (no definition of boundary), boolean membership of given boundary (rectangular, circular, state etc.)
+
 They are available in the form of pre-defined templates or can be configured on demand.
 Enterprises choose the geo-fence policies to be enforced for various hosts. Note that the hosts must belong to the list of approved hosts in a shared ledger (TPM EK, mobile-SIM).
 The geo-fence policies applied to various hosts are recorded in a shared ledger.
@@ -197,7 +230,7 @@ Geo-fence policy match result details:
 
 * Distance from geo-fence
 
-GF signs the geo-fence policy match result, along with a trusted time, with a private key whose public key certificate is a public trusted transparent ledger such as certificate transparency log.
+GF signs the geo-fence policy match result, along with a trusted time (can we reuse RFC 3161), with a private key whose public key certificate is a public trusted transparent ledger such as certificate transparency log.
 
 GF logs geo-fence policy match result in a shared ledger.
 
@@ -207,6 +240,7 @@ GF logs geo-fence policy match result in a shared ledger.
 
 Workload (W) and Workload Agent run on H.
 W can be a server app, a mobile/PC app (including browser), or a network host (e.g., router).
+
 
 ## Step 6
 
@@ -235,48 +269,6 @@ Workload Agent sends attested location + W’s parameters to Workload Identity M
 ## Step 9
 
 Workload Identity Manager gives signed Workload ID (WID) with location as a field or location-matches boolean result as a field. This could be a certificate or a token.
-
-The agent (SPIFFE/SPIRE agent) is a daemon running on bare-metal Linux OS as a process with root permissions and direct access to TPM. The agent has a TPM plugin which interacts with the TPM. The server (SPIFFE/SPIRE server) is running in cluster which is isolated from the cluster in which the agent is running.
-
-Note on TPM: The EK certificate is a digital certificate signed by the TPM manufacturer's CA. It verifies the identity and trustworthiness of the TPM's Endorsement Key (EK).
-
-### Boot time attestation of OS and agent
-As part of system boot/reboot process, boot loader based measured system boot with remote SPIFFE/SPIRE server verification is used to ensure only approved OS is running on an approved hardware platform.
-
-Measurement Collection: During the boot process, the boot loader collects measurements (hashes) of the boot components and configurations. The boot components are Firmware/BIOS/UEFI, bootloader, OS, drivers and initial programs.
-
-Log Creation: These measurements are recorded in a log, often referred to as the TCGLog, and stored in the TPM's Platform Configuration Registers (PCRs).
-
-Attestation Report: The TPM generates an attestation report, which includes the signed measurements and the boot configuration log. The signature of the attestation report (aka quote) is by a TPM attestation key (AK). This attestation includes data about the TPM's state and can be used to verify that the AK is indeed cryptographically backed by the TPM EK certificate.
-
-Transmission: The attestation report is then sent to an external verifier (server), through a secure TLS connection.
-Verification: The remote server checks the integrity of the attestation report and validates the measurements against known good values. The server also validates that the TPM EK certificate has not been revoked and part of approved list of TPM EK identifiers associated with hardware platform. At this point, we can be sure that the hardware platform is approved for running workloads and is running an approved OS.
-
-### Run time attestation of agent
-As part of agent start/restart process, linux integrity measurment architecture (linux-ima) is used to ensure that only approved executable for agent is loaded.
-
-Measurement collection: The agent executable is measured by linux-ima before it is loaded.
-Local Verification: Enforce local validation of a measurement against a approved value stored in an extended attribute of the file.
-
-TPM attestation and remote server verification:
-
-- Agent generates attestation key (AK) using TPM
-
-- Agent sends the AK attestation parameters (PCR quote etc.) and EK certificate to the server
-
-- Server inspects EK certificate. If ca_path exists, and the EK certificate was signed by any chain in ca_path, validation passes
-
-- If validation passed, the server generates a credential activation challenge. The challenge's secret is encrypted using the EK public key.
-
-- Server sends challenge to agent
-
-- Agent decrypts the challenge's secret
-
-- Agent sends back decrypted secret
-
-- Server verifies that the decrypted secret is the same it used to build the challenge
-
-- Server creates a SPIFFE ID along with the sha256sum of the TPM AK public key
 
 # Networking Protocol Changes
 Workload ID (WID), with location field, in the form of a proof-of-residency certificate or token needs to be conveyed to the peer during connection established. The connection is end-to-end across proxies like
