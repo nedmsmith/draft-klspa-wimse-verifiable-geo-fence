@@ -134,11 +134,14 @@ Enterprise (e.g. healthcare) ensuring that it is communicating with a server (e.
 Geographic boundary attestation helps satisfy data residency and data sovereignty requirements for regulatory compliance.
 
 # High-level Approach
-
-## Gathering location on Host
 Host (H) contains location Devices (HD) like mobile sensor, GPS sensor, WiFi sensor, GNSS sensor, etc. H is a compute node, including servers, routers, and end-user appliances like smartphones or tablets or PCs. H has a TPM. Note on TPM -- The EK certificate is a digital certificate signed by the TPM manufacturer's CA which verifies the identity and trustworthiness of the TPM's Endorsement Key (EK). For the initial version of the draft H is bare metal Linux OS host.
 
-The location agent (modified SPIFFE/SPIRE agent using a geo-location plugin mechnism) is a daemon running on bare-metal Linux OS Host as a process with root permissions (todo: dow we need root permissions for TPM 2.0 access - Ned?) and direct access to TPM. The agent gathers the location from host local location sensors (e.g. GPS, GNSS). The agent has a TPM plugin which interacts with the TPM. The server (SPIFFE/SPIRE server) is running in cluster which is isolated from the cluster in which the agent is running.
+Trusted hosts are the hosts which have trustworthy device composition (TPM EK, Mobile-SIM, GPS device id etc.), endorsed by manufacturer/owner, and use a trustworthy OS. A set of trusted hosts along with the device composition details and OS details are recorded in a shared datastore (database or ledger) by the host owner.
+
+## Gathering location on Host
+
+
+The location agent (modified SPIFFE/SPIRE agent using a geo-location plugin mechnism) is a daemon running on bare-metal Linux OS Host (H) as a process with root permissions (todo: dow we need root permissions for TPM 2.0 access - Ned?) and direct access to TPM. The agent gathers the location from host local location sensors (e.g. GPS, GNSS). The agent has a TPM plugin which interacts with the TPM. The server (SPIFFE/SPIRE server) is running in cluster which is isolated from the cluster in which the agent is running.
 
 ### Boot time attestation/remote verification of OS for integrity and proof of residency on H
 As part of system boot/reboot process, boot loader based measured system boot with remote SPIFFE/SPIRE server verification is used to ensure only approved OS is running on an approved hardware platform.
@@ -151,7 +154,7 @@ Attestation Report: The TPM generates an attestation report, which includes the 
 
 Transmission: The attestation report is then sent to an external verifier (server), through a secure TLS connection.
 
-Remote Verification: The remote server checks the integrity of the attestation report and validates the measurements against known good values. The server also validates that the TPM EK certificate has not been revoked and part of approved list of TPM EK identifiers associated with hardware platform. At this point, we can be sure that the hardware platform is approved for running workloads and is running an approved OS.
+Remote Verification: The remote server checks the integrity of the attestation report and validates the measurements against known good values from the set of trusted hosts in the shared datastore. The server also validates that the TPM EK certificate has not been revoked and part of approved list of TPM EK identifiers associated with hardware platform. At this point, we can be sure that the hardware platform is approved for running workloads and is running an approved OS.
 
 ### Run time attestation/remote verification of agent for integrity and proof of residency on H
 As part of agent start/restart process, linux integrity measurment architecture (linux-ima) is used to ensure that only approved executable for agent is loaded.
@@ -179,52 +182,31 @@ TPM attestation and remote server verification:
 
 - Server creates a SPIFFE ID along with the sha256sum of the TPM AK public key
 
-## Attesting composite location using Geo-location service (GL)
+## Composite location using Geo-location service (GL)
 Geo-location service (GL) runs outside of H -- besides the location from device location sources (e.g. GPS, GNSS), it will connect to mobile location service providers (e.g., Telefonica) using GSMA APIs (todo - https://www.gsma.com/solutions-and-impact/gsma-open-gateway/gsma-open-gateway-api-descriptions/).
 
 * Agent gathers the location from H local location sensors (e.g. GPS, GNSS). Agent connects to GL using secure connection mechanism like TLS. Agent provides the gathered location to GL over the secure connection.
 
 * Location (L) has a quality associated with it. For example, IP address-based L is of lower quality as compared to other sources.
 
-* GL ensures that the device composition of H (reference to H composition table for further details) is intact (e.g. SIM card not plugged out of H) by periodically polling the state of H. Note that e-SIM does not have the plugging out problem like standard SIM but could be subject to e-SIM swap attack. Host composition (HC) comprises of TPM EK, Mobile-SIM etc.
+* GL ensures that the device composition of H (reference to H composition table for further details) is intact (e.g. SIM card not plugged out of H) by periodically polling the state of H. H is a member of the set of trusted hosts in the shared datastore -- the shared datastore has the host composition details. Note that e-SIM does not have the plugging out problem like standard SIM but could be subject to e-SIM swap attack. Host composition (HC) comprises of TPM EK, Mobile-SIM etc.
 
 * GL derives a combined location, including location quality, from various location sensors for a H with multiple location sensors -- this includes the gathered location from Agent running on H. As an example, GPS is considered less trustworthy as compared to mobile.
 
-* The composite location comprises of combined geo-location (which includes location quality), time and host composition (TPM EK, mobile-SIM etc.). GL signs the composite location with a private key whose public key certificate is a public trusted transparent ledger such as certificate transparency log.
+* The composite location comprises of combined geo-location (which includes location quality), host composition (TPM EK, mobile-SIM etc.) and time from a trusted source. GL signs the composite location with a private key whose public key certificate is a public trusted transparent ledger such as certificate transparency log. Now we have a attested composite location.
 
-* Other entities on H (e.g., an application) will have to associate with L through proof of residency on H.
+* Agent is returned the attested composite location over the secure connection. Agent signs the attested composite location using TPM AIK establishing proof of residency of composite location to H. This is called attested proof-of-residency aware composite location (APL).
 
-## Step 3
+## Geographic boundary using Geo-fencing (GF) service
+* Geo-fence policies are of four flavours - precise location, precise bounding box/circle of location, approximate location (no definition of boundary), boolean membership of given boundary (rectangular, circular, state etc.). They are available in the form of pre-defined templates or can be configured on demand. Enterprises, who are the user of the hosts, choose the geo-fence policies to be enforced for various hosts. Note that the hosts must belong to the set of trsuted hosts in a shared ledger. The geo-fence policies applied to the set of trusted hosts are recorded in a shared ledger.
 
-Geo-fence policies are of four flavours - precise location, precise bounding box/circle of location, approximate location (no definition of boundary), boolean membership of given boundary (rectangular, circular, state etc.)
+* Location agent on H supplies (APL) to geo-fence service (GF) over a secure connection. GF performs geo-fence policy enforcement by matching the location against configured geo-fence policies. GF signs the geo-fence policy match result, along with a trusted time (todo - can we reuse RFC 3161), with a private key whose public key certificate is a public trusted transparent ledger such as certificate transparency log.
 
-They are available in the form of pre-defined templates or can be configured on demand.
-Enterprises choose the geo-fence policies to be enforced for various hosts. Note that the hosts must belong to the list of approved hosts in a shared ledger (TPM EK, mobile-SIM).
-The geo-fence policies applied to various hosts are recorded in a shared ledger.
+* Geo-fence policy match result details (non-exhaustive): 1) Geo-fence policy which matched 2) Boolean - inside or outside geo-fence - applicable to boolean membership of given boundary policy type
 
-## Step 4
+* GF logs attested geo-fence policy match result in a shared ledger.
 
-Location agent on H supplies attested location (L) to geo-fence service (GF) which performs geo-fence policy enforcement by matching the location against configured geo-fence policies (available in a shared ledger) and returns an attested geo-fence policy match result.
-
-### Geo-fence policy engine is part of GF and uses L and quality of L to make decisions
-
-Geo-fence policy engine can be coded anywhere, including H such as a mobile app for maximizing privacy, a workload/server app, an workload orchestrator, an OS process scheduler, a JVM deserializer, or a storage server.
-
-### Definition of attested geo-fence policy match result (GFL)
-
-Geo-fence policy match result details:
-
-* Geo-fence policy hash which matched
-
-* Boolean (inside or outside geo-fence)
-
-* Distance from geo-fence
-
-GF signs the geo-fence policy match result, along with a trusted time (can we reuse RFC 3161), with a private key whose public key certificate is a public trusted transparent ledger such as certificate transparency log.
-
-GF logs geo-fence policy match result in a shared ledger.
-
-### Log result in ledger - todo
+* Agent is returned the attested geo-fence policy match result. Agent signs the attested geo-fence policy match result using TPM AIK establishing proof of residency of geo-fence policy match result to H. This is called attested proof-of-residency aware geo-fence policy match result (APGL).
 
 ## Step 5
 
