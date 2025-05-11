@@ -112,17 +112,14 @@ Standardizing the attestation of a host’s geographic location enables interope
 The following use cases motivate the need for a verifiable geographic claim.
 
 ## **Category 1**: Enterprise need cryptographic proof of trustworthy geographic boundary (region, zone, countries, state etc.) for cloud facing workloads
-* **Server workload <-> Server workload**:
-
+### **Server workload <-> Server workload**:
 Enterprises handling sensitive data—such as EU banks—rely on dedicated cloud hosts (e.g., EU sovereign cloud providers) to ensure high availability while complying with data residency laws.
 To meet these requirements, they need to be able to verify the geographic boundary where their dedicated hosts are deployed.
 
-* **User workload <-> Server workload**:
-
-(e.g. healthcare enterprise) ensuring that  it is communicating with a server (e.g. cloud service) located within a specific geographic boundary.
+### **User workload <-> Server workload**:
+Enterprise (e.g. healthcare) ensuring that it is communicating with a server (e.g. cloud service) located within a specific geographic boundary.
 
 ## **Category 2**: Enterprise need cryptographic proof of trustworthy geographic boundary for user facing workloads
-
 * A server (or proxy) authenticates to clients using different TLS certificates, each signed by a different Certificate Authority (CA), based on the geographic boundaries of user workloads.
 
 * Enterprise on-premise Customer Premise Equipment (CPE) provides its geographic boundary using a mobile network. This ensures that the Host (H) – a computing device such as a PC, phone, or router – connected to the CPE, is physically present on-premise.
@@ -134,21 +131,19 @@ To meet these requirements, they need to be able to verify the geographic bounda
 * U.S. Presidential Executive Order compliance: For example, U.S. Cloud Service Providers (CSPs) may have support personnel located in a restricted geographic boundary (countries e.g., Venezuela, Iran, China, North Korea). However, those personnel should not be allowed to support U.S. customers. Geo-location enforcement can ensure policy compliance. See [doj-cisa].
 
 ## **Category 3**: Security assurance and compliance
-
 Geographic boundary attestation helps satisfy data residency and data sovereignty requirements for regulatory compliance.
 
 # High-level Approach
 
 ## Gathering location on Host
-
 Host (H) contains location Devices (HD) like mobile sensor, GPS sensor, WiFi sensor, GNSS sensor, etc. H is a compute node, including servers, routers, and end-user appliances like smartphones or tablets or PCs. H has a TPM. Note on TPM -- The EK certificate is a digital certificate signed by the TPM manufacturer's CA which verifies the identity and trustworthiness of the TPM's Endorsement Key (EK). For the initial version of the draft H is bare metal Linux OS host.
 
-The location agent (modified SPIFFE/SPIRE agent) is a daemon running on bare-metal Linux OS Host as a process with root permissions and direct access to TPM. The agent gathers the location from local location sensors (e.g. GPS, GNSS). The agent has a TPM plugin which interacts with the TPM. The server (SPIFFE/SPIRE server) is running in cluster which is isolated from the cluster in which the agent is running.
+The location agent (modified SPIFFE/SPIRE agent using a geo-location plugin mechnism) is a daemon running on bare-metal Linux OS Host as a process with root permissions (todo: dow we need root permissions for TPM 2.0 access - Ned?) and direct access to TPM. The agent gathers the location from local location sensors (e.g. GPS, GNSS). The agent has a TPM plugin which interacts with the TPM. The server (SPIFFE/SPIRE server) is running in cluster which is isolated from the cluster in which the agent is running.
 
 ### Boot time attestation/remote verification of OS for integrity and proof of residency on H
 As part of system boot/reboot process, boot loader based measured system boot with remote SPIFFE/SPIRE server verification is used to ensure only approved OS is running on an approved hardware platform.
 
-Measurement Collection: During the boot process, the boot loader collects measurements (hashes) of the boot components and configurations. The boot components are Firmware/BIOS/UEFI, bootloader, OS, drivers and initial programs.
+Measurement Collection: During the boot process, the boot loader collects measurements (hashes) of the boot components and configurations. The boot components are Firmware/BIOS/UEFI, bootloader, OS, drivers, location devices and initial programs. All the location devices (e.g. GPS sensor, Mobile sensor) version/firmware in a platform are measured during each boot -- this is a boot loader enhancement. Any new location device which is hotswapped in will be evaluated for inclusion only during next reboot.
 
 Log Creation: These measurements are recorded in a log, often referred to as the TCGLog, and stored in the TPM's Platform Configuration Registers (PCRs).
 
@@ -184,25 +179,18 @@ TPM attestation and remote server verification:
 
 - Server creates a SPIFFE ID along with the sha256sum of the TPM AK public key
 
-## Geo-location service
-
-
-
-* Outside H: In turn will connect to mobile location service providers (e.g., Telefonica), and use other sources such as WiFi-based location service providers (e.g., Google) or device location sources (e.g., GNSS).
-
-### Location Quality
+## Attesting composite location using Geo-location service (GL)
+Geo-location service (GL) runs outside of H -- besides the location from device location sources (e.g. GPS, GNSS), it will connect to mobile location service providers (e.g., Telefonica) using GSMA APIs (todo - https://www.gsma.com/solutions-and-impact/gsma-open-gateway/gsma-open-gateway-api-descriptions/).
 
 * Location (L) has a quality associated with it. For example, IP address-based L is of lower quality as compared to other sources.
 
-### Definition of attested location generated by GL
-
-* GL ensures that the composition of H (todo: add reference to H composition table) is intact (e.g. SIM card not plugged out from CPE) by periodically polling the state of H. Note that e-SIM does not have the plugging out problem like standard SIM but could be subject to e-SIM swap attack. Host composition (HC) comprises of TPM EK, Mobile-SIM etc.
+* GL ensures that the device composition of H (reference to H composition table for further details) is intact (e.g. SIM card not plugged out of H) by periodically polling the state of H. Note that e-SIM does not have the plugging out problem like standard SIM but could be subject to e-SIM swap attack. Host composition (HC) comprises of TPM EK, Mobile-SIM etc.
 
 * GL derives a combined location, including location quality, from various location sensors for a H with multiple location sensors. As an example, GPS is considered less trustworthy as compared to mobile.
 
-* GL signs the combined location, along with a time from a trusted source, and host composition (TPM EK, mobile-SIM etc.) with a private key whose public key certificate is a public trusted transparent ledger such as certificate transparency log.
-
-* The composite location comprises of combined geo-location (which includes location quality), time and host composition. Other entities on H (e.g., an application) will have to associate with L through proof of residency on H.
+* The composite location comprises of combined geo-location (which includes location quality), time and host composition (TPM EK, mobile-SIM etc.). GL signs the composite location with a private key whose public key certificate is a public trusted transparent ledger such as certificate transparency log.
+ 
+* Other entities on H (e.g., an application) will have to associate with L through proof of residency on H.
 
 ## Step 3
 
@@ -297,7 +285,7 @@ Workload ID (WID), with location field, in the form of a proof-of-residency cert
 
 * Enhance SSH/IPSEC to convey Workload ID (WID), with location field.
 
-# Host Details
+# Host (H) Composition Table
 
 | Component  | Functionality       | Comments |
 |---
