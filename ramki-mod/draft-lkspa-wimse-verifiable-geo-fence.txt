@@ -5,13 +5,13 @@
 Workload Identity in Multi System Environments               R. Krishnan
 Internet-Draft                                                  N. Smith
 Intended status: Informational                                     Intel
-Expires: 12 November 2025                                       D. Lopez
+Expires: 13 November 2025                                       D. Lopez
                                                               Telefonica
                                                                A. Prasad
                                                                   Oracle
                                                             S. Addepalli
                                                                   Aryaka
-                                                             11 May 2025
+                                                             12 May 2025
 
 
           Trustworthy and Verifiable Geo-fencing for Workloads
@@ -67,7 +67,7 @@ Status of This Memo
    time.  It is inappropriate to use Internet-Drafts as reference
    material or to cite them other than as "work in progress."
 
-   This Internet-Draft will expire on 12 November 2025.
+   This Internet-Draft will expire on 13 November 2025.
 
 Copyright Notice
 
@@ -96,23 +96,21 @@ Table of Contents
            trustworthy geographic boundary for user facing workloads
      3.3.  *Category 3*: Security assurance and compliance
    4.  High-level Approach
-     4.1.  Gathering location on Host
+     4.1.  Agent attestation/remote verification and gathering
+           location on Host
        4.1.1.  Boot time attestation/remote verification of OS for
                integrity and proof of residency on H
        4.1.2.  Run time attestation/remote verification of agent for
                integrity and proof of residency on H
-     4.2.  Composite location using Geo-location service (GL)
-     4.3.  Geographic boundary using Geo-fencing (GF) service
-     4.4.  Step 5
-     4.5.  Step 6
-     4.6.  Step 7
-     4.7.  Step 8
-     4.8.  Step 9
+     4.2.  Agent gets attested composite location using Geo-location
+           service (GL)
+     4.3.  Agent gets attested geographic boundary using Geo-fencing
+           (GF) service
    5.  Networking Protocol Changes
      5.1.  Using TLS
      5.2.  Not Using TLS
      5.3.  Approaches
-   6.  Host (H) Composition Table
+   6.  Host Composition Table
    7.  Authorization Policy Implementers
    8.  Security Considerations
    9.  IANA Considerations
@@ -195,14 +193,15 @@ Table of Contents
 
 4.  High-level Approach
 
-   Host (H) contains location Devices (HD) like mobile sensor, GPS
-   sensor, WiFi sensor, GNSS sensor, etc.  H is a compute node,
-   including servers, routers, and end-user appliances like smartphones
-   or tablets or PCs.  H has a TPM.  Note on TPM -- The EK certificate
-   is a digital certificate signed by the TPM manufacturer's CA which
+   Host contains location devices like mobile sensor, GPS sensor, WiFi
+   sensor, GNSS sensor, etc.  Host is a compute node, including servers,
+   routers, and end-user appliances like smartphones or tablets or PCs.
+   Host has a discrete TPM.  Note on TPM -- The EK certificate is a
+   digital certificate signed by the TPM manufacturer's CA which
    verifies the identity and trustworthiness of the TPM's Endorsement
-   Key (EK).  For the initial version of the draft H is bare metal Linux
-   OS host.
+   Key (EK); TPM attestation key (AK) is cryptographically backed by TPM
+   EK.  For the initial version of the draft, host is bare metal Linux
+   OS host and interactions are with TPM.
 
    Trusted hosts are the hosts which have trustworthy device composition
    (TPM EK, Mobile-SIM, GPS device id etc.), endorsed by manufacturer/
@@ -210,16 +209,36 @@ Table of Contents
    the device composition details and OS details are recorded in a
    shared datastore (database or ledger) by the host owner.
 
-4.1.  Gathering location on Host
+   Workload (W) and Agent run on a set of trusted hosts.  W can be a
+   server app, a mobile/PC app (including browser), or a network host
+   (e.g., router).  Proof of Residency of W on a trusted host is
+   obtained using TPM.  W asks its Agent for proof, which in turn asks
+   TPM for AK-attested proof.
 
-   The location agent (modified SPIFFE/SPIRE agent using a geo-location
-   plugin mechnism) is a daemon running on bare-metal Linux OS Host (H)
-   as a process with root permissions (todo: dow we need root
-   permissions for TPM 2.0 access - Ned?) and direct access to TPM.  The
-   agent gathers the location from host local location sensors (e.g.
-   GPS, GNSS).  The agent has a TPM plugin which interacts with the TPM.
-   The server (SPIFFE/SPIRE server) is running in cluster which is
-   isolated from the cluster in which the agent is running.
+   Agent sends attested geographic boundary (e.g., cloud region, city,
+   country etc.) and W’s parameters to Workload Identity Manager (WIM).
+
+   *  Example for Agent used in this document: SPIFFE/SPIRE agent can be
+      enhanced to add attested geographic boundary that will become part
+      of Identity granted (e.g., SVID).
+
+   *  Example for WIM used in this document: SPIFFE/Spire server
+
+   *  WIM gives signed Workload ID (WID) with geographic boundary as an
+      additional field.  This could be a certificate or a token.
+
+4.1.  Agent attestation/remote verification and gathering location on
+      Host
+
+   The location agent, which is a modified SPIFFE/SPIRE (spire) agent
+   using a geo-location plugin mechanism, is a daemon running on bare-
+   metal Linux OS Host (H) as a process with root permissions (todo: do
+   we need root permissions for TPM 2.0 access - Ned?) and direct access
+   to TPM.  The agent gathers the location from host local location
+   sensors (e.g. GPS, GNSS).  The agent has a TPM plugin (spire-tpm)
+   which interacts with the TPM.  The server (SPIFFE/SPIRE server) is
+   running in cluster which is isolated from the cluster in which the
+   agent is running.
 
 4.1.1.  Boot time attestation/remote verification of OS for integrity
         and proof of residency on H
@@ -263,7 +282,7 @@ Table of Contents
 4.1.2.  Run time attestation/remote verification of agent for integrity
         and proof of residency on H
 
-   As part of agent start/restart process, linux integrity measurment
+   As part of agent start/restart process, linux integrity measurement
    architecture (linux-ima) is used to ensure that only approved
    executable for agent is loaded.
 
@@ -274,10 +293,13 @@ Table of Contents
 
    TPM attestation and remote server verification:
 
-   *  Agent generates attestation key (AK) using TPM
+   *  Agent generates private/public key pair for workload attestation
 
-   *  Agent sends the AK attestation parameters (PCR quote etc.) and EK
-      certificate to the server
+   *  Agent generates attestation key (AK) using TPM for proof of
+      residency on H.
+
+   *  Agent sends the AK attestation parameters (PCR quote, workload
+      attestation public etc.) and EK certificate to the server
 
    *  Server inspects EK certificate.  If ca_path exists, and the EK
       certificate was signed by any chain in ca_path, validation passes
@@ -296,15 +318,15 @@ Table of Contents
       build the challenge
 
    *  Server creates a SPIFFE ID along with the sha256sum of the TPM AK
-      public key
+      public key and Workload attestation public key
 
-4.2.  Composite location using Geo-location service (GL)
+4.2.  Agent gets attested composite location using Geo-location service
+      (GL)
 
    Geo-location service (GL) runs outside of H -- besides the location
    from device location sources (e.g. GPS, GNSS), it will connect to
-   mobile location service providers (e.g., Telefonica) using GSMA APIs
-   (todo - https://www.gsma.com/solutions-and-impact/gsma-open-gateway/
-   gsma-open-gateway-api-descriptions/).
+   mobile location service providers (e.g., Telefonica) using GSMA
+   location API (gsma-loc).
 
    *  Agent gathers the location from H local location sensors (e.g.
       GPS, GNSS).  Agent connects to GL using secure connection
@@ -338,11 +360,12 @@ Table of Contents
 
    *  Agent is returned the attested composite location over the secure
       connection.  Agent signs the attested composite location using TPM
-      AIK establishing proof of residency of composite location to H.
+      AK establishing proof of residency of composite location to H.
       This is called attested proof-of-residency aware composite
       location (APL).
 
-4.3.  Geographic boundary using Geo-fencing (GF) service
+4.3.  Agent gets attested geographic boundary using Geo-fencing (GF)
+      service
 
    *  Geo-fence policies are of four flavours - precise location,
       precise bounding box/circle of location, approximate location (no
@@ -351,7 +374,7 @@ Table of Contents
       form of pre-defined templates or can be configured on demand.
       Enterprises, who are the user of the hosts, choose the geo-fence
       policies to be enforced for various hosts.  Note that the hosts
-      must belong to the set of trsuted hosts in a shared ledger.  The
+      must belong to the set of trusted hosts in a shared ledger.  The
       geo-fence policies applied to the set of trusted hosts are
       recorded in a shared ledger.
 
@@ -372,59 +395,15 @@ Table of Contents
 
    *  Agent is returned the attested geo-fence policy match result.
       Agent signs the attested geo-fence policy match result using TPM
-      AIK establishing proof of residency of geo-fence policy match
+      AK establishing proof of residency of geo-fence policy match
       result to H.  This is called attested proof-of-residency aware
       geo-fence policy match result (APGL).
-
-4.4.  Step 5
-
-   Workload (W) and Workload Agent run on H.  W can be a server app, a
-   mobile/PC app (including browser), or a network host (e.g., router).
-
-4.5.  Step 6
-
-   Between W and H, there may be several layers of software (e.g.,
-   baremetal, hypervisors, VMs, containers, etc.).  Our focus is on W
-   and a virtual-TPM (vTPM) accessible to W, with vTPM transitively and
-   securely linked to bare metal TPM.
-
-   If W is directly on bare metal H, the vTPM = TPM on baremetal.
-
-   For the first version of the draft, vTPM = TPM on baremetal.  Host OS
-   is Linux.
-
-4.6.  Step 7
-
-   Proof of Residency of W on H is obtained using vTPM.  W asks its
-   Workload Agent for proof, which in turn asks vTPM for AIK-attested
-   proof.  (Note: TPM-EK authenticity checked in ledger by Geo-fencing
-   service earlier, as described above.)
-
-   W’s Proof of Residency on H + H’s attested location from geo-fencing
-   service = attested location for W
-
-4.7.  Step 8
-
-   Workload Agent sends attested location + W’s parameters to Workload
-   Identity Manager (WIM).
-
-   *  Example for a Workload Agent: SPIFFE/Spire agent can be enhanced
-      to add attested location that will become part of Identity granted
-      (e.g., SVID).
-
-   *  Example for WIM: SPIFFE/Spire server
-
-4.8.  Step 9
-
-   Workload Identity Manager gives signed Workload ID (WID) with
-   location as a field or location-matches boolean result as a field.
-   This could be a certificate or a token.
 
 5.  Networking Protocol Changes
 
    Workload ID (WID), with location field, in the form of a proof-of-
    residency certificate or token needs to be conveyed to the peer
-   during connection established.  The connection is end-to-end across
+   during connection establishment.  The connection is end-to-end across
    proxies like
 
 5.1.  Using TLS
@@ -458,7 +437,7 @@ Table of Contents
    *  Enhance SSH/IPSEC to convey Workload ID (WID), with location
       field.
 
-6.  Host (H) Composition Table
+6.  Host Composition Table
 
     +===============+=================================+==============+
     | Component     | Functionality                   | Comments     |
@@ -559,6 +538,10 @@ Table of Contents
               space.ec.europa.eu/eu-space/galileo-satellite-
               navigation_en>.
 
+   [gsma-loc] GSMA open gateway documentation, "GSMA location API",
+              n.d., <https://www.gsma.com/solutions-and-impact/gsma-
+              open-gateway/gsma-open-gateway-api-descriptions/>.
+
    [I-D.ietf-wimse-arch]
               Salowey, J. A., Rosomakho, Y., and H. Tschofenig,
               "Workload Identity in a Multi System Environment (WIMSE)
@@ -572,9 +555,13 @@ Table of Contents
               measurement architecture", n.d.,
               <https://linux-ima.sourceforge.net/>.
 
+   [spire]    Spire open source project, "SPIFFE/SPIRE workload
+              identity", n.d., <https://spiffe.io/>.
+
    [spire-tpm]
-              Spire open source project, "SPIFFE/Spire TPM plugin",
-              n.d., <https://github.com/bloomberg/spire-tpm-plugin>.
+              Spire open source project plugin, "SPIFFE/SPIRE TPM
+              plugin", n.d.,
+              <https://github.com/bloomberg/spire-tpm-plugin>.
 
    [tcg-geo-loc]
               TCG, "TCG keynote and whitepaper-Trusted Computing Future-
