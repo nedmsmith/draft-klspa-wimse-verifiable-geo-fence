@@ -180,8 +180,6 @@ Local Verification: Enforce local validation of a measurement against a approved
 
 TPM attestation and remote server verification:
 
-* Agent generates private/public key pair for workload attestation
-
 * Agent generates attestation key (AK) using TPM for proof of residency on H.
 
 * Agent sends the AK attestation parameters (PCR quote, workload attestation public etc.) and EK certificate to the server
@@ -198,7 +196,7 @@ TPM attestation and remote server verification:
 
 * Server verifies that the decrypted secret is the same it used to build the challenge
 
-* Server creates a SPIFFE ID along with the sha256sum of the TPM AK public key and Workload attestation public key
+* Server creates a SPIFFE ID along with the sha256sum of the TPM AK public key. Server stores agent SPIFFE ID mapping to TPM AK public key in a shared datastore.
 
 ## Agent gets attested composite location using Geo-location service (GL)
 Geo-location service (GL) runs outside of H -- besides the location from device location sources (e.g. GPS, GNSS), it will connect to mobile location service providers (e.g., Telefonica) using GSMA location API (gsma-loc).
@@ -225,6 +223,17 @@ Geo-location service (GL) runs outside of H -- besides the location from device 
 * GF logs attested geo-fence policy match result in a shared ledger.
 
 * Agent is returned the attested geo-fence policy match result. Agent signs the attested geo-fence policy match result using TPM AK establishing proof of residency of geo-fence policy match result to H. This is called attested proof-of-residency aware geo-fence policy match result (APGL).
+
+# Workload (W) attestation and remote verification - key steps
+* Agent generates private/public key pair for W.
+
+* Agent signs the W public key with its TPM AK. Agent sends the signed public key along with its SPIFFE ID to the server. Note that the TPM AK is already verified by the server as part of the agent attestation process.
+
+* Server gets the TPM AK public key from the Agent SPIFFE ID by looking it up in the shared datastore.
+
+* Server then sendsan encrypted challenge to the agent. The challenge's secret is encrypted using the W public key.
+
+* Agent decrypts the challenge using its private key and sends the response back to the server. Server receives the response from the agent and verifies the proof of residency of W to H.
 
 # Networking Protocol Changes
 Workload ID (WID), with location field, in the form of a proof-of-residency certificate or token needs to be conveyed to the peer during connection establishment. The connection is end-to-end across proxies like
