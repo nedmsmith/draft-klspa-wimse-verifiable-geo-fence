@@ -159,7 +159,7 @@ Agent sends attested geographic boundary (e.g., cloud region, city, country etc.
 # Attestation for System Bootstrap and Agent Initialization
 The location agent, which is a modified SPIFFE/SPIRE (spire) agent using a geo-location plugin mechanism, is a daemon running on bare-metal Linux OS Host (H) as a process with direct access to TPM (root permissions for TPM 2.0 access may be needed for certain Linux distributions for certain H hardware configurations). The agent can gather the location from host local location sensors (e.g. GPS, GNSS). The agent has a TPM plugin (spire-tpm) which interacts with the TPM. The server (SPIFFE/SPIRE server) is running in cluster which is isolated from the cluster in which the agent is running.
 
-## Boot/reboot time attestation/remote verification of OS for integrity and proof of residency on H
+## Attestation of OS Integrity and Proof of Residency on Host
 As part of system boot/reboot process, boot loader based measured system boot with remote SPIFFE/SPIRE server verification is used to ensure only approved OS is running on an approved hardware platform.
 
 Measurement Collection: During the boot process, the boot loader collects measurements (hashes) of the boot components and configurations. The boot components are Firmware/BIOS/UEFI, bootloader, OS, drivers, location devices and initial programs. All the location devices (e.g. GPS sensor, Mobile sensor) version/firmware in a platform are measured during each boot -- this is a boot loader enhancement. Any new location device which is hotswapped in will be evaluated for inclusion only during next reboot.
