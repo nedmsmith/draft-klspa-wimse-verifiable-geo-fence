@@ -156,7 +156,7 @@ Agent sends attested geographic boundary (e.g., cloud region, city, country etc.
 
 * WIM gives signed Workload ID (WID) with geographic boundary as an additional field. This could be a certificate or a token.
 
-# System boot/reboot and Agent start/restart time attestation/remote verification
+# Attestation for System Bootstrap and Agent Initialization
 The location agent, which is a modified SPIFFE/SPIRE (spire) agent using a geo-location plugin mechanism, is a daemon running on bare-metal Linux OS Host (H) as a process with direct access to TPM (root permissions for TPM 2.0 access may be needed for certain Linux distributions for certain H hardware configurations). The agent can gather the location from host local location sensors (e.g. GPS, GNSS). The agent has a TPM plugin (spire-tpm) which interacts with the TPM. The server (SPIFFE/SPIRE server) is running in cluster which is isolated from the cluster in which the agent is running.
 
 ## Boot/reboot time attestation/remote verification of OS for integrity and proof of residency on H
