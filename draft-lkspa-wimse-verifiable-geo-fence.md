@@ -172,7 +172,7 @@ Transmission: The attestation report is then sent to an external verifier (serve
 
 Remote Verification: The remote server checks the integrity of the attestation report and validates the measurements against known good values from the set of trusted hosts in the shared datastore. The server also validates that the TPM EK certificate has not been revoked and part of approved list of TPM EK identifiers associated with hardware platform. At this point, we can be sure that the hardware platform is approved for running workloads and is running an approved OS.
 
-## Start/restart time attestation/remote verification of agent for integrity and proof of residency on H
+## Start/restart time attestation/remote verification of agent for integrity and proof of residency on Host
 As part of agent start/restart process, linux integrity measurement architecture (linux-ima) is used to ensure that only approved executable for agent is loaded.
 
 Measurement collection: The agent executable is measured by linux-ima before it is loaded.
