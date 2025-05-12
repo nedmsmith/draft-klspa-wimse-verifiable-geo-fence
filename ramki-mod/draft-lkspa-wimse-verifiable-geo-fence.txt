@@ -97,8 +97,7 @@ Table of Contents
      3.3.  *Category 3*: Security assurance and compliance
    4.  Approach summary
    5.  Attestation for System Bootstrap and Agent Initialization
-     5.1.  Boot/reboot time attestation/remote verification of OS for
-           integrity and proof of residency on H
+     5.1.  Attestation of OS Integrity and Proof of Residency on Host
      5.2.  Start/restart time attestation/remote verification of agent
            for integrity and proof of residency on H
    6.  Agent geo-location and geo-fencing workflow - this is run
@@ -240,8 +239,7 @@ Table of Contents
    the TPM.  The server (SPIFFE/SPIRE server) is running in cluster
    which is isolated from the cluster in which the agent is running.
 
-5.1.  Boot/reboot time attestation/remote verification of OS for
-      integrity and proof of residency on H
+5.1.  Attestation of OS Integrity and Proof of Residency on Host
 
    As part of system boot/reboot process, boot loader based measured
    system boot with remote SPIFFE/SPIRE server verification is used to
