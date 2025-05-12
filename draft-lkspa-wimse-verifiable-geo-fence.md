@@ -141,7 +141,7 @@ Enterprise (e.g. healthcare) ensuring that it is communicating with a server (e.
 ## **Category 3**: Security assurance and compliance
 Geographic boundary attestation helps satisfy data residency and data sovereignty requirements for regulatory compliance.
 
-# High-level Approach
+# Approach  summary
 Host contains location devices like mobile sensor, GPS sensor, WiFi sensor, GNSS sensor, etc. Host is a compute node, including servers, routers, and end-user appliances like smartphones or tablets or PCs. Host has a discrete TPM. Note on TPM -- The EK certificate is a digital certificate signed by the TPM manufacturer's CA which verifies the identity and trustworthiness of the TPM's Endorsement Key (EK);  TPM attestation key (AK) is cryptographically backed by TPM EK. For the initial version of the draft, host is bare metal Linux OS host and interactions are with TPM.
 
 Trusted hosts are the hosts which have trustworthy device composition (TPM EK, Mobile-SIM, GPS device id etc.), endorsed by manufacturer/owner, and use a trustworthy OS. A set of trusted hosts along with the device composition details and OS details are recorded in a shared datastore (database or ledger) by the host owner.
@@ -156,10 +156,10 @@ Agent sends attested geographic boundary (e.g., cloud region, city, country etc.
 
 * WIM gives signed Workload ID (WID) with geographic boundary as an additional field. This could be a certificate or a token.
 
-## Agent attestation/remote verification and gathering location on Host
-The location agent, which is a modified SPIFFE/SPIRE (spire) agent using a geo-location plugin mechanism, is a daemon running on bare-metal Linux OS Host (H) as a process with root permissions (todo: do we need root permissions for TPM 2.0 access - Ned?) and direct access to TPM. The agent gathers the location from host local location sensors (e.g. GPS, GNSS). The agent has a TPM plugin (spire-tpm) which interacts with the TPM. The server (SPIFFE/SPIRE server) is running in cluster which is isolated from the cluster in which the agent is running.
+# System boot/reboot and Agent start/restart time attestation/remote verification
+The location agent, which is a modified SPIFFE/SPIRE (spire) agent using a geo-location plugin mechanism, is a daemon running on bare-metal Linux OS Host (H) as a process with direct access to TPM (root permissions for TPM 2.0 access may be needed for certain Linux distributions for certain H hardware configurations). The agent can gather the location from host local location sensors (e.g. GPS, GNSS). The agent has a TPM plugin (spire-tpm) which interacts with the TPM. The server (SPIFFE/SPIRE server) is running in cluster which is isolated from the cluster in which the agent is running.
 
-### Boot time attestation/remote verification of OS for integrity and proof of residency on H
+## Boot/reboot time attestation/remote verification of OS for integrity and proof of residency on H
 As part of system boot/reboot process, boot loader based measured system boot with remote SPIFFE/SPIRE server verification is used to ensure only approved OS is running on an approved hardware platform.
 
 Measurement Collection: During the boot process, the boot loader collects measurements (hashes) of the boot components and configurations. The boot components are Firmware/BIOS/UEFI, bootloader, OS, drivers, location devices and initial programs. All the location devices (e.g. GPS sensor, Mobile sensor) version/firmware in a platform are measured during each boot -- this is a boot loader enhancement. Any new location device which is hotswapped in will be evaluated for inclusion only during next reboot.
@@ -172,7 +172,7 @@ Transmission: The attestation report is then sent to an external verifier (serve
 
 Remote Verification: The remote server checks the integrity of the attestation report and validates the measurements against known good values from the set of trusted hosts in the shared datastore. The server also validates that the TPM EK certificate has not been revoked and part of approved list of TPM EK identifiers associated with hardware platform. At this point, we can be sure that the hardware platform is approved for running workloads and is running an approved OS.
 
-### Run time attestation/remote verification of agent for integrity and proof of residency on H
+## Start/restart time attestation/remote verification of agent for integrity and proof of residency on H
 As part of agent start/restart process, linux integrity measurement architecture (linux-ima) is used to ensure that only approved executable for agent is loaded.
 
 Measurement collection: The agent executable is measured by linux-ima before it is loaded.
@@ -198,7 +198,8 @@ TPM attestation and remote server verification:
 
 * Server creates a SPIFFE ID along with the sha256sum of the TPM AK public key. Server stores agent SPIFFE ID mapping to TPM AK public key in a shared datastore.
 
-## Agent gets attested composite location using Geo-location service (GL)
+# Agent geo-location and geo-fencing workflow - this is run periodically (say every 5 minutes) to ensure that the host is in the same location
+## Step 1: Agent gets attested composite location using Geo-location service (GL)
 Geo-location service (GL) runs outside of H -- besides the location from device location sources (e.g. GPS, GNSS), it will connect to mobile location service providers (e.g., Telefonica) using GSMA location API (gsma-loc).
 
 * Agent gathers the location from H local location sensors (e.g. GPS, GNSS). Agent connects to GL using secure connection mechanism like TLS. Agent provides the gathered location to GL over the secure connection.
@@ -213,27 +214,23 @@ Geo-location service (GL) runs outside of H -- besides the location from device 
 
 * Agent is returned the attested composite location over the secure connection. Agent signs the attested composite location using TPM AK establishing proof of residency of composite location to H. This is called attested proof-of-residency aware composite location (APL).
 
-## Agent gets attested geographic boundary using Geo-fencing (GF) service
-* Geo-fence policies are of four flavours - precise location, precise bounding box/circle of location, approximate location (no definition of boundary), boolean membership of given boundary (rectangular, circular, state etc.). They are available in the form of pre-defined templates or can be configured on demand. Enterprises, who are the user of the hosts, choose the geo-fence policies to be enforced for various hosts. Note that the hosts must belong to the set of trusted hosts in a shared ledger. The geo-fence policies applied to the set of trusted hosts are recorded in a shared ledger.
+## Step 2: Agent gets attested geographic boundary using Geo-fencing (GF) service
+* Geo-fence policies are of four flavours - (1)boolean membership of given boundary (rectangular, circular, state etc.), (2)precise location, (3)precise bounding box/circle of location, (4)approximate location (no definition of boundary). Thew first one, boolean membership of given boundary, is the most common and will be assumed as the default. They are available in the form of pre-defined templates or can be configured on demand. Enterprises, who are the user of the hosts, choose the geo-fence policies to be enforced for various hosts. Note that the hosts must belong to the set of trusted hosts in a shared ledger. The geo-fence policies applied to the set of trusted hosts are recorded in a shared ledger.
 
-* Location agent on H supplies (APL) to geo-fence service (GF) over a secure connection. GF performs geo-fence policy enforcement by matching the location against configured geo-fence policies. GF signs the geo-fence policy match result, along with a trusted time (todo - can we reuse RFC 3161), with a private key whose public key certificate is a public trusted transparent ledger such as certificate transparency log.
+* Location agent on H supplies (APL) to geo-fence service (GF) over a secure connection. GF performs geo-fence policy enforcement by matching the location against configured geo-fence policies. GF signs the geo-fence policy match result, along with a trusted time (potentially leverage RFC 3161), with a private key whose public key certificate is a public trusted transparent ledger such as certificate transparency log.
 
-* Geo-fence policy match result details (non-exhaustive): 1) Geo-fence policy which matched 2) Boolean - inside or outside geo-fence - applicable to boolean membership of given boundary policy type
-
-* GF logs attested geo-fence policy match result in a shared ledger.
+* Geo-fence policy match result details (non-exhaustive): 1) Geo-fence policy which matched 2) Boolean - inside or outside geo-fence - applicable to boolean membership of given boundary policy type.
 
 * Agent is returned the attested geo-fence policy match result. Agent signs the attested geo-fence policy match result using TPM AK establishing proof of residency of geo-fence policy match result to H. This is called attested proof-of-residency aware geo-fence policy match result (APGL).
 
 # Workload (W) attestation and remote verification - key steps
-* Agent generates private/public key pair for W.
+* Agent ensures that W connects to it on H local socket (e.g. Unix domain socket). Agent generates private/public key pair for W. Agent signs the W public key with its TPM AK. Agent sends the signed W public key along with its SPIFFE ID and last known APGL to the server. Note that the TPM AK is already verified by the server as part of the agent attestation process establishing proof of residency of Agent to H.
 
-* Agent signs the W public key with its TPM AK. Agent sends the signed public key along with its SPIFFE ID to the server. Note that the TPM AK is already verified by the server as part of the agent attestation process.
+* Server gets the Agent TPM AK public key from the SPIFFE ID by looking it up in the shared datastore. Server verifies the W public key signature using the TPM AK public key. Server then sends an encrypted challenge to the agent. The challenge's secret is encrypted using the W public key.
 
-* Server gets the TPM AK public key from the Agent SPIFFE ID by looking it up in the shared datastore.
+* Agent decrypts the challenge using its W private key and sends the response back to the server.
 
-* Server then sendsan encrypted challenge to the agent. The challenge's secret is encrypted using the W public key.
-
-* Agent decrypts the challenge using its private key and sends the response back to the server. Server receives the response from the agent and verifies the proof of residency of W to H.
+* Server verifies that the decrypted secret is the same it used to build the challenge. It then issues SPIFFE ID for W. The SPIFFE ID is signed by the server and contains the W public key and the geographic boundary (e.g. cloud region, city, country etc.) of the host. The geographic boundary is obtained from the last known APGL. The server also stores the W SPIFFE ID mapping to W public key in a shared datastore.
 
 # Networking Protocol Changes
 Workload ID (WID), with location field, in the form of a proof-of-residency certificate or token needs to be conveyed to the peer during connection establishment. The connection is end-to-end across proxies like
