@@ -96,8 +96,7 @@ Table of Contents
            trustworthy geographic boundary for user facing workloads
      3.3.  *Category 3*: Security assurance and compliance
    4.  Approach summary
-   5.  System boot/reboot and Agent start/restart time attestation/
-           remote verification
+   5.  Attestation for System Bootstrap and Agent Initialization
      5.1.  Boot/reboot time attestation/remote verification of OS for
            integrity and proof of residency on H
      5.2.  Start/restart time attestation/remote verification of agent
@@ -229,8 +228,7 @@ Table of Contents
    *  WIM gives signed Workload ID (WID) with geographic boundary as an
       additional field.  This could be a certificate or a token.
 
-5.  System boot/reboot and Agent start/restart time attestation/remote
-    verification
+5.  Attestation for System Bootstrap and Agent Initialization
 
    The location agent, which is a modified SPIFFE/SPIRE (spire) agent
    using a geo-location plugin mechanism, is a daemon running on bare-
