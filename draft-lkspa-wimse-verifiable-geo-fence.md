@@ -251,7 +251,7 @@ Workload ID (WID), with location field, in the form of a proof-of-residency cert
 
 * Enhance SSH/IPSEC to convey Workload ID (WID), with location field.
 
-# Host (H) Composition Table
+# Host Composition Table
 
 | Component  | Functionality       | Comments |
 |---
