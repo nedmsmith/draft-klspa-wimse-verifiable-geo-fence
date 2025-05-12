@@ -196,7 +196,8 @@ TPM attestation and remote server verification:
 
 * Server verifies that the decrypted secret is the same it used to build the challenge
 
-* Server creates a SPIFFE ID along with the sha256sum of the TPM AK public key. Server stores agent SPIFFE ID mapping to TPM AK public key in a shared datastore.
+* Server creates a SPIFFE ID along with the sha256sum of the TPM AK public key.
+Server stores agent SPIFFE ID mapping to TPM AK public key in a shared datastore.
 
 # Agent geo-location and geo-fencing workflow - this is run periodically (say every 5 minutes) to ensure that the host is in the same location
 ## Step 1: Agent gets attested composite location using Geo-location service (GL)
