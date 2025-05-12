@@ -142,11 +142,11 @@ Enterprise (e.g. healthcare) ensuring that it is communicating with a server (e.
 Geographic boundary attestation helps satisfy data residency and data sovereignty requirements for regulatory compliance.
 
 # High-level Approach
-Host contains location devices like mobile sensor, GPS sensor, WiFi sensor, GNSS sensor, etc. Host is a compute node, including servers, routers, and end-user appliances like smartphones or tablets or PCs. Host has a discrete TPM. Note on TPM -- The EK certificate is a digital certificate signed by the TPM manufacturer's CA which verifies the identity and trustworthiness of the TPM's Endorsement Key (EK). For the initial version of the draft, host is bare metal Linux OS host and interactions are with TPM.
+Host contains location devices like mobile sensor, GPS sensor, WiFi sensor, GNSS sensor, etc. Host is a compute node, including servers, routers, and end-user appliances like smartphones or tablets or PCs. Host has a discrete TPM. Note on TPM -- The EK certificate is a digital certificate signed by the TPM manufacturer's CA which verifies the identity and trustworthiness of the TPM's Endorsement Key (EK);  TPM attestation key (AK) is cryptographically backed by TPM EK. For the initial version of the draft, host is bare metal Linux OS host and interactions are with TPM.
 
 Trusted hosts are the hosts which have trustworthy device composition (TPM EK, Mobile-SIM, GPS device id etc.), endorsed by manufacturer/owner, and use a trustworthy OS. A set of trusted hosts along with the device composition details and OS details are recorded in a shared datastore (database or ledger) by the host owner.
 
-Workload (W) and Agent run on a set of trusted hosts. W can be a server app, a mobile/PC app (including browser), or a network host (e.g., router). Proof of Residency of W on a trusted host is obtained using TPM. W asks its Agent for proof, which in turn asks TPM for AIK-attested proof.
+Workload (W) and Agent run on a set of trusted hosts. W can be a server app, a mobile/PC app (including browser), or a network host (e.g., router). Proof of Residency of W on a trusted host is obtained using TPM. W asks its Agent for proof, which in turn asks TPM for AK-attested proof.
 
 Agent sends attested geographic boundary (e.g., cloud region, city, country etc.) and W’s parameters to Workload Identity Manager (WIM).
 
@@ -180,25 +180,27 @@ Local Verification: Enforce local validation of a measurement against a approved
 
 TPM attestation and remote server verification:
 
-- Agent generates attestation key (AK) using TPM
+* Agent generates private/public key pair for workload attestation
 
-- Agent sends the AK attestation parameters (PCR quote etc.) and EK certificate to the server
+* Agent generates attestation key (AK) using TPM for proof of residency on H.
 
-- Server inspects EK certificate. If ca_path exists, and the EK certificate was signed by any chain in ca_path, validation passes
+* Agent sends the AK attestation parameters (PCR quote, workload attestation public etc.) and EK certificate to the server
 
-- If validation passed, the server generates a credential activation challenge. The challenge's secret is encrypted using the EK public key.
+* Server inspects EK certificate. If ca_path exists, and the EK certificate was signed by any chain in ca_path, validation passes
 
-- Server sends challenge to agent
+* If validation passed, the server generates a credential activation challenge. The challenge's secret is encrypted using the EK public key.
 
-- Agent decrypts the challenge's secret
+* Server sends challenge to agent
 
-- Agent sends back decrypted secret
+* Agent decrypts the challenge's secret
 
-- Server verifies that the decrypted secret is the same it used to build the challenge
+* Agent sends back decrypted secret
 
-- Server creates a SPIFFE ID along with the sha256sum of the TPM AK public key
+* Server verifies that the decrypted secret is the same it used to build the challenge
 
-## Composite location using Geo-location service (GL)
+* Server creates a SPIFFE ID along with the sha256sum of the TPM AK public key and Workload attestation public key
+
+## Agent gets attested composite location using Geo-location service (GL)
 Geo-location service (GL) runs outside of H -- besides the location from device location sources (e.g. GPS, GNSS), it will connect to mobile location service providers (e.g., Telefonica) using GSMA location API (gsma-loc).
 
 * Agent gathers the location from H local location sensors (e.g. GPS, GNSS). Agent connects to GL using secure connection mechanism like TLS. Agent provides the gathered location to GL over the secure connection.
@@ -211,9 +213,9 @@ Geo-location service (GL) runs outside of H -- besides the location from device 
 
 * The composite location comprises of combined geo-location (which includes location quality), host composition (TPM EK, mobile-SIM etc.) and time from a trusted source. GL signs the composite location with a private key whose public key certificate is a public trusted transparent ledger such as certificate transparency log. Now we have a attested composite location.
 
-* Agent is returned the attested composite location over the secure connection. Agent signs the attested composite location using TPM AIK establishing proof of residency of composite location to H. This is called attested proof-of-residency aware composite location (APL).
+* Agent is returned the attested composite location over the secure connection. Agent signs the attested composite location using TPM AK establishing proof of residency of composite location to H. This is called attested proof-of-residency aware composite location (APL).
 
-## Geographic boundary using Geo-fencing (GF) service
+## Agent gets attested geographic boundary using Geo-fencing (GF) service
 * Geo-fence policies are of four flavours - precise location, precise bounding box/circle of location, approximate location (no definition of boundary), boolean membership of given boundary (rectangular, circular, state etc.). They are available in the form of pre-defined templates or can be configured on demand. Enterprises, who are the user of the hosts, choose the geo-fence policies to be enforced for various hosts. Note that the hosts must belong to the set of trusted hosts in a shared ledger. The geo-fence policies applied to the set of trusted hosts are recorded in a shared ledger.
 
 * Location agent on H supplies (APL) to geo-fence service (GF) over a secure connection. GF performs geo-fence policy enforcement by matching the location against configured geo-fence policies. GF signs the geo-fence policy match result, along with a trusted time (todo - can we reuse RFC 3161), with a private key whose public key certificate is a public trusted transparent ledger such as certificate transparency log.
@@ -222,7 +224,7 @@ Geo-location service (GL) runs outside of H -- besides the location from device 
 
 * GF logs attested geo-fence policy match result in a shared ledger.
 
-* Agent is returned the attested geo-fence policy match result. Agent signs the attested geo-fence policy match result using TPM AIK establishing proof of residency of geo-fence policy match result to H. This is called attested proof-of-residency aware geo-fence policy match result (APGL).
+* Agent is returned the attested geo-fence policy match result. Agent signs the attested geo-fence policy match result using TPM AK establishing proof of residency of geo-fence policy match result to H. This is called attested proof-of-residency aware geo-fence policy match result (APGL).
 
 # Networking Protocol Changes
 Workload ID (WID), with location field, in the form of a proof-of-residency certificate or token needs to be conveyed to the peer during connection establishment. The connection is end-to-end across proxies like
