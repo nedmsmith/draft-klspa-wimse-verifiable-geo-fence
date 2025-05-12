@@ -373,10 +373,10 @@ Table of Contents
    *  Geo-fence policies are of four flavours - (1)boolean membership of
       given boundary (rectangular, circular, state etc.), (2)precise
       location, (3)precise bounding box/circle of location,
-      (4)approximate location (no definition of boundary).  Thew first
-      one, boolean membership of given boundary, is the most common and
-      will be assumed as the default.  They are available in the form of
-      pre-defined templates or can be configured on demand.
+      (4)approximate location with no definition of boundary.  Thew
+      first one, boolean membership of given boundary, is the most
+      common and will be assumed as the default.  They are available in
+      the form of pre-defined templates or can be configured on demand.
       Enterprises, who are the user of the hosts, choose the geo-fence
       policies to be enforced for various hosts.  Note that the hosts
       must belong to the set of trusted hosts in a shared ledger.  The
