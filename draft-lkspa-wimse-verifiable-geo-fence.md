@@ -108,7 +108,7 @@ Financial services, healthcare and government entities have data residency requi
 
 # Introduction
 
-TODO Introduction
+TODO Introduction - nms
 
 
 # Conventions and Definitions
