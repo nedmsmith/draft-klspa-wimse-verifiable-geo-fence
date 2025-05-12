@@ -10,6 +10,6 @@ ifneq (,$(wildcard $(ID_TEMPLATE_HOME)))
 	ln -s "$(ID_TEMPLATE_HOME)" $(LIBDIR)
 else
 	git clone -q --depth 10 -b main \
-	    https://github.com:martinthomson/i-d-template $(LIBDIR)
+	    https://github.com/martinthomson/i-d-template $(LIBDIR)
 endif
 endif
