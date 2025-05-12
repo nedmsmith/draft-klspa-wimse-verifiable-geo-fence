@@ -99,7 +99,7 @@ Table of Contents
    5.  Attestation for System Bootstrap and Agent Initialization
      5.1.  Attestation of OS Integrity and Proof of Residency on Host
      5.2.  Start/restart time attestation/remote verification of agent
-           for integrity and proof of residency on H
+           for integrity and proof of residency on Host
    6.  Agent geo-location and geo-fencing workflow - this is run
            periodically (say every 5 minutes) to ensure that the host is
            in the same location
@@ -278,7 +278,7 @@ Table of Contents
    approved OS.
 
 5.2.  Start/restart time attestation/remote verification of agent for
-      integrity and proof of residency on H
+      integrity and proof of residency on Host
 
    As part of agent start/restart process, linux integrity measurement
    architecture (linux-ima) is used to ensure that only approved

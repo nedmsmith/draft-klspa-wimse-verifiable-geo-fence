@@ -1202,7 +1202,7 @@ svg :is([fill="white"], [fill^="#fff"]) {
                 <p id="section-toc.1-1.5.2.1.1"><a href="#section-5.1" class="auto internal xref">5.1</a>.  <a href="#name-attestation-of-os-integrity" class="internal xref">Attestation of OS Integrity and Proof of Residency on Host</a></p>
 </li>
               <li class="compact toc ulBare ulEmpty" id="section-toc.1-1.5.2.2">
-                <p id="section-toc.1-1.5.2.2.1"><a href="#section-5.2" class="auto internal xref">5.2</a>.  <a href="#name-start-restart-time-attestat" class="internal xref">Start/restart time attestation/remote verification of agent for integrity and proof of residency on H</a></p>
+                <p id="section-toc.1-1.5.2.2.1"><a href="#section-5.2" class="auto internal xref">5.2</a>.  <a href="#name-start-restart-time-attestat" class="internal xref">Start/restart time attestation/remote verification of agent for integrity and proof of residency on Host</a></p>
 </li>
             </ul>
 </li>
@@ -1386,10 +1386,10 @@ To meet these requirements, they need to be able to verify the geographic bounda
 <p id="section-5.1-6">Remote Verification: The remote server checks the integrity of the attestation report and validates the measurements against known good values from the set of trusted hosts in the shared datastore. The server also validates that the TPM EK certificate has not been revoked and part of approved list of TPM EK identifiers associated with hardware platform. At this point, we can be sure that the hardware platform is approved for running workloads and is running an approved OS.<a href="#section-5.1-6" class="pilcrow">¶</a></p>
 </section>
 </div>
-<div id="startrestart-time-attestationremote-verification-of-agent-for-integrity-and-proof-of-residency-on-h">
+<div id="startrestart-time-attestationremote-verification-of-agent-for-integrity-and-proof-of-residency-on-host">
 <section id="section-5.2">
         <h3 id="name-start-restart-time-attestat">
-<a href="#section-5.2" class="section-number selfRef">5.2. </a><a href="#name-start-restart-time-attestat" class="section-name selfRef">Start/restart time attestation/remote verification of agent for integrity and proof of residency on H</a>
+<a href="#section-5.2" class="section-number selfRef">5.2. </a><a href="#name-start-restart-time-attestat" class="section-name selfRef">Start/restart time attestation/remote verification of agent for integrity and proof of residency on Host</a>
         </h3>
 <p id="section-5.2-1">As part of agent start/restart process, linux integrity measurement architecture (linux-ima) is used to ensure that only approved executable for agent is loaded.<a href="#section-5.2-1" class="pilcrow">¶</a></p>
 <p id="section-5.2-2">Measurement collection: The agent executable is measured by linux-ima before it is loaded.
