@@ -77,12 +77,12 @@ informative:
     org: TCG
   target: https://trustedcomputinggroup.org/resource/trusted-platform-module-2-0-a-brief-introduction/
  spire:
-   title: SPIRE workload identity
+  title: SPIFFE/SPIRE workload identity
   author:
     org: Spire open source project
   target: https://spiffe.io/
  spire-tpm:
-  title: SPIRE TPM plugin
+  title: SPIFFE/SPIRE TPM plugin
   author:
     org: Spire open source project plugin
   target: https://github.com/bloomberg/spire-tpm-plugin
@@ -199,7 +199,7 @@ TPM attestation and remote server verification:
 - Server creates a SPIFFE ID along with the sha256sum of the TPM AK public key
 
 ## Composite location using Geo-location service (GL)
-Geo-location service (GL) runs outside of H -- besides the location from device location sources (e.g. GPS, GNSS), it will connect to mobile location service providers (e.g., Telefonica) using GSMA location API (gsma-loc). 
+Geo-location service (GL) runs outside of H -- besides the location from device location sources (e.g. GPS, GNSS), it will connect to mobile location service providers (e.g., Telefonica) using GSMA location API (gsma-loc).
 
 * Agent gathers the location from H local location sensors (e.g. GPS, GNSS). Agent connects to GL using secure connection mechanism like TLS. Agent provides the gathered location to GL over the secure connection.
 
