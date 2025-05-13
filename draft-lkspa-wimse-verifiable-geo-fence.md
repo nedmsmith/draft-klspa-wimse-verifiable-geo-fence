@@ -248,6 +248,8 @@ Workload ID (WID), with location field, in the form of a proof-of-residency cert
 
 * SCTP session termination (Mobile network SASE firewall etc.) - terminate and re-establish TLS; sctp/ip; does not use TCP or UDP.
 
+* NFS - terminate and re-establish TLS; tcp/ip.
+
 ## Not Using TLS
 
 * SSH tunnel (Jump hosts etc.) - terminate and re-establish ssh; tcp/ip; does not use TLS.
