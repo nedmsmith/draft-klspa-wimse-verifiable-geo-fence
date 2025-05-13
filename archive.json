@@ -1,6 +1,6 @@
 {
   "magic": "E!vIA5L86J2I",
-  "timestamp": "2025-05-11T01:14:37.478201+00:00",
+  "timestamp": "2025-05-13T01:11:20.260421+00:00",
   "repo": "nedmsmith/draft-klspa-wimse-verifiable-geo-fence",
   "labels": [
     {
@@ -106,6 +106,212 @@
       },
       "comments": [],
       "reviews": []
+    },
+    {
+      "number": 3,
+      "id": "PR_kwDOOmshaM6VvCZK",
+      "title": "Ramki mod",
+      "url": "https://github.com/nedmsmith/draft-klspa-wimse-verifiable-geo-fence/pull/3",
+      "state": "MERGED",
+      "author": "ramkri123",
+      "authorAssociation": "COLLABORATOR",
+      "assignees": [
+        "ramkri123"
+      ],
+      "labels": [],
+      "body": "Cleanup",
+      "createdAt": "2025-05-11T13:30:20Z",
+      "updatedAt": "2025-05-12T18:29:14Z",
+      "baseRepository": "nedmsmith/draft-klspa-wimse-verifiable-geo-fence",
+      "baseRefName": "main",
+      "baseRefOid": "0b150f98c6d5da316647046d148d6e015cb69612",
+      "headRepository": "nedmsmith/draft-klspa-wimse-verifiable-geo-fence",
+      "headRefName": "ramki-mod",
+      "headRefOid": "297af8c1d69a690e3c3f02f09a7d432a756f58fd",
+      "closedAt": "2025-05-12T18:29:11Z",
+      "mergedAt": "2025-05-12T18:29:11Z",
+      "mergedBy": "nedmsmith",
+      "mergeCommit": {
+        "oid": "bdc36a44c3e4a24d004d5b867087a9c56c23bdb9"
+      },
+      "comments": [],
+      "reviews": [
+        {
+          "id": "PRR_kwDOOmshaM6o7VcL",
+          "commit": {
+            "abbreviatedOid": "297af8c"
+          },
+          "author": "nedmsmith",
+          "authorAssociation": "OWNER",
+          "state": "APPROVED",
+          "body": "LGTM",
+          "createdAt": "2025-05-12T18:28:58Z",
+          "updatedAt": "2025-05-12T18:28:58Z",
+          "comments": []
+        }
+      ]
+    },
+    {
+      "number": 4,
+      "id": "PR_kwDOOmshaM6V4fus",
+      "title": "Update draft-lkspa-wimse-verifiable-geo-fence.md",
+      "url": "https://github.com/nedmsmith/draft-klspa-wimse-verifiable-geo-fence/pull/4",
+      "state": "MERGED",
+      "author": "nedmsmith",
+      "authorAssociation": "OWNER",
+      "assignees": [],
+      "labels": [],
+      "body": "testing permissions",
+      "createdAt": "2025-05-12T18:34:01Z",
+      "updatedAt": "2025-05-12T18:37:07Z",
+      "baseRepository": "nedmsmith/draft-klspa-wimse-verifiable-geo-fence",
+      "baseRefName": "main",
+      "baseRefOid": "bdc36a44c3e4a24d004d5b867087a9c56c23bdb9",
+      "headRepository": "nedmsmith/draft-klspa-wimse-verifiable-geo-fence",
+      "headRefName": "ramki-mod",
+      "headRefOid": "024eb04263113fecc86939e841315b92934a180a",
+      "closedAt": "2025-05-12T18:37:07Z",
+      "mergedAt": "2025-05-12T18:37:07Z",
+      "mergedBy": "ramkri123",
+      "mergeCommit": {
+        "oid": "b596e1cfe4ef6ef780d1ab403a3195096618bf63"
+      },
+      "comments": [],
+      "reviews": [
+        {
+          "id": "PRR_kwDOOmshaM6o7bI7",
+          "commit": {
+            "abbreviatedOid": "024eb04"
+          },
+          "author": "ramkri123",
+          "authorAssociation": "COLLABORATOR",
+          "state": "APPROVED",
+          "body": "looks good",
+          "createdAt": "2025-05-12T18:36:57Z",
+          "updatedAt": "2025-05-12T18:36:57Z",
+          "comments": []
+        }
+      ]
+    },
+    {
+      "number": 5,
+      "id": "PR_kwDOOmshaM6V56hx",
+      "title": "Ramki mod",
+      "url": "https://github.com/nedmsmith/draft-klspa-wimse-verifiable-geo-fence/pull/5",
+      "state": "MERGED",
+      "author": "ramkri123",
+      "authorAssociation": "COLLABORATOR",
+      "assignees": [],
+      "labels": [],
+      "body": "good version, please review",
+      "createdAt": "2025-05-12T21:40:48Z",
+      "updatedAt": "2025-05-12T22:26:00Z",
+      "baseRepository": "nedmsmith/draft-klspa-wimse-verifiable-geo-fence",
+      "baseRefName": "main",
+      "baseRefOid": "b596e1cfe4ef6ef780d1ab403a3195096618bf63",
+      "headRepository": "nedmsmith/draft-klspa-wimse-verifiable-geo-fence",
+      "headRefName": "ramki-mod",
+      "headRefOid": "218274ed7e73076d89810ec7862f0d68abf47c66",
+      "closedAt": "2025-05-12T22:25:59Z",
+      "mergedAt": "2025-05-12T22:25:59Z",
+      "mergedBy": "ramkri123",
+      "mergeCommit": {
+        "oid": "7a0c8387c80f430398566e5a1b5cd8a36831ffdd"
+      },
+      "comments": [
+        {
+          "author": "ramkri123",
+          "authorAssociation": "COLLABORATOR",
+          "body": "@nedmsmith - I have accepted all your comments. Please approve",
+          "createdAt": "2025-05-12T22:22:28Z",
+          "updatedAt": "2025-05-12T22:22:28Z"
+        }
+      ],
+      "reviews": [
+        {
+          "id": "PRR_kwDOOmshaM6o9kMC",
+          "commit": {
+            "abbreviatedOid": "8fa631e"
+          },
+          "author": "nedmsmith",
+          "authorAssociation": "OWNER",
+          "state": "COMMENTED",
+          "body": "",
+          "createdAt": "2025-05-12T21:47:50Z",
+          "updatedAt": "2025-05-12T21:50:30Z",
+          "comments": [
+            {
+              "originalPosition": 5,
+              "body": "```suggestion\r\n* Geo-fence policies are of four flavours - (1) boolean membership of given boundary (rectangular, circular, state etc.), (2) precise location, (3) precise bounding box/circle of location, (4) approximate location with no definition of boundary.\r\nThe first one, boolean membership of given boundary, is the most common and will be assumed as the default. They are available in the form of pre-defined templates or can be configured on demand.\r\nEnterprises, who are the user of the hosts, choose the geo-fence policies to be enforced for various hosts.\r\nNote that the hosts must belong to the set of trusted hosts in a shared ledger.\r\nThe geo-fence policies applied to the set of trusted hosts are recorded in a shared ledger.\r\n```",
+              "createdAt": "2025-05-12T21:47:50Z",
+              "updatedAt": "2025-05-12T21:50:31Z"
+            },
+            {
+              "originalPosition": 5,
+              "body": "Note (1), (2), etc... won't render as numbered bullets. use:\r\n\"1. my first bullet\"\r\n\"1. my second bullet\"\r\n\"1. my third bullet\"\r\nwithout the quote marks.\r\nPutting only one sentence per line makes it easier to review and suggest changes.",
+              "createdAt": "2025-05-12T21:49:14Z",
+              "updatedAt": "2025-05-12T21:51:32Z"
+            }
+          ]
+        },
+        {
+          "id": "PRR_kwDOOmshaM6o9muu",
+          "commit": {
+            "abbreviatedOid": "8fa631e"
+          },
+          "author": "nedmsmith",
+          "authorAssociation": "OWNER",
+          "state": "COMMENTED",
+          "body": "multiple",
+          "createdAt": "2025-05-12T21:55:21Z",
+          "updatedAt": "2025-05-12T22:03:51Z",
+          "comments": [
+            {
+              "originalPosition": 15,
+              "body": "```suggestion\r\n# Attestation for System Bootstrap and Agent Initialization\r\n```",
+              "createdAt": "2025-05-12T21:55:21Z",
+              "updatedAt": "2025-05-12T22:03:51Z"
+            },
+            {
+              "originalPosition": 15,
+              "body": "using slash character \"/\" in a title is hard to read",
+              "createdAt": "2025-05-12T21:56:07Z",
+              "updatedAt": "2025-05-12T22:03:51Z"
+            },
+            {
+              "originalPosition": 19,
+              "body": "```suggestion\r\n## Attestation of OS Integrity and Proof of Residency on Host\r\n```",
+              "createdAt": "2025-05-12T22:00:19Z",
+              "updatedAt": "2025-05-12T22:03:51Z"
+            },
+            {
+              "originalPosition": 28,
+              "body": "```suggestion\r\n## Start/restart time attestation/remote verification of agent for integrity and proof of residency on Host\r\n```\r\n\r\nHow is this section different from the previous section that is almost the same name?",
+              "createdAt": "2025-05-12T22:02:01Z",
+              "updatedAt": "2025-05-12T22:03:51Z"
+            },
+            {
+              "originalPosition": 46,
+              "body": "```suggestion\r\n* Server creates a SPIFFE ID along with the sha256sum of the TPM AK public key.\r\nServer stores agent SPIFFE ID mapping to TPM AK public key in a shared datastore.\r\n```",
+              "createdAt": "2025-05-12T22:02:25Z",
+              "updatedAt": "2025-05-12T22:03:51Z"
+            }
+          ]
+        },
+        {
+          "id": "PRR_kwDOOmshaM6o9vU-",
+          "commit": {
+            "abbreviatedOid": "218274e"
+          },
+          "author": "nedmsmith",
+          "authorAssociation": "OWNER",
+          "state": "APPROVED",
+          "body": "",
+          "createdAt": "2025-05-12T22:23:55Z",
+          "updatedAt": "2025-05-12T22:23:55Z",
+          "comments": []
+        }
+      ]
     }
   ]
 }
