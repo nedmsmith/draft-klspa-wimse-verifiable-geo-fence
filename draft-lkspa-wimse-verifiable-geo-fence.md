@@ -321,20 +321,20 @@ By addressing these considerations, the framework aims to provide a secure and r
 
 This document has no IANA actions.
 
-# Appendix: Workflow Diagram
+# Appendix: End-to-end workflow diagram with a secure AI agent workload
 
 ```mermaid
 flowchart TD
-    subgraph Trusted Host (with TPM & Location Sensors)
-        A[AI Agent/Workload]
-        B[Location Agent<br/>(SPIFFE/SPIRE + TPM)]
+    subgraph Trusted_Host
+        A[AI Agent / Workload]
+        B[Location Agent (SPIFFE/SPIRE + TPM)]
         C[TPM & Location Sensors]
     end
 
     D[Geo-location Service (GL)]
     E[Geo-fence Service (GF)]
     F[Workload Identity Manager (WIM)]
-    G[Financial Service Application/Policy Enforcer]
+    G[Financial Service App / Policy Enforcer]
 
     %% Workflow steps
     A -- Requests attestation --> B
@@ -350,7 +350,7 @@ flowchart TD
 
     %% Annotations
     classDef trusted fill:#e0f7fa,stroke:#00796b,stroke-width:2px;
-    class Trusted Host trusted;
+    class Trusted_Host trusted;
 ```
 
 --- back
