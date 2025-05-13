@@ -301,7 +301,7 @@ The proposed framework introduces several security considerations that must be a
 
 - **TPM and Hardware Trust**: The security of the solution depends on the integrity of the TPM and other hardware roots of trust. Physical attacks, firmware vulnerabilities, or supply chain compromises could undermine attestation. Regular updates, secure provisioning, and monitoring are required.
 
-- **Geo-location Spoofing**: Location sensors (e.g., GPS, GNSS, mobile network) are susceptible to spoofing or relay attacks. Use of cryptographically authenticated signals (e.g., Galileo GNSS signal authentication) and cross-verification with multiple sources can mitigate this risk.
+- **Geo-location Spoofing**: Location sensors (e.g., GPS) are susceptible to spoofing or replay attacks. Use of cryptographically authenticated signals (e.g., Galileo GNSS, Mobile network) and cross-verification with multiple sources can mitigate this risk.
 
 - **SIM and e-SIM Attacks**: Physical SIM removal or e-SIM swap attacks can break the binding between device and location. Continuous monitoring of device composition and periodic re-attestation are recommended.
 
