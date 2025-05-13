@@ -321,12 +321,36 @@ By addressing these considerations, the framework aims to provide a secure and r
 
 This document has no IANA actions.
 
-# Workflow Diagram
+# Appendix: Workflow Diagram
 
 ```mermaid
 flowchart TD
-    A[Workload with Geo-bound SPIFFE ID] -->|Connect| B[Peer/Service/Policy Enforcer]
-    B -->|Verify SPIFFE ID & Geo-boundary| C[Allow or Deny Access]
+    subgraph Trusted Host (with TPM & Location Sensors)
+        A[AI Agent/Workload]
+        B[Location Agent<br/>(SPIFFE/SPIRE + TPM)]
+        C[TPM & Location Sensors]
+    end
+
+    D[Geo-location Service (GL)]
+    E[Geo-fence Service (GF)]
+    F[Workload Identity Manager (WIM)]
+    G[Financial Service Application/Policy Enforcer]
+
+    %% Workflow steps
+    A -- Requests attestation --> B
+    B -- Gathers measurements & location --> C
+    B -- Sends attested location & host info --> D
+    D -- Returns attested composite location --> B
+    B -- Sends proof to geo-fence service --> E
+    E -- Returns geo-fence policy match --> B
+    B -- Sends attested info to WIM --> F
+    F -- Issues Geo-bound Workload ID (WID) --> B
+    A -- Presents WID on connect --> G
+    G -- Verifies WID, host & location affinity --> G
+
+    %% Annotations
+    classDef trusted fill:#e0f7fa,stroke:#00796b,stroke-width:2px;
+    class Trusted Host trusted;
 ```
 
 --- back
