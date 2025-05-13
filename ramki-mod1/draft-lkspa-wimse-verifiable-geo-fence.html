@@ -1244,7 +1244,7 @@ svg :is([fill="white"], [fill^="#fff"]) {
             <p id="section-toc.1-1.12.1"><a href="#section-12" class="auto internal xref">12</a>. <a href="#name-iana-considerations" class="internal xref">IANA Considerations</a></p>
 </li>
           <li class="compact toc ulBare ulEmpty" id="section-toc.1-1.13">
-            <p id="section-toc.1-1.13.1"><a href="#section-13" class="auto internal xref">13</a>. <a href="#name-appendix-workflow-diagram" class="internal xref">Appendix: Workflow Diagram</a></p>
+            <p id="section-toc.1-1.13.1"><a href="#section-13" class="auto internal xref">13</a>. <a href="#name-appendix-end-to-end-workflo" class="internal xref">Appendix: End-to-end workflow diagram with a secure AI agent workload</a></p>
 </li>
           <li class="compact toc ulBare ulEmpty" id="section-toc.1-1.14">
             <p id="section-toc.1-1.14.1"><a href="#section-14" class="auto internal xref">14</a>. <a href="#name-references" class="internal xref">References</a></p>
@@ -1684,16 +1684,16 @@ However, if it is pushed down to, say, K8s or OS process scheduler or JVM class 
 <p id="section-12-1">This document has no IANA actions.<a href="#section-12-1" class="pilcrow">¶</a></p>
 </section>
 </div>
-<div id="appendix-workflow-diagram">
+<div id="appendix-end-to-end-workflow-diagram-with-a-secure-ai-agent-workload">
 <section id="section-13">
-      <h2 id="name-appendix-workflow-diagram">
-<a href="#section-13" class="section-number selfRef">13. </a><a href="#name-appendix-workflow-diagram" class="section-name selfRef">Appendix: Workflow Diagram</a>
+      <h2 id="name-appendix-end-to-end-workflo">
+<a href="#section-13" class="section-number selfRef">13. </a><a href="#name-appendix-end-to-end-workflo" class="section-name selfRef">Appendix: End-to-end workflow diagram with a secure AI agent workload</a>
       </h2>
 <p id="section-13-1">```mermaid
 flowchart TD
-    subgraph Trusted Host (with TPM &amp; Location Sensors)
-        A[AI Agent/Workload]
-        B[Location Agent<br>(SPIFFE/SPIRE + TPM)]
+    subgraph Trusted_Host
+        A[AI Agent / Workload]
+        B[Location Agent (SPIFFE/SPIRE + TPM)]
         C[TPM &amp; Location Sensors]
     end<a href="#section-13-1" class="pilcrow">¶</a></p>
 <div class="alignLeft art-text artwork" id="section-13-2">
@@ -1701,7 +1701,7 @@ flowchart TD
 D[Geo-location Service (GL)]
 E[Geo-fence Service (GF)]
 F[Workload Identity Manager (WIM)]
-G[Financial Service Application/Policy Enforcer]
+G[Financial Service App / Policy Enforcer]
 
 %% Workflow steps
 A -- Requests attestation --&gt; B
@@ -1717,7 +1717,7 @@ G -- Verifies WID, host &amp; location affinity --&gt; G
 
 %% Annotations
 classDef trusted fill:#e0f7fa,stroke:#00796b,stroke-width:2px;
-class Trusted Host trusted; ```
+class Trusted_Host trusted; ```
 </pre><a href="#section-13-2" class="pilcrow">¶</a>
 </div>
 </section>
