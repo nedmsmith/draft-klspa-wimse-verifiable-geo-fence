@@ -568,10 +568,10 @@ Table of Contents
       compromises could undermine attestation.  Regular updates, secure
       provisioning, and monitoring are required.
 
-   *  *Geo-location Spoofing*: Location sensors (e.g., GPS, GNSS, mobile
-      network) are susceptible to spoofing or relay attacks.  Use of
-      cryptographically authenticated signals (e.g., Galileo GNSS signal
-      authentication) and cross-verification with multiple sources can
+   *  *Geo-location Spoofing*: Location sensors (e.g., GPS) are
+      susceptible to spoofing or replay attacks.  Use of
+      cryptographically authenticated signals (e.g., Galileo GNSS,
+      Mobile network) and cross-verification with multiple sources can
       mitigate this risk.
 
    *  *SIM and e-SIM Attacks*: Physical SIM removal or e-SIM swap
