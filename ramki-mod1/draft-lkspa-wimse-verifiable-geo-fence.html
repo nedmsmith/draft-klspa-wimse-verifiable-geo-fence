@@ -1689,36 +1689,177 @@ However, if it is pushed down to, say, K8s or OS process scheduler or JVM class 
       <h2 id="name-appendix-end-to-end-workflo">
 <a href="#section-13" class="section-number selfRef">13. </a><a href="#name-appendix-end-to-end-workflo" class="section-name selfRef">Appendix: End-to-end workflow diagram with a secure AI agent workload</a>
       </h2>
-<p id="section-13-1">```mermaid
-flowchart TD
-    subgraph Trusted_Host
-        A[AI Agent / Workload]
-        B[Location Agent (SPIFFE/SPIRE + TPM)]
-        C[TPM &amp; Location Sensors]
-    end<a href="#section-13-1" class="pilcrow">¶</a></p>
-<div class="alignLeft art-text artwork" id="section-13-2">
-<pre>
-D[Geo-location Service (GL)]
-E[Geo-fence Service (GF)]
-F[Workload Identity Manager (WIM)]
-G[Financial Service App / Policy Enforcer]
-
-%% Workflow steps
-A -- Requests attestation --&gt; B
-B -- Gathers measurements &amp; location --&gt; C
-B -- Sends attested location &amp; host info --&gt; D
-D -- Returns attested composite location --&gt; B
-B -- Sends proof to geo-fence service --&gt; E
-E -- Returns geo-fence policy match --&gt; B
-B -- Sends attested info to WIM --&gt; F
-F -- Issues Geo-bound Workload ID (WID) --&gt; B
-A -- Presents WID on connect --&gt; G
-G -- Verifies WID, host &amp; location affinity --&gt; G
-
-%% Annotations
-classDef trusted fill:#e0f7fa,stroke:#00796b,stroke-width:2px;
-class Trusted_Host trusted; ```
-</pre><a href="#section-13-2" class="pilcrow">¶</a>
+<div id="section-13-1">
+        <div class="alignLeft art-svg artwork" id="section-13-1.1">
+<svg xmlns="http://www.w3.org/2000/svg" version="1.1" height="912" width="656" viewBox="0 0 656 912" class="diagram" text-anchor="middle" font-family="monospace" font-size="13px" stroke-linecap="round">
+            <path d="M 8,32 L 8,112" fill="none" stroke="black"></path>
+            <path d="M 8,736 L 8,816" fill="none" stroke="black"></path>
+            <path d="M 88,112 L 88,704" fill="none" stroke="black"></path>
+            <path d="M 168,32 L 168,112" fill="none" stroke="black"></path>
+            <path d="M 168,736 L 168,816" fill="none" stroke="black"></path>
+            <path d="M 248,32 L 248,112" fill="none" stroke="black"></path>
+            <path d="M 328,112 L 328,400" fill="none" stroke="black"></path>
+            <path d="M 408,32 L 408,112" fill="none" stroke="black"></path>
+            <path d="M 488,32 L 488,112" fill="none" stroke="black"></path>
+            <path d="M 536,416 L 536,512" fill="none" stroke="black"></path>
+            <path d="M 568,112 L 568,416" fill="none" stroke="black"></path>
+            <path d="M 568,512 L 568,640" fill="none" stroke="black"></path>
+            <path d="M 600,416 L 600,512" fill="none" stroke="black"></path>
+            <path d="M 648,32 L 648,112" fill="none" stroke="black"></path>
+            <path d="M 8,32 L 168,32" fill="none" stroke="black"></path>
+            <path d="M 248,32 L 408,32" fill="none" stroke="black"></path>
+            <path d="M 488,32 L 648,32" fill="none" stroke="black"></path>
+            <path d="M 8,112 L 168,112" fill="none" stroke="black"></path>
+            <path d="M 248,112 L 408,112" fill="none" stroke="black"></path>
+            <path d="M 488,112 L 648,112" fill="none" stroke="black"></path>
+            <path d="M 88,176 L 320,176" fill="none" stroke="black"></path>
+            <path d="M 328,256 L 560,256" fill="none" stroke="black"></path>
+            <path d="M 96,304 L 328,304" fill="none" stroke="black"></path>
+            <path d="M 88,352 L 328,352" fill="none" stroke="black"></path>
+            <path d="M 88,400 L 328,400" fill="none" stroke="black"></path>
+            <path d="M 536,416 L 560,416" fill="none" stroke="black"></path>
+            <path d="M 576,416 L 600,416" fill="none" stroke="black"></path>
+            <path d="M 536,512 L 600,512" fill="none" stroke="black"></path>
+            <path d="M 400,560 L 560,560" fill="none" stroke="black"></path>
+            <path d="M 96,640 L 568,640" fill="none" stroke="black"></path>
+            <path d="M 8,736 L 168,736" fill="none" stroke="black"></path>
+            <path d="M 8,816 L 168,816" fill="none" stroke="black"></path>
+            <path d="M 536,512 L 544,496" fill="none" stroke="black"></path>
+            <polygon class="arrowhead" points="576,416 564,410.4 564,421.6" fill="black" transform="rotate(90,568,416)"></polygon>
+            <polygon class="arrowhead" points="568,560 556,554.4 556,565.6" fill="black" transform="rotate(0,560,560)"></polygon>
+            <polygon class="arrowhead" points="568,256 556,250.4 556,261.6" fill="black" transform="rotate(0,560,256)"></polygon>
+            <polygon class="arrowhead" points="328,176 316,170.4 316,181.6" fill="black" transform="rotate(0,320,176)"></polygon>
+            <polygon class="arrowhead" points="104,640 92,634.4 92,645.6" fill="black" transform="rotate(180,96,640)"></polygon>
+            <polygon class="arrowhead" points="104,304 92,298.4 92,309.6" fill="black" transform="rotate(180,96,304)"></polygon>
+            <polygon class="arrowhead" points="96,704 84,698.4 84,709.6" fill="black" transform="rotate(90,88,704)"></polygon>
+            <g class="text">
+              <text x="64" y="68">Trusted</text>
+              <text x="116" y="68">Host</text>
+              <text x="308" y="68">Geo-location</text>
+              <text x="376" y="68">Svc</text>
+              <text x="536" y="68">Geo-fence</text>
+              <text x="592" y="68">Svc</text>
+              <text x="40" y="84">(TPM,</text>
+              <text x="100" y="84">Sensors,</text>
+              <text x="292" y="84">(GL)</text>
+              <text x="532" y="84">(GF)</text>
+              <text x="48" y="100">Linux</text>
+              <text x="92" y="100">IMA,</text>
+              <text x="136" y="100">etc.)</text>
+              <text x="108" y="148">1.</text>
+              <text x="148" y="148">Gather</text>
+              <text x="200" y="148">local</text>
+              <text x="260" y="148">location</text>
+              <text x="144" y="164">(GPS,</text>
+              <text x="188" y="164">SIM,</text>
+              <text x="232" y="164">etc.)</text>
+              <text x="108" y="196">2.</text>
+              <text x="140" y="196">Send</text>
+              <text x="172" y="196">to</text>
+              <text x="196" y="196">GL</text>
+              <text x="232" y="196">(TLS)</text>
+              <text x="348" y="228">3.</text>
+              <text x="416" y="228">Cross-verify,</text>
+              <text x="492" y="228">sign</text>
+              <text x="400" y="244">composite</text>
+              <text x="476" y="244">location</text>
+              <text x="348" y="276">4.</text>
+              <text x="388" y="276">Policy</text>
+              <text x="444" y="276">match,</text>
+              <text x="492" y="276">sign</text>
+              <text x="400" y="292">geo-fence</text>
+              <text x="468" y="292">result</text>
+              <text x="108" y="324">5.</text>
+              <text x="148" y="324">Return</text>
+              <text x="212" y="324">attested</text>
+              <text x="160" y="340">geo-fence</text>
+              <text x="228" y="340">result</text>
+              <text x="108" y="372">6.</text>
+              <text x="140" y="372">Sign</text>
+              <text x="180" y="372">with</text>
+              <text x="216" y="372">TPM</text>
+              <text x="244" y="372">AK</text>
+              <text x="148" y="388">(Proof</text>
+              <text x="188" y="388">of</text>
+              <text x="244" y="388">residency)</text>
+              <text x="568" y="452">WIM</text>
+              <text x="568" y="468">(Server</text>
+              <text x="568" y="484">/SPIFFE</text>
+              <text x="572" y="500">SPIRE)</text>
+              <text x="108" y="548">7.</text>
+              <text x="140" y="548">Send</text>
+              <text x="196" y="548">attested</text>
+              <text x="272" y="548">geo-fence</text>
+              <text x="344" y="548">result,</text>
+              <text x="156" y="564">workload</text>
+              <text x="224" y="564">pubkey,</text>
+              <text x="280" y="564">agent</text>
+              <text x="332" y="564">SPIFFE</text>
+              <text x="372" y="564">ID</text>
+              <text x="108" y="612">8.</text>
+              <text x="148" y="612">Verify</text>
+              <text x="228" y="612">attestation,</text>
+              <text x="304" y="612">issue</text>
+              <text x="364" y="612">Workload</text>
+              <text x="412" y="612">ID</text>
+              <text x="448" y="612">(WID)</text>
+              <text x="140" y="628">with</text>
+              <text x="216" y="628">geo-boundary,</text>
+              <text x="296" y="628">store</text>
+              <text x="352" y="628">mapping</text>
+              <text x="108" y="676">9.</text>
+              <text x="156" y="676">Workload</text>
+              <text x="212" y="676">uses</text>
+              <text x="248" y="676">WID</text>
+              <text x="280" y="676">for</text>
+              <text x="324" y="676">secure</text>
+              <text x="400" y="676">connections</text>
+              <text x="148" y="692">(e.g.,</text>
+              <text x="196" y="692">TLS,</text>
+              <text x="236" y="692">HTTP</text>
+              <text x="288" y="692">header,</text>
+              <text x="344" y="692">etc.)</text>
+              <text x="52" y="772">Peer</text>
+              <text x="104" y="772">Service</text>
+              <text x="64" y="788">(Policy</text>
+              <text x="132" y="788">Enforcer</text>
+              <text x="64" y="804">SaaS,</text>
+              <text x="108" y="804">K8s,</text>
+              <text x="148" y="804">etc)</text>
+              <text x="32" y="852">Legend:</text>
+              <text x="8" y="868">-</text>
+              <text x="32" y="868">All</text>
+              <text x="108" y="868">communications</text>
+              <text x="184" y="868">are</text>
+              <text x="220" y="868">over</text>
+              <text x="324" y="868">secure/authenticated</text>
+              <text x="444" y="868">channels</text>
+              <text x="508" y="868">(e.g.,</text>
+              <text x="556" y="868">TLS)</text>
+              <text x="8" y="884">-</text>
+              <text x="32" y="884">All</text>
+              <text x="96" y="884">attestation</text>
+              <text x="168" y="884">steps</text>
+              <text x="224" y="884">involve</text>
+              <text x="312" y="884">cryptographic</text>
+              <text x="412" y="884">signatures</text>
+              <text x="476" y="884">(TPM</text>
+              <text x="512" y="884">AK,</text>
+              <text x="544" y="884">GL,</text>
+              <text x="576" y="884">GF,</text>
+              <text x="612" y="884">WIM)</text>
+              <text x="8" y="900">-</text>
+              <text x="52" y="900">Periodic</text>
+              <text x="148" y="900">re-attestation</text>
+              <text x="224" y="900">and</text>
+              <text x="284" y="900">monitoring</text>
+              <text x="344" y="900">not</text>
+              <text x="384" y="900">shown</text>
+              <text x="424" y="900">for</text>
+              <text x="472" y="900">brevity</text>
+            </g>
+          </svg><a href="#section-13-1.1" class="pilcrow">¶</a>
+</div>
 </div>
 </section>
 </div>

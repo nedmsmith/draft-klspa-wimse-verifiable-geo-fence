@@ -614,29 +614,61 @@ Table of Contents
 13.  Appendix: End-to-end workflow diagram with a secure AI agent
      workload
 
-   ```mermaid flowchart TD subgraph Trusted_Host A[AI Agent / Workload]
-   B[Location Agent (SPIFFE/SPIRE + TPM)] C[TPM & Location Sensors] end
++-------------------+         +-------------------+         +-------------------+
+|                   |         |                   |         |                   |
+|   Trusted Host    |         | Geo-location Svc  |         | Geo-fence Svc     |
+| (TPM, Sensors,    |         |   (GL)            |         |   (GF)            |
+|  Linux IMA, etc.) |         |                   |         |                   |
++---------+---------+         +---------+---------+         +---------+---------+
+          |                             |                             |
+          | 1. Gather local location    |                             |
+          |    (GPS, SIM, etc.)         |                             |
+          +---------------------------->|                             |
+          | 2. Send to GL (TLS)         |                             |
+          |                             |                             |
+          |                             | 3. Cross-verify, sign       |
+          |                             |    composite location       |
+          |                             +---------------------------->|
+          |                             | 4. Policy match, sign       |
+          |                             |    geo-fence result         |
+          |<----------------------------+                             |
+          | 5. Return attested          |                             |
+          |    geo-fence result         |                             |
+          +-----------------------------+                             |
+          | 6. Sign with TPM AK         |                             |
+          |    (Proof of residency)     |                             |
+          +-----------------------------+                             |
+          |                                                       +---v---+
+          |                                                       |       |
+          |                                                       |  WIM  |
+          |                                                       |(Server|
+          |                                                       |/SPIFFE|
+          |                                                       |/SPIRE)|
+          |                                                       +---+---+
+          |                                                           |
+          | 7. Send attested geo-fence result,                        |
+          |    workload pubkey, agent SPIFFE ID  -------------------->|
+          |                                                           |
+          |                                                           |
+          | 8. Verify attestation, issue Workload ID (WID)            |
+          |    with geo-boundary, store mapping                       |
+          |<----------------------------------------------------------+
+          |
+          | 9. Workload uses WID for secure connections
+          |    (e.g., TLS, HTTP header, etc.)
+          v
 
-   D[Geo-location Service (GL)]
-   E[Geo-fence Service (GF)]
-   F[Workload Identity Manager (WIM)]
-   G[Financial Service App / Policy Enforcer]
++-------------------+
+|                   |
+|   Peer Service    |
+|   (Policy Enforcer|
+|    SaaS, K8s, etc)|
++-------------------+
 
-   %% Workflow steps
-   A -- Requests attestation --> B
-   B -- Gathers measurements & location --> C
-   B -- Sends attested location & host info --> D
-   D -- Returns attested composite location --> B
-   B -- Sends proof to geo-fence service --> E
-   E -- Returns geo-fence policy match --> B
-   B -- Sends attested info to WIM --> F
-   F -- Issues Geo-bound Workload ID (WID) --> B
-   A -- Presents WID on connect --> G
-   G -- Verifies WID, host & location affinity --> G
-
-   %% Annotations
-   classDef trusted fill:#e0f7fa,stroke:#00796b,stroke-width:2px;
-   class Trusted_Host trusted; ```
+Legend:
+- All communications are over secure/authenticated channels (e.g., TLS)
+- All attestation steps involve cryptographic signatures (TPM AK, GL, GF, WIM)
+- Periodic re-attestation and monitoring not shown for brevity
 
 14.  References
 
