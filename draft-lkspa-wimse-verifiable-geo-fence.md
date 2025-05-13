@@ -108,8 +108,11 @@ Financial services, healthcare and government entities have data residency requi
 
 # Introduction
 
-TODO Introduction - nms
+As organizations increasingly adopt cloud and distributed computing, the need to enforce data residency, geo-location affinity, and host affinity has become critical for regulatory compliance and risk management. Traditional approaches to geographic and host enforcement rely on trust in infrastructure providers or network-based controls, which are insufficient in adversarial or multi-tenant environments.
 
+Recent advances in trusted computing, remote attestation, and workload identity standards enable a new class of solutions where the geographic location and host integrity of workloads can be cryptographically attested and verified. By binding workload identity to both platform and domain attributes—such as TPM-backed device identity and verifiable geographic boundaries—organizations can enforce fine-grained policies on where and how sensitive workloads are executed.
+
+This document describes a framework for trustworthy and verifiable geo-fencing of workloads. It details use cases, architectural flows, and protocol enhancements that leverage trusted hardware (e.g., TPM), attestation protocols, and geo-location services. The goal is to enable interoperable, cryptographically verifiable claims about workload residency and location, supporting compliance, security, and operational requirements in multi-system environments.
 
 # Conventions and Definitions
 
@@ -294,17 +297,41 @@ However, if it is pushed down to, say, K8s or OS process scheduler or JVM class 
 
 # Security Considerations
 
-TODO Security
+The proposed framework introduces several security considerations that must be addressed to ensure the integrity and trustworthiness of geo-fencing:
 
+- **TPM and Hardware Trust**: The security of the solution depends on the integrity of the TPM and other hardware roots of trust. Physical attacks, firmware vulnerabilities, or supply chain compromises could undermine attestation. Regular updates, secure provisioning, and monitoring are required.
+
+- **Geo-location Spoofing**: Location sensors (e.g., GPS, GNSS, mobile network) are susceptible to spoofing or relay attacks. Use of cryptographically authenticated signals (e.g., Galileo GNSS signal authentication) and cross-verification with multiple sources can mitigate this risk.
+
+- **SIM and e-SIM Attacks**: Physical SIM removal or e-SIM swap attacks can break the binding between device and location. Continuous monitoring of device composition and periodic re-attestation are recommended.
+
+- **Software Integrity**: The geo-location agent and supporting software must be protected against tampering. Use of Linux IMA, secure boot, and measured launch environments helps ensure only approved software is executed.
+
+- **Communication Security**: All attestation and geo-location data must be transmitted over secure, authenticated channels (e.g., TLS) to prevent interception or manipulation.
+
+- **Policy Enforcement**: The enforcement of geo-fence policies must be robust against attempts by malicious workloads or agents to bypass controls. Policy decisions should be based on verifiable, signed attestation evidence.
+
+- **Time Source Integrity**: Trusted time sources are necessary to prevent replay attacks and ensure the freshness of attestation data.
+
+- **Datastore Security**: The shared datastore containing trusted host compositions and geo-fence policies must be protected against unauthorized access and tampering, using encryption and access controls.
+
+By addressing these considerations, the framework aims to provide a secure and reliable foundation for verifiable geo-fencing in diverse deployment environments.
 
 # IANA Considerations
 
 This document has no IANA actions.
 
+# Workflow Diagram
+
+```mermaid
+flowchart TD
+    A[Workload with Geo-bound SPIFFE ID] -->|Connect| B[Peer/Service/Policy Enforcer]
+    B -->|Verify SPIFFE ID & Geo-boundary| C[Allow or Deny Access]
+```
 
 --- back
 
 # Acknowledgments
 {:numbered="false"}
 
-TODO acknowledge.
+The authors thank the members of the WIMSE working group and the broader trusted computing and workload identity communities for their feedback and contributions. Special thanks to the Trusted Computing Group (TCG), the SPIFFE/SPIRE open-source community, and industry partners for foundational work and ongoing collaboration.
