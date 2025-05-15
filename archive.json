@@ -1,6 +1,6 @@
 {
   "magic": "E!vIA5L86J2I",
-  "timestamp": "2025-05-13T01:11:20.260421+00:00",
+  "timestamp": "2025-05-15T01:08:04.892783+00:00",
   "repo": "nedmsmith/draft-klspa-wimse-verifiable-geo-fence",
   "labels": [
     {
@@ -205,7 +205,7 @@
       "labels": [],
       "body": "good version, please review",
       "createdAt": "2025-05-12T21:40:48Z",
-      "updatedAt": "2025-05-12T22:26:00Z",
+      "updatedAt": "2025-05-13T14:44:06Z",
       "baseRepository": "nedmsmith/draft-klspa-wimse-verifiable-geo-fence",
       "baseRefName": "main",
       "baseRefOid": "b596e1cfe4ef6ef780d1ab403a3195096618bf63",
@@ -312,6 +312,96 @@
           "comments": []
         }
       ]
+    },
+    {
+      "number": 6,
+      "id": "PR_kwDOOmshaM6WBZx6",
+      "title": "Ramki mod1",
+      "url": "https://github.com/nedmsmith/draft-klspa-wimse-verifiable-geo-fence/pull/6",
+      "state": "MERGED",
+      "author": "ramkri123",
+      "authorAssociation": "COLLABORATOR",
+      "assignees": [],
+      "labels": [],
+      "body": "\r\n[a.md](https://github.com/user-attachments/files/20190672/a.md)\r\n\r\n",
+      "createdAt": "2025-05-13T15:18:06Z",
+      "updatedAt": "2025-05-13T23:25:52Z",
+      "baseRepository": "nedmsmith/draft-klspa-wimse-verifiable-geo-fence",
+      "baseRefName": "main",
+      "baseRefOid": "7a0c8387c80f430398566e5a1b5cd8a36831ffdd",
+      "headRepository": "nedmsmith/draft-klspa-wimse-verifiable-geo-fence",
+      "headRefName": "ramki-mod1",
+      "headRefOid": "aa412ff25b4512fa0cb1c5c889c4dc0b3fac84e8",
+      "closedAt": "2025-05-13T23:25:37Z",
+      "mergedAt": "2025-05-13T23:25:36Z",
+      "mergedBy": "nedmsmith",
+      "mergeCommit": {
+        "oid": "b7ffe67d805e2cbb725716d450e09e2b44a2e487"
+      },
+      "comments": [],
+      "reviews": [
+        {
+          "id": "PRR_kwDOOmshaM6pKikh",
+          "commit": {
+            "abbreviatedOid": "9d5fc1f"
+          },
+          "author": "nedmsmith",
+          "authorAssociation": "OWNER",
+          "state": "COMMENTED",
+          "body": "",
+          "createdAt": "2025-05-13T21:00:14Z",
+          "updatedAt": "2025-05-13T21:00:21Z",
+          "comments": [
+            {
+              "originalPosition": 7,
+              "body": "IETF markdown doesn't do mermaid. ",
+              "createdAt": "2025-05-13T21:00:14Z",
+              "updatedAt": "2025-05-13T21:00:21Z"
+            }
+          ]
+        },
+        {
+          "id": "PRR_kwDOOmshaM6pLXeb",
+          "commit": {
+            "abbreviatedOid": "aa412ff"
+          },
+          "author": "nedmsmith",
+          "authorAssociation": "OWNER",
+          "state": "APPROVED",
+          "body": "LGTM",
+          "createdAt": "2025-05-13T23:25:30Z",
+          "updatedAt": "2025-05-13T23:25:30Z",
+          "comments": []
+        }
+      ]
+    },
+    {
+      "number": 7,
+      "id": "PR_kwDOOmshaM6WPa9q",
+      "title": "Update draft-lkspa-wimse-verifiable-geo-fence.md",
+      "url": "https://github.com/nedmsmith/draft-klspa-wimse-verifiable-geo-fence/pull/7",
+      "state": "OPEN",
+      "author": "nedmsmith",
+      "authorAssociation": "OWNER",
+      "assignees": [
+        "nedmsmith"
+      ],
+      "labels": [],
+      "body": "Editing pass: inserted CR for each sentence to facilitate reviewer feedback. Various grammar and word choice improvements.",
+      "createdAt": "2025-05-15T01:07:22Z",
+      "updatedAt": "2025-05-15T01:07:22Z",
+      "baseRepository": "nedmsmith/draft-klspa-wimse-verifiable-geo-fence",
+      "baseRefName": "main",
+      "baseRefOid": "b7ffe67d805e2cbb725716d450e09e2b44a2e487",
+      "headRepository": "nedmsmith/draft-klspa-wimse-verifiable-geo-fence",
+      "headRefName": "nms/cleanup",
+      "headRefOid": "1e5e8f60f26aaa9cf60cc1377c034795c3e4de36",
+      "closedAt": null,
+      "mergedAt": null,
+      "mergedBy": null,
+      "mergeCommit": null,
+      "comments": [],
+      "reviews": []
     }
   ]
 }
