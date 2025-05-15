@@ -5,13 +5,13 @@
 Workload Identity in Multi System Environments               R. Krishnan
 Internet-Draft                                                  N. Smith
 Intended status: Informational                                     Intel
-Expires: 14 November 2025                                       D. Lopez
+Expires: 16 November 2025                                       D. Lopez
                                                               Telefonica
                                                                A. Prasad
                                                                   Oracle
                                                             S. Addepalli
                                                                   Aryaka
-                                                             13 May 2025
+                                                             15 May 2025
 
 
           Trustworthy and Verifiable Geo-fencing for Workloads
@@ -20,19 +20,15 @@ Expires: 14 November 2025                                       D. Lopez
 Abstract
 
    Financial services, healthcare and government entities have data
-   residency requirements, geo-location affinity and host affinity, to
-   protect sensitive data.  Geo-location affinity necessitates workload
-   being cryptographically bound to a geographic boundary.  Host
-   affinity entails workload being cryptographically bound to a specific
-   execution environment.  These requirements are well described in the
-   Trusted Computing Group keynote and whitepaper on emerging use case
-   and solutions [tcg-geo-loc].  From WIMSE perspective, to address
-   these requirements, workload identity needs to be cryptographically
-   bound to platform identity and domain identity.  Examples of platform
-   identity are Device ID such as TPM [tcg-tpm] endorsement.  Examples
-   of domain identity are Geographic boundary such as Geo-location
-   area/region/country.  This draft aims to address the aforementioned
-   gaps in WIMSE through use cases and high level architectural flows.
+   residency requirements that aim to protect sensitive data by
+   specifying its location.  Data location can be both geographic and
+   host-centric.  Geo-location affinity means workloads are
+   cryptographically bound to a geographic boundary.  Host affinity
+   means workloads are cryptographically bound to a specific execution
+   environment.  WIMSE architecture can be improved to show how location
+   can be cryptographically bound to WIMSE identities.  This document
+   augments WIMSE architecture to include geo-location and host affinity
+   use cases and workflows.
 
 About This Document
 
@@ -67,7 +63,7 @@ Status of This Memo
    time.  It is inappropriate to use Internet-Drafts as reference
    material or to cite them other than as "work in progress."
 
-   This Internet-Draft will expire on 14 November 2025.
+   This Internet-Draft will expire on 16 November 2025.
 
 Copyright Notice
 
@@ -87,23 +83,20 @@ Table of Contents
 
    1.  Introduction
    2.  Conventions and Definitions
-   3.  Use Cases: Cryptographic Attestation of Geographic Boundaries
-     3.1.  *Category 1*: Enterprise need cryptographic proof of
-           trustworthy geographic boundary (region, zone, countries,
-           state etc.) for cloud facing workloads
-       3.1.1.  *User workload <-> Server workload*:
-     3.2.  *Category 2*: Enterprise need cryptographic proof of
-           trustworthy geographic boundary for user facing workloads
-     3.3.  *Category 3*: Security assurance and compliance
-   4.  Approach summary
+   3.  Use Cases
+     3.1.  *Category 1*: Server-centric Location
+     3.2.  *Category 2*: User-centric Location
+     3.3.  *Category 3*: Regulatory Compliance
+     3.4.  Data Residency Requirements
+   4.  Approach Summary
    5.  Attestation for System Bootstrap and Agent Initialization
      5.1.  Attestation of OS Integrity and Proof of Residency on Host
      5.2.  Start/restart time attestation/remote verification of agent
            for integrity and proof of residency on Host
-   6.  Agent geo-location and geo-fencing workflow - this is run
-           periodically (say every 5 minutes) to ensure that the host is
-           in the same location
-     6.1.  Step 2: Agent gets attested geographic boundary using
+   6.  Agent geo-location and geo-fencing workflow
+     6.1.  Step 1: Agent gets attested composite location using
+           Geo-location service (GL)
+     6.2.  Step 2: Agent gets attested geographic boundary using
            Geo-fencing (GF) service
    7.  Workload (W) attestation and remote verification - key steps
    8.  Networking Protocol Changes
@@ -125,6 +118,14 @@ Table of Contents
 
 1.  Introduction
 
+   This document describes a framework for trustworthy and verifiable
+   geo-fencing of workloads.  It details use cases, architectural flows,
+   and protocol enhancements that leverage trusted hardware (e.g., TPM),
+   attestation protocols, and geo-location services.  The goal is to
+   enable interoperable, cryptographically verifiable claims about
+   workload residency and location, supporting compliance, security, and
+   operational requirements in multi-system environments.
+
    As organizations increasingly adopt cloud and distributed computing,
    the need to enforce data residency, geo-location affinity, and host
    affinity has become critical for regulatory compliance and risk
@@ -137,18 +138,16 @@ Table of Contents
    workload identity standards enable a new class of solutions where the
    geographic location and host integrity of workloads can be
    cryptographically attested and verified.  By binding workload
-   identity to both platform and domain attributes—such as TPM-backed
-   device identity and verifiable geographic boundaries—organizations
-   can enforce fine-grained policies on where and how sensitive
+   identity to both platform and domain attributes, such as TPM-backed
+   device identity and verifiable geographic boundaries, organizations
+   can enforce fine-grained policies to define where and how sensitive
    workloads are executed.
 
-   This document describes a framework for trustworthy and verifiable
-   geo-fencing of workloads.  It details use cases, architectural flows,
-   and protocol enhancements that leverage trusted hardware (e.g., TPM),
-   attestation protocols, and geo-location services.  The goal is to
-   enable interoperable, cryptographically verifiable claims about
-   workload residency and location, supporting compliance, security, and
-   operational requirements in multi-system environments.
+   Data residency requirements are described in more detail in
+   [tcg-geo-loc].
+
+   An example of platform identity binding (i.e., host affinity) is
+   described in [tcg-tpm].
 
 2.  Conventions and Definitions
 
@@ -158,65 +157,80 @@ Table of Contents
    BCP 14 [RFC2119] [RFC8174] when, and only when, they appear in all
    capitals, as shown here.
 
-3.  Use Cases: Cryptographic Attestation of Geographic Boundaries
+3.  Use Cases
 
-   Standardizing the attestation of a host’s geographic location enables
-   interoperable enforcement of policy, compliance, and security
-   guarantees across diverse deployment environments.  The following use
-   cases motivate the need for a verifiable geographic claim.
+   Data residency use cases can be divided into three categories, (1)
+   server-centric location, (2) user-centric location, and (3)
+   regulatority compliance.
 
-3.1.  *Category 1*: Enterprise need cryptographic proof of trustworthy
-      geographic boundary (region, zone, countries, state etc.) for
-      cloud facing workloads
+3.1.  *Category 1*: Server-centric Location
 
-   ### *Server workload <-> Server workload*: Enterprises handling
-   sensitive data—such as EU banks—rely on dedicated cloud hosts (e.g.,
-   EU sovereign cloud providers) to ensure high availability while
-   complying with data residency laws.  To meet these requirements, they
-   need to be able to verify the geographic boundary where their
-   dedicated hosts are deployed.
+   Enterprises (e.g., healthcare, banking) need cryptographic proof of
+   trustworthy geographic boundary (i.e., region, zone, countries, state
+   etc.) for cloud facing workloads.
 
-3.1.1.  *User workload <-> Server workload*:
+   *  *Server workload <-> Server workload*: Enterprises handling of
+      sensitive data relies on dedicated cloud hosts (e.g., EU sovereign
+      cloud providers) that ensure compmliance to data residency laws,
+      while also ensuring appropriate levels of service (e.g., high
+      availability).  To meet data residency legal requirements,
+      enterprises need to verify workload data is processed by hosts
+      that are within a geographic boundary and workload data is only
+      transmitted between specified geographic boundaries.
 
-   Enterprise (e.g. healthcare) ensuring that it is communicating with a
-   server (e.g. cloud service) located within a specific geographic
-   boundary.
+   *  *User workload <-> Server workload*: Enterprises ensure that it is
+      communicating with a server (e.g., cloud services) located within
+      a specific geographic boundary.
 
-3.2.  *Category 2*: Enterprise need cryptographic proof of trustworthy
-      geographic boundary for user facing workloads
+3.2.  *Category 2*: User-centric Location
+
+   Enterprises need cryptographic proof of trustworthy geographic
+   boundary for user facing workloads.
 
    *  A server (or proxy) authenticates to clients using different TLS
       certificates, each signed by a different Certificate Authority
       (CA), based on the geographic boundaries of user workloads.
 
-   *  Enterprise on-premise Customer Premise Equipment (CPE) provides
-      its geographic boundary using a mobile network.  This ensures that
-      the Host (H) – a computing device such as a PC, phone, or router –
-      connected to the CPE, is physically present on-premise.
+   *  Enterprise Customer Premise Equipment (CPE) provides on-premise
+      computing that is a basis for defining geolocation boundaries.  A
+      telco network provides a means for communication between premises.
 
-   *  Construction & Engineering SaaS workloads can benefit immensely
-      from attested geographic boundary data from end-user devices to
-      restrict access within specific regions (e.g., California).
-      Enabling per-user or group-level geo-fencing helps prevent
-      fraudulent access originating outside the authorized area.
+   *  Construction & Engineering of SaaS workloads can benefit from
+      attested geographic boundary data from end-user devices to
+      restrict access within specific geo-political regions (e.g.,
+      California).  Enabling per-user or group-level geo-fencing helps
+      prevent fraudulent access originating outside the authorized area.
 
    *  Healthcare providers need to ensure that the Host (H) is located
-      in a specific geographic boundary (countries e.g. US) when
-      downloading patient data or performing other sensitive operations.
+      in a specific geographic boundary when downloading patient data or
+      performing other sensitive operations.
 
-   *  U.S.  Presidential Executive Order compliance: For example, U.S.
-      Cloud Service Providers (CSPs) may have support personnel located
-      in a restricted geographic boundary (countries e.g., Venezuela,
-      Iran, China, North Korea).  However, those personnel should not be
+   *  U.S.  Presidential Executive Order (TODO: site reference)
+      compliance directs Cloud Service Provider (CSP) support personnel
+      be located in restricted geographies (e.g., Venezuela, Iran,
+      China, North Korea).  However, those personnel should not be
       allowed to support U.S. customers.  Geo-location enforcement can
       ensure policy compliance.  See [doj-cisa].
 
-3.3.  *Category 3*: Security assurance and compliance
+3.3.  *Category 3*: Regulatory Compliance
 
    Geographic boundary attestation helps satisfy data residency and data
    sovereignty requirements for regulatory compliance.
 
-4.  Approach summary
+3.4.  Data Residency Requirements
+
+   Data residency use cases motivate the following requirements:
+
+   *  Location-specific verifiable claims.
+
+   *  Standards-based attestation of geographic location claims.
+
+   *  Interoperable policy enforcement for audit and compliance.
+
+   *  Security guarantees that are portable across diverse deployment
+      topologies.
+
+4.  Approach Summary
 
    Host contains location devices like mobile sensor, GPS sensor, WiFi
    sensor, GNSS sensor, etc.  Host is a compute node, including servers,
@@ -243,9 +257,9 @@ Table of Contents
    Agent sends attested geographic boundary (e.g., cloud region, city,
    country etc.) and W’s parameters to Workload Identity Manager (WIM).
 
-   *  Example for Agent used in this document: SPIFFE/SPIRE agent can be
-      enhanced to add attested geographic boundary that will become part
-      of Identity granted (e.g., SVID).
+   *  Example for Agent used in this document: SPIFFE/SPIRE agent (TODO:
+      cite reference spire) can be enhanced to add attested geographic
+      boundary that will become part of Identity granted (e.g., SVID).
 
    *  Example for WIM used in this document: SPIFFE/Spire server
 
@@ -254,9 +268,13 @@ Table of Contents
 
 5.  Attestation for System Bootstrap and Agent Initialization
 
-   The location agent, which is a modified SPIFFE/SPIRE (spire) agent
-   using a geo-location plugin mechanism, is a daemon running on bare-
-   metal Linux OS Host (H) as a process with direct access to TPM (root
+   This section describes workload attestation based on SPIFFE/SPIRE.
+
+   (TODO: add diagram showing agents and SPIRE connectivity)
+
+   The location agent, which is a modified SPIFFE/SPIRE agent using a
+   geo-location plugin mechanism, is a daemon running on bare-metal
+   Linux OS Host (H) as a process with direct access to TPM (root
    permissions for TPM 2.0 access may be needed for certain Linux
    distributions for certain H hardware configurations).  The agent can
    gather the location from host local location sensors (e.g. GPS,
@@ -342,15 +360,18 @@ Table of Contents
       public key.  Server stores agent SPIFFE ID mapping to TPM AK
       public key in a shared datastore.
 
-6.  Agent geo-location and geo-fencing workflow - this is run
-    periodically (say every 5 minutes) to ensure that the host is in the
-    same location
+6.  Agent geo-location and geo-fencing workflow
 
-   ## Step 1: Agent gets attested composite location using Geo-location
-   service (GL) Geo-location service (GL) runs outside of H -- besides
-   the location from device location sources (e.g. GPS, GNSS), it will
-   connect to mobile location service providers (e.g., Telefonica) using
-   GSMA location API (gsma-loc).
+   *  this is run periodically (say every 5 minutes) to ensure that the
+      host is in the same location
+
+6.1.  Step 1: Agent gets attested composite location using Geo-location
+      service (GL)
+
+   Geo-location service (GL) runs outside of H -- besides the location
+   from device location sources (e.g. GPS, GNSS), it will connect to
+   mobile location service providers (e.g., Telefonica) using GSMA
+   location API (gsma-loc).
 
    *  Agent gathers the location from H local location sensors (e.g.
       GPS, GNSS).  Agent connects to GL using secure connection
@@ -388,7 +409,7 @@ Table of Contents
       This is called attested proof-of-residency aware composite
       location (APL).
 
-6.1.  Step 2: Agent gets attested geographic boundary using Geo-fencing
+6.2.  Step 2: Agent gets attested geographic boundary using Geo-fencing
       (GF) service
 
    *  Geo-fence policies are of four flavours - (1) boolean membership

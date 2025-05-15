@@ -11,7 +11,12 @@
 <meta content="A Prasad" name="author">
 <meta content="Srinivasa Addepalli" name="author">
 <meta content="
-       Financial services, healthcare and government entities have data residency requirements, geo-location affinity and host affinity, to protect sensitive data. Geo-location affinity necessitates workload being cryptographically bound to a geographic boundary. Host affinity entails workload being cryptographically bound to a specific execution environment. These requirements are well described in the Trusted Computing Group keynote and whitepaper on emerging use case and solutions  . From WIMSE perspective, to address these requirements, workload identity needs to be cryptographically bound to platform identity and domain identity. Examples of platform identity are Device ID such as TPM   endorsement. Examples of domain identity are Geographic boundary such as Geo-location area/region/country. This draft aims to address the aforementioned gaps in WIMSE through use cases and high level architectural flows. 
+       Financial services, healthcare and government entities have data residency requirements that aim to protect sensitive data by specifying its location.
+Data location can be both geographic and host-centric.
+Geo-location affinity means workloads are cryptographically bound to a geographic boundary.
+Host affinity means workloads are cryptographically bound to a specific execution environment.
+WIMSE architecture can be improved to show how location can be cryptographically bound to WIMSE identities.
+This document augments WIMSE architecture to include geo-location and host affinity use cases and workflows. 
     " name="description">
 <meta content="xml2rfc 3.28.1" name="generator">
 <meta content="geo-fence" name="keyword">
@@ -1054,7 +1059,7 @@ svg :is([fill="white"], [fill^="#fff"]) {
 </tr></thead>
 <tfoot><tr>
 <td class="left">Krishnan, et al.</td>
-<td class="center">Expires 14 November 2025</td>
+<td class="center">Expires 16 November 2025</td>
 <td class="right">[Page]</td>
 </tr></tfoot>
 </table>
@@ -1067,12 +1072,12 @@ svg :is([fill="white"], [fill^="#fff"]) {
 <dd class="internet-draft">draft-lkspa-wimse-verifiable-geo-fence-latest</dd>
 <dt class="label-published">Published:</dt>
 <dd class="published">
-<time datetime="2025-05-13" class="published">13 May 2025</time>
+<time datetime="2025-05-15" class="published">15 May 2025</time>
     </dd>
 <dt class="label-intended-status">Intended Status:</dt>
 <dd class="intended-status">Informational</dd>
 <dt class="label-expires">Expires:</dt>
-<dd class="expires"><time datetime="2025-11-14">14 November 2025</time></dd>
+<dd class="expires"><time datetime="2025-11-16">16 November 2025</time></dd>
 <dt class="label-authors">Authors:</dt>
 <dd class="authors">
 <div class="author">
@@ -1101,7 +1106,12 @@ svg :is([fill="white"], [fill^="#fff"]) {
 <h1 id="title">Trustworthy and Verifiable Geo-fencing for Workloads</h1>
 <section id="section-abstract">
       <h2 id="abstract"><a href="#abstract" class="selfRef">Abstract</a></h2>
-<p id="section-abstract-1">Financial services, healthcare and government entities have data residency requirements, geo-location affinity and host affinity, to protect sensitive data. Geo-location affinity necessitates workload being cryptographically bound to a geographic boundary. Host affinity entails workload being cryptographically bound to a specific execution environment. These requirements are well described in the Trusted Computing Group keynote and whitepaper on emerging use case and solutions <span>[<a href="#tcg-geo-loc" class="cite xref">tcg-geo-loc</a>]</span>. From WIMSE perspective, to address these requirements, workload identity needs to be cryptographically bound to platform identity and domain identity. Examples of platform identity are Device ID such as TPM <span>[<a href="#tcg-tpm" class="cite xref">tcg-tpm</a>]</span> endorsement. Examples of domain identity are Geographic boundary such as Geo-location area/region/country. This draft aims to address the aforementioned gaps in WIMSE through use cases and high level architectural flows.<a href="#section-abstract-1" class="pilcrow">¶</a></p>
+<p id="section-abstract-1">Financial services, healthcare and government entities have data residency requirements that aim to protect sensitive data by specifying its location.
+Data location can be both geographic and host-centric.
+Geo-location affinity means workloads are cryptographically bound to a geographic boundary.
+Host affinity means workloads are cryptographically bound to a specific execution environment.
+WIMSE architecture can be improved to show how location can be cryptographically bound to WIMSE identities.
+This document augments WIMSE architecture to include geo-location and host affinity use cases and workflows.<a href="#section-abstract-1" class="pilcrow">¶</a></p>
 </section>
 <section class="note rfcEditorRemove" id="section-note.1">
       <h2 id="name-about-this-document">
@@ -1138,7 +1148,7 @@ svg :is([fill="white"], [fill^="#fff"]) {
         time. It is inappropriate to use Internet-Drafts as reference
         material or to cite them other than as "work in progress."<a href="#section-boilerplate.1-3" class="pilcrow">¶</a></p>
 <p id="section-boilerplate.1-4">
-        This Internet-Draft will expire on 14 November 2025.<a href="#section-boilerplate.1-4" class="pilcrow">¶</a></p>
+        This Internet-Draft will expire on 16 November 2025.<a href="#section-boilerplate.1-4" class="pilcrow">¶</a></p>
 </section>
 </div>
 <div id="copyright">
@@ -1174,26 +1184,24 @@ svg :is([fill="white"], [fill^="#fff"]) {
             <p id="section-toc.1-1.2.1" class="keepWithNext"><a href="#section-2" class="auto internal xref">2</a>.  <a href="#name-conventions-and-definitions" class="internal xref">Conventions and Definitions</a></p>
 </li>
           <li class="compact toc ulBare ulEmpty" id="section-toc.1-1.3">
-            <p id="section-toc.1-1.3.1"><a href="#section-3" class="auto internal xref">3</a>.  <a href="#name-use-cases-cryptographic-att" class="internal xref">Use Cases: Cryptographic Attestation of Geographic Boundaries</a></p>
+            <p id="section-toc.1-1.3.1"><a href="#section-3" class="auto internal xref">3</a>.  <a href="#name-use-cases" class="internal xref">Use Cases</a></p>
 <ul class="compact toc ulBare ulEmpty">
 <li class="compact toc ulBare ulEmpty" id="section-toc.1-1.3.2.1">
-                <p id="section-toc.1-1.3.2.1.1"><a href="#section-3.1" class="auto internal xref">3.1</a>.  <a href="#name-category-1-enterprise-need-" class="internal xref"><strong>Category 1</strong>: Enterprise need cryptographic proof of trustworthy geographic boundary (region, zone, countries, state etc.) for cloud facing workloads</a></p>
-<ul class="compact toc ulBare ulEmpty">
-<li class="compact toc ulBare ulEmpty" id="section-toc.1-1.3.2.1.2.1">
-                    <p id="section-toc.1-1.3.2.1.2.1.1" class="keepWithNext"><a href="#section-3.1.1" class="auto internal xref">3.1.1</a>.  <a href="#name-user-workload-server-worklo" class="internal xref"><strong>User workload &lt;-&gt; Server workload</strong>:</a></p>
-</li>
-                </ul>
+                <p id="section-toc.1-1.3.2.1.1" class="keepWithNext"><a href="#section-3.1" class="auto internal xref">3.1</a>.  <a href="#name-category-1-server-centric-l" class="internal xref"><strong>Category 1</strong>: Server-centric Location</a></p>
 </li>
               <li class="compact toc ulBare ulEmpty" id="section-toc.1-1.3.2.2">
-                <p id="section-toc.1-1.3.2.2.1"><a href="#section-3.2" class="auto internal xref">3.2</a>.  <a href="#name-category-2-enterprise-need-" class="internal xref"><strong>Category 2</strong>: Enterprise need cryptographic proof of trustworthy geographic boundary for user facing workloads</a></p>
+                <p id="section-toc.1-1.3.2.2.1"><a href="#section-3.2" class="auto internal xref">3.2</a>.  <a href="#name-category-2-user-centric-loc" class="internal xref"><strong>Category 2</strong>: User-centric Location</a></p>
 </li>
               <li class="compact toc ulBare ulEmpty" id="section-toc.1-1.3.2.3">
-                <p id="section-toc.1-1.3.2.3.1"><a href="#section-3.3" class="auto internal xref">3.3</a>.  <a href="#name-category-3-security-assuran" class="internal xref"><strong>Category 3</strong>: Security assurance and compliance</a></p>
+                <p id="section-toc.1-1.3.2.3.1"><a href="#section-3.3" class="auto internal xref">3.3</a>.  <a href="#name-category-3-regulatory-compl" class="internal xref"><strong>Category 3</strong>: Regulatory Compliance</a></p>
+</li>
+              <li class="compact toc ulBare ulEmpty" id="section-toc.1-1.3.2.4">
+                <p id="section-toc.1-1.3.2.4.1"><a href="#section-3.4" class="auto internal xref">3.4</a>.  <a href="#name-data-residency-requirements" class="internal xref">Data Residency Requirements</a></p>
 </li>
             </ul>
 </li>
           <li class="compact toc ulBare ulEmpty" id="section-toc.1-1.4">
-            <p id="section-toc.1-1.4.1"><a href="#section-4" class="auto internal xref">4</a>.  <a href="#name-approach-summary" class="internal xref">Approach  summary</a></p>
+            <p id="section-toc.1-1.4.1"><a href="#section-4" class="auto internal xref">4</a>.  <a href="#name-approach-summary" class="internal xref">Approach Summary</a></p>
 </li>
           <li class="compact toc ulBare ulEmpty" id="section-toc.1-1.5">
             <p id="section-toc.1-1.5.1"><a href="#section-5" class="auto internal xref">5</a>.  <a href="#name-attestation-for-system-boot" class="internal xref">Attestation for System Bootstrap and Agent Initialization</a></p>
@@ -1207,10 +1215,13 @@ svg :is([fill="white"], [fill^="#fff"]) {
             </ul>
 </li>
           <li class="compact toc ulBare ulEmpty" id="section-toc.1-1.6">
-            <p id="section-toc.1-1.6.1"><a href="#section-6" class="auto internal xref">6</a>.  <a href="#name-agent-geo-location-and-geo-" class="internal xref">Agent geo-location and geo-fencing workflow - this is run periodically (say every 5 minutes) to ensure that the host is in the same location</a></p>
+            <p id="section-toc.1-1.6.1"><a href="#section-6" class="auto internal xref">6</a>.  <a href="#name-agent-geo-location-and-geo-" class="internal xref">Agent geo-location and geo-fencing workflow</a></p>
 <ul class="compact toc ulBare ulEmpty">
 <li class="compact toc ulBare ulEmpty" id="section-toc.1-1.6.2.1">
-                <p id="section-toc.1-1.6.2.1.1"><a href="#section-6.1" class="auto internal xref">6.1</a>.  <a href="#name-step-2-agent-gets-attested-" class="internal xref">Step 2: Agent gets attested geographic boundary using Geo-fencing (GF) service</a></p>
+                <p id="section-toc.1-1.6.2.1.1"><a href="#section-6.1" class="auto internal xref">6.1</a>.  <a href="#name-step-1-agent-gets-attested-" class="internal xref">Step 1: Agent gets attested composite location using Geo-location service (GL)</a></p>
+</li>
+              <li class="compact toc ulBare ulEmpty" id="section-toc.1-1.6.2.2">
+                <p id="section-toc.1-1.6.2.2.1"><a href="#section-6.2" class="auto internal xref">6.2</a>.  <a href="#name-step-2-agent-gets-attested-" class="internal xref">Step 2: Agent gets attested geographic boundary using Geo-fencing (GF) service</a></p>
 </li>
             </ul>
 </li>
@@ -1275,9 +1286,15 @@ svg :is([fill="white"], [fill^="#fff"]) {
       <h2 id="name-introduction">
 <a href="#section-1" class="section-number selfRef">1. </a><a href="#name-introduction" class="section-name selfRef">Introduction</a>
       </h2>
-<p id="section-1-1">As organizations increasingly adopt cloud and distributed computing, the need to enforce data residency, geo-location affinity, and host affinity has become critical for regulatory compliance and risk management. Traditional approaches to geographic and host enforcement rely on trust in infrastructure providers or network-based controls, which are insufficient in adversarial or multi-tenant environments.<a href="#section-1-1" class="pilcrow">¶</a></p>
-<p id="section-1-2">Recent advances in trusted computing, remote attestation, and workload identity standards enable a new class of solutions where the geographic location and host integrity of workloads can be cryptographically attested and verified. By binding workload identity to both platform and domain attributes—such as TPM-backed device identity and verifiable geographic boundaries—organizations can enforce fine-grained policies on where and how sensitive workloads are executed.<a href="#section-1-2" class="pilcrow">¶</a></p>
-<p id="section-1-3">This document describes a framework for trustworthy and verifiable geo-fencing of workloads. It details use cases, architectural flows, and protocol enhancements that leverage trusted hardware (e.g., TPM), attestation protocols, and geo-location services. The goal is to enable interoperable, cryptographically verifiable claims about workload residency and location, supporting compliance, security, and operational requirements in multi-system environments.<a href="#section-1-3" class="pilcrow">¶</a></p>
+<p id="section-1-1">This document describes a framework for trustworthy and verifiable geo-fencing of workloads.
+It details use cases, architectural flows, and protocol enhancements that leverage trusted hardware (e.g., TPM), attestation protocols, and geo-location services.
+The goal is to enable interoperable, cryptographically verifiable claims about workload residency and location, supporting compliance, security, and operational requirements in multi-system environments.<a href="#section-1-1" class="pilcrow">¶</a></p>
+<p id="section-1-2">As organizations increasingly adopt cloud and distributed computing, the need to enforce data residency, geo-location affinity, and host affinity has become critical for regulatory compliance and risk management.
+Traditional approaches to geographic and host enforcement rely on trust in infrastructure providers or network-based controls, which are insufficient in adversarial or multi-tenant environments.<a href="#section-1-2" class="pilcrow">¶</a></p>
+<p id="section-1-3">Recent advances in trusted computing, remote attestation, and workload identity standards enable a new class of solutions where the geographic location and host integrity of workloads can be cryptographically attested and verified.
+By binding workload identity to both platform and domain attributes, such as TPM-backed device identity and verifiable geographic boundaries, organizations can enforce fine-grained policies to define where and how sensitive workloads are executed.<a href="#section-1-3" class="pilcrow">¶</a></p>
+<p id="section-1-4">Data residency requirements are described in more detail in <span>[<a href="#tcg-geo-loc" class="cite xref">tcg-geo-loc</a>]</span>.<a href="#section-1-4" class="pilcrow">¶</a></p>
+<p id="section-1-5">An example of platform identity binding (i.e., host affinity) is described in <span>[<a href="#tcg-tpm" class="cite xref">tcg-tpm</a>]</span>.<a href="#section-1-5" class="pilcrow">¶</a></p>
 </section>
 </div>
 <div id="conventions-and-definitions">
@@ -1291,61 +1308,88 @@ described in BCP 14 <span>[<a href="#RFC2119" class="cite xref">RFC2119</a>]</s
 appear in all capitals, as shown here.<a href="#section-2-1" class="pilcrow">¶</a></p>
 </section>
 </div>
-<div id="use-cases-cryptographic-attestation-of-geographic-boundaries">
+<div id="use-cases">
 <section id="section-3">
-      <h2 id="name-use-cases-cryptographic-att">
-<a href="#section-3" class="section-number selfRef">3. </a><a href="#name-use-cases-cryptographic-att" class="section-name selfRef">Use Cases: Cryptographic Attestation of Geographic Boundaries</a>
+      <h2 id="name-use-cases">
+<a href="#section-3" class="section-number selfRef">3. </a><a href="#name-use-cases" class="section-name selfRef">Use Cases</a>
       </h2>
-<p id="section-3-1">Standardizing the attestation of a host’s geographic location enables interoperable enforcement of policy, compliance, and security guarantees across diverse deployment environments.
-The following use cases motivate the need for a verifiable geographic claim.<a href="#section-3-1" class="pilcrow">¶</a></p>
-<div id="category-1-enterprise-need-cryptographic-proof-of-trustworthy-geographic-boundary-region-zone-countries-state-etc-for-cloud-facing-workloads">
+<p id="section-3-1">Data residency use cases can be divided into three categories, (1) server-centric location, (2) user-centric location, and (3) regulatority compliance.<a href="#section-3-1" class="pilcrow">¶</a></p>
+<div id="category-1-server-centric-location">
 <section id="section-3.1">
-        <h3 id="name-category-1-enterprise-need-">
-<a href="#section-3.1" class="section-number selfRef">3.1. </a><a href="#name-category-1-enterprise-need-" class="section-name selfRef"><strong>Category 1</strong>: Enterprise need cryptographic proof of trustworthy geographic boundary (region, zone, countries, state etc.) for cloud facing workloads</a>
+        <h3 id="name-category-1-server-centric-l">
+<a href="#section-3.1" class="section-number selfRef">3.1. </a><a href="#name-category-1-server-centric-l" class="section-name selfRef"><strong>Category 1</strong>: Server-centric Location</a>
         </h3>
-<p id="section-3.1-1">### <strong>Server workload &lt;-&gt; Server workload</strong>:
-Enterprises handling sensitive data—such as EU banks—rely on dedicated cloud hosts (e.g., EU sovereign cloud providers) to ensure high availability while complying with data residency laws.
-To meet these requirements, they need to be able to verify the geographic boundary where their dedicated hosts are deployed.<a href="#section-3.1-1" class="pilcrow">¶</a></p>
-<div id="user-workload-server-workload">
-<section id="section-3.1.1">
-          <h4 id="name-user-workload-server-worklo">
-<a href="#section-3.1.1" class="section-number selfRef">3.1.1. </a><a href="#name-user-workload-server-worklo" class="section-name selfRef"><strong>User workload &lt;-&gt; Server workload</strong>:</a>
-          </h4>
-<p id="section-3.1.1-1">Enterprise (e.g. healthcare) ensuring that it is communicating with a server (e.g. cloud service) located within a specific geographic boundary.<a href="#section-3.1.1-1" class="pilcrow">¶</a></p>
-</section>
-</div>
-</section>
-</div>
-<div id="category-2-enterprise-need-cryptographic-proof-of-trustworthy-geographic-boundary-for-user-facing-workloads">
-<section id="section-3.2">
-        <h3 id="name-category-2-enterprise-need-">
-<a href="#section-3.2" class="section-number selfRef">3.2. </a><a href="#name-category-2-enterprise-need-" class="section-name selfRef"><strong>Category 2</strong>: Enterprise need cryptographic proof of trustworthy geographic boundary for user facing workloads</a>
-        </h3>
+<p id="section-3.1-1">Enterprises (e.g., healthcare, banking) need cryptographic proof of trustworthy geographic boundary (i.e., region, zone, countries, state etc.) for cloud facing workloads.<a href="#section-3.1-1" class="pilcrow">¶</a></p>
 <ul class="normal">
-<li class="normal" id="section-3.2-1.1">
-            <p id="section-3.2-1.1.1">A server (or proxy) authenticates to clients using different TLS certificates, each signed by a different Certificate Authority (CA), based on the geographic boundaries of user workloads.<a href="#section-3.2-1.1.1" class="pilcrow">¶</a></p>
+<li class="normal" id="section-3.1-2.1">
+            <p id="section-3.1-2.1.1"><strong>Server workload &lt;-&gt; Server workload</strong>:
+Enterprises handling of sensitive data relies on dedicated cloud hosts (e.g., EU sovereign cloud providers) that ensure compmliance to data residency laws, while also ensuring appropriate levels of service (e.g., high availability).
+To meet data residency legal requirements, enterprises need to verify workload data is processed by hosts that are within a geographic boundary and workload data is only transmitted between specified geographic boundaries.<a href="#section-3.1-2.1.1" class="pilcrow">¶</a></p>
 </li>
-          <li class="normal" id="section-3.2-1.2">
-            <p id="section-3.2-1.2.1">Enterprise on-premise Customer Premise Equipment (CPE) provides its geographic boundary using a mobile network. This ensures that the Host (H) – a computing device such as a PC, phone, or router – connected to the CPE, is physically present on-premise.<a href="#section-3.2-1.2.1" class="pilcrow">¶</a></p>
-</li>
-          <li class="normal" id="section-3.2-1.3">
-            <p id="section-3.2-1.3.1">Construction &amp; Engineering SaaS workloads can benefit immensely from attested geographic boundary data from end-user devices to restrict access within specific regions (e.g., California). Enabling per-user or group-level geo-fencing helps prevent fraudulent access originating outside the authorized area.<a href="#section-3.2-1.3.1" class="pilcrow">¶</a></p>
-</li>
-          <li class="normal" id="section-3.2-1.4">
-            <p id="section-3.2-1.4.1">Healthcare providers need to ensure that the Host (H) is located in a specific geographic boundary (countries e.g. US) when downloading patient data or performing other sensitive operations.<a href="#section-3.2-1.4.1" class="pilcrow">¶</a></p>
-</li>
-          <li class="normal" id="section-3.2-1.5">
-            <p id="section-3.2-1.5.1">U.S. Presidential Executive Order compliance: For example, U.S. Cloud Service Providers (CSPs) may have support personnel located in a restricted geographic boundary (countries e.g., Venezuela, Iran, China, North Korea). However, those personnel should not be allowed to support U.S. customers. Geo-location enforcement can ensure policy compliance. See <span>[<a href="#doj-cisa" class="cite xref">doj-cisa</a>]</span>.<a href="#section-3.2-1.5.1" class="pilcrow">¶</a></p>
+          <li class="normal" id="section-3.1-2.2">
+            <p id="section-3.1-2.2.1"><strong>User workload &lt;-&gt; Server workload</strong>:
+Enterprises ensure that it is communicating with a server (e.g., cloud services) located within a specific geographic boundary.<a href="#section-3.1-2.2.1" class="pilcrow">¶</a></p>
 </li>
         </ul>
 </section>
 </div>
-<div id="category-3-security-assurance-and-compliance">
+<div id="category-2-user-centric-location">
+<section id="section-3.2">
+        <h3 id="name-category-2-user-centric-loc">
+<a href="#section-3.2" class="section-number selfRef">3.2. </a><a href="#name-category-2-user-centric-loc" class="section-name selfRef"><strong>Category 2</strong>: User-centric Location</a>
+        </h3>
+<p id="section-3.2-1">Enterprises need cryptographic proof of trustworthy geographic boundary for user facing workloads.<a href="#section-3.2-1" class="pilcrow">¶</a></p>
+<ul class="normal">
+<li class="normal" id="section-3.2-2.1">
+            <p id="section-3.2-2.1.1">A server (or proxy) authenticates to clients using different TLS certificates, each signed by a different Certificate Authority (CA), based on the geographic boundaries of user workloads.<a href="#section-3.2-2.1.1" class="pilcrow">¶</a></p>
+</li>
+          <li class="normal" id="section-3.2-2.2">
+            <p id="section-3.2-2.2.1">Enterprise Customer Premise Equipment (CPE) provides on-premise computing that is a basis for defining geolocation boundaries.
+A telco network provides a means for communication between premises.<a href="#section-3.2-2.2.1" class="pilcrow">¶</a></p>
+</li>
+          <li class="normal" id="section-3.2-2.3">
+            <p id="section-3.2-2.3.1">Construction &amp; Engineering of SaaS workloads can benefit from attested geographic boundary data from end-user devices to restrict access within specific geo-political regions (e.g., California).
+Enabling per-user or group-level geo-fencing helps prevent fraudulent access originating outside the authorized area.<a href="#section-3.2-2.3.1" class="pilcrow">¶</a></p>
+</li>
+          <li class="normal" id="section-3.2-2.4">
+            <p id="section-3.2-2.4.1">Healthcare providers need to ensure that the Host (H) is located in a specific geographic boundary when downloading patient data or performing other sensitive operations.<a href="#section-3.2-2.4.1" class="pilcrow">¶</a></p>
+</li>
+          <li class="normal" id="section-3.2-2.5">
+            <p id="section-3.2-2.5.1">U.S. Presidential Executive Order (TODO: site reference) compliance directs Cloud Service Provider (CSP) support personnel be located in restricted geographies  (e.g., Venezuela, Iran, China, North Korea).
+However, those personnel should not be allowed to support U.S. customers.
+Geo-location enforcement can ensure policy compliance. See <span>[<a href="#doj-cisa" class="cite xref">doj-cisa</a>]</span>.<a href="#section-3.2-2.5.1" class="pilcrow">¶</a></p>
+</li>
+        </ul>
+</section>
+</div>
+<div id="category-3-regulatory-compliance">
 <section id="section-3.3">
-        <h3 id="name-category-3-security-assuran">
-<a href="#section-3.3" class="section-number selfRef">3.3. </a><a href="#name-category-3-security-assuran" class="section-name selfRef"><strong>Category 3</strong>: Security assurance and compliance</a>
+        <h3 id="name-category-3-regulatory-compl">
+<a href="#section-3.3" class="section-number selfRef">3.3. </a><a href="#name-category-3-regulatory-compl" class="section-name selfRef"><strong>Category 3</strong>: Regulatory Compliance</a>
         </h3>
 <p id="section-3.3-1">Geographic boundary attestation helps satisfy data residency and data sovereignty requirements for regulatory compliance.<a href="#section-3.3-1" class="pilcrow">¶</a></p>
+</section>
+</div>
+<div id="data-residency-requirements">
+<section id="section-3.4">
+        <h3 id="name-data-residency-requirements">
+<a href="#section-3.4" class="section-number selfRef">3.4. </a><a href="#name-data-residency-requirements" class="section-name selfRef">Data Residency Requirements</a>
+        </h3>
+<p id="section-3.4-1">Data residency use cases motivate the following requirements:<a href="#section-3.4-1" class="pilcrow">¶</a></p>
+<ul class="normal">
+<li class="normal" id="section-3.4-2.1">
+            <p id="section-3.4-2.1.1">Location-specific verifiable claims.<a href="#section-3.4-2.1.1" class="pilcrow">¶</a></p>
+</li>
+          <li class="normal" id="section-3.4-2.2">
+            <p id="section-3.4-2.2.1">Standards-based attestation of geographic location claims.<a href="#section-3.4-2.2.1" class="pilcrow">¶</a></p>
+</li>
+          <li class="normal" id="section-3.4-2.3">
+            <p id="section-3.4-2.3.1">Interoperable policy enforcement for audit and compliance.<a href="#section-3.4-2.3.1" class="pilcrow">¶</a></p>
+</li>
+          <li class="normal" id="section-3.4-2.4">
+            <p id="section-3.4-2.4.1">Security guarantees that are portable across diverse deployment topologies.<a href="#section-3.4-2.4.1" class="pilcrow">¶</a></p>
+</li>
+        </ul>
 </section>
 </div>
 </section>
@@ -1353,21 +1397,26 @@ To meet these requirements, they need to be able to verify the geographic bounda
 <div id="approach-summary">
 <section id="section-4">
       <h2 id="name-approach-summary">
-<a href="#section-4" class="section-number selfRef">4. </a><a href="#name-approach-summary" class="section-name selfRef">Approach  summary</a>
+<a href="#section-4" class="section-number selfRef">4. </a><a href="#name-approach-summary" class="section-name selfRef">Approach Summary</a>
       </h2>
-<p id="section-4-1">Host contains location devices like mobile sensor, GPS sensor, WiFi sensor, GNSS sensor, etc. Host is a compute node, including servers, routers, and end-user appliances like smartphones or tablets or PCs. Host has a discrete TPM. Note on TPM -- The EK certificate is a digital certificate signed by the TPM manufacturer's CA which verifies the identity and trustworthiness of the TPM's Endorsement Key (EK);  TPM attestation key (AK) is cryptographically backed by TPM EK. For the initial version of the draft, host is bare metal Linux OS host and interactions are with TPM.<a href="#section-4-1" class="pilcrow">¶</a></p>
-<p id="section-4-2">Trusted hosts are the hosts which have trustworthy device composition (TPM EK, Mobile-SIM, GPS device id etc.), endorsed by manufacturer/owner, and use a trustworthy OS. A set of trusted hosts along with the device composition details and OS details are recorded in a shared datastore (database or ledger) by the host owner.<a href="#section-4-2" class="pilcrow">¶</a></p>
-<p id="section-4-3">Workload (W) and Agent run on a set of trusted hosts. W can be a server app, a mobile/PC app (including browser), or a network host (e.g., router). Proof of Residency of W on a trusted host is obtained using TPM. W asks its Agent for proof, which in turn asks TPM for AK-attested proof.<a href="#section-4-3" class="pilcrow">¶</a></p>
+<p id="section-4-1">Host contains location devices like mobile sensor, GPS sensor, WiFi sensor, GNSS sensor, etc. Host is a compute node, including servers, routers, and end-user appliances like smartphones or tablets or PCs.
+Host has a discrete TPM. Note on TPM -- The EK certificate is a digital certificate signed by the TPM manufacturer's CA which verifies the identity and trustworthiness of the TPM's Endorsement Key (EK);  TPM attestation key (AK) is cryptographically backed by TPM EK.
+For the initial version of the draft, host is bare metal Linux OS host and interactions are with TPM.<a href="#section-4-1" class="pilcrow">¶</a></p>
+<p id="section-4-2">Trusted hosts are the hosts which have trustworthy device composition (TPM EK, Mobile-SIM, GPS device id etc.), endorsed by manufacturer/owner, and use a trustworthy OS.
+A set of trusted hosts along with the device composition details and OS details are recorded in a shared datastore (database or ledger) by the host owner.<a href="#section-4-2" class="pilcrow">¶</a></p>
+<p id="section-4-3">Workload (W) and Agent run on a set of trusted hosts. W can be a server app, a mobile/PC app (including browser), or a network host (e.g., router).
+Proof of Residency of W on a trusted host is obtained using TPM. W asks its Agent for proof, which in turn asks TPM for AK-attested proof.<a href="#section-4-3" class="pilcrow">¶</a></p>
 <p id="section-4-4">Agent sends attested geographic boundary (e.g., cloud region, city, country etc.) and W’s parameters to Workload Identity Manager (WIM).<a href="#section-4-4" class="pilcrow">¶</a></p>
 <ul class="normal">
 <li class="normal" id="section-4-5.1">
-          <p id="section-4-5.1.1">Example for Agent used in this document: SPIFFE/SPIRE agent can be enhanced to add attested geographic boundary that will become part of Identity granted (e.g., SVID).<a href="#section-4-5.1.1" class="pilcrow">¶</a></p>
+          <p id="section-4-5.1.1">Example for Agent used in this document: SPIFFE/SPIRE agent (TODO: cite reference spire) can be enhanced to add attested geographic boundary that will become part of Identity granted (e.g., SVID).<a href="#section-4-5.1.1" class="pilcrow">¶</a></p>
 </li>
         <li class="normal" id="section-4-5.2">
           <p id="section-4-5.2.1">Example for WIM used in this document: SPIFFE/Spire server<a href="#section-4-5.2.1" class="pilcrow">¶</a></p>
 </li>
         <li class="normal" id="section-4-5.3">
-          <p id="section-4-5.3.1">WIM gives signed Workload ID (WID) with geographic boundary as an additional field. This could be a certificate or a token.<a href="#section-4-5.3.1" class="pilcrow">¶</a></p>
+          <p id="section-4-5.3.1">WIM gives signed Workload ID (WID) with geographic boundary as an additional field.
+This could be a certificate or a token.<a href="#section-4-5.3.1" class="pilcrow">¶</a></p>
 </li>
       </ul>
 </section>
@@ -1377,18 +1426,30 @@ To meet these requirements, they need to be able to verify the geographic bounda
       <h2 id="name-attestation-for-system-boot">
 <a href="#section-5" class="section-number selfRef">5. </a><a href="#name-attestation-for-system-boot" class="section-name selfRef">Attestation for System Bootstrap and Agent Initialization</a>
       </h2>
-<p id="section-5-1">The location agent, which is a modified SPIFFE/SPIRE (spire) agent using a geo-location plugin mechanism, is a daemon running on bare-metal Linux OS Host (H) as a process with direct access to TPM (root permissions for TPM 2.0 access may be needed for certain Linux distributions for certain H hardware configurations). The agent can gather the location from host local location sensors (e.g. GPS, GNSS). The agent has a TPM plugin (spire-tpm) which interacts with the TPM. The server (SPIFFE/SPIRE server) is running in cluster which is isolated from the cluster in which the agent is running.<a href="#section-5-1" class="pilcrow">¶</a></p>
+<p id="section-5-1">This section describes workload attestation based on SPIFFE/SPIRE.<a href="#section-5-1" class="pilcrow">¶</a></p>
+<p id="section-5-2">(TODO: add diagram showing agents and SPIRE connectivity)<a href="#section-5-2" class="pilcrow">¶</a></p>
+<p id="section-5-3">The location agent, which is a modified SPIFFE/SPIRE agent using a geo-location plugin mechanism, is a daemon running on bare-metal Linux OS Host (H) as a process with direct access to TPM (root permissions for TPM 2.0 access may be needed for certain Linux distributions for certain H hardware configurations).
+The agent can gather the location from host local location sensors (e.g. GPS, GNSS).
+The agent has a TPM plugin (spire-tpm) which interacts with the TPM.
+The server (SPIFFE/SPIRE server) is running in cluster which is isolated from the cluster in which the agent is running.<a href="#section-5-3" class="pilcrow">¶</a></p>
 <div id="attestation-of-os-integrity-and-proof-of-residency-on-host">
 <section id="section-5.1">
         <h3 id="name-attestation-of-os-integrity">
 <a href="#section-5.1" class="section-number selfRef">5.1. </a><a href="#name-attestation-of-os-integrity" class="section-name selfRef">Attestation of OS Integrity and Proof of Residency on Host</a>
         </h3>
 <p id="section-5.1-1">As part of system boot/reboot process, boot loader based measured system boot with remote SPIFFE/SPIRE server verification is used to ensure only approved OS is running on an approved hardware platform.<a href="#section-5.1-1" class="pilcrow">¶</a></p>
-<p id="section-5.1-2">Measurement Collection: During the boot process, the boot loader collects measurements (hashes) of the boot components and configurations. The boot components are Firmware/BIOS/UEFI, bootloader, OS, drivers, location devices and initial programs. All the location devices (e.g. GPS sensor, Mobile sensor) version/firmware in a platform are measured during each boot -- this is a boot loader enhancement. Any new location device which is hotswapped in will be evaluated for inclusion only during next reboot.<a href="#section-5.1-2" class="pilcrow">¶</a></p>
+<p id="section-5.1-2">Measurement Collection: During the boot process, the boot loader collects measurements (hashes) of the boot components and configurations.
+The boot components are Firmware/BIOS/UEFI, bootloader, OS, drivers, location devices and initial programs.
+All the location devices (e.g. GPS sensor, Mobile sensor) version/firmware in a platform are measured during each boot -- this is a boot loader enhancement.
+Any new location device which is hotswapped in will be evaluated for inclusion only during next reboot.<a href="#section-5.1-2" class="pilcrow">¶</a></p>
 <p id="section-5.1-3">Log Creation: These measurements are recorded in a log, often referred to as the TCGLog, and stored in the TPM's Platform Configuration Registers (PCRs).<a href="#section-5.1-3" class="pilcrow">¶</a></p>
-<p id="section-5.1-4">Attestation Report: The TPM generates an attestation report, which includes the signed measurements and the boot configuration log. The signature of the attestation report (aka quote) is by a TPM attestation key (AK). This attestation includes data about the TPM's state and can be used to verify that the AK is indeed cryptographically backed by the TPM EK certificate.<a href="#section-5.1-4" class="pilcrow">¶</a></p>
+<p id="section-5.1-4">Attestation Report: The TPM generates an attestation report, which includes the signed measurements and the boot configuration log.
+The signature of the attestation report (aka quote) is by a TPM attestation key (AK).
+This attestation includes data about the TPM's state and can be used to verify that the AK is indeed cryptographically backed by the TPM EK certificate.<a href="#section-5.1-4" class="pilcrow">¶</a></p>
 <p id="section-5.1-5">Transmission: The attestation report is then sent to an external verifier (server), through a secure TLS connection.<a href="#section-5.1-5" class="pilcrow">¶</a></p>
-<p id="section-5.1-6">Remote Verification: The remote server checks the integrity of the attestation report and validates the measurements against known good values from the set of trusted hosts in the shared datastore. The server also validates that the TPM EK certificate has not been revoked and part of approved list of TPM EK identifiers associated with hardware platform. At this point, we can be sure that the hardware platform is approved for running workloads and is running an approved OS.<a href="#section-5.1-6" class="pilcrow">¶</a></p>
+<p id="section-5.1-6">Remote Verification: The remote server checks the integrity of the attestation report and validates the measurements against known good values from the set of trusted hosts in the shared datastore.
+The server also validates that the TPM EK certificate has not been revoked and part of approved list of TPM EK identifiers associated with hardware platform.
+At this point, we can be sure that the hardware platform is approved for running workloads and is running an approved OS.<a href="#section-5.1-6" class="pilcrow">¶</a></p>
 </section>
 </div>
 <div id="startrestart-time-attestationremote-verification-of-agent-for-integrity-and-proof-of-residency-on-host">
@@ -1434,54 +1495,75 @@ Server stores agent SPIFFE ID mapping to TPM AK public key in a shared datastore
 </div>
 </section>
 </div>
-<div id="agent-geo-location-and-geo-fencing-workflow-this-is-run-periodically-say-every-5-minutes-to-ensure-that-the-host-is-in-the-same-location">
+<div id="agent-geo-location-and-geo-fencing-workflow">
 <section id="section-6">
       <h2 id="name-agent-geo-location-and-geo-">
-<a href="#section-6" class="section-number selfRef">6. </a><a href="#name-agent-geo-location-and-geo-" class="section-name selfRef">Agent geo-location and geo-fencing workflow - this is run periodically (say every 5 minutes) to ensure that the host is in the same location</a>
+<a href="#section-6" class="section-number selfRef">6. </a><a href="#name-agent-geo-location-and-geo-" class="section-name selfRef">Agent geo-location and geo-fencing workflow</a>
       </h2>
-<p id="section-6-1">## Step 1: Agent gets attested composite location using Geo-location service (GL)
-Geo-location service (GL) runs outside of H -- besides the location from device location sources (e.g. GPS, GNSS), it will connect to mobile location service providers (e.g., Telefonica) using GSMA location API (gsma-loc).<a href="#section-6-1" class="pilcrow">¶</a></p>
 <ul class="normal">
-<li class="normal" id="section-6-2.1">
-          <p id="section-6-2.1.1">Agent gathers the location from H local location sensors (e.g. GPS, GNSS). Agent connects to GL using secure connection mechanism like TLS. Agent provides the gathered location to GL over the secure connection.<a href="#section-6-2.1.1" class="pilcrow">¶</a></p>
-</li>
-        <li class="normal" id="section-6-2.2">
-          <p id="section-6-2.2.1">Location (L) has a quality associated with it. For example, IP address-based L is of lower quality as compared to other sources.<a href="#section-6-2.2.1" class="pilcrow">¶</a></p>
-</li>
-        <li class="normal" id="section-6-2.3">
-          <p id="section-6-2.3.1">GL ensures that the device composition of H (reference to H composition table for further details) is intact (e.g. SIM card not plugged out of H) by periodically polling the state of H. H is a member of the set of trusted hosts in the shared datastore -- the shared datastore has the host composition details. Note that e-SIM does not have the plugging out problem like standard SIM but could be subject to e-SIM swap attack. Host composition (HC) comprises of TPM EK, Mobile-SIM etc.<a href="#section-6-2.3.1" class="pilcrow">¶</a></p>
-</li>
-        <li class="normal" id="section-6-2.4">
-          <p id="section-6-2.4.1">GL derives a combined location, including location quality, from various location sensors for a H with multiple location sensors -- this includes the gathered location from Agent running on H. As an example, GPS is considered less trustworthy as compared to mobile.<a href="#section-6-2.4.1" class="pilcrow">¶</a></p>
-</li>
-        <li class="normal" id="section-6-2.5">
-          <p id="section-6-2.5.1">The composite location comprises of combined geo-location (which includes location quality), host composition (TPM EK, mobile-SIM etc.) and time from a trusted source. GL signs the composite location with a private key whose public key certificate is a public trusted transparent ledger such as certificate transparency log. Now we have a attested composite location.<a href="#section-6-2.5.1" class="pilcrow">¶</a></p>
-</li>
-        <li class="normal" id="section-6-2.6">
-          <p id="section-6-2.6.1">Agent is returned the attested composite location over the secure connection. Agent signs the attested composite location using TPM AK establishing proof of residency of composite location to H. This is called attested proof-of-residency aware composite location (APL).<a href="#section-6-2.6.1" class="pilcrow">¶</a></p>
+<li class="normal" id="section-6-1.1">
+          <p id="section-6-1.1.1">this is run periodically (say every 5 minutes) to ensure that the host is in the same location<a href="#section-6-1.1.1" class="pilcrow">¶</a></p>
 </li>
       </ul>
-<div id="step-2-agent-gets-attested-geographic-boundary-using-geo-fencing-gf-service">
+<div id="step-1-agent-gets-attested-composite-location-using-geo-location-service-gl">
 <section id="section-6.1">
+        <h3 id="name-step-1-agent-gets-attested-">
+<a href="#section-6.1" class="section-number selfRef">6.1. </a><a href="#name-step-1-agent-gets-attested-" class="section-name selfRef">Step 1: Agent gets attested composite location using Geo-location service (GL)</a>
+        </h3>
+<p id="section-6.1-1">Geo-location service (GL) runs outside of H -- besides the location from device location sources (e.g. GPS, GNSS), it will connect to mobile location service providers (e.g., Telefonica) using GSMA location API (gsma-loc).<a href="#section-6.1-1" class="pilcrow">¶</a></p>
+<ul class="normal">
+<li class="normal" id="section-6.1-2.1">
+            <p id="section-6.1-2.1.1">Agent gathers the location from H local location sensors (e.g. GPS, GNSS).
+Agent connects to GL using secure connection mechanism like TLS. Agent provides the gathered location to GL over the secure connection.<a href="#section-6.1-2.1.1" class="pilcrow">¶</a></p>
+</li>
+          <li class="normal" id="section-6.1-2.2">
+            <p id="section-6.1-2.2.1">Location (L) has a quality associated with it. For example, IP address-based L is of lower quality as compared to other sources.<a href="#section-6.1-2.2.1" class="pilcrow">¶</a></p>
+</li>
+          <li class="normal" id="section-6.1-2.3">
+            <p id="section-6.1-2.3.1">GL ensures that the device composition of H (reference to H composition table for further details) is intact (e.g. SIM card not plugged out of H) by periodically polling the state of H.
+H is a member of the set of trusted hosts in the shared datastore -- the shared datastore has the host composition details.
+Note that e-SIM does not have the plugging out problem like standard SIM but could be subject to e-SIM swap attack.
+Host composition (HC) comprises of TPM EK, Mobile-SIM etc.<a href="#section-6.1-2.3.1" class="pilcrow">¶</a></p>
+</li>
+          <li class="normal" id="section-6.1-2.4">
+            <p id="section-6.1-2.4.1">GL derives a combined location, including location quality, from various location sensors for a H with multiple location sensors -- this includes the gathered location from Agent running on H.
+As an example, GPS is considered less trustworthy as compared to mobile.<a href="#section-6.1-2.4.1" class="pilcrow">¶</a></p>
+</li>
+          <li class="normal" id="section-6.1-2.5">
+            <p id="section-6.1-2.5.1">The composite location comprises of combined geo-location (which includes location quality), host composition (TPM EK, mobile-SIM etc.) and time from a trusted source.
+GL signs the composite location with a private key whose public key certificate is a public trusted transparent ledger such as certificate transparency log.
+Now we have a attested composite location.<a href="#section-6.1-2.5.1" class="pilcrow">¶</a></p>
+</li>
+          <li class="normal" id="section-6.1-2.6">
+            <p id="section-6.1-2.6.1">Agent is returned the attested composite location over the secure connection.
+Agent signs the attested composite location using TPM AK establishing proof of residency of composite location to H. This is called attested proof-of-residency aware composite location (APL).<a href="#section-6.1-2.6.1" class="pilcrow">¶</a></p>
+</li>
+        </ul>
+</section>
+</div>
+<div id="step-2-agent-gets-attested-geographic-boundary-using-geo-fencing-gf-service">
+<section id="section-6.2">
         <h3 id="name-step-2-agent-gets-attested-">
-<a href="#section-6.1" class="section-number selfRef">6.1. </a><a href="#name-step-2-agent-gets-attested-" class="section-name selfRef">Step 2: Agent gets attested geographic boundary using Geo-fencing (GF) service</a>
+<a href="#section-6.2" class="section-number selfRef">6.2. </a><a href="#name-step-2-agent-gets-attested-" class="section-name selfRef">Step 2: Agent gets attested geographic boundary using Geo-fencing (GF) service</a>
         </h3>
 <ul class="normal">
-<li class="normal" id="section-6.1-1.1">
-            <p id="section-6.1-1.1.1">Geo-fence policies are of four flavours - (1) boolean membership of given boundary (rectangular, circular, state etc.), (2) precise location, (3) precise bounding box/circle of location, (4) approximate location with no definition of boundary.
-The first one, boolean membership of given boundary, is the most common and will be assumed as the default. They are available in the form of pre-defined templates or can be configured on demand.
+<li class="normal" id="section-6.2-1.1">
+            <p id="section-6.2-1.1.1">Geo-fence policies are of four flavours - (1) boolean membership of given boundary (rectangular, circular, state etc.), (2) precise location, (3) precise bounding box/circle of location, (4) approximate location with no definition of boundary.
+The first one, boolean membership of given boundary, is the most common and will be assumed as the default.
+They are available in the form of pre-defined templates or can be configured on demand.
 Enterprises, who are the user of the hosts, choose the geo-fence policies to be enforced for various hosts.
 Note that the hosts must belong to the set of trusted hosts in a shared ledger.
-The geo-fence policies applied to the set of trusted hosts are recorded in a shared ledger.<a href="#section-6.1-1.1.1" class="pilcrow">¶</a></p>
+The geo-fence policies applied to the set of trusted hosts are recorded in a shared ledger.<a href="#section-6.2-1.1.1" class="pilcrow">¶</a></p>
 </li>
-          <li class="normal" id="section-6.1-1.2">
-            <p id="section-6.1-1.2.1">Location agent on H supplies (APL) to geo-fence service (GF) over a secure connection. GF performs geo-fence policy enforcement by matching the location against configured geo-fence policies. GF signs the geo-fence policy match result, along with a trusted time (potentially leverage RFC 3161), with a private key whose public key certificate is a public trusted transparent ledger such as certificate transparency log.<a href="#section-6.1-1.2.1" class="pilcrow">¶</a></p>
+          <li class="normal" id="section-6.2-1.2">
+            <p id="section-6.2-1.2.1">Location agent on H supplies (APL) to geo-fence service (GF) over a secure connection.
+GF performs geo-fence policy enforcement by matching the location against configured geo-fence policies. GF signs the geo-fence policy match result, along with a trusted time (potentially leverage RFC 3161), with a private key whose public key certificate is a public trusted transparent ledger such as certificate transparency log.<a href="#section-6.2-1.2.1" class="pilcrow">¶</a></p>
 </li>
-          <li class="normal" id="section-6.1-1.3">
-            <p id="section-6.1-1.3.1">Geo-fence policy match result details (non-exhaustive): 1) Geo-fence policy which matched 2) Boolean - inside or outside geo-fence - applicable to boolean membership of given boundary policy type.<a href="#section-6.1-1.3.1" class="pilcrow">¶</a></p>
+          <li class="normal" id="section-6.2-1.3">
+            <p id="section-6.2-1.3.1">Geo-fence policy match result details (non-exhaustive): 1) Geo-fence policy which matched 2) Boolean - inside or outside geo-fence - applicable to boolean membership of given boundary policy type.<a href="#section-6.2-1.3.1" class="pilcrow">¶</a></p>
 </li>
-          <li class="normal" id="section-6.1-1.4">
-            <p id="section-6.1-1.4.1">Agent is returned the attested geo-fence policy match result. Agent signs the attested geo-fence policy match result using TPM AK establishing proof of residency of geo-fence policy match result to H. This is called attested proof-of-residency aware geo-fence policy match result (APGL).<a href="#section-6.1-1.4.1" class="pilcrow">¶</a></p>
+          <li class="normal" id="section-6.2-1.4">
+            <p id="section-6.2-1.4.1">Agent is returned the attested geo-fence policy match result. Agent signs the attested geo-fence policy match result using TPM AK establishing proof of residency of geo-fence policy match result to H. This is called attested proof-of-residency aware geo-fence policy match result (APGL).<a href="#section-6.2-1.4.1" class="pilcrow">¶</a></p>
 </li>
         </ul>
 </section>
@@ -1495,16 +1577,24 @@ The geo-fence policies applied to the set of trusted hosts are recorded in a sha
       </h2>
 <ul class="normal">
 <li class="normal" id="section-7-1.1">
-          <p id="section-7-1.1.1">Agent ensures that W connects to it on H local socket (e.g. Unix domain socket). Agent generates private/public key pair for W. Agent signs the W public key with its TPM AK. Agent sends the signed W public key along with its SPIFFE ID and last known APGL to the server. Note that the TPM AK is already verified by the server as part of the agent attestation process establishing proof of residency of Agent to H.<a href="#section-7-1.1.1" class="pilcrow">¶</a></p>
+          <p id="section-7-1.1.1">Agent ensures that W connects to it on H local socket (e.g. Unix domain socket).
+Agent generates private/public key pair for W. Agent signs the W public key with its TPM AK.
+Agent sends the signed W public key along with its SPIFFE ID and last known APGL to the server.
+Note that the TPM AK is already verified by the server as part of the agent attestation process establishing proof of residency of Agent to H.<a href="#section-7-1.1.1" class="pilcrow">¶</a></p>
 </li>
         <li class="normal" id="section-7-1.2">
-          <p id="section-7-1.2.1">Server gets the Agent TPM AK public key from the SPIFFE ID by looking it up in the shared datastore. Server verifies the W public key signature using the TPM AK public key. Server then sends an encrypted challenge to the agent. The challenge's secret is encrypted using the W public key.<a href="#section-7-1.2.1" class="pilcrow">¶</a></p>
+          <p id="section-7-1.2.1">Server gets the Agent TPM AK public key from the SPIFFE ID by looking it up in the shared datastore.
+Server verifies the W public key signature using the TPM AK public key.
+Server then sends an encrypted challenge to the agent.
+The challenge's secret is encrypted using the W public key.<a href="#section-7-1.2.1" class="pilcrow">¶</a></p>
 </li>
         <li class="normal" id="section-7-1.3">
           <p id="section-7-1.3.1">Agent decrypts the challenge using its W private key and sends the response back to the server.<a href="#section-7-1.3.1" class="pilcrow">¶</a></p>
 </li>
         <li class="normal" id="section-7-1.4">
-          <p id="section-7-1.4.1">Server verifies that the decrypted secret is the same it used to build the challenge. It then issues SPIFFE ID for W. The SPIFFE ID is signed by the server and contains the W public key and the geographic boundary (e.g. cloud region, city, country etc.) of the host. The geographic boundary is obtained from the last known APGL. The server also stores the W SPIFFE ID mapping to W public key in a shared datastore.<a href="#section-7-1.4.1" class="pilcrow">¶</a></p>
+          <p id="section-7-1.4.1">Server verifies that the decrypted secret is the same it used to build the challenge.
+It then issues SPIFFE ID for W. The SPIFFE ID is signed by the server and contains the W public key and the geographic boundary (e.g. cloud region, city, country etc.) of the host.
+The geographic boundary is obtained from the last known APGL. The server also stores the W SPIFFE ID mapping to W public key in a shared datastore.<a href="#section-7-1.4.1" class="pilcrow">¶</a></p>
 </li>
       </ul>
 </section>
