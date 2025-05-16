@@ -199,6 +199,8 @@ This could be a certificate or a token.
 # Attestation for System Bootstrap and Agent Initialization
 This section describes workload attestation based on SPIFFE/SPIRE.
 
+<img src="./another_file_in_the_repo.svg">
+
 (TODO: add diagram showing agents and SPIRE connectivity)
 
 The location agent, which is a modified SPIFFE/SPIRE agent using a geo-location plugin mechanism, is a daemon running on bare-metal Linux OS Host (H) as a process with direct access to TPM (root permissions for TPM 2.0 access may be needed for certain Linux distributions for certain H hardware configurations).
