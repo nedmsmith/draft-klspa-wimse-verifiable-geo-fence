@@ -152,7 +152,7 @@ Enterprises need cryptographic proof of trustworthy geographic boundary for user
 
 * A server (or proxy) authenticates to clients using different TLS certificates, each signed by a different Certificate Authority (CA), based on the geographic boundaries of user workloads.
 
-* Enterprise Customer Premise Equipment (CPE) provides on-premise computing that is a basis for defining geolocation boundaries.
+* Enterprise Customer Premise Equipment (CPE) provides on-premise computing that is a basis for defining geo-location boundaries.
 A telco network provides a means for communication between premises.
 
 * Construction & Engineering of SaaS workloads can benefit from attested geographic boundary data from end-user devices to restrict access within specific geo-political regions (e.g., California).
@@ -160,7 +160,7 @@ Enabling per-user or group-level geo-fencing helps prevent fraudulent access ori
 
 * Healthcare providers need to ensure that the Host (H) is located in a specific geographic boundary when downloading patient data or performing other sensitive operations.
 
-* U.S. Presidential Executive Order (TODO: site reference) compliance directs Cloud Service Provider (CSP) support personnel be located in restricted geographies  (e.g., Venezuela, Iran, China, North Korea).
+* U.S. Presidential Executive Order (doj-cisa) compliance directs Cloud Service Provider (CSP) support personnel be located in restricted geographies  (e.g., Venezuela, Iran, China, North Korea).
 However, those personnel should not be allowed to support U.S. customers.
 Geo-location enforcement can ensure policy compliance. See [doj-cisa].
 
@@ -189,7 +189,7 @@ Proof of Residency of W on a trusted host is obtained using TPM. W asks its Agen
 
 Agent sends attested geographic boundary (e.g., cloud region, city, country etc.) and W’s parameters to Workload Identity Manager (WIM).
 
-* Example for Agent used in this document: SPIFFE/SPIRE agent (TODO: cite reference spire) can be enhanced to add attested geographic boundary that will become part of Identity granted (e.g., SVID).
+* Example for Agent used in this document: SPIFFE/SPIRE agent (spire) can be enhanced to add attested geographic boundary that will become part of Identity granted (e.g., SVID).
 
 * Example for WIM used in this document: SPIFFE/Spire server
 
@@ -199,10 +199,13 @@ This could be a certificate or a token.
 # Attestation for System Bootstrap and Agent Initialization
 This section describes workload attestation based on SPIFFE/SPIRE.
 
-(TODO: add diagram showing agents and SPIRE connectivity)
+~~~aasvg
+./spiffe-spire.svg
+~~~
+SPIFFE/SPIRE architecture with new geo-location plugin
 
-The location agent, which is a modified SPIFFE/SPIRE agent using a geo-location plugin mechanism, is a daemon running on bare-metal Linux OS Host (H) as a process with direct access to TPM (root permissions for TPM 2.0 access may be needed for certain Linux distributions for certain H hardware configurations).
-The agent can gather the location from host local location sensors (e.g. GPS, GNSS).
+In the context of the SPIFFE/SPIRE architecture (spire), the SPIFFE/SPIRE agent includes a new geo-location plugin -- this is depicted in the figure below. The agent is a daemon running on bare-metal Linux OS Host (H) as a process with direct access to TPM (root permissions for TPM 2.0 access may be needed for certain Linux distributions for certain H hardware configurations).
+The agent, using the geo-location plugin, can gather the location from host local location sensors (e.g. GPS, GNSS).
 The agent has a TPM plugin (spire-tpm) which interacts with the TPM.
 The server (SPIFFE/SPIRE server) is running in cluster which is isolated from the cluster in which the agent is running.
 
@@ -397,15 +400,15 @@ This document has no IANA actions.
 
 # Appendix: End-to-end workflow diagram with a secure AI agent workload
 ~~~aasvg
-+-------------------+         +-------------------+         +-------------------+
-|                   |         |                   |         |                   |
-|   Trusted Host    |         | Geo-location Svc  |         | Geo-fence Svc     |
-| (TPM, Sensors,    |         |   (GL)            |         |   (GF)            |
-|  Linux IMA, etc.) |         |                   |         |                   |
-+---------+---------+         +---------+---------+         +---------+---------+
++-------------------+         +-------------------+         +-------------------+         +-------------------+
+|                   |         |                   |         |                   |         |                   |
+|   Trusted Host    |         | Geo-location Svc  |         | Geo-fence Svc     |         |  Workload Identity|
+|(TPM, Sensors,     |         |   (GL)            |         |   (GF)            |         |   Management (WIM)|
+|Agent,Linux IMA ..)|         |                   |         |                   |         |SPIFFE/SPIRE server|
++---------+---------+         +---------+---------+         +---------+---------+         +---------+---------+
           |                             |                             |
           | 1. Gather local location    |                             |
-          |    (GPS, SIM, etc.)         |                             |
+          |    (GPS, GNSS etc.)         |                             |
           +---------------------------->|                             |
           | 2. Send to GL (TLS)         |                             |
           |                             |                             |
