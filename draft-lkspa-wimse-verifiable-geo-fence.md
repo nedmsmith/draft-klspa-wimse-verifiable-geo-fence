@@ -199,9 +199,7 @@ This could be a certificate or a token.
 # Attestation for System Bootstrap and Agent Initialization
 This section describes workload attestation based on SPIFFE/SPIRE.
 
-~~~aasvg
-{::include ./spiffe-spire.svg}
-~~~
+<img src="./spiffe-spire.svg">
 
 SPIFFE/SPIRE architecture with new geo-location plugin
 
