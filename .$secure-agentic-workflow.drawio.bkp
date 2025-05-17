@@ -43,6 +43,12 @@
             <mxPoint x="520" y="246" as="targetPoint" />
           </mxGeometry>
         </mxCell>
+        <mxCell id="Ej8hDgJhuvleFJYb6pgI-12" value="End user devices list -&amp;gt; match policy &quot;ZTNA score &amp;lt; threshold for last x minutes&quot;" style="text;html=1;align=center;verticalAlign=middle;whiteSpace=wrap;rounded=0;fillColor=default;" vertex="1" parent="1">
+          <mxGeometry x="310" y="220" width="180" height="41" as="geometry" />
+        </mxCell>
+        <mxCell id="Ej8hDgJhuvleFJYb6pgI-13" value="End user devices list -&amp;gt; action &quot;Block VPN access&quot;" style="text;html=1;align=center;verticalAlign=middle;whiteSpace=wrap;rounded=0;fillColor=default;" vertex="1" parent="1">
+          <mxGeometry x="310" y="299" width="180" height="41" as="geometry" />
+        </mxCell>
       </root>
     </mxGraphModel>
   </diagram>
