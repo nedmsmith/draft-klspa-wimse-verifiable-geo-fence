@@ -1,0 +1,49 @@
+<mxfile host="Electron" agent="Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) AppleWebKit/537.36 (KHTML, like Gecko) draw.io/27.0.5 Chrome/134.0.6998.205 Electron/35.3.0 Safari/537.36" version="27.0.5">
+  <diagram name="Page-1" id="xFBABuUxaobWXg4LbbgL">
+    <mxGraphModel dx="1106" dy="484" grid="1" gridSize="10" guides="1" tooltips="1" connect="1" arrows="1" fold="1" page="1" pageScale="1" pageWidth="850" pageHeight="1100" math="0" shadow="0">
+      <root>
+        <mxCell id="0" />
+        <mxCell id="1" parent="0" />
+        <mxCell id="Ej8hDgJhuvleFJYb6pgI-1" value="&lt;b&gt;&lt;font style=&quot;font-size: 20px;&quot;&gt;LLM&lt;/font&gt;&lt;/b&gt;" style="shape=process;whiteSpace=wrap;html=1;backgroundOutline=1;" vertex="1" parent="1">
+          <mxGeometry x="99" y="58" width="150" height="80" as="geometry" />
+        </mxCell>
+        <mxCell id="Ej8hDgJhuvleFJYb6pgI-2" value="&lt;b&gt;Agent&lt;/b&gt;" style="whiteSpace=wrap;html=1;aspect=fixed;" vertex="1" parent="1">
+          <mxGeometry x="138" y="240" width="87" height="87" as="geometry" />
+        </mxCell>
+        <mxCell id="Ej8hDgJhuvleFJYb6pgI-3" value="" style="endArrow=classic;html=1;rounded=0;entryX=0.4;entryY=1.025;entryDx=0;entryDy=0;entryPerimeter=0;" edge="1" parent="1">
+          <mxGeometry width="50" height="50" relative="1" as="geometry">
+            <mxPoint x="176" y="240" as="sourcePoint" />
+            <mxPoint x="176" y="138" as="targetPoint" />
+          </mxGeometry>
+        </mxCell>
+        <mxCell id="Ej8hDgJhuvleFJYb6pgI-4" value="&lt;p&gt;&lt;b&gt;&lt;font style=&quot;font-size: 14px;&quot;&gt;Prompt&lt;/font&gt;&lt;/b&gt;: Identity end user devices with ZTNA score &amp;lt; threshold for last x minutes and block VPN access&lt;/p&gt;" style="text;html=1;align=center;verticalAlign=middle;whiteSpace=wrap;rounded=0;" vertex="1" parent="1">
+          <mxGeometry x="51" y="153" width="117" height="80" as="geometry" />
+        </mxCell>
+        <mxCell id="Ej8hDgJhuvleFJYb6pgI-5" value="&lt;b&gt;&lt;font style=&quot;font-size: 16px;&quot;&gt;Cybersecure and Compliant Agentic AI Workflow&amp;nbsp;&lt;/font&gt;&lt;/b&gt;" style="text;html=1;align=center;verticalAlign=middle;resizable=0;points=[];autosize=1;strokeColor=none;fillColor=none;" vertex="1" parent="1">
+          <mxGeometry x="239" y="386" width="400" height="30" as="geometry" />
+        </mxCell>
+        <mxCell id="Ej8hDgJhuvleFJYb6pgI-6" value="&lt;p&gt;&lt;b&gt;&lt;font style=&quot;font-size: 14px;&quot;&gt;Response&lt;/font&gt;&lt;/b&gt;: SIEM endpoint with MCP API details + VPN policy server with MCP API details&lt;/p&gt;" style="text;html=1;align=center;verticalAlign=middle;whiteSpace=wrap;rounded=0;" vertex="1" parent="1">
+          <mxGeometry x="190" y="151" width="105" height="80" as="geometry" />
+        </mxCell>
+        <mxCell id="Ej8hDgJhuvleFJYb6pgI-8" value="" style="endArrow=classic;html=1;rounded=0;entryX=0;entryY=0.5;entryDx=0;entryDy=0;exitX=1;exitY=0.25;exitDx=0;exitDy=0;" edge="1" parent="1" source="Ej8hDgJhuvleFJYb6pgI-2" target="Ej8hDgJhuvleFJYb6pgI-9">
+          <mxGeometry width="50" height="50" relative="1" as="geometry">
+            <mxPoint x="220" y="260" as="sourcePoint" />
+            <mxPoint x="580" y="200" as="targetPoint" />
+          </mxGeometry>
+        </mxCell>
+        <mxCell id="Ej8hDgJhuvleFJYb6pgI-9" value="&lt;b&gt;SIEM MCP server&lt;/b&gt;" style="rounded=1;whiteSpace=wrap;html=1;" vertex="1" parent="1">
+          <mxGeometry x="520" y="179" width="120" height="60" as="geometry" />
+        </mxCell>
+        <mxCell id="Ej8hDgJhuvleFJYb6pgI-10" value="&lt;b&gt;VPN Policy MCP server&lt;/b&gt;" style="rounded=1;whiteSpace=wrap;html=1;" vertex="1" parent="1">
+          <mxGeometry x="520" y="299" width="120" height="60" as="geometry" />
+        </mxCell>
+        <mxCell id="Ej8hDgJhuvleFJYb6pgI-11" value="" style="endArrow=classic;html=1;rounded=0;entryX=0;entryY=0.5;entryDx=0;entryDy=0;exitX=1;exitY=0.25;exitDx=0;exitDy=0;" edge="1" parent="1" target="Ej8hDgJhuvleFJYb6pgI-10">
+          <mxGeometry width="50" height="50" relative="1" as="geometry">
+            <mxPoint x="225" y="299" as="sourcePoint" />
+            <mxPoint x="520" y="246" as="targetPoint" />
+          </mxGeometry>
+        </mxCell>
+      </root>
+    </mxGraphModel>
+  </diagram>
+</mxfile>
