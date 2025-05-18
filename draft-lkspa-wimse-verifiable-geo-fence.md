@@ -402,7 +402,6 @@ By addressing these considerations, the framework aims to provide a secure and r
 This document has no IANA actions.
 
 # Appendix: End-to-end workflow diagram with a secure AI agent workload
-
 <img src="./secure-agentic-workflow.svg">
 
 --- back
