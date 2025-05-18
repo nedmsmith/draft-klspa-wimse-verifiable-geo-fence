@@ -402,63 +402,8 @@ By addressing these considerations, the framework aims to provide a secure and r
 This document has no IANA actions.
 
 # Appendix: End-to-end workflow diagram with a secure AI agent workload
-~~~aasvg
-+-------------------+         +-------------------+         +-------------------+         +-------------------+
-|                   |         |                   |         |                   |         |                   |
-|   Trusted Host    |         | Geo-location Svc  |         | Geo-fence Svc     |         |  Workload Identity|
-|(TPM, Sensors,     |         |   (GL)            |         |   (GF)            |         |   Management (WIM)|
-|Agent,Linux IMA ..)|         |                   |         |                   |         |SPIFFE/SPIRE server|
-+---------+---------+         +---------+---------+         +---------+---------+         +---------+---------+
-          |                             |                             |
-          | 1. Gather local location    |                             |
-          |    (GPS, GNSS etc.)         |                             |
-          +---------------------------->|                             |
-          | 2. Send to GL (TLS)         |                             |
-          |                             |                             |
-          |                             | 3. Cross-verify, sign       |
-          |                             |    composite location       |
-          |                             +---------------------------->|
-          |                             | 4. Policy match, sign       |
-          |                             |    geo-fence result         |
-          |<----------------------------+                             |
-          | 5. Return attested          |                             |
-          |    geo-fence result         |                             |
-          +-----------------------------+                             |
-          | 6. Sign with TPM AK         |                             |
-          |    (Proof of residency)     |                             |
-          +-----------------------------+                             |
-          |                                                       +---v---+
-          |                                                       |       |
-          |                                                       |  WIM  |
-          |                                                       |(Server|
-          |                                                       |/SPIFFE|
-          |                                                       |/SPIRE)|
-          |                                                       +---+---+
-          |                                                           |
-          | 7. Send attested geo-fence result,                        |
-          |    workload pubkey, agent SPIFFE ID  -------------------->|
-          |                                                           |
-          |                                                           |
-          | 8. Verify attestation, issue Workload ID (WID)            |
-          |    with geo-boundary, store mapping                       |
-          |<----------------------------------------------------------+
-          |
-          | 9. Workload uses WID for secure connections
-          |    (e.g., TLS, HTTP header, etc.)
-          v
 
-+-------------------+
-|                   |
-|   Peer Service    |
-|   (Policy Enforcer|
-|    SaaS, K8s, etc)|
-+-------------------+
-
-Legend:
-- All communications are over secure/authenticated channels (e.g., TLS)
-- All attestation steps involve cryptographic signatures (TPM AK, GL, GF, WIM)
-- Periodic re-attestation and monitoring not shown for brevity
-~~~
+<img src="./secure-agentic-workflow.svg">
 
 --- back
 
