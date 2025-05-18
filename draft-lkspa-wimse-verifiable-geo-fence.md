@@ -201,7 +201,7 @@ This section describes workload attestation based on SPIFFE/SPIRE.
 
 <img src="./spiffe-spire.svg">
 
-SPIFFE/SPIRE architecture with new geo-location plugin
+                           SPIFFE/SPIRE architecture with new geo-location plugin
 
 In the context of the SPIFFE/SPIRE architecture (spire), the SPIFFE/SPIRE agent includes a new geo-location plugin -- this is depicted in the figure below. The agent is a daemon running on bare-metal Linux OS Host (H) as a process with direct access to TPM (root permissions for TPM 2.0 access may be needed for certain Linux distributions for certain H hardware configurations).
 The agent, using the geo-location plugin, can gather the location from host local location sensors (e.g. GPS, GNSS).
