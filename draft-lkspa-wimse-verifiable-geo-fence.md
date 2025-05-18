@@ -403,8 +403,10 @@ This document has no IANA actions.
 
 # Appendix: End-to-end workflow diagram with a secure AI agent workload
 
-<img src="./secure-agentic-workflow.svg">
+Figure 3: Cybersecure and Compliant Agentic AI Workflow
+
 The end-to-end workflow illustrates how a secure AI agent, running on a trusted host with TPM-backed attestation, interacts with geo-location and geo-fencing services to obtain verifiable proof of its geographic boundary. The agent periodically collects location data from trusted sensors, obtains attested composite location from a geo-location service, and enforces geo-fence policies via a geo-fencing service. The resulting attested geo-fence proof is used to bind workload identity to both the host and its geographic location, enabling secure, policy-driven execution of AI workloads and compliance with data residency requirements.
+
 --- back
 
 # Acknowledgments

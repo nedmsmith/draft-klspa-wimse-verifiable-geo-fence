@@ -1,6 +1,6 @@
 <mxfile host="Electron" agent="Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) AppleWebKit/537.36 (KHTML, like Gecko) draw.io/27.0.5 Chrome/134.0.6998.205 Electron/35.3.0 Safari/537.36" version="27.0.5">
   <diagram name="Page-1" id="xFBABuUxaobWXg4LbbgL">
-    <mxGraphModel dx="913" dy="1584" grid="1" gridSize="10" guides="1" tooltips="1" connect="1" arrows="1" fold="1" page="1" pageScale="1" pageWidth="850" pageHeight="1100" math="0" shadow="0">
+    <mxGraphModel dx="913" dy="484" grid="1" gridSize="10" guides="1" tooltips="1" connect="1" arrows="1" fold="1" page="1" pageScale="1" pageWidth="850" pageHeight="1100" math="0" shadow="0">
       <root>
         <mxCell id="0" />
         <mxCell id="1" parent="0" />
@@ -12,9 +12,6 @@
             <mxPoint x="176" y="240" as="sourcePoint" />
             <mxPoint x="40" y="102" as="targetPoint" />
           </mxGeometry>
-        </mxCell>
-        <mxCell id="Ej8hDgJhuvleFJYb6pgI-5" value="&lt;b&gt;&lt;font style=&quot;font-size: 16px;&quot;&gt;Cybersecure and Compliant Agentic AI Workflow&amp;nbsp;&lt;/font&gt;&lt;/b&gt;" style="text;html=1;align=center;verticalAlign=middle;resizable=0;points=[];autosize=1;strokeColor=none;fillColor=none;" parent="1" vertex="1">
-          <mxGeometry x="168" y="-20" width="400" height="30" as="geometry" />
         </mxCell>
         <mxCell id="Ej8hDgJhuvleFJYb6pgI-6" value="&lt;p&gt;&lt;b&gt;&lt;font style=&quot;font-size: 12px;&quot;&gt;(3) LLM Response 1&lt;/font&gt;&lt;/b&gt;: Tools to be executed w/ information to pass to tools - Execute SIEM tool with MCP API details to identify end user devices as per user policy&lt;/p&gt;" style="text;html=1;align=center;verticalAlign=middle;whiteSpace=wrap;rounded=0;" parent="1" vertex="1">
           <mxGeometry x="149" y="101" width="141" height="120" as="geometry" />
