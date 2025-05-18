@@ -201,7 +201,7 @@ This section describes workload attestation based on SPIFFE/SPIRE.
 
 <img src="./spiffe-spire.svg">
 
-   **Modified SPIFFE/SPIRE architecture with new geo-location plugin**
+**Figure 1: Modified SPIFFE/SPIRE architecture with new geo-location plugin**
 
 In the context of the SPIFFE/SPIRE architecture (spire), the SPIFFE/SPIRE agent includes a new geo-location plugin -- this is depicted in the figure below. The agent is a daemon running on bare-metal Linux OS Host (H) as a process with direct access to TPM (root permissions for TPM 2.0 access may be needed for certain Linux distributions for certain H hardware configurations).
 The agent, using the geo-location plugin, can gather the location from host local location sensors (e.g. GPS, GNSS).
@@ -315,6 +315,10 @@ The challenge's secret is encrypted using the W public key.
 * Server verifies that the decrypted secret is the same it used to build the challenge.
 It then issues SPIFFE ID for W. The SPIFFE ID is signed by the server and contains the W public key and the geographic boundary (e.g. cloud region, city, country etc.) of the host.
 The geographic boundary is obtained from the last known APGL. The server also stores the W SPIFFE ID mapping to W public key in a shared datastore.
+
+<img src="./end-to-end-flow.svg">
+
+**Figure 2: End-to-end Workflow**
 
 # Networking Protocol Changes
 Workload ID (WID), with location field, in the form of a proof-of-residency certificate or token needs to be conveyed to the peer during connection establishment. The connection is end-to-end across proxies like
