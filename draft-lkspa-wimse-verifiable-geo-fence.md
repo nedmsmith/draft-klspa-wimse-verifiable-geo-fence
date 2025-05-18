@@ -403,7 +403,7 @@ This document has no IANA actions.
 
 # Appendix: End-to-end workflow diagram with a secure AI agent workload
 
-<img src="./secure-agentic-workflow.svg">
+
 
 --- back
 
