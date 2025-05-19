@@ -1,0 +1,79 @@
+<svg xmlns="http://www.w3.org/2000/svg" version="1.1" height="912" width="656" viewBox="0 0 656 912" class="diagram" text-anchor="middle" font-family="monospace" font-size="13px" stroke-linecap="round">
+<path d="M 8,32 L 8,112" fill="none" stroke="black"/>
+<path d="M 8,736 L 8,816" fill="none" stroke="black"/>
+<path d="M 88,112 L 88,704" fill="none" stroke="black"/>
+<path d="M 168,32 L 168,112" fill="none" stroke="black"/>
+<path d="M 168,736 L 168,816" fill="none" stroke="black"/>
+<path d="M 248,32 L 248,112" fill="none" stroke="black"/>
+<path d="M 328,112 L 328,400" fill="none" stroke="black"/>
+<path d="M 408,32 L 408,112" fill="none" stroke="black"/>
+<path d="M 488,32 L 488,112" fill="none" stroke="black"/>
+<path d="M 536,416 L 536,512" fill="none" stroke="black"/>
+<path d="M 568,112 L 568,416" fill="none" stroke="black"/>
+<path d="M 568,512 L 568,640" fill="none" stroke="black"/>
+<path d="M 600,416 L 600,512" fill="none" stroke="black"/>
+<path d="M 648,32 L 648,112" fill="none" stroke="black"/>
+<path d="M 8,32 L 168,32" fill="none" stroke="black"/>
+<path d="M 248,32 L 408,32" fill="none" stroke="black"/>
+<path d="M 488,32 L 648,32" fill="none" stroke="black"/>
+<path d="M 8,112 L 168,112" fill="none" stroke="black"/>
+<path d="M 248,112 L 408,112" fill="none" stroke="black"/>
+<path d="M 488,112 L 648,112" fill="none" stroke="black"/>
+<path d="M 88,176 L 320,176" fill="none" stroke="black"/>
+<path d="M 328,256 L 560,256" fill="none" stroke="black"/>
+<path d="M 96,304 L 328,304" fill="none" stroke="black"/>
+<path d="M 88,352 L 328,352" fill="none" stroke="black"/>
+<path d="M 88,400 L 328,400" fill="none" stroke="black"/>
+<path d="M 536,416 L 560,416" fill="none" stroke="black"/>
+<path d="M 576,416 L 600,416" fill="none" stroke="black"/>
+<path d="M 536,512 L 600,512" fill="none" stroke="black"/>
+<path d="M 400,560 L 560,560" fill="none" stroke="black"/>
+<path d="M 96,640 L 568,640" fill="none" stroke="black"/>
+<path d="M 8,736 L 168,736" fill="none" stroke="black"/>
+<path d="M 8,816 L 168,816" fill="none" stroke="black"/>
+<path d="M 536,512 L 544,496" fill="none" stroke="black"/>
+<polygon class="arrowhead" points="576,416 564,410.4 564,421.6" fill="black" transform="rotate(90,568,416)"/>
+<polygon class="arrowhead" points="568,560 556,554.4 556,565.6" fill="black" transform="rotate(0,560,560)"/>
+<polygon class="arrowhead" points="568,256 556,250.4 556,261.6" fill="black" transform="rotate(0,560,256)"/>
+<polygon class="arrowhead" points="328,176 316,170.4 316,181.6" fill="black" transform="rotate(0,320,176)"/>
+<polygon class="arrowhead" points="104,640 92,634.4 92,645.6" fill="black" transform="rotate(180,96,640)"/>
+<polygon class="arrowhead" points="104,304 92,298.4 92,309.6" fill="black" transform="rotate(180,96,304)"/>
+<polygon class="arrowhead" points="96,704 84,698.4 84,709.6" fill="black" transform="rotate(90,88,704)"/>
+<g class="text">
+<text x="84" y="68">Trusted Host</text>
+<text x="324" y="68">Geo-location Svc</text>
+<text x="552" y="68">Geo-fence Svc</text>
+<text x="76" y="84">(TPM, Sensors,</text>
+<text x="292" y="84">(GL)</text>
+<text x="532" y="84">(GF)</text>
+<text x="92" y="100">Linux IMA, etc.)</text>
+<text x="196" y="148">1. Gather local location</text>
+<text x="188" y="164">(GPS, SIM, etc.)</text>
+<text x="176" y="196">2. Send to GL (TLS)</text>
+<text x="424" y="228">3. Cross-verify, sign</text>
+<text x="436" y="244">composite location</text>
+<text x="424" y="276">4. Policy match, sign</text>
+<text x="428" y="292">geo-fence result</text>
+<text x="172" y="324">5. Return attested</text>
+<text x="188" y="340">geo-fence result</text>
+<text x="176" y="372">6. Sign with TPM AK</text>
+<text x="204" y="388">(Proof of residency)</text>
+<text x="568" y="452">WIM</text>
+<text x="568" y="468">(Server</text>
+<text x="568" y="484">/SPIFFE</text>
+<text x="572" y="500">SPIRE)</text>
+<text x="236" y="548">7. Send attested geo-fence result,</text>
+<text x="252" y="564">workload pubkey, agent SPIFFE ID</text>
+<text x="284" y="612">8. Verify attestation, issue Workload ID (WID)</text>
+<text x="252" y="628">with geo-boundary, store mapping</text>
+<text x="272" y="676">9. Workload uses WID for secure connections</text>
+<text x="244" y="692">(e.g., TLS, HTTP header, etc.)</text>
+<text x="84" y="772">Peer Service</text>
+<text x="100" y="788">(Policy Enforcer</text>
+<text x="104" y="804">SaaS, K8s, etc)</text>
+<text x="32" y="852">Legend:</text>
+<text x="288" y="868">- All communications are over secure/authenticated channels (e.g., TLS)</text>
+<text x="316" y="884">- All attestation steps involve cryptographic signatures (TPM AK, GL, GF, WIM)</text>
+<text x="252" y="900">- Periodic re-attestation and monitoring not shown for brevity</text>
+</g>
+</svg>
