@@ -1187,7 +1187,18 @@ This document augments WIMSE architecture to include geo-location and host affin
             <p id="section-toc.1-1.3.1"><a href="#section-3" class="auto internal xref">3</a>.  <a href="#name-use-cases" class="internal xref">Use Cases</a></p>
 <ul class="compact toc ulBare ulEmpty">
 <li class="compact toc ulBare ulEmpty" id="section-toc.1-1.3.2.1">
-                <p id="section-toc.1-1.3.2.1.1" class="keepWithNext"><a href="#section-3.1" class="auto internal xref">3.1</a>.  <a href="#name-category-1-server-centric-l" class="internal xref"><strong>Category 1</strong>: Server-centric Location</a></p>
+                <p id="section-toc.1-1.3.2.1.1"><a href="#section-3.1" class="auto internal xref">3.1</a>.  <a href="#name-category-1-server-centric-l" class="internal xref"><strong>Category 1</strong>: Server-centric Location</a></p>
+<ul class="compact toc ulBare ulEmpty">
+<li class="compact toc ulBare ulEmpty" id="section-toc.1-1.3.2.1.2.1">
+                    <p id="section-toc.1-1.3.2.1.2.1.1" class="keepWithNext"><a href="#section-3.1.1" class="auto internal xref">3.1.1</a>.  <a href="#name-server-workload-server-work" class="internal xref"><strong>Server workload &lt;-&gt; Server workload - General</strong>:</a></p>
+</li>
+                  <li class="compact toc ulBare ulEmpty" id="section-toc.1-1.3.2.1.2.2">
+                    <p id="section-toc.1-1.3.2.1.2.2.1"><a href="#section-3.1.2" class="auto internal xref">3.1.2</a>.  <a href="#name-server-workload-server-workl" class="internal xref"><strong>Server workload &lt;-&gt; Server workload - Agentic AI</strong>:</a></p>
+</li>
+                  <li class="compact toc ulBare ulEmpty" id="section-toc.1-1.3.2.1.2.3">
+                    <p id="section-toc.1-1.3.2.1.2.3.1"><a href="#section-3.1.3" class="auto internal xref">3.1.3</a>.  <a href="#name-user-workload-server-worklo" class="internal xref"><strong>User workload &lt;-&gt; Server workload</strong>:</a></p>
+</li>
+                </ul>
 </li>
               <li class="compact toc ulBare ulEmpty" id="section-toc.1-1.3.2.2">
                 <p id="section-toc.1-1.3.2.2.1"><a href="#section-3.2" class="auto internal xref">3.2</a>.  <a href="#name-category-2-user-centric-loc" class="internal xref"><strong>Category 2</strong>: User-centric Location</a></p>
@@ -1204,75 +1215,83 @@ This document augments WIMSE architecture to include geo-location and host affin
             <p id="section-toc.1-1.4.1"><a href="#section-4" class="auto internal xref">4</a>.  <a href="#name-approach-summary" class="internal xref">Approach Summary</a></p>
 </li>
           <li class="compact toc ulBare ulEmpty" id="section-toc.1-1.5">
-            <p id="section-toc.1-1.5.1"><a href="#section-5" class="auto internal xref">5</a>.  <a href="#name-attestation-for-system-boot" class="internal xref">Attestation for System Bootstrap and Agent Initialization</a></p>
-<ul class="compact toc ulBare ulEmpty">
-<li class="compact toc ulBare ulEmpty" id="section-toc.1-1.5.2.1">
-                <p id="section-toc.1-1.5.2.1.1"><a href="#section-5.1" class="auto internal xref">5.1</a>.  <a href="#name-attestation-of-os-integrity" class="internal xref">Attestation of OS Integrity and Proof of Residency on Host</a></p>
-</li>
-              <li class="compact toc ulBare ulEmpty" id="section-toc.1-1.5.2.2">
-                <p id="section-toc.1-1.5.2.2.1"><a href="#section-5.2" class="auto internal xref">5.2</a>.  <a href="#name-start-restart-time-attestat" class="internal xref">Start/restart time attestation/remote verification of agent for integrity and proof of residency on Host</a></p>
-</li>
-            </ul>
+            <p id="section-toc.1-1.5.1"><a href="#section-5" class="auto internal xref">5</a>.  <a href="#name-spiffe-spire-architecture-m" class="internal xref">SPIFFE/SPIRE Architecture modifications</a></p>
 </li>
           <li class="compact toc ulBare ulEmpty" id="section-toc.1-1.6">
-            <p id="section-toc.1-1.6.1"><a href="#section-6" class="auto internal xref">6</a>.  <a href="#name-agent-geo-location-and-geo-" class="internal xref">Agent geo-location and geo-fencing workflow</a></p>
+            <p id="section-toc.1-1.6.1"><a href="#section-6" class="auto internal xref">6</a>.  <a href="#name-end-to-end-workflow" class="internal xref">End-to-End Workflow</a></p>
 <ul class="compact toc ulBare ulEmpty">
 <li class="compact toc ulBare ulEmpty" id="section-toc.1-1.6.2.1">
-                <p id="section-toc.1-1.6.2.1.1"><a href="#section-6.1" class="auto internal xref">6.1</a>.  <a href="#name-step-1-agent-gets-attested-" class="internal xref">Step 1: Agent gets attested composite location using Geo-location service (GL)</a></p>
+                <p id="section-toc.1-1.6.2.1.1"><a href="#section-6.1" class="auto internal xref">6.1</a>.  <a href="#name-attestation-for-system-boot" class="internal xref">Attestation for System Bootstrap and Agent Initialization</a></p>
+<ul class="compact toc ulBare ulEmpty">
+<li class="compact toc ulBare ulEmpty" id="section-toc.1-1.6.2.1.2.1">
+                    <p id="section-toc.1-1.6.2.1.2.1.1"><a href="#section-6.1.1" class="auto internal xref">6.1.1</a>.  <a href="#name-attestation-of-os-integrity" class="internal xref">Attestation of OS Integrity and Proof of Residency on Host</a></p>
+</li>
+                  <li class="compact toc ulBare ulEmpty" id="section-toc.1-1.6.2.1.2.2">
+                    <p id="section-toc.1-1.6.2.1.2.2.1"><a href="#section-6.1.2" class="auto internal xref">6.1.2</a>.  <a href="#name-start-restart-time-attestat" class="internal xref">Start/restart time attestation/remote verification of agent for integrity and proof of residency on Host</a></p>
+</li>
+                </ul>
 </li>
               <li class="compact toc ulBare ulEmpty" id="section-toc.1-1.6.2.2">
-                <p id="section-toc.1-1.6.2.2.1"><a href="#section-6.2" class="auto internal xref">6.2</a>.  <a href="#name-step-2-agent-gets-attested-" class="internal xref">Step 2: Agent gets attested geographic boundary using Geo-fencing (GF) service</a></p>
+                <p id="section-toc.1-1.6.2.2.1"><a href="#section-6.2" class="auto internal xref">6.2</a>.  <a href="#name-agent-geo-location-and-geo-" class="internal xref">Agent geo-location and geo-fencing workflow</a></p>
+<ul class="compact toc ulBare ulEmpty">
+<li class="compact toc ulBare ulEmpty" id="section-toc.1-1.6.2.2.2.1">
+                    <p id="section-toc.1-1.6.2.2.2.1.1"><a href="#section-6.2.1" class="auto internal xref">6.2.1</a>.  <a href="#name-step-1-agent-gets-attested-" class="internal xref">Step 1: Agent gets attested composite location using Geo-location service (GL)</a></p>
+</li>
+                  <li class="compact toc ulBare ulEmpty" id="section-toc.1-1.6.2.2.2.2">
+                    <p id="section-toc.1-1.6.2.2.2.2.1"><a href="#section-6.2.2" class="auto internal xref">6.2.2</a>.  <a href="#name-step-2-agent-gets-attested-" class="internal xref">Step 2: Agent gets attested geographic boundary using Geo-fencing (GF) service</a></p>
+</li>
+                </ul>
+</li>
+              <li class="compact toc ulBare ulEmpty" id="section-toc.1-1.6.2.3">
+                <p id="section-toc.1-1.6.2.3.1"><a href="#section-6.3" class="auto internal xref">6.3</a>.  <a href="#name-workload-w-attestation-and-" class="internal xref">Workload (W) attestation and remote verification - key steps</a></p>
 </li>
             </ul>
 </li>
           <li class="compact toc ulBare ulEmpty" id="section-toc.1-1.7">
-            <p id="section-toc.1-1.7.1"><a href="#section-7" class="auto internal xref">7</a>.  <a href="#name-workload-w-attestation-and-" class="internal xref">Workload (W) attestation and remote verification - key steps</a></p>
+            <p id="section-toc.1-1.7.1"><a href="#section-7" class="auto internal xref">7</a>.  <a href="#name-networking-protocol-changes" class="internal xref">Networking Protocol Changes</a></p>
+<ul class="compact toc ulBare ulEmpty">
+<li class="compact toc ulBare ulEmpty" id="section-toc.1-1.7.2.1">
+                <p id="section-toc.1-1.7.2.1.1"><a href="#section-7.1" class="auto internal xref">7.1</a>.  <a href="#name-using-tls" class="internal xref">Using TLS</a></p>
+</li>
+              <li class="compact toc ulBare ulEmpty" id="section-toc.1-1.7.2.2">
+                <p id="section-toc.1-1.7.2.2.1"><a href="#section-7.2" class="auto internal xref">7.2</a>.  <a href="#name-not-using-tls" class="internal xref">Not Using TLS</a></p>
+</li>
+              <li class="compact toc ulBare ulEmpty" id="section-toc.1-1.7.2.3">
+                <p id="section-toc.1-1.7.2.3.1"><a href="#section-7.3" class="auto internal xref">7.3</a>.  <a href="#name-approaches" class="internal xref">Approaches</a></p>
+</li>
+            </ul>
 </li>
           <li class="compact toc ulBare ulEmpty" id="section-toc.1-1.8">
-            <p id="section-toc.1-1.8.1"><a href="#section-8" class="auto internal xref">8</a>.  <a href="#name-networking-protocol-changes" class="internal xref">Networking Protocol Changes</a></p>
-<ul class="compact toc ulBare ulEmpty">
-<li class="compact toc ulBare ulEmpty" id="section-toc.1-1.8.2.1">
-                <p id="section-toc.1-1.8.2.1.1"><a href="#section-8.1" class="auto internal xref">8.1</a>.  <a href="#name-using-tls" class="internal xref">Using TLS</a></p>
-</li>
-              <li class="compact toc ulBare ulEmpty" id="section-toc.1-1.8.2.2">
-                <p id="section-toc.1-1.8.2.2.1"><a href="#section-8.2" class="auto internal xref">8.2</a>.  <a href="#name-not-using-tls" class="internal xref">Not Using TLS</a></p>
-</li>
-              <li class="compact toc ulBare ulEmpty" id="section-toc.1-1.8.2.3">
-                <p id="section-toc.1-1.8.2.3.1"><a href="#section-8.3" class="auto internal xref">8.3</a>.  <a href="#name-approaches" class="internal xref">Approaches</a></p>
-</li>
-            </ul>
+            <p id="section-toc.1-1.8.1"><a href="#section-8" class="auto internal xref">8</a>.  <a href="#name-host-composition-table" class="internal xref">Host Composition Table</a></p>
 </li>
           <li class="compact toc ulBare ulEmpty" id="section-toc.1-1.9">
-            <p id="section-toc.1-1.9.1"><a href="#section-9" class="auto internal xref">9</a>.  <a href="#name-host-composition-table" class="internal xref">Host Composition Table</a></p>
+            <p id="section-toc.1-1.9.1"><a href="#section-9" class="auto internal xref">9</a>.  <a href="#name-authorization-policy-implem" class="internal xref">Authorization Policy Implementers</a></p>
 </li>
           <li class="compact toc ulBare ulEmpty" id="section-toc.1-1.10">
-            <p id="section-toc.1-1.10.1"><a href="#section-10" class="auto internal xref">10</a>. <a href="#name-authorization-policy-implem" class="internal xref">Authorization Policy Implementers</a></p>
+            <p id="section-toc.1-1.10.1"><a href="#section-10" class="auto internal xref">10</a>. <a href="#name-security-considerations" class="internal xref">Security Considerations</a></p>
 </li>
           <li class="compact toc ulBare ulEmpty" id="section-toc.1-1.11">
-            <p id="section-toc.1-1.11.1"><a href="#section-11" class="auto internal xref">11</a>. <a href="#name-security-considerations" class="internal xref">Security Considerations</a></p>
+            <p id="section-toc.1-1.11.1"><a href="#section-11" class="auto internal xref">11</a>. <a href="#name-iana-considerations" class="internal xref">IANA Considerations</a></p>
 </li>
           <li class="compact toc ulBare ulEmpty" id="section-toc.1-1.12">
-            <p id="section-toc.1-1.12.1"><a href="#section-12" class="auto internal xref">12</a>. <a href="#name-iana-considerations" class="internal xref">IANA Considerations</a></p>
+            <p id="section-toc.1-1.12.1"><a href="#section-12" class="auto internal xref"></a><a href="#name-acknowledgments" class="internal xref">Acknowledgments</a></p>
 </li>
           <li class="compact toc ulBare ulEmpty" id="section-toc.1-1.13">
-            <p id="section-toc.1-1.13.1"><a href="#section-13" class="auto internal xref"></a><a href="#name-acknowledgments" class="internal xref">Acknowledgments</a></p>
-</li>
-          <li class="compact toc ulBare ulEmpty" id="section-toc.1-1.14">
-            <p id="section-toc.1-1.14.1"><a href="#section-14" class="auto internal xref"></a><a href="#name-references" class="internal xref">References</a></p>
+            <p id="section-toc.1-1.13.1"><a href="#section-13" class="auto internal xref"></a><a href="#name-references" class="internal xref">References</a></p>
 <ul class="compact toc ulBare ulEmpty">
-<li class="compact toc ulBare ulEmpty" id="section-toc.1-1.14.2.1">
-                <p id="section-toc.1-1.14.2.1.1"><a href="#section-14.1" class="auto internal xref"></a><a href="#name-normative-references" class="internal xref">Normative References</a></p>
+<li class="compact toc ulBare ulEmpty" id="section-toc.1-1.13.2.1">
+                <p id="section-toc.1-1.13.2.1.1"><a href="#section-13.1" class="auto internal xref"></a><a href="#name-normative-references" class="internal xref">Normative References</a></p>
 </li>
-              <li class="compact toc ulBare ulEmpty" id="section-toc.1-1.14.2.2">
-                <p id="section-toc.1-1.14.2.2.1"><a href="#section-14.2" class="auto internal xref"></a><a href="#name-informative-references" class="internal xref">Informative References</a></p>
+              <li class="compact toc ulBare ulEmpty" id="section-toc.1-1.13.2.2">
+                <p id="section-toc.1-1.13.2.2.1"><a href="#section-13.2" class="auto internal xref"></a><a href="#name-informative-references" class="internal xref">Informative References</a></p>
 </li>
             </ul>
 </li>
-          <li class="compact toc ulBare ulEmpty" id="section-toc.1-1.15">
-            <p id="section-toc.1-1.15.1"><a href="#appendix-A" class="auto internal xref"></a><a href="#name-contributors" class="internal xref">Contributors</a></p>
+          <li class="compact toc ulBare ulEmpty" id="section-toc.1-1.14">
+            <p id="section-toc.1-1.14.1"><a href="#appendix-A" class="auto internal xref"></a><a href="#name-contributors" class="internal xref">Contributors</a></p>
 </li>
-          <li class="compact toc ulBare ulEmpty" id="section-toc.1-1.16">
-            <p id="section-toc.1-1.16.1"><a href="#appendix-B" class="auto internal xref"></a><a href="#name-authors-addresses" class="internal xref">Authors' Addresses</a></p>
+          <li class="compact toc ulBare ulEmpty" id="section-toc.1-1.15">
+            <p id="section-toc.1-1.15.1"><a href="#appendix-B" class="auto internal xref"></a><a href="#name-authors-addresses" class="internal xref">Authors' Addresses</a></p>
 </li>
         </ul>
 </nav>
@@ -1317,24 +1336,32 @@ appear in all capitals, as shown here.<a href="#section-2-1" class="pilcrow">¶<
 <a href="#section-3.1" class="section-number selfRef">3.1. </a><a href="#name-category-1-server-centric-l" class="section-name selfRef"><strong>Category 1</strong>: Server-centric Location</a>
         </h3>
 <p id="section-3.1-1">Enterprises (e.g., healthcare, banking) need cryptographic proof of trustworthy geographic boundary (i.e., region, zone, countries, state etc.) for cloud facing workloads.<a href="#section-3.1-1" class="pilcrow">¶</a></p>
-<ul class="normal">
-<li class="normal" id="section-3.1-2.1">
-            <p id="section-3.1-2.1.1"><strong>Server workload &lt;-&gt; Server workload - General</strong>:
-Enterprises handling of sensitive data relies on dedicated cloud hosts (e.g., EU sovereign cloud providers) that ensure compmliance to data residency laws, while also ensuring appropriate levels of service (e.g., high availability).
-To meet data residency legal requirements, enterprises need to verify workload data is processed by hosts that are within a geographic boundary and workload data is only transmitted between specified geographic boundaries.<a href="#section-3.1-2.1.1" class="pilcrow">¶</a></p>
-</li>
-          <li class="normal" id="section-3.1-2.2">
-            <p id="section-3.1-2.2.1"><strong>Server workload &lt;-&gt; Server workload - Agentic AI</strong>:
-Enterprises need to ensure that the AI agent is located in a specific geographic boundary when downloading sensitive data or performing other sensitive operations. A secure AI agent, running on a trusted host with TPM-backed attestation, interacts with geo-location and geo-fencing services to obtain verifiable proof of its geographic boundary. The agent periodically collects location data from trusted sensors, obtains attested composite location from a geo-location service, and enforces geo-fence policies via a geo-fencing service. The resulting attested geo-fence proof is used to bind workload identity to both the host and its geographic location, enabling secure, policy-driven execution of AI workloads and compliance with data residency requirements.<a href="#section-3.1-2.2.1" class="pilcrow">¶</a></p>
-</li>
-        </ul>
-<p id="section-3.1-3"><a href="https://github.com/nedmsmith/draft-klspa-wimse-verifiable-geo-fence/blob/ramki-mod2/pictures/secure-agentic-workflow.svg/">Cybersecure and Compliant Agentic AI Workflow</a><a href="#section-3.1-3" class="pilcrow">¶</a></p>
-<ul class="normal">
-<li class="normal" id="section-3.1-4.1">
-            <p id="section-3.1-4.1.1"><strong>User workload &lt;-&gt; Server workload</strong>:
-Enterprises ensure that it is communicating with a server (e.g., cloud services) located within a specific geographic boundary.<a href="#section-3.1-4.1.1" class="pilcrow">¶</a></p>
-</li>
-        </ul>
+<div id="server-workload-server-workload-general">
+<section id="section-3.1.1">
+          <h4 id="name-server-workload-server-work">
+<a href="#section-3.1.1" class="section-number selfRef">3.1.1. </a><a href="#name-server-workload-server-work" class="section-name selfRef"><strong>Server workload &lt;-&gt; Server workload - General</strong>:</a>
+          </h4>
+<p id="section-3.1.1-1">Enterprises handling of sensitive data relies on dedicated cloud hosts (e.g., EU sovereign cloud providers) that ensure compmliance to data residency laws, while also ensuring appropriate levels of service (e.g., high availability).
+To meet data residency legal requirements, enterprises need to verify workload data is processed by hosts that are within a geographic boundary and workload data is only transmitted between specified geographic boundaries.<a href="#section-3.1.1-1" class="pilcrow">¶</a></p>
+</section>
+</div>
+<div id="server-workload-server-workload-agentic-ai">
+<section id="section-3.1.2">
+          <h4 id="name-server-workload-server-workl">
+<a href="#section-3.1.2" class="section-number selfRef">3.1.2. </a><a href="#name-server-workload-server-workl" class="section-name selfRef"><strong>Server workload &lt;-&gt; Server workload - Agentic AI</strong>:</a>
+          </h4>
+<p id="section-3.1.2-1">Enterprises need to ensure that the AI agent is located in a specific geographic boundary when downloading sensitive data or performing other sensitive operations. A secure AI agent, running on a trusted host with TPM-backed attestation, interacts with geo-location and geo-fencing services to obtain verifiable proof of its geographic boundary. The agent periodically collects location data from trusted sensors, obtains attested composite location from a geo-location service, and enforces geo-fence policies via a geo-fencing service. The resulting attested geo-fence proof is used to bind workload identity to both the host and its geographic location, enabling secure, policy-driven execution of AI workloads and compliance with data residency requirements.<a href="#section-3.1.2-1" class="pilcrow">¶</a></p>
+<p id="section-3.1.2-2"><a href="https://github.com/nedmsmith/draft-klspa-wimse-verifiable-geo-fence/blob/ramki-mod2/pictures/secure-agentic-workflow.svg/">Cybersecure and Compliant Agentic AI Workflow diagram</a><a href="#section-3.1.2-2" class="pilcrow">¶</a></p>
+</section>
+</div>
+<div id="user-workload-server-workload">
+<section id="section-3.1.3">
+          <h4 id="name-user-workload-server-worklo">
+<a href="#section-3.1.3" class="section-number selfRef">3.1.3. </a><a href="#name-user-workload-server-worklo" class="section-name selfRef"><strong>User workload &lt;-&gt; Server workload</strong>:</a>
+          </h4>
+<p id="section-3.1.3-1">Enterprises ensure that it is communicating with a server (e.g., cloud services) located within a specific geographic boundary.<a href="#section-3.1.3-1" class="pilcrow">¶</a></p>
+</section>
+</div>
 </section>
 </div>
 <div id="category-2-user-centric-location">
@@ -1425,244 +1452,258 @@ This could be a certificate or a token.<a href="#section-4-5.3.1" class="pilcrow
       </ul>
 </section>
 </div>
-<div id="attestation-for-system-bootstrap-and-agent-initialization">
+<div id="spiffespire-architecture-modifications">
 <section id="section-5">
-      <h2 id="name-attestation-for-system-boot">
-<a href="#section-5" class="section-number selfRef">5. </a><a href="#name-attestation-for-system-boot" class="section-name selfRef">Attestation for System Bootstrap and Agent Initialization</a>
+      <h2 id="name-spiffe-spire-architecture-m">
+<a href="#section-5" class="section-number selfRef">5. </a><a href="#name-spiffe-spire-architecture-m" class="section-name selfRef">SPIFFE/SPIRE Architecture modifications</a>
       </h2>
-<p id="section-5-1">This section describes workload attestation based on SPIFFE/SPIRE.<a href="#section-5-1" class="pilcrow">¶</a></p>
-<p id="section-5-2"><a href="https://github.com/nedmsmith/draft-klspa-wimse-verifiable-geo-fence/blob/ramki-mod2/pictures/spiffe-spire.svg">Modified SPIFFE-SPIRE architecture with new geo-location plugin</a><a href="#section-5-2" class="pilcrow">¶</a></p>
-<p id="section-5-3">In the context of the SPIFFE/SPIRE architecture (spire), the SPIFFE/SPIRE agent includes a new geo-location plugin -- this is depicted in the figure below. The agent is a daemon running on bare-metal Linux OS Host (H) as a process with direct access to TPM (root permissions for TPM 2.0 access may be needed for certain Linux distributions for certain H hardware configurations).
+<p id="section-5-1">In the context of the SPIFFE/SPIRE architecture (spire), the SPIFFE/SPIRE agent includes a new geo-location plugin -- this is depicted in the figure below. The agent is a daemon running on bare-metal Linux OS Host (H) as a process with direct access to TPM (root permissions for TPM 2.0 access may be needed for certain Linux distributions for certain H hardware configurations).
 The agent, using the geo-location plugin, can gather the location from host local location sensors (e.g. GPS, GNSS).
 The agent has a TPM plugin (spire-tpm) which interacts with the TPM.
-The server (SPIFFE/SPIRE server) is running in cluster which is isolated from the cluster in which the agent is running.<a href="#section-5-3" class="pilcrow">¶</a></p>
-<p id="section-5-4"><a href="https://github.com/nedmsmith/draft-klspa-wimse-verifiable-geo-fence/blob/ramki-mod2/pictures/end-to-end-flow.svg">Fig-End-to-end Workflow</a><a href="#section-5-4" class="pilcrow">¶</a></p>
-<div id="attestation-of-os-integrity-and-proof-of-residency-on-host">
-<section id="section-5.1">
-        <h3 id="name-attestation-of-os-integrity">
-<a href="#section-5.1" class="section-number selfRef">5.1. </a><a href="#name-attestation-of-os-integrity" class="section-name selfRef">Attestation of OS Integrity and Proof of Residency on Host</a>
+The server (SPIFFE/SPIRE server) is running in cluster which is isolated from the cluster in which the agent is running.<a href="#section-5-1" class="pilcrow">¶</a></p>
+<p id="section-5-2"><a href="https://github.com/nedmsmith/draft-klspa-wimse-verifiable-geo-fence/blob/ramki-mod2/pictures/spiffe-spire.svg">Modified SPIFFE-SPIRE architecture with new geo-location plugin</a><a href="#section-5-2" class="pilcrow">¶</a></p>
+</section>
+</div>
+<div id="end-to-end-workflow">
+<section id="section-6">
+      <h2 id="name-end-to-end-workflow">
+<a href="#section-6" class="section-number selfRef">6. </a><a href="#name-end-to-end-workflow" class="section-name selfRef">End-to-End Workflow</a>
+      </h2>
+<p id="section-6-1">The end-to-end workflow for the proposed framework consists of several key steps, including attestation for system bootstrap and agent initialization, agent geo-location and geo-fencing, workload attestation, and remote verification.
+<a href="https://github.com/nedmsmith/draft-klspa-wimse-verifiable-geo-fence/blob/ramki-mod2/pictures/end-to-end-flow.svg">Fig-End-to-end Workflow</a><a href="#section-6-1" class="pilcrow">¶</a></p>
+<div id="attestation-for-system-bootstrap-and-agent-initialization">
+<section id="section-6.1">
+        <h3 id="name-attestation-for-system-boot">
+<a href="#section-6.1" class="section-number selfRef">6.1. </a><a href="#name-attestation-for-system-boot" class="section-name selfRef">Attestation for System Bootstrap and Agent Initialization</a>
         </h3>
-<p id="section-5.1-1">As part of system boot/reboot process, boot loader based measured system boot with remote SPIFFE/SPIRE server verification is used to ensure only approved OS is running on an approved hardware platform.<a href="#section-5.1-1" class="pilcrow">¶</a></p>
-<p id="section-5.1-2">Measurement Collection: During the boot process, the boot loader collects measurements (hashes) of the boot components and configurations.
+<div id="attestation-of-os-integrity-and-proof-of-residency-on-host">
+<section id="section-6.1.1">
+          <h4 id="name-attestation-of-os-integrity">
+<a href="#section-6.1.1" class="section-number selfRef">6.1.1. </a><a href="#name-attestation-of-os-integrity" class="section-name selfRef">Attestation of OS Integrity and Proof of Residency on Host</a>
+          </h4>
+<p id="section-6.1.1-1">As part of system boot/reboot process, boot loader based measured system boot with remote SPIFFE/SPIRE server verification is used to ensure only approved OS is running on an approved hardware platform.<a href="#section-6.1.1-1" class="pilcrow">¶</a></p>
+<p id="section-6.1.1-2">Measurement Collection: During the boot process, the boot loader collects measurements (hashes) of the boot components and configurations.
 The boot components are Firmware/BIOS/UEFI, bootloader, OS, drivers, location devices and initial programs.
 All the location devices (e.g. GPS sensor, Mobile sensor) version/firmware in a platform are measured during each boot -- this is a boot loader enhancement.
-Any new location device which is hotswapped in will be evaluated for inclusion only during next reboot.<a href="#section-5.1-2" class="pilcrow">¶</a></p>
-<p id="section-5.1-3">Log Creation: These measurements are recorded in a log, often referred to as the TCGLog, and stored in the TPM's Platform Configuration Registers (PCRs).<a href="#section-5.1-3" class="pilcrow">¶</a></p>
-<p id="section-5.1-4">Attestation Report: The TPM generates an attestation report, which includes the signed measurements and the boot configuration log.
+Any new location device which is hotswapped in will be evaluated for inclusion only during next reboot.<a href="#section-6.1.1-2" class="pilcrow">¶</a></p>
+<p id="section-6.1.1-3">Log Creation: These measurements are recorded in a log, often referred to as the TCGLog, and stored in the TPM's Platform Configuration Registers (PCRs).<a href="#section-6.1.1-3" class="pilcrow">¶</a></p>
+<p id="section-6.1.1-4">Attestation Report: The TPM generates an attestation report, which includes the signed measurements and the boot configuration log.
 The signature of the attestation report (aka quote) is by a TPM attestation key (AK).
-This attestation includes data about the TPM's state and can be used to verify that the AK is indeed cryptographically backed by the TPM EK certificate.<a href="#section-5.1-4" class="pilcrow">¶</a></p>
-<p id="section-5.1-5">Transmission: The attestation report is then sent to an external verifier (server), through a secure TLS connection.<a href="#section-5.1-5" class="pilcrow">¶</a></p>
-<p id="section-5.1-6">Remote Verification: The remote server checks the integrity of the attestation report and validates the measurements against known good values from the set of trusted hosts in the shared datastore.
+This attestation includes data about the TPM's state and can be used to verify that the AK is indeed cryptographically backed by the TPM EK certificate.<a href="#section-6.1.1-4" class="pilcrow">¶</a></p>
+<p id="section-6.1.1-5">Transmission: The attestation report is then sent to an external verifier (server), through a secure TLS connection.<a href="#section-6.1.1-5" class="pilcrow">¶</a></p>
+<p id="section-6.1.1-6">Remote Verification: The remote server checks the integrity of the attestation report and validates the measurements against known good values from the set of trusted hosts in the shared datastore.
 The server also validates that the TPM EK certificate has not been revoked and part of approved list of TPM EK identifiers associated with hardware platform.
-At this point, we can be sure that the hardware platform is approved for running workloads and is running an approved OS.<a href="#section-5.1-6" class="pilcrow">¶</a></p>
+At this point, we can be sure that the hardware platform is approved for running workloads and is running an approved OS.<a href="#section-6.1.1-6" class="pilcrow">¶</a></p>
 </section>
 </div>
 <div id="startrestart-time-attestationremote-verification-of-agent-for-integrity-and-proof-of-residency-on-host">
-<section id="section-5.2">
-        <h3 id="name-start-restart-time-attestat">
-<a href="#section-5.2" class="section-number selfRef">5.2. </a><a href="#name-start-restart-time-attestat" class="section-name selfRef">Start/restart time attestation/remote verification of agent for integrity and proof of residency on Host</a>
-        </h3>
-<p id="section-5.2-1">As part of agent start/restart process, linux integrity measurement architecture (linux-ima) is used to ensure that only approved executable for agent is loaded.<a href="#section-5.2-1" class="pilcrow">¶</a></p>
-<p id="section-5.2-2">Measurement collection: The agent executable is measured by linux-ima before it is loaded.
-Local Verification: Enforce local validation of a measurement against a approved value stored in an extended attribute of the file.<a href="#section-5.2-2" class="pilcrow">¶</a></p>
-<p id="section-5.2-3">TPM attestation and remote server verification:<a href="#section-5.2-3" class="pilcrow">¶</a></p>
+<section id="section-6.1.2">
+          <h4 id="name-start-restart-time-attestat">
+<a href="#section-6.1.2" class="section-number selfRef">6.1.2. </a><a href="#name-start-restart-time-attestat" class="section-name selfRef">Start/restart time attestation/remote verification of agent for integrity and proof of residency on Host</a>
+          </h4>
+<p id="section-6.1.2-1">As part of agent start/restart process, linux integrity measurement architecture (linux-ima) is used to ensure that only approved executable for agent is loaded.<a href="#section-6.1.2-1" class="pilcrow">¶</a></p>
+<p id="section-6.1.2-2">Measurement collection: The agent executable is measured by linux-ima before it is loaded.
+Local Verification: Enforce local validation of a measurement against a approved value stored in an extended attribute of the file.<a href="#section-6.1.2-2" class="pilcrow">¶</a></p>
+<p id="section-6.1.2-3">TPM attestation and remote server verification:<a href="#section-6.1.2-3" class="pilcrow">¶</a></p>
 <ul class="normal">
-<li class="normal" id="section-5.2-4.1">
-            <p id="section-5.2-4.1.1">Agent generates attestation key (AK) using TPM for proof of residency on H.<a href="#section-5.2-4.1.1" class="pilcrow">¶</a></p>
+<li class="normal" id="section-6.1.2-4.1">
+              <p id="section-6.1.2-4.1.1">Agent generates attestation key (AK) using TPM for proof of residency on H.<a href="#section-6.1.2-4.1.1" class="pilcrow">¶</a></p>
 </li>
-          <li class="normal" id="section-5.2-4.2">
-            <p id="section-5.2-4.2.1">Agent sends the AK attestation parameters (PCR quote, workload attestation public etc.) and EK certificate to the server<a href="#section-5.2-4.2.1" class="pilcrow">¶</a></p>
+            <li class="normal" id="section-6.1.2-4.2">
+              <p id="section-6.1.2-4.2.1">Agent sends the AK attestation parameters (PCR quote, workload attestation public etc.) and EK certificate to the server<a href="#section-6.1.2-4.2.1" class="pilcrow">¶</a></p>
 </li>
-          <li class="normal" id="section-5.2-4.3">
-            <p id="section-5.2-4.3.1">Server inspects EK certificate. If ca_path exists, and the EK certificate was signed by any chain in ca_path, validation passes<a href="#section-5.2-4.3.1" class="pilcrow">¶</a></p>
+            <li class="normal" id="section-6.1.2-4.3">
+              <p id="section-6.1.2-4.3.1">Server inspects EK certificate. If ca_path exists, and the EK certificate was signed by any chain in ca_path, validation passes<a href="#section-6.1.2-4.3.1" class="pilcrow">¶</a></p>
 </li>
-          <li class="normal" id="section-5.2-4.4">
-            <p id="section-5.2-4.4.1">If validation passed, the server generates a credential activation challenge. The challenge's secret is encrypted using the EK public key.<a href="#section-5.2-4.4.1" class="pilcrow">¶</a></p>
+            <li class="normal" id="section-6.1.2-4.4">
+              <p id="section-6.1.2-4.4.1">If validation passed, the server generates a credential activation challenge. The challenge's secret is encrypted using the EK public key.<a href="#section-6.1.2-4.4.1" class="pilcrow">¶</a></p>
 </li>
-          <li class="normal" id="section-5.2-4.5">
-            <p id="section-5.2-4.5.1">Server sends challenge to agent<a href="#section-5.2-4.5.1" class="pilcrow">¶</a></p>
+            <li class="normal" id="section-6.1.2-4.5">
+              <p id="section-6.1.2-4.5.1">Server sends challenge to agent<a href="#section-6.1.2-4.5.1" class="pilcrow">¶</a></p>
 </li>
-          <li class="normal" id="section-5.2-4.6">
-            <p id="section-5.2-4.6.1">Agent decrypts the challenge's secret<a href="#section-5.2-4.6.1" class="pilcrow">¶</a></p>
+            <li class="normal" id="section-6.1.2-4.6">
+              <p id="section-6.1.2-4.6.1">Agent decrypts the challenge's secret<a href="#section-6.1.2-4.6.1" class="pilcrow">¶</a></p>
 </li>
-          <li class="normal" id="section-5.2-4.7">
-            <p id="section-5.2-4.7.1">Agent sends back decrypted secret<a href="#section-5.2-4.7.1" class="pilcrow">¶</a></p>
+            <li class="normal" id="section-6.1.2-4.7">
+              <p id="section-6.1.2-4.7.1">Agent sends back decrypted secret<a href="#section-6.1.2-4.7.1" class="pilcrow">¶</a></p>
 </li>
-          <li class="normal" id="section-5.2-4.8">
-            <p id="section-5.2-4.8.1">Server verifies that the decrypted secret is the same it used to build the challenge<a href="#section-5.2-4.8.1" class="pilcrow">¶</a></p>
+            <li class="normal" id="section-6.1.2-4.8">
+              <p id="section-6.1.2-4.8.1">Server verifies that the decrypted secret is the same it used to build the challenge<a href="#section-6.1.2-4.8.1" class="pilcrow">¶</a></p>
 </li>
-          <li class="normal" id="section-5.2-4.9">
-            <p id="section-5.2-4.9.1">Server creates a SPIFFE ID along with the sha256sum of the TPM AK public key.
-Server stores agent SPIFFE ID mapping to TPM AK public key in a shared datastore.<a href="#section-5.2-4.9.1" class="pilcrow">¶</a></p>
+            <li class="normal" id="section-6.1.2-4.9">
+              <p id="section-6.1.2-4.9.1">Server creates a SPIFFE ID along with the sha256sum of the TPM AK public key.
+Server stores agent SPIFFE ID mapping to TPM AK public key in a shared datastore.<a href="#section-6.1.2-4.9.1" class="pilcrow">¶</a></p>
 </li>
-        </ul>
+          </ul>
 </section>
 </div>
 </section>
 </div>
 <div id="agent-geo-location-and-geo-fencing-workflow">
-<section id="section-6">
-      <h2 id="name-agent-geo-location-and-geo-">
-<a href="#section-6" class="section-number selfRef">6. </a><a href="#name-agent-geo-location-and-geo-" class="section-name selfRef">Agent geo-location and geo-fencing workflow</a>
-      </h2>
-<ul class="normal">
-<li class="normal" id="section-6-1.1">
-          <p id="section-6-1.1.1">this is run periodically (say every 5 minutes) to ensure that the Host is in the same location<a href="#section-6-1.1.1" class="pilcrow">¶</a></p>
-</li>
-      </ul>
-<div id="step-1-agent-gets-attested-composite-location-using-geo-location-service-gl">
-<section id="section-6.1">
-        <h3 id="name-step-1-agent-gets-attested-">
-<a href="#section-6.1" class="section-number selfRef">6.1. </a><a href="#name-step-1-agent-gets-attested-" class="section-name selfRef">Step 1: Agent gets attested composite location using Geo-location service (GL)</a>
-        </h3>
-<p id="section-6.1-1">Geo-location service (GL) runs outside of Host -- besides the location from device location sources (e.g. GPS, GNSS), it will connect to mobile location service providers (e.g., Telefonica) using GSMA location API (gsma-loc).<a href="#section-6.1-1" class="pilcrow">¶</a></p>
-<ul class="normal">
-<li class="normal" id="section-6.1-2.1">
-            <p id="section-6.1-2.1.1">Agent gathers the location from Host local location sensors (e.g. GPS, GNSS).
-Agent connects to GL using secure connection mechanism like TLS. Agent provides the gathered location to GL over the secure connection.<a href="#section-6.1-2.1.1" class="pilcrow">¶</a></p>
-</li>
-          <li class="normal" id="section-6.1-2.2">
-            <p id="section-6.1-2.2.1">Location has a quality associated with it. For example, IP address-based location is of lower quality as compared to other sources.<a href="#section-6.1-2.2.1" class="pilcrow">¶</a></p>
-</li>
-          <li class="normal" id="section-6.1-2.3">
-            <p id="section-6.1-2.3.1">GL ensures that the device composition of Host (reference to Host composition table for further details) is intact (e.g. SIM card not plugged out of Host) by periodically polling the state of Host.
-Host is a member of the set of trusted Hosts in the shared datastore -- the shared datastore has the Host composition details.
-Note that e-SIM does not have the plugging out problem like standard SIM but could be subject to e-SIM swap attack.
-Host composition (HC) comprises of TPM EK, Mobile-SIM etc.<a href="#section-6.1-2.3.1" class="pilcrow">¶</a></p>
-</li>
-          <li class="normal" id="section-6.1-2.4">
-            <p id="section-6.1-2.4.1">GL derives a combined location, including location quality, from various location sensors for a Host with multiple location sensors -- this includes the gathered location from Agent running on Host.
-As an example, GPS is considered less trustworthy as compared to mobile.<a href="#section-6.1-2.4.1" class="pilcrow">¶</a></p>
-</li>
-          <li class="normal" id="section-6.1-2.5">
-            <p id="section-6.1-2.5.1">The composite location comprises of combined geo-location (which includes location quality), Host composition (TPM EK, mobile-SIM etc.) and time from a trusted source.
-GL signs the composite location with a private key whose public key certificate is a public trusted transparent ledger such as certificate transparency log.
-Now we have a attested composite location.<a href="#section-6.1-2.5.1" class="pilcrow">¶</a></p>
-</li>
-          <li class="normal" id="section-6.1-2.6">
-            <p id="section-6.1-2.6.1">Agent is returned the attested composite location over the secure connection.
-Agent signs the attested composite location using TPM AK establishing proof of residency of composite location to Host. This is called attested proof-of-residency aware composite location (APL).<a href="#section-6.1-2.6.1" class="pilcrow">¶</a></p>
-</li>
-        </ul>
-</section>
-</div>
-<div id="step-2-agent-gets-attested-geographic-boundary-using-geo-fencing-gf-service">
 <section id="section-6.2">
-        <h3 id="name-step-2-agent-gets-attested-">
-<a href="#section-6.2" class="section-number selfRef">6.2. </a><a href="#name-step-2-agent-gets-attested-" class="section-name selfRef">Step 2: Agent gets attested geographic boundary using Geo-fencing (GF) service</a>
+        <h3 id="name-agent-geo-location-and-geo-">
+<a href="#section-6.2" class="section-number selfRef">6.2. </a><a href="#name-agent-geo-location-and-geo-" class="section-name selfRef">Agent geo-location and geo-fencing workflow</a>
         </h3>
 <ul class="normal">
 <li class="normal" id="section-6.2-1.1">
-            <p id="section-6.2-1.1.1">Geo-fence policies are of four flavours - (1) boolean membership of given boundary (rectangular, circular, state etc.), (2) precise location, (3) precise bounding box/circle of location, (4) approximate location with no definition of boundary.
+            <p id="section-6.2-1.1.1">this is run periodically (say every 5 minutes) to ensure that the Host is in the same location<a href="#section-6.2-1.1.1" class="pilcrow">¶</a></p>
+</li>
+        </ul>
+<div id="step-1-agent-gets-attested-composite-location-using-geo-location-service-gl">
+<section id="section-6.2.1">
+          <h4 id="name-step-1-agent-gets-attested-">
+<a href="#section-6.2.1" class="section-number selfRef">6.2.1. </a><a href="#name-step-1-agent-gets-attested-" class="section-name selfRef">Step 1: Agent gets attested composite location using Geo-location service (GL)</a>
+          </h4>
+<p id="section-6.2.1-1">Geo-location service (GL) runs outside of Host -- besides the location from device location sources (e.g. GPS, GNSS), it will connect to mobile location service providers (e.g., Telefonica) using GSMA location API (gsma-loc).<a href="#section-6.2.1-1" class="pilcrow">¶</a></p>
+<ul class="normal">
+<li class="normal" id="section-6.2.1-2.1">
+              <p id="section-6.2.1-2.1.1">Agent gathers the location from Host local location sensors (e.g. GPS, GNSS).
+Agent connects to GL using secure connection mechanism like TLS. Agent provides the gathered location to GL over the secure connection.<a href="#section-6.2.1-2.1.1" class="pilcrow">¶</a></p>
+</li>
+            <li class="normal" id="section-6.2.1-2.2">
+              <p id="section-6.2.1-2.2.1">Location has a quality associated with it. For example, IP address-based location is of lower quality as compared to other sources.<a href="#section-6.2.1-2.2.1" class="pilcrow">¶</a></p>
+</li>
+            <li class="normal" id="section-6.2.1-2.3">
+              <p id="section-6.2.1-2.3.1">GL ensures that the device composition of Host (reference to Host composition table for further details) is intact (e.g. SIM card not plugged out of Host) by periodically polling the state of Host.
+Host is a member of the set of trusted Hosts in the shared datastore -- the shared datastore has the Host composition details.
+Note that e-SIM does not have the plugging out problem like standard SIM but could be subject to e-SIM swap attack.
+Host composition (HC) comprises of TPM EK, Mobile-SIM etc.<a href="#section-6.2.1-2.3.1" class="pilcrow">¶</a></p>
+</li>
+            <li class="normal" id="section-6.2.1-2.4">
+              <p id="section-6.2.1-2.4.1">GL derives a combined location, including location quality, from various location sensors for a Host with multiple location sensors -- this includes the gathered location from Agent running on Host.
+As an example, GPS is considered less trustworthy as compared to mobile.<a href="#section-6.2.1-2.4.1" class="pilcrow">¶</a></p>
+</li>
+            <li class="normal" id="section-6.2.1-2.5">
+              <p id="section-6.2.1-2.5.1">The composite location comprises of combined geo-location (which includes location quality), Host composition (TPM EK, mobile-SIM etc.) and time from a trusted source.
+GL signs the composite location with a private key whose public key certificate is a public trusted transparent ledger such as certificate transparency log.
+Now we have a attested composite location.<a href="#section-6.2.1-2.5.1" class="pilcrow">¶</a></p>
+</li>
+            <li class="normal" id="section-6.2.1-2.6">
+              <p id="section-6.2.1-2.6.1">Agent is returned the attested composite location over the secure connection.
+Agent signs the attested composite location using TPM AK establishing proof of residency of composite location to Host. This is called attested proof-of-residency aware composite location (APL).<a href="#section-6.2.1-2.6.1" class="pilcrow">¶</a></p>
+</li>
+          </ul>
+</section>
+</div>
+<div id="step-2-agent-gets-attested-geographic-boundary-using-geo-fencing-gf-service">
+<section id="section-6.2.2">
+          <h4 id="name-step-2-agent-gets-attested-">
+<a href="#section-6.2.2" class="section-number selfRef">6.2.2. </a><a href="#name-step-2-agent-gets-attested-" class="section-name selfRef">Step 2: Agent gets attested geographic boundary using Geo-fencing (GF) service</a>
+          </h4>
+<ul class="normal">
+<li class="normal" id="section-6.2.2-1.1">
+              <p id="section-6.2.2-1.1.1">Geo-fence policies are of four flavours - (1) boolean membership of given boundary (rectangular, circular, state etc.), (2) precise location, (3) precise bounding box/circle of location, (4) approximate location with no definition of boundary.
 The first one, boolean membership of given boundary, is the most common and will be assumed as the default.
 They are available in the form of pre-defined templates or can be configured on demand.
 Enterprises, who are the user of the Hosts, choose the geo-fence policies to be enforced for various Hosts.
 Note that the Hosts must belong to the set of trusted Hosts in a shared ledger.
-The geo-fence policies applied to the set of trusted Hosts are recorded in a shared ledger.<a href="#section-6.2-1.1.1" class="pilcrow">¶</a></p>
+The geo-fence policies applied to the set of trusted Hosts are recorded in a shared ledger.<a href="#section-6.2.2-1.1.1" class="pilcrow">¶</a></p>
 </li>
-          <li class="normal" id="section-6.2-1.2">
-            <p id="section-6.2-1.2.1">Location agent on Host supplies (APL) to geo-fence service (GF) over a secure connection.
-GF performs geo-fence policy enforcement by matching the location against configured geo-fence policies. GF signs the geo-fence policy match result, along with a trusted time (potentially leverage RFC 3161), with a private key whose public key certificate is a public trusted transparent ledger such as certificate transparency log.<a href="#section-6.2-1.2.1" class="pilcrow">¶</a></p>
+            <li class="normal" id="section-6.2.2-1.2">
+              <p id="section-6.2.2-1.2.1">Location agent on Host supplies (APL) to geo-fence service (GF) over a secure connection.
+GF performs geo-fence policy enforcement by matching the location against configured geo-fence policies. GF signs the geo-fence policy match result, along with a trusted time (potentially leverage RFC 3161), with a private key whose public key certificate is a public trusted transparent ledger such as certificate transparency log.<a href="#section-6.2.2-1.2.1" class="pilcrow">¶</a></p>
 </li>
-          <li class="normal" id="section-6.2-1.3">
-            <p id="section-6.2-1.3.1">Geo-fence policy match result details (non-exhaustive): 1) Geo-fence policy which matched 2) Boolean - inside or outside geo-fence - applicable to boolean membership of given boundary policy type.<a href="#section-6.2-1.3.1" class="pilcrow">¶</a></p>
+            <li class="normal" id="section-6.2.2-1.3">
+              <p id="section-6.2.2-1.3.1">Geo-fence policy match result details (non-exhaustive): 1) Geo-fence policy which matched 2) Boolean - inside or outside geo-fence - applicable to boolean membership of given boundary policy type.<a href="#section-6.2.2-1.3.1" class="pilcrow">¶</a></p>
 </li>
-          <li class="normal" id="section-6.2-1.4">
-            <p id="section-6.2-1.4.1">Agent is returned the attested geo-fence policy match result. Agent signs the attested geo-fence policy match result using TPM AK establishing proof of residency of geo-fence policy match result to Host. This is called attested proof-of-residency aware geo-fence policy match result (APGL).<a href="#section-6.2-1.4.1" class="pilcrow">¶</a></p>
+            <li class="normal" id="section-6.2.2-1.4">
+              <p id="section-6.2.2-1.4.1">Agent is returned the attested geo-fence policy match result. Agent signs the attested geo-fence policy match result using TPM AK establishing proof of residency of geo-fence policy match result to Host. This is called attested proof-of-residency aware geo-fence policy match result (APGL).<a href="#section-6.2.2-1.4.1" class="pilcrow">¶</a></p>
 </li>
-        </ul>
+          </ul>
 </section>
 </div>
 </section>
 </div>
 <div id="workload-w-attestation-and-remote-verification-key-steps">
-<section id="section-7">
-      <h2 id="name-workload-w-attestation-and-">
-<a href="#section-7" class="section-number selfRef">7. </a><a href="#name-workload-w-attestation-and-" class="section-name selfRef">Workload (W) attestation and remote verification - key steps</a>
-      </h2>
+<section id="section-6.3">
+        <h3 id="name-workload-w-attestation-and-">
+<a href="#section-6.3" class="section-number selfRef">6.3. </a><a href="#name-workload-w-attestation-and-" class="section-name selfRef">Workload (W) attestation and remote verification - key steps</a>
+        </h3>
 <ul class="normal">
-<li class="normal" id="section-7-1.1">
-          <p id="section-7-1.1.1">Agent ensures that Workload connects to it on Host local socket (e.g. Unix domain socket).
+<li class="normal" id="section-6.3-1.1">
+            <p id="section-6.3-1.1.1">Agent ensures that Workload connects to it on Host local socket (e.g. Unix domain socket).
 Agent generates private/public key pair for Workload. Agent signs the Workload public key with its TPM AK.
 Agent sends the signed Workload public key along with its SPIFFE ID and last known APGL to the server.
-Note that the TPM AK is already verified by the server as part of the agent attestation process establishing proof of residency of Agent to Host.<a href="#section-7-1.1.1" class="pilcrow">¶</a></p>
+Note that the TPM AK is already verified by the server as part of the agent attestation process establishing proof of residency of Agent to Host.<a href="#section-6.3-1.1.1" class="pilcrow">¶</a></p>
 </li>
-        <li class="normal" id="section-7-1.2">
-          <p id="section-7-1.2.1">Server gets the Agent TPM AK public key from the SPIFFE ID by looking it up in the shared datastore.
+          <li class="normal" id="section-6.3-1.2">
+            <p id="section-6.3-1.2.1">Server gets the Agent TPM AK public key from the SPIFFE ID by looking it up in the shared datastore.
 Server verifies the Workload public key signature using the TPM AK public key.
 Server then sends an encrypted challenge to the agent.
-The challenge's secret is encrypted using the Workload public key.<a href="#section-7-1.2.1" class="pilcrow">¶</a></p>
+The challenge's secret is encrypted using the Workload public key.<a href="#section-6.3-1.2.1" class="pilcrow">¶</a></p>
 </li>
-        <li class="normal" id="section-7-1.3">
-          <p id="section-7-1.3.1">Agent decrypts the challenge using its Workload private key and sends the response back to the server.<a href="#section-7-1.3.1" class="pilcrow">¶</a></p>
+          <li class="normal" id="section-6.3-1.3">
+            <p id="section-6.3-1.3.1">Agent decrypts the challenge using its Workload private key and sends the response back to the server.<a href="#section-6.3-1.3.1" class="pilcrow">¶</a></p>
 </li>
-        <li class="normal" id="section-7-1.4">
-          <p id="section-7-1.4.1">Server verifies that the decrypted secret is the same it used to build the challenge.
+          <li class="normal" id="section-6.3-1.4">
+            <p id="section-6.3-1.4.1">Server verifies that the decrypted secret is the same it used to build the challenge.
 It then issues SPIFFE ID for Workload. The SPIFFE ID is signed by the server and contains the Workload public key and the geographic boundary (e.g. cloud region, city, country etc.) of the Host.
-The geographic boundary is obtained from the last known APGL. The server also stores the Workload SPIFFE ID mapping to Workload public key in a shared datastore.<a href="#section-7-1.4.1" class="pilcrow">¶</a></p>
+The geographic boundary is obtained from the last known APGL. The server also stores the Workload SPIFFE ID mapping to Workload public key in a shared datastore.<a href="#section-6.3-1.4.1" class="pilcrow">¶</a></p>
 </li>
-      </ul>
+        </ul>
+</section>
+</div>
 </section>
 </div>
 <div id="networking-protocol-changes">
-<section id="section-8">
+<section id="section-7">
       <h2 id="name-networking-protocol-changes">
-<a href="#section-8" class="section-number selfRef">8. </a><a href="#name-networking-protocol-changes" class="section-name selfRef">Networking Protocol Changes</a>
+<a href="#section-7" class="section-number selfRef">7. </a><a href="#name-networking-protocol-changes" class="section-name selfRef">Networking Protocol Changes</a>
       </h2>
-<p id="section-8-1">Workload ID (WID), with location field, in the form of a proof-of-residency certificate or token needs to be conveyed to the peer during connection establishment. The connection is end-to-end across proxies like<a href="#section-8-1" class="pilcrow">¶</a></p>
+<p id="section-7-1">Workload ID (WID), with location field, in the form of a proof-of-residency certificate or token needs to be conveyed to the peer during connection establishment. The connection is end-to-end across proxies like<a href="#section-7-1" class="pilcrow">¶</a></p>
 <div id="using-tls">
-<section id="section-8.1">
+<section id="section-7.1">
         <h3 id="name-using-tls">
-<a href="#section-8.1" class="section-number selfRef">8.1. </a><a href="#name-using-tls" class="section-name selfRef">Using TLS</a>
+<a href="#section-7.1" class="section-number selfRef">7.1. </a><a href="#name-using-tls" class="section-name selfRef">Using TLS</a>
         </h3>
 <ul class="normal">
-<li class="normal" id="section-8.1-1.1">
-            <p id="section-8.1-1.1.1">HTTP session termination (SASE firewall, API gateways etc.) - terminate and re-establish TLS.<a href="#section-8.1-1.1.1" class="pilcrow">¶</a></p>
+<li class="normal" id="section-7.1-1.1">
+            <p id="section-7.1-1.1.1">HTTP session termination (SASE firewall, API gateways etc.) - terminate and re-establish TLS.<a href="#section-7.1-1.1.1" class="pilcrow">¶</a></p>
 </li>
-          <li class="normal" id="section-8.1-1.2">
-            <p id="section-8.1-1.2.1">RDP latest version - terminate and re-establish TLS; tcp/ip.<a href="#section-8.1-1.2.1" class="pilcrow">¶</a></p>
+          <li class="normal" id="section-7.1-1.2">
+            <p id="section-7.1-1.2.1">RDP latest version - terminate and re-establish TLS; tcp/ip.<a href="#section-7.1-1.2.1" class="pilcrow">¶</a></p>
 </li>
-          <li class="normal" id="section-8.1-1.3">
-            <p id="section-8.1-1.3.1">SCTP session termination (Mobile network SASE firewall etc.) - terminate and re-establish TLS; sctp/ip; does not use TCP or UDP.<a href="#section-8.1-1.3.1" class="pilcrow">¶</a></p>
+          <li class="normal" id="section-7.1-1.3">
+            <p id="section-7.1-1.3.1">SCTP session termination (Mobile network SASE firewall etc.) - terminate and re-establish TLS; sctp/ip; does not use TCP or UDP.<a href="#section-7.1-1.3.1" class="pilcrow">¶</a></p>
 </li>
-          <li class="normal" id="section-8.1-1.4">
-            <p id="section-8.1-1.4.1">NFS - terminate and re-establish TLS; tcp/ip.<a href="#section-8.1-1.4.1" class="pilcrow">¶</a></p>
+          <li class="normal" id="section-7.1-1.4">
+            <p id="section-7.1-1.4.1">NFS - terminate and re-establish TLS; tcp/ip.<a href="#section-7.1-1.4.1" class="pilcrow">¶</a></p>
 </li>
         </ul>
 </section>
 </div>
 <div id="not-using-tls">
-<section id="section-8.2">
+<section id="section-7.2">
         <h3 id="name-not-using-tls">
-<a href="#section-8.2" class="section-number selfRef">8.2. </a><a href="#name-not-using-tls" class="section-name selfRef">Not Using TLS</a>
+<a href="#section-7.2" class="section-number selfRef">7.2. </a><a href="#name-not-using-tls" class="section-name selfRef">Not Using TLS</a>
         </h3>
 <ul class="normal">
-<li class="normal" id="section-8.2-1.1">
-            <p id="section-8.2-1.1.1">SSH tunnel (Jump Hosts etc.) - terminate and re-establish ssh; tcp/ip; does not use TLS.<a href="#section-8.2-1.1.1" class="pilcrow">¶</a></p>
+<li class="normal" id="section-7.2-1.1">
+            <p id="section-7.2-1.1.1">SSH tunnel (Jump Hosts etc.) - terminate and re-establish ssh; tcp/ip; does not use TLS.<a href="#section-7.2-1.1.1" class="pilcrow">¶</a></p>
 </li>
-          <li class="normal" id="section-8.2-1.2">
-            <p id="section-8.2-1.2.1">IPSEC tunnel (Router control plane etc.) - terminates IPSEC tunnel and forwards encapsulated traffic; ip; does not use TLS.<a href="#section-8.2-1.2.1" class="pilcrow">¶</a></p>
+          <li class="normal" id="section-7.2-1.2">
+            <p id="section-7.2-1.2.1">IPSEC tunnel (Router control plane etc.) - terminates IPSEC tunnel and forwards encapsulated traffic; ip; does not use TLS.<a href="#section-7.2-1.2.1" class="pilcrow">¶</a></p>
 </li>
         </ul>
 </section>
 </div>
 <div id="approaches">
-<section id="section-8.3">
+<section id="section-7.3">
         <h3 id="name-approaches">
-<a href="#section-8.3" class="section-number selfRef">8.3. </a><a href="#name-approaches" class="section-name selfRef">Approaches</a>
+<a href="#section-7.3" class="section-number selfRef">7.3. </a><a href="#name-approaches" class="section-name selfRef">Approaches</a>
         </h3>
 <ul class="normal">
-<li class="normal" id="section-8.3-1.1">
-            <p id="section-8.3-1.1.1">Enhance applications (e.g. MCP protocol) to convey Workload ID (WID), with location field.<a href="#section-8.3-1.1.1" class="pilcrow">¶</a></p>
+<li class="normal" id="section-7.3-1.1">
+            <p id="section-7.3-1.1.1">Enhance applications (e.g. MCP protocol) to convey Workload ID (WID), with location field.<a href="#section-7.3-1.1.1" class="pilcrow">¶</a></p>
 </li>
-          <li class="normal" id="section-8.3-1.2">
-            <p id="section-8.3-1.2.1">Enhance HTTP headers to convey Workload ID (WID), with location field.<a href="#section-8.3-1.2.1" class="pilcrow">¶</a></p>
+          <li class="normal" id="section-7.3-1.2">
+            <p id="section-7.3-1.2.1">Enhance HTTP headers to convey Workload ID (WID), with location field.<a href="#section-7.3-1.2.1" class="pilcrow">¶</a></p>
 </li>
-          <li class="normal" id="section-8.3-1.3">
-            <p id="section-8.3-1.3.1">Enhance TLS to convey Workload ID (WID), with location field.<a href="#section-8.3-1.3.1" class="pilcrow">¶</a></p>
+          <li class="normal" id="section-7.3-1.3">
+            <p id="section-7.3-1.3.1">Enhance TLS to convey Workload ID (WID), with location field.<a href="#section-7.3-1.3.1" class="pilcrow">¶</a></p>
 </li>
-          <li class="normal" id="section-8.3-1.4">
-            <p id="section-8.3-1.4.1">Enhance SSH/IPSEC to convey Workload ID (WID), with location field.<a href="#section-8.3-1.4.1" class="pilcrow">¶</a></p>
+          <li class="normal" id="section-7.3-1.4">
+            <p id="section-7.3-1.4.1">Enhance SSH/IPSEC to convey Workload ID (WID), with location field.<a href="#section-7.3-1.4.1" class="pilcrow">¶</a></p>
 </li>
         </ul>
 </section>
@@ -1670,9 +1711,9 @@ The geographic boundary is obtained from the last known APGL. The server also st
 </section>
 </div>
 <div id="host-composition-table">
-<section id="section-9">
+<section id="section-8">
       <h2 id="name-host-composition-table">
-<a href="#section-9" class="section-number selfRef">9. </a><a href="#name-host-composition-table" class="section-name selfRef">Host Composition Table</a>
+<a href="#section-8" class="section-number selfRef">8. </a><a href="#name-host-composition-table" class="section-name selfRef">Host Composition Table</a>
       </h2>
 <table class="center" id="table-1">
         <caption><a href="#table-1" class="selfRef">Table 1</a></caption>
@@ -1711,89 +1752,89 @@ The geographic boundary is obtained from the last known APGL. The server also st
           </tr>
         </tbody>
       </table>
-<p id="section-9-2"><strong>Note</strong>: A GPS sensor with a cryptographic signature, also known as GNSS signal authentication, uses digital signatures in the broadcast signal to ensure the authenticity and integrity of the GPS data, protecting against spoofing attacks.<a href="#section-9-2" class="pilcrow">¶</a></p>
+<p id="section-8-2"><strong>Note</strong>: A GPS sensor with a cryptographic signature, also known as GNSS signal authentication, uses digital signatures in the broadcast signal to ensure the authenticity and integrity of the GPS data, protecting against spoofing attacks.<a href="#section-8-2" class="pilcrow">¶</a></p>
 </section>
 </div>
 <div id="authorization-policy-implementers">
-<section id="section-10">
+<section id="section-9">
       <h2 id="name-authorization-policy-implem">
-<a href="#section-10" class="section-number selfRef">10. </a><a href="#name-authorization-policy-implem" class="section-name selfRef">Authorization Policy Implementers</a>
+<a href="#section-9" class="section-number selfRef">9. </a><a href="#name-authorization-policy-implem" class="section-name selfRef">Authorization Policy Implementers</a>
       </h2>
-<p id="section-10-1">Policy Implementers use attested a geographic boundary from W to make decisions.
-Example implementers:<a href="#section-10-1" class="pilcrow">¶</a></p>
+<p id="section-9-1">Policy Implementers use attested a geographic boundary from W to make decisions.
+Example implementers:<a href="#section-9-1" class="pilcrow">¶</a></p>
 <ul class="normal">
-<li class="normal" id="section-10-2.1">
-          <p id="section-10-2.1.1">SaaS application.<a href="#section-10-2.1.1" class="pilcrow">¶</a></p>
+<li class="normal" id="section-9-2.1">
+          <p id="section-9-2.1.1">SaaS application.<a href="#section-9-2.1.1" class="pilcrow">¶</a></p>
 </li>
-        <li class="normal" id="section-10-2.2">
-          <p id="section-10-2.2.1">K8s node agent.<a href="#section-10-2.2.1" class="pilcrow">¶</a></p>
+        <li class="normal" id="section-9-2.2">
+          <p id="section-9-2.2.1">K8s node agent.<a href="#section-9-2.2.1" class="pilcrow">¶</a></p>
 </li>
-        <li class="normal" id="section-10-2.3">
-          <p id="section-10-2.3.1">OS process scheduler.<a href="#section-10-2.3.1" class="pilcrow">¶</a></p>
+        <li class="normal" id="section-9-2.3">
+          <p id="section-9-2.3.1">OS process scheduler.<a href="#section-9-2.3.1" class="pilcrow">¶</a></p>
 </li>
       </ul>
-<p id="section-10-3">If the policy implementer is at the SaaS application level, things are simpler.
-However, if it is pushed down to, say, K8s or OS process scheduler or JVM class loader/deserializer, then malware can be prevented (similar to code-signed application).<a href="#section-10-3" class="pilcrow">¶</a></p>
+<p id="section-9-3">If the policy implementer is at the SaaS application level, things are simpler.
+However, if it is pushed down to, say, K8s or OS process scheduler or JVM class loader/deserializer, then malware can be prevented (similar to code-signed application).<a href="#section-9-3" class="pilcrow">¶</a></p>
 </section>
 </div>
 <div id="security-considerations">
-<section id="section-11">
+<section id="section-10">
       <h2 id="name-security-considerations">
-<a href="#section-11" class="section-number selfRef">11. </a><a href="#name-security-considerations" class="section-name selfRef">Security Considerations</a>
+<a href="#section-10" class="section-number selfRef">10. </a><a href="#name-security-considerations" class="section-name selfRef">Security Considerations</a>
       </h2>
-<p id="section-11-1">The proposed framework introduces several security considerations that must be addressed to ensure the integrity and trustworthiness of geo-fencing:<a href="#section-11-1" class="pilcrow">¶</a></p>
+<p id="section-10-1">The proposed framework introduces several security considerations that must be addressed to ensure the integrity and trustworthiness of geo-fencing:<a href="#section-10-1" class="pilcrow">¶</a></p>
 <ul class="normal">
-<li class="normal" id="section-11-2.1">
-          <p id="section-11-2.1.1"><strong>TPM and Hardware Trust</strong>: The security of the solution depends on the integrity of the TPM and other hardware roots of trust. Physical attacks, firmware vulnerabilities, or supply chain compromises could undermine attestation. Regular updates, secure provisioning, and monitoring are required.<a href="#section-11-2.1.1" class="pilcrow">¶</a></p>
+<li class="normal" id="section-10-2.1">
+          <p id="section-10-2.1.1"><strong>TPM and Hardware Trust</strong>: The security of the solution depends on the integrity of the TPM and other hardware roots of trust. Physical attacks, firmware vulnerabilities, or supply chain compromises could undermine attestation. Regular updates, secure provisioning, and monitoring are required.<a href="#section-10-2.1.1" class="pilcrow">¶</a></p>
 </li>
-        <li class="normal" id="section-11-2.2">
-          <p id="section-11-2.2.1"><strong>Geo-location Spoofing</strong>: Location sensors (e.g., GPS) are susceptible to spoofing or replay attacks. Use of cryptographically authenticated signals (e.g., Galileo GNSS, Mobile network) and cross-verification with multiple sources can mitigate this risk.<a href="#section-11-2.2.1" class="pilcrow">¶</a></p>
+        <li class="normal" id="section-10-2.2">
+          <p id="section-10-2.2.1"><strong>Geo-location Spoofing</strong>: Location sensors (e.g., GPS) are susceptible to spoofing or replay attacks. Use of cryptographically authenticated signals (e.g., Galileo GNSS, Mobile network) and cross-verification with multiple sources can mitigate this risk.<a href="#section-10-2.2.1" class="pilcrow">¶</a></p>
 </li>
-        <li class="normal" id="section-11-2.3">
-          <p id="section-11-2.3.1"><strong>SIM and e-SIM Attacks</strong>: Physical SIM removal or e-SIM swap attacks can break the binding between device and location. Continuous monitoring of device composition and periodic re-attestation are recommended.<a href="#section-11-2.3.1" class="pilcrow">¶</a></p>
+        <li class="normal" id="section-10-2.3">
+          <p id="section-10-2.3.1"><strong>SIM and e-SIM Attacks</strong>: Physical SIM removal or e-SIM swap attacks can break the binding between device and location. Continuous monitoring of device composition and periodic re-attestation are recommended.<a href="#section-10-2.3.1" class="pilcrow">¶</a></p>
 </li>
-        <li class="normal" id="section-11-2.4">
-          <p id="section-11-2.4.1"><strong>Software Integrity</strong>: The geo-location agent and supporting software must be protected against tampering. Use of Linux IMA, secure boot, and measured launch environments helps ensure only approved software is executed.<a href="#section-11-2.4.1" class="pilcrow">¶</a></p>
+        <li class="normal" id="section-10-2.4">
+          <p id="section-10-2.4.1"><strong>Software Integrity</strong>: The geo-location agent and supporting software must be protected against tampering. Use of Linux IMA, secure boot, and measured launch environments helps ensure only approved software is executed.<a href="#section-10-2.4.1" class="pilcrow">¶</a></p>
 </li>
-        <li class="normal" id="section-11-2.5">
-          <p id="section-11-2.5.1"><strong>Communication Security</strong>: All attestation and geo-location data must be transmitted over secure, authenticated channels (e.g., TLS) to prevent interception or manipulation.<a href="#section-11-2.5.1" class="pilcrow">¶</a></p>
+        <li class="normal" id="section-10-2.5">
+          <p id="section-10-2.5.1"><strong>Communication Security</strong>: All attestation and geo-location data must be transmitted over secure, authenticated channels (e.g., TLS) to prevent interception or manipulation.<a href="#section-10-2.5.1" class="pilcrow">¶</a></p>
 </li>
-        <li class="normal" id="section-11-2.6">
-          <p id="section-11-2.6.1"><strong>Policy Enforcement</strong>: The enforcement of geo-fence policies must be robust against attempts by malicious workloads or agents to bypass controls. Policy decisions should be based on verifiable, signed attestation evidence.<a href="#section-11-2.6.1" class="pilcrow">¶</a></p>
+        <li class="normal" id="section-10-2.6">
+          <p id="section-10-2.6.1"><strong>Policy Enforcement</strong>: The enforcement of geo-fence policies must be robust against attempts by malicious workloads or agents to bypass controls. Policy decisions should be based on verifiable, signed attestation evidence.<a href="#section-10-2.6.1" class="pilcrow">¶</a></p>
 </li>
-        <li class="normal" id="section-11-2.7">
-          <p id="section-11-2.7.1"><strong>Time Source Integrity</strong>: Trusted time sources are necessary to prevent replay attacks and ensure the freshness of attestation data.<a href="#section-11-2.7.1" class="pilcrow">¶</a></p>
+        <li class="normal" id="section-10-2.7">
+          <p id="section-10-2.7.1"><strong>Time Source Integrity</strong>: Trusted time sources are necessary to prevent replay attacks and ensure the freshness of attestation data.<a href="#section-10-2.7.1" class="pilcrow">¶</a></p>
 </li>
-        <li class="normal" id="section-11-2.8">
-          <p id="section-11-2.8.1"><strong>Datastore Security</strong>: The shared datastore containing trusted host compositions and geo-fence policies must be protected against unauthorized access and tampering, using encryption and access controls.<a href="#section-11-2.8.1" class="pilcrow">¶</a></p>
+        <li class="normal" id="section-10-2.8">
+          <p id="section-10-2.8.1"><strong>Datastore Security</strong>: The shared datastore containing trusted host compositions and geo-fence policies must be protected against unauthorized access and tampering, using encryption and access controls.<a href="#section-10-2.8.1" class="pilcrow">¶</a></p>
 </li>
       </ul>
-<p id="section-11-3">By addressing these considerations, the framework aims to provide a secure and reliable foundation for verifiable geo-fencing in diverse deployment environments.<a href="#section-11-3" class="pilcrow">¶</a></p>
+<p id="section-10-3">By addressing these considerations, the framework aims to provide a secure and reliable foundation for verifiable geo-fencing in diverse deployment environments.<a href="#section-10-3" class="pilcrow">¶</a></p>
 </section>
 </div>
 <div id="iana-considerations">
-<section id="section-12">
+<section id="section-11">
       <h2 id="name-iana-considerations">
-<a href="#section-12" class="section-number selfRef">12. </a><a href="#name-iana-considerations" class="section-name selfRef">IANA Considerations</a>
+<a href="#section-11" class="section-number selfRef">11. </a><a href="#name-iana-considerations" class="section-name selfRef">IANA Considerations</a>
       </h2>
-<p id="section-12-1">This document has no IANA actions.<a href="#section-12-1" class="pilcrow">¶</a></p>
+<p id="section-11-1">This document has no IANA actions.<a href="#section-11-1" class="pilcrow">¶</a></p>
 </section>
 </div>
 <div id="acknowledgments">
-<section id="section-13">
+<section id="section-12">
       <h2 id="name-acknowledgments">
 <a href="#name-acknowledgments" class="section-name selfRef">Acknowledgments</a>
       </h2>
-<p id="section-13-1">The authors thank the members of the WIMSE working group and the broader trusted computing and workload identity communities for their feedback and contributions. Special thanks to the Trusted Computing Group (TCG), the SPIFFE/SPIRE open-source community, and industry partners for foundational work and ongoing collaboration.<a href="#section-13-1" class="pilcrow">¶</a></p>
+<p id="section-12-1">The authors thank the members of the WIMSE working group and the broader trusted computing and workload identity communities for their feedback and contributions. Special thanks to the Trusted Computing Group (TCG), the SPIFFE/SPIRE open-source community, and industry partners for foundational work and ongoing collaboration.<a href="#section-12-1" class="pilcrow">¶</a></p>
 </section>
 </div>
 <div id="sec-combined-references">
-<section id="section-14">
+<section id="section-13">
       <h2 id="name-references">
 <a href="#name-references" class="section-name selfRef">References</a>
       </h2>
 <div id="sec-normative-references">
-<section id="section-14.1">
+<section id="section-13.1">
         <h3 id="name-normative-references">
 <a href="#name-normative-references" class="section-name selfRef">Normative References</a>
         </h3>
@@ -1810,7 +1851,7 @@ However, if it is pushed down to, say, K8s or OS process scheduler or JVM class 
 </section>
 </div>
 <div id="sec-informative-references">
-<section id="section-14.2">
+<section id="section-13.2">
         <h3 id="name-informative-references">
 <a href="#name-informative-references" class="section-name selfRef">Informative References</a>
         </h3>

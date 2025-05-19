@@ -85,28 +85,35 @@ Table of Contents
    2.  Conventions and Definitions
    3.  Use Cases
      3.1.  *Category 1*: Server-centric Location
+       3.1.1.  *Server workload <-> Server workload - General*:
+       3.1.2.  *Server workload <-> Server workload - Agentic AI*:
+       3.1.3.  *User workload <-> Server workload*:
      3.2.  *Category 2*: User-centric Location
      3.3.  *Category 3*: Regulatory Compliance
      3.4.  Data Residency Requirements
    4.  Approach Summary
-   5.  Attestation for System Bootstrap and Agent Initialization
-     5.1.  Attestation of OS Integrity and Proof of Residency on Host
-     5.2.  Start/restart time attestation/remote verification of agent
-           for integrity and proof of residency on Host
-   6.  Agent geo-location and geo-fencing workflow
-     6.1.  Step 1: Agent gets attested composite location using
-           Geo-location service (GL)
-     6.2.  Step 2: Agent gets attested geographic boundary using
-           Geo-fencing (GF) service
-   7.  Workload (W) attestation and remote verification - key steps
-   8.  Networking Protocol Changes
-     8.1.  Using TLS
-     8.2.  Not Using TLS
-     8.3.  Approaches
-   9.  Host Composition Table
-   10. Authorization Policy Implementers
-   11. Security Considerations
-   12. IANA Considerations
+   5.  SPIFFE/SPIRE Architecture modifications
+   6.  End-to-End Workflow
+     6.1.  Attestation for System Bootstrap and Agent Initialization
+       6.1.1.  Attestation of OS Integrity and Proof of Residency on
+               Host
+       6.1.2.  Start/restart time attestation/remote verification of
+               agent for integrity and proof of residency on Host
+     6.2.  Agent geo-location and geo-fencing workflow
+       6.2.1.  Step 1: Agent gets attested composite location using
+               Geo-location service (GL)
+       6.2.2.  Step 2: Agent gets attested geographic boundary using
+               Geo-fencing (GF) service
+     6.3.  Workload (W) attestation and remote verification - key
+           steps
+   7.  Networking Protocol Changes
+     7.1.  Using TLS
+     7.2.  Not Using TLS
+     7.3.  Approaches
+   8.  Host Composition Table
+   9.  Authorization Policy Implementers
+   10. Security Considerations
+   11. IANA Considerations
    Acknowledgments
    References
      Normative References
@@ -167,37 +174,39 @@ Table of Contents
    trustworthy geographic boundary (i.e., region, zone, countries, state
    etc.) for cloud facing workloads.
 
-   *  *Server workload <-> Server workload - General*: Enterprises
-      handling of sensitive data relies on dedicated cloud hosts (e.g.,
-      EU sovereign cloud providers) that ensure compmliance to data
-      residency laws, while also ensuring appropriate levels of service
-      (e.g., high availability).  To meet data residency legal
-      requirements, enterprises need to verify workload data is
-      processed by hosts that are within a geographic boundary and
-      workload data is only transmitted between specified geographic
-      boundaries.
+3.1.1.  *Server workload <-> Server workload - General*:
 
-   *  *Server workload <-> Server workload - Agentic AI*: Enterprises
-      need to ensure that the AI agent is located in a specific
-      geographic boundary when downloading sensitive data or performing
-      other sensitive operations.  A secure AI agent, running on a
-      trusted host with TPM-backed attestation, interacts with geo-
-      location and geo-fencing services to obtain verifiable proof of
-      its geographic boundary.  The agent periodically collects location
-      data from trusted sensors, obtains attested composite location
-      from a geo-location service, and enforces geo-fence policies via a
-      geo-fencing service.  The resulting attested geo-fence proof is
-      used to bind workload identity to both the host and its geographic
-      location, enabling secure, policy-driven execution of AI workloads
-      and compliance with data residency requirements.
+   Enterprises handling of sensitive data relies on dedicated cloud
+   hosts (e.g., EU sovereign cloud providers) that ensure compmliance to
+   data residency laws, while also ensuring appropriate levels of
+   service (e.g., high availability).  To meet data residency legal
+   requirements, enterprises need to verify workload data is processed
+   by hosts that are within a geographic boundary and workload data is
+   only transmitted between specified geographic boundaries.
 
-   Cybersecure and Compliant Agentic AI Workflow
+3.1.2.  *Server workload <-> Server workload - Agentic AI*:
+
+   Enterprises need to ensure that the AI agent is located in a specific
+   geographic boundary when downloading sensitive data or performing
+   other sensitive operations.  A secure AI agent, running on a trusted
+   host with TPM-backed attestation, interacts with geo-location and
+   geo-fencing services to obtain verifiable proof of its geographic
+   boundary.  The agent periodically collects location data from trusted
+   sensors, obtains attested composite location from a geo-location
+   service, and enforces geo-fence policies via a geo-fencing service.
+   The resulting attested geo-fence proof is used to bind workload
+   identity to both the host and its geographic location, enabling
+   secure, policy-driven execution of AI workloads and compliance with
+   data residency requirements.
+
+   Cybersecure and Compliant Agentic AI Workflow diagram
    (https://github.com/nedmsmith/draft-klspa-wimse-verifiable-geo-
    fence/blob/ramki-mod2/pictures/secure-agentic-workflow.svg/)
 
-   *  *User workload <-> Server workload*: Enterprises ensure that it is
-      communicating with a server (e.g., cloud services) located within
-      a specific geographic boundary.
+3.1.3.  *User workload <-> Server workload*:
+
+   Enterprises ensure that it is communicating with a server (e.g.,
+   cloud services) located within a specific geographic boundary.
 
 3.2.  *Category 2*: User-centric Location
 
@@ -284,13 +293,7 @@ Table of Contents
    *  WIM gives signed Workload ID (WID) with geographic boundary as an
       additional field.  This could be a certificate or a token.
 
-5.  Attestation for System Bootstrap and Agent Initialization
-
-   This section describes workload attestation based on SPIFFE/SPIRE.
-
-   Modified SPIFFE-SPIRE architecture with new geo-location plugin
-   (https://github.com/nedmsmith/draft-klspa-wimse-verifiable-geo-
-   fence/blob/ramki-mod2/pictures/spiffe-spire.svg)
+5.  SPIFFE/SPIRE Architecture modifications
 
    In the context of the SPIFFE/SPIRE architecture (spire), the SPIFFE/
    SPIRE agent includes a new geo-location plugin -- this is depicted in
@@ -304,11 +307,22 @@ Table of Contents
    running in cluster which is isolated from the cluster in which the
    agent is running.
 
-   Fig-End-to-end Workflow (https://github.com/nedmsmith/draft-klspa-
-   wimse-verifiable-geo-fence/blob/ramki-mod2/pictures/end-to-end-
-   flow.svg)
+   Modified SPIFFE-SPIRE architecture with new geo-location plugin
+   (https://github.com/nedmsmith/draft-klspa-wimse-verifiable-geo-
+   fence/blob/ramki-mod2/pictures/spiffe-spire.svg)
 
-5.1.  Attestation of OS Integrity and Proof of Residency on Host
+6.  End-to-End Workflow
+
+   The end-to-end workflow for the proposed framework consists of
+   several key steps, including attestation for system bootstrap and
+   agent initialization, agent geo-location and geo-fencing, workload
+   attestation, and remote verification.  Fig-End-to-end Workflow
+   (https://github.com/nedmsmith/draft-klspa-wimse-verifiable-geo-
+   fence/blob/ramki-mod2/pictures/end-to-end-flow.svg)
+
+6.1.  Attestation for System Bootstrap and Agent Initialization
+
+6.1.1.  Attestation of OS Integrity and Proof of Residency on Host
 
    As part of system boot/reboot process, boot loader based measured
    system boot with remote SPIFFE/SPIRE server verification is used to
@@ -346,8 +360,8 @@ Table of Contents
    hardware platform is approved for running workloads and is running an
    approved OS.
 
-5.2.  Start/restart time attestation/remote verification of agent for
-      integrity and proof of residency on Host
+6.1.2.  Start/restart time attestation/remote verification of agent for
+        integrity and proof of residency on Host
 
    As part of agent start/restart process, linux integrity measurement
    architecture (linux-ima) is used to ensure that only approved
@@ -386,13 +400,13 @@ Table of Contents
       public key.  Server stores agent SPIFFE ID mapping to TPM AK
       public key in a shared datastore.
 
-6.  Agent geo-location and geo-fencing workflow
+6.2.  Agent geo-location and geo-fencing workflow
 
    *  this is run periodically (say every 5 minutes) to ensure that the
       Host is in the same location
 
-6.1.  Step 1: Agent gets attested composite location using Geo-location
-      service (GL)
+6.2.1.  Step 1: Agent gets attested composite location using Geo-
+        location service (GL)
 
    Geo-location service (GL) runs outside of Host -- besides the
    location from device location sources (e.g. GPS, GNSS), it will
@@ -436,8 +450,8 @@ Table of Contents
       This is called attested proof-of-residency aware composite
       location (APL).
 
-6.2.  Step 2: Agent gets attested geographic boundary using Geo-fencing
-      (GF) service
+6.2.2.  Step 2: Agent gets attested geographic boundary using Geo-
+        fencing (GF) service
 
    *  Geo-fence policies are of four flavours - (1) boolean membership
       of given boundary (rectangular, circular, state etc.), (2) precise
@@ -471,7 +485,7 @@ Table of Contents
       result to Host.  This is called attested proof-of-residency aware
       geo-fence policy match result (APGL).
 
-7.  Workload (W) attestation and remote verification - key steps
+6.3.  Workload (W) attestation and remote verification - key steps
 
    *  Agent ensures that Workload connects to it on Host local socket
       (e.g. Unix domain socket).  Agent generates private/public key
@@ -498,14 +512,14 @@ Table of Contents
       last known APGL.  The server also stores the Workload SPIFFE ID
       mapping to Workload public key in a shared datastore.
 
-8.  Networking Protocol Changes
+7.  Networking Protocol Changes
 
    Workload ID (WID), with location field, in the form of a proof-of-
    residency certificate or token needs to be conveyed to the peer
    during connection establishment.  The connection is end-to-end across
    proxies like
 
-8.1.  Using TLS
+7.1.  Using TLS
 
    *  HTTP session termination (SASE firewall, API gateways etc.) -
       terminate and re-establish TLS.
@@ -517,7 +531,7 @@ Table of Contents
 
    *  NFS - terminate and re-establish TLS; tcp/ip.
 
-8.2.  Not Using TLS
+7.2.  Not Using TLS
 
    *  SSH tunnel (Jump Hosts etc.) - terminate and re-establish ssh;
       tcp/ip; does not use TLS.
@@ -525,7 +539,7 @@ Table of Contents
    *  IPSEC tunnel (Router control plane etc.) - terminates IPSEC tunnel
       and forwards encapsulated traffic; ip; does not use TLS.
 
-8.3.  Approaches
+7.3.  Approaches
 
    *  Enhance applications (e.g. MCP protocol) to convey Workload ID
       (WID), with location field.
@@ -538,7 +552,7 @@ Table of Contents
    *  Enhance SSH/IPSEC to convey Workload ID (WID), with location
       field.
 
-9.  Host Composition Table
+8.  Host Composition Table
 
     +===============+=================================+==============+
     | Component     | Functionality                   | Comments     |
@@ -589,7 +603,7 @@ Table of Contents
    signal to ensure the authenticity and integrity of the GPS data,
    protecting against spoofing attacks.
 
-10.  Authorization Policy Implementers
+9.  Authorization Policy Implementers
 
    Policy Implementers use attested a geographic boundary from W to make
    decisions.  Example implementers:
@@ -605,7 +619,7 @@ Table of Contents
    process scheduler or JVM class loader/deserializer, then malware can
    be prevented (similar to code-signed application).
 
-11.  Security Considerations
+10.  Security Considerations
 
    The proposed framework introduces several security considerations
    that must be addressed to ensure the integrity and trustworthiness of
@@ -655,7 +669,7 @@ Table of Contents
    secure and reliable foundation for verifiable geo-fencing in diverse
    deployment environments.
 
-12.  IANA Considerations
+11.  IANA Considerations
 
    This document has no IANA actions.
 
