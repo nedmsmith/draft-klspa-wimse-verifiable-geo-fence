@@ -214,7 +214,8 @@ The server (SPIFFE/SPIRE server) is running in cluster which is isolated from th
 
 # End-to-End Workflow
 
-The end-to-end workflow for the proposed framework consists of several key steps, including attestation for system bootstrap and agent initialization, agent geo-location and geo-fencing, workload attestation, and remote verification.
+The end-to-end workflow for the proposed framework consists of several key steps, including attestation for system bootstrap and agent initialization, agent geo-location and geo-fencing processing, workload attestation and remote verification.
+
 [Fig-End-to-end Workflow](https://github.com/nedmsmith/draft-klspa-wimse-verifiable-geo-fence/blob/ramki-mod2/pictures/end-to-end-flow.svg)
 
 ## Attestation for System Bootstrap and Agent Initialization
