@@ -315,10 +315,12 @@ Table of Contents
 
    The end-to-end workflow for the proposed framework consists of
    several key steps, including attestation for system bootstrap and
-   agent initialization, agent geo-location and geo-fencing, workload
-   attestation, and remote verification.  Fig-End-to-end Workflow
-   (https://github.com/nedmsmith/draft-klspa-wimse-verifiable-geo-
-   fence/blob/ramki-mod2/pictures/end-to-end-flow.svg)
+   agent initialization, agent geo-location and geo-fencing processing,
+   workload attestation and remote verification.
+
+   Fig-End-to-end Workflow (https://github.com/nedmsmith/draft-klspa-
+   wimse-verifiable-geo-fence/blob/ramki-mod2/pictures/end-to-end-
+   flow.svg)
 
 6.1.  Attestation for System Bootstrap and Agent Initialization
 
