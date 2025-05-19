@@ -199,7 +199,7 @@ Table of Contents
    secure, policy-driven execution of AI workloads and compliance with
    data residency requirements.
 
-   Cybersecure and Compliant Agentic AI Workflow diagram
+   Figure -- Cybersecure and Compliant Agentic AI Workflow
    (https://github.com/nedmsmith/draft-klspa-wimse-verifiable-geo-
    fence/blob/ramki-mod2/pictures/secure-agentic-workflow.svg/)
 
@@ -307,9 +307,9 @@ Table of Contents
    running in cluster which is isolated from the cluster in which the
    agent is running.
 
-   Modified SPIFFE-SPIRE architecture with new geo-location plugin
-   (https://github.com/nedmsmith/draft-klspa-wimse-verifiable-geo-
-   fence/blob/ramki-mod2/pictures/spiffe-spire.svg)
+   Figure -- Modified SPIFFE-SPIRE architecture with new geo-location
+   plugin (https://github.com/nedmsmith/draft-klspa-wimse-verifiable-
+   geo-fence/blob/ramki-mod2/pictures/spiffe-spire.svg)
 
 6.  End-to-End Workflow
 
@@ -318,8 +318,8 @@ Table of Contents
    agent initialization, agent geo-location and geo-fencing processing,
    workload attestation and remote verification.
 
-   Fig-End-to-end Workflow (https://github.com/nedmsmith/draft-klspa-
-   wimse-verifiable-geo-fence/blob/ramki-mod2/pictures/end-to-end-
+   Figure -- End-to-end Workflow (https://github.com/nedmsmith/draft-
+   klspa-wimse-verifiable-geo-fence/blob/ramki-mod2/pictures/end-to-end-
    flow.svg)
 
 6.1.  Attestation for System Bootstrap and Agent Initialization

@@ -1351,7 +1351,7 @@ To meet data residency legal requirements, enterprises need to verify workload d
 <a href="#section-3.1.2" class="section-number selfRef">3.1.2. </a><a href="#name-server-workload-server-workl" class="section-name selfRef"><strong>Server workload &lt;-&gt; Server workload - Agentic AI</strong>:</a>
           </h4>
 <p id="section-3.1.2-1">Enterprises need to ensure that the AI agent is located in a specific geographic boundary when downloading sensitive data or performing other sensitive operations. A secure AI agent, running on a trusted host with TPM-backed attestation, interacts with geo-location and geo-fencing services to obtain verifiable proof of its geographic boundary. The agent periodically collects location data from trusted sensors, obtains attested composite location from a geo-location service, and enforces geo-fence policies via a geo-fencing service. The resulting attested geo-fence proof is used to bind workload identity to both the host and its geographic location, enabling secure, policy-driven execution of AI workloads and compliance with data residency requirements.<a href="#section-3.1.2-1" class="pilcrow">¶</a></p>
-<p id="section-3.1.2-2"><a href="https://github.com/nedmsmith/draft-klspa-wimse-verifiable-geo-fence/blob/ramki-mod2/pictures/secure-agentic-workflow.svg/">Cybersecure and Compliant Agentic AI Workflow diagram</a><a href="#section-3.1.2-2" class="pilcrow">¶</a></p>
+<p id="section-3.1.2-2"><a href="https://github.com/nedmsmith/draft-klspa-wimse-verifiable-geo-fence/blob/ramki-mod2/pictures/secure-agentic-workflow.svg/">Figure -- Cybersecure and Compliant Agentic AI Workflow</a><a href="#section-3.1.2-2" class="pilcrow">¶</a></p>
 </section>
 </div>
 <div id="user-workload-server-workload">
@@ -1461,7 +1461,7 @@ This could be a certificate or a token.<a href="#section-4-5.3.1" class="pilcrow
 The agent, using the geo-location plugin, can gather the location from host local location sensors (e.g. GPS, GNSS).
 The agent has a TPM plugin (spire-tpm) which interacts with the TPM.
 The server (SPIFFE/SPIRE server) is running in cluster which is isolated from the cluster in which the agent is running.<a href="#section-5-1" class="pilcrow">¶</a></p>
-<p id="section-5-2"><a href="https://github.com/nedmsmith/draft-klspa-wimse-verifiable-geo-fence/blob/ramki-mod2/pictures/spiffe-spire.svg">Modified SPIFFE-SPIRE architecture with new geo-location plugin</a><a href="#section-5-2" class="pilcrow">¶</a></p>
+<p id="section-5-2"><a href="https://github.com/nedmsmith/draft-klspa-wimse-verifiable-geo-fence/blob/ramki-mod2/pictures/spiffe-spire.svg">Figure -- Modified SPIFFE-SPIRE architecture with new geo-location plugin</a><a href="#section-5-2" class="pilcrow">¶</a></p>
 </section>
 </div>
 <div id="end-to-end-workflow">
@@ -1470,7 +1470,7 @@ The server (SPIFFE/SPIRE server) is running in cluster which is isolated from th
 <a href="#section-6" class="section-number selfRef">6. </a><a href="#name-end-to-end-workflow" class="section-name selfRef">End-to-End Workflow</a>
       </h2>
 <p id="section-6-1">The end-to-end workflow for the proposed framework consists of several key steps, including attestation for system bootstrap and agent initialization, agent geo-location and geo-fencing processing, workload attestation and remote verification.<a href="#section-6-1" class="pilcrow">¶</a></p>
-<p id="section-6-2"><a href="https://github.com/nedmsmith/draft-klspa-wimse-verifiable-geo-fence/blob/ramki-mod2/pictures/end-to-end-flow.svg">Fig-End-to-end Workflow</a><a href="#section-6-2" class="pilcrow">¶</a></p>
+<p id="section-6-2"><a href="https://github.com/nedmsmith/draft-klspa-wimse-verifiable-geo-fence/blob/ramki-mod2/pictures/end-to-end-flow.svg">Figure -- End-to-end Workflow</a><a href="#section-6-2" class="pilcrow">¶</a></p>
 <div id="attestation-for-system-bootstrap-and-agent-initialization">
 <section id="section-6.1">
         <h3 id="name-attestation-for-system-boot">
