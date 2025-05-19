@@ -4,9 +4,6 @@
       <root>
         <mxCell id="0" />
         <mxCell id="1" parent="0" />
-        <mxCell id="M9Ocb2jdhmregSc9Uv31-19" value="&lt;h2 style=&quot;box-sizing: border-box; margin-top: 24px; margin-bottom: 16px; line-height: 1.25; padding-bottom: 0.3em; border-bottom: 1px solid rgba(209, 217, 224, 0.7); color: rgb(31, 35, 40); background-color: rgb(255, 255, 255);&quot; dir=&quot;auto&quot; class=&quot;heading-element&quot; tabindex=&quot;-1&quot;&gt;&lt;font face=&quot;Helvetica&quot; style=&quot;font-size: 10px; font-weight: normal;&quot;&gt;(2) Start/restart time attestation/remote verification of agent (includes TPM/location plugin) for integrity and proof of residency on Host using TPM&lt;/font&gt;&lt;/h2&gt;" style="text;html=1;align=center;verticalAlign=middle;whiteSpace=wrap;rounded=0;" parent="1" vertex="1">
-          <mxGeometry x="99" y="267" width="600" height="1" as="geometry" />
-        </mxCell>
         <mxCell id="M9Ocb2jdhmregSc9Uv31-2" value="&lt;b&gt;&lt;font style=&quot;font-size: 14px;&quot;&gt;Trusted Host&lt;/font&gt;&amp;nbsp;&lt;/b&gt;&lt;div&gt;Hardware: Location sensors, TPM etc.&lt;div&gt;Software: Spiffe/Spire agent with Location and TPM plugins, Workload etc.&lt;/div&gt;&lt;/div&gt;&lt;div&gt;Role: Attester&lt;/div&gt;" style="rounded=0;whiteSpace=wrap;html=1;" parent="1" vertex="1">
           <mxGeometry x="40" y="40" width="120" height="120" as="geometry" />
         </mxCell>
@@ -44,10 +41,10 @@
           </mxGeometry>
         </mxCell>
         <mxCell id="M9Ocb2jdhmregSc9Uv31-8" value="&lt;h1 tabindex=&quot;-1&quot; class=&quot;heading-element&quot; dir=&quot;auto&quot; style=&quot;box-sizing: border-box; margin: 24px 0px 16px; font-weight: 600; line-height: 1.25; padding-bottom: 0.3em; border-bottom: 1px solid rgba(209, 217, 224, 0.7); color: rgb(31, 35, 40); font-family: -apple-system, &amp;quot;system-ui&amp;quot;, &amp;quot;Segoe UI&amp;quot;, &amp;quot;Noto Sans&amp;quot;, Helvetica, Arial, sans-serif, &amp;quot;Apple Color Emoji&amp;quot;, &amp;quot;Segoe UI Emoji&amp;quot;; font-style: normal; font-variant-ligatures: normal; font-variant-caps: normal; letter-spacing: normal; orphans: 2; text-indent: 0px; text-transform: none; widows: 2; word-spacing: 0px; -webkit-text-stroke-width: 0px; white-space: normal; background-color: rgb(255, 255, 255); text-decoration-thickness: initial; text-decoration-style: initial; text-decoration-color: initial;&quot;&gt;&lt;font style=&quot;font-size: 14px;&quot;&gt;Initialization: Attestation for System Bootstrap and Agent Start/Restart&lt;/font&gt;&lt;/h1&gt;" style="text;whiteSpace=wrap;html=1;align=center;" parent="1" vertex="1">
-          <mxGeometry x="40" y="131" width="720" height="22" as="geometry" />
+          <mxGeometry x="40" y="130" width="720" height="21" as="geometry" />
         </mxCell>
         <mxCell id="M9Ocb2jdhmregSc9Uv31-13" value="&lt;font style=&quot;font-size: 10px;&quot;&gt;&amp;nbsp;&lt;/font&gt;&lt;h2 style=&quot;box-sizing: border-box; margin-top: 24px; margin-bottom: 16px; line-height: 1.25; padding-bottom: 0.3em; border-bottom: 1px solid rgba(209, 217, 224, 0.7); color: rgb(31, 35, 40); background-color: rgb(255, 255, 255);&quot; dir=&quot;auto&quot; class=&quot;heading-element&quot; tabindex=&quot;-1&quot;&gt;&lt;span style=&quot;font-weight: normal;&quot;&gt;&lt;font face=&quot;Helvetica&quot; style=&quot;font-size: 10px;&quot;&gt;(1) Boot time a&lt;font style=&quot;&quot;&gt;ttestation/remote verification of OS Integrity along with location sensor HW and proof of residency on Host using TPM&lt;/font&gt;&lt;/font&gt;&lt;/span&gt;&lt;/h2&gt;" style="text;html=1;align=center;verticalAlign=middle;whiteSpace=wrap;rounded=0;" parent="1" vertex="1">
-          <mxGeometry x="100" y="195" width="600" height="30" as="geometry" />
+          <mxGeometry x="100" y="197" width="600" height="30" as="geometry" />
         </mxCell>
         <mxCell id="M9Ocb2jdhmregSc9Uv31-17" value="" style="endArrow=classic;html=1;rounded=0;" parent="1" edge="1">
           <mxGeometry width="50" height="50" relative="1" as="geometry">
@@ -57,51 +54,54 @@
         </mxCell>
         <mxCell id="M9Ocb2jdhmregSc9Uv31-18" value="" style="endArrow=classic;html=1;rounded=0;" parent="1" edge="1">
           <mxGeometry width="50" height="50" relative="1" as="geometry">
-            <mxPoint x="101" y="273" as="sourcePoint" />
-            <mxPoint x="701" y="273" as="targetPoint" />
+            <mxPoint x="101" y="299" as="sourcePoint" />
+            <mxPoint x="701" y="299" as="targetPoint" />
           </mxGeometry>
         </mxCell>
         <mxCell id="M9Ocb2jdhmregSc9Uv31-20" value="&lt;h1 tabindex=&quot;-1&quot; class=&quot;heading-element&quot; dir=&quot;auto&quot; style=&quot;box-sizing: border-box; margin: 24px 0px 16px; font-weight: 600; line-height: 1.25; padding-bottom: 0.3em; border-bottom: 1px solid rgba(209, 217, 224, 0.7); color: rgb(31, 35, 40); font-family: -apple-system, &amp;quot;system-ui&amp;quot;, &amp;quot;Segoe UI&amp;quot;, &amp;quot;Noto Sans&amp;quot;, Helvetica, Arial, sans-serif, &amp;quot;Apple Color Emoji&amp;quot;, &amp;quot;Segoe UI Emoji&amp;quot;; font-style: normal; font-variant-ligatures: normal; font-variant-caps: normal; letter-spacing: normal; orphans: 2; text-indent: 0px; text-transform: none; widows: 2; word-spacing: 0px; -webkit-text-stroke-width: 0px; white-space: normal; background-color: rgb(255, 255, 255); text-decoration-thickness: initial; text-decoration-style: initial; text-decoration-color: initial;&quot;&gt;&lt;font style=&quot;font-size: 14px;&quot;&gt;Runtime: Agent Geo-location and Geo-fencing (Periodic)&amp;nbsp;&lt;/font&gt;&lt;/h1&gt;" style="text;whiteSpace=wrap;html=1;align=center;" parent="1" vertex="1">
-          <mxGeometry x="40" y="266" width="720" height="22" as="geometry" />
+          <mxGeometry x="40" y="280" width="720" height="22" as="geometry" />
         </mxCell>
-        <mxCell id="CC5dUmVlAGV62EEgw9hK-3" value="&lt;h2 style=&quot;box-sizing: border-box; margin-top: 24px; margin-bottom: 16px; line-height: 1.25; padding-bottom: 0.3em; border-bottom: 1px solid rgba(209, 217, 224, 0.7); color: rgb(31, 35, 40); text-align: start; background-color: rgb(255, 255, 255);&quot; dir=&quot;auto&quot; class=&quot;heading-element&quot; tabindex=&quot;-1&quot;&gt;&lt;span style=&quot;font-weight: normal;&quot;&gt;&lt;font face=&quot;Helvetica&quot; style=&quot;font-size: 10px;&quot;&gt;(1) Agent gets attested composite location using Geo-location service (GL)&lt;/font&gt;&lt;/span&gt;&lt;/h2&gt;" style="text;html=1;align=center;verticalAlign=middle;whiteSpace=wrap;rounded=0;" vertex="1" parent="1">
-          <mxGeometry x="106" y="356" width="180" height="1" as="geometry" />
+        <mxCell id="CC5dUmVlAGV62EEgw9hK-3" value="&lt;h2 style=&quot;box-sizing: border-box; margin-top: 24px; margin-bottom: 16px; line-height: 1.25; padding-bottom: 0.3em; border-bottom: 1px solid rgba(209, 217, 224, 0.7); color: rgb(31, 35, 40); text-align: start; background-color: rgb(255, 255, 255);&quot; dir=&quot;auto&quot; class=&quot;heading-element&quot; tabindex=&quot;-1&quot;&gt;&lt;span style=&quot;font-weight: normal;&quot;&gt;&lt;font face=&quot;Helvetica&quot; style=&quot;font-size: 10px;&quot;&gt;(1) Agent gets attested composite location using Geo-location service (GL)&lt;/font&gt;&lt;/span&gt;&lt;/h2&gt;" style="text;html=1;align=center;verticalAlign=middle;whiteSpace=wrap;rounded=0;" parent="1" vertex="1">
+          <mxGeometry x="106" y="372" width="180" height="1" as="geometry" />
         </mxCell>
-        <mxCell id="CC5dUmVlAGV62EEgw9hK-4" value="" style="endArrow=classic;html=1;rounded=0;" edge="1" parent="1">
+        <mxCell id="CC5dUmVlAGV62EEgw9hK-4" value="" style="endArrow=classic;html=1;rounded=0;" parent="1" edge="1">
           <mxGeometry width="50" height="50" relative="1" as="geometry">
-            <mxPoint x="100" y="365" as="sourcePoint" />
-            <mxPoint x="300" y="365" as="targetPoint" />
+            <mxPoint x="100" y="404" as="sourcePoint" />
+            <mxPoint x="300" y="404" as="targetPoint" />
           </mxGeometry>
         </mxCell>
-        <mxCell id="CC5dUmVlAGV62EEgw9hK-6" value="&lt;h2 style=&quot;box-sizing: border-box; margin-top: 24px; margin-bottom: 16px; line-height: 1.25; padding-bottom: 0.3em; border-bottom: 1px solid rgba(209, 217, 224, 0.7);&quot; dir=&quot;auto&quot; class=&quot;heading-element&quot; tabindex=&quot;-1&quot;&gt;&lt;span style=&quot;font-weight: normal;&quot;&gt;&lt;font style=&quot;font-size: 10px;&quot;&gt;(2) Agent gets attested geographic boundary using Geo-fencing (GF) service&lt;/font&gt;&lt;/span&gt;&lt;/h2&gt;" style="text;html=1;align=center;verticalAlign=middle;whiteSpace=wrap;rounded=0;" vertex="1" parent="1">
-          <mxGeometry x="82" y="400" width="390" height="1" as="geometry" />
-        </mxCell>
-        <mxCell id="CC5dUmVlAGV62EEgw9hK-7" value="" style="endArrow=classic;html=1;rounded=0;" edge="1" parent="1">
+        <mxCell id="CC5dUmVlAGV62EEgw9hK-7" value="" style="endArrow=classic;html=1;rounded=0;" parent="1" edge="1">
           <mxGeometry width="50" height="50" relative="1" as="geometry">
-            <mxPoint x="102" y="414" as="sourcePoint" />
-            <mxPoint x="500" y="415" as="targetPoint" />
+            <mxPoint x="102" y="439" as="sourcePoint" />
+            <mxPoint x="500" y="440" as="targetPoint" />
           </mxGeometry>
         </mxCell>
-        <mxCell id="CC5dUmVlAGV62EEgw9hK-8" value="&lt;h1 tabindex=&quot;-1&quot; class=&quot;heading-element&quot; dir=&quot;auto&quot; style=&quot;box-sizing: border-box; margin: 24px 0px 16px; font-weight: 600; line-height: 1.25; padding-bottom: 0.3em; border-bottom: 1px solid rgba(209, 217, 224, 0.7); color: rgb(31, 35, 40); font-family: -apple-system, &amp;quot;system-ui&amp;quot;, &amp;quot;Segoe UI&amp;quot;, &amp;quot;Noto Sans&amp;quot;, Helvetica, Arial, sans-serif, &amp;quot;Apple Color Emoji&amp;quot;, &amp;quot;Segoe UI Emoji&amp;quot;; font-style: normal; font-variant-ligatures: normal; font-variant-caps: normal; letter-spacing: normal; orphans: 2; text-indent: 0px; text-transform: none; widows: 2; word-spacing: 0px; -webkit-text-stroke-width: 0px; white-space: normal; background-color: rgb(255, 255, 255); text-decoration-thickness: initial; text-decoration-style: initial; text-decoration-color: initial;&quot;&gt;&lt;font style=&quot;font-size: 14px;&quot;&gt;Runtime: Workload Start/Restart Attestation and Verification&lt;/font&gt;&lt;/h1&gt;" style="text;whiteSpace=wrap;html=1;align=center;" vertex="1" parent="1">
-          <mxGeometry x="38" y="408" width="720" height="22" as="geometry" />
+        <mxCell id="CC5dUmVlAGV62EEgw9hK-8" value="&lt;h1 tabindex=&quot;-1&quot; class=&quot;heading-element&quot; dir=&quot;auto&quot; style=&quot;box-sizing: border-box; margin: 24px 0px 16px; font-weight: 600; line-height: 1.25; padding-bottom: 0.3em; border-bottom: 1px solid rgba(209, 217, 224, 0.7); color: rgb(31, 35, 40); font-family: -apple-system, &amp;quot;system-ui&amp;quot;, &amp;quot;Segoe UI&amp;quot;, &amp;quot;Noto Sans&amp;quot;, Helvetica, Arial, sans-serif, &amp;quot;Apple Color Emoji&amp;quot;, &amp;quot;Segoe UI Emoji&amp;quot;; font-style: normal; font-variant-ligatures: normal; font-variant-caps: normal; letter-spacing: normal; orphans: 2; text-indent: 0px; text-transform: none; widows: 2; word-spacing: 0px; -webkit-text-stroke-width: 0px; white-space: normal; background-color: rgb(255, 255, 255); text-decoration-thickness: initial; text-decoration-style: initial; text-decoration-color: initial;&quot;&gt;&lt;font style=&quot;font-size: 14px;&quot;&gt;Runtime: Workload Start/Restart Attestation and Verification&lt;/font&gt;&lt;/h1&gt;" style="text;whiteSpace=wrap;html=1;align=center;" parent="1" vertex="1">
+          <mxGeometry x="38" y="420" width="720" height="22" as="geometry" />
         </mxCell>
-        <mxCell id="CC5dUmVlAGV62EEgw9hK-11" value="&lt;h2 style=&quot;box-sizing: border-box; margin-top: 24px; margin-bottom: 16px; line-height: 1.25; padding-bottom: 0.3em; border-bottom: 1px solid rgba(209, 217, 224, 0.7); color: rgb(31, 35, 40); text-align: start; background-color: rgb(255, 255, 255);&quot; dir=&quot;auto&quot; class=&quot;heading-element&quot; tabindex=&quot;-1&quot;&gt;&lt;span style=&quot;font-weight: 400;&quot;&gt;&lt;font style=&quot;font-size: 10px;&quot;&gt;(1) Agent ensures that workload connects to it on H local socket (e.g. Unix domain socket). Agent generates private/public key pair for workload. Agent signs the workload public key with its TPM AK. Agent sends the signed workload public key along with its SPIFFE ID and last known&amp;nbsp;&lt;/font&gt;&lt;/span&gt;&lt;span style=&quot;font-weight: normal;&quot;&gt;&lt;font face=&quot;Helvetica&quot; style=&quot;font-size: 10px;&quot;&gt;attested geographic boundary&lt;/font&gt;&lt;/span&gt;&lt;span style=&quot;font-family: -apple-system, &amp;quot;system-ui&amp;quot;, &amp;quot;Segoe UI&amp;quot;, &amp;quot;Noto Sans&amp;quot;, Helvetica, Arial, sans-serif, &amp;quot;Apple Color Emoji&amp;quot;, &amp;quot;Segoe UI Emoji&amp;quot;; font-size: 16px; font-weight: normal;&quot;&gt;&amp;nbsp;&lt;/span&gt;&lt;span style=&quot;font-size: 10px; font-weight: 400;&quot;&gt;to the server.&lt;/span&gt;&lt;/h2&gt;" style="text;html=1;align=center;verticalAlign=middle;whiteSpace=wrap;rounded=0;" vertex="1" parent="1">
-          <mxGeometry x="108" y="508" width="572" height="1" as="geometry" />
+        <mxCell id="CC5dUmVlAGV62EEgw9hK-11" value="&lt;h2 style=&quot;box-sizing: border-box; margin-top: 24px; margin-bottom: 16px; line-height: 1.25; padding-bottom: 0.3em; border-bottom: 1px solid rgba(209, 217, 224, 0.7); color: rgb(31, 35, 40); text-align: start; background-color: rgb(255, 255, 255);&quot; dir=&quot;auto&quot; class=&quot;heading-element&quot; tabindex=&quot;-1&quot;&gt;&lt;span style=&quot;font-weight: 400;&quot;&gt;&lt;font style=&quot;font-size: 10px;&quot;&gt;(1) Agent ensures that workload connects to it on H local socket (e.g. Unix domain socket). Agent generates private/public key pair for workload. Agent signs the workload public key with its TPM AK. Agent sends the signed workload public key along with its SPIFFE ID and last known&amp;nbsp;&lt;/font&gt;&lt;/span&gt;&lt;span style=&quot;font-weight: normal;&quot;&gt;&lt;font face=&quot;Helvetica&quot; style=&quot;font-size: 10px;&quot;&gt;attested geographic boundary&lt;/font&gt;&lt;/span&gt;&lt;span style=&quot;font-family: -apple-system, &amp;quot;system-ui&amp;quot;, &amp;quot;Segoe UI&amp;quot;, &amp;quot;Noto Sans&amp;quot;, Helvetica, Arial, sans-serif, &amp;quot;Apple Color Emoji&amp;quot;, &amp;quot;Segoe UI Emoji&amp;quot;; font-size: 16px; font-weight: normal;&quot;&gt;&amp;nbsp;&lt;/span&gt;&lt;span style=&quot;font-size: 10px; font-weight: 400;&quot;&gt;to the server.&lt;/span&gt;&lt;/h2&gt;" style="text;html=1;align=center;verticalAlign=middle;whiteSpace=wrap;rounded=0;" parent="1" vertex="1">
+          <mxGeometry x="108" y="522" width="572" height="1" as="geometry" />
         </mxCell>
-        <mxCell id="CC5dUmVlAGV62EEgw9hK-12" value="" style="endArrow=classic;html=1;rounded=0;" edge="1" parent="1">
+        <mxCell id="CC5dUmVlAGV62EEgw9hK-12" value="" style="endArrow=classic;html=1;rounded=0;" parent="1" edge="1">
           <mxGeometry width="50" height="50" relative="1" as="geometry">
-            <mxPoint x="100" y="502" as="sourcePoint" />
-            <mxPoint x="700" y="502" as="targetPoint" />
+            <mxPoint x="100" y="566" as="sourcePoint" />
+            <mxPoint x="700" y="566" as="targetPoint" />
           </mxGeometry>
         </mxCell>
-        <mxCell id="CC5dUmVlAGV62EEgw9hK-15" value="&lt;h2 style=&quot;box-sizing: border-box; margin-top: 24px; margin-bottom: 16px; line-height: 1.25; padding-bottom: 0.3em; border-bottom: 1px solid rgba(209, 217, 224, 0.7); color: rgb(31, 35, 40); text-align: start; background-color: rgb(255, 255, 255);&quot; dir=&quot;auto&quot; class=&quot;heading-element&quot; tabindex=&quot;-1&quot;&gt;&lt;span style=&quot;font-weight: 400;&quot;&gt;&lt;font style=&quot;font-size: 10px;&quot;&gt;(2) Server verifies proof of possession of workload private key and issues SPIFFE ID for workload. The SPIFFE ID is signed by the server and contains the workload public key and the geographic boundary (e.g. cloud region, city, country etc.) of the host.&lt;/font&gt;&lt;/span&gt;&lt;/h2&gt;" style="text;html=1;align=center;verticalAlign=middle;whiteSpace=wrap;rounded=0;" vertex="1" parent="1">
-          <mxGeometry x="108" y="571" width="572" height="1" as="geometry" />
+        <mxCell id="CC5dUmVlAGV62EEgw9hK-15" value="&lt;h2 style=&quot;box-sizing: border-box; margin-top: 24px; margin-bottom: 16px; line-height: 1.25; padding-bottom: 0.3em; border-bottom: 1px solid rgba(209, 217, 224, 0.7); color: rgb(31, 35, 40); text-align: start; background-color: rgb(255, 255, 255);&quot; dir=&quot;auto&quot; class=&quot;heading-element&quot; tabindex=&quot;-1&quot;&gt;&lt;span style=&quot;font-weight: 400;&quot;&gt;&lt;font style=&quot;font-size: 10px;&quot;&gt;(2) Server verifies proof of possession of workload private key and issues SPIFFE ID for workload. The SPIFFE ID is signed by the server and contains the workload public key and the geographic boundary (e.g. cloud region, city, country etc.) of the host.&lt;/font&gt;&lt;/span&gt;&lt;/h2&gt;" style="text;html=1;align=center;verticalAlign=middle;whiteSpace=wrap;rounded=0;" parent="1" vertex="1">
+          <mxGeometry x="108" y="607" width="572" height="1" as="geometry" />
         </mxCell>
-        <mxCell id="CC5dUmVlAGV62EEgw9hK-14" value="" style="endArrow=classic;html=1;rounded=0;" edge="1" parent="1">
+        <mxCell id="CC5dUmVlAGV62EEgw9hK-14" value="" style="endArrow=classic;html=1;rounded=0;" parent="1" edge="1">
           <mxGeometry width="50" height="50" relative="1" as="geometry">
-            <mxPoint x="101" y="571" as="sourcePoint" />
-            <mxPoint x="701" y="571" as="targetPoint" />
+            <mxPoint x="101" y="639" as="sourcePoint" />
+            <mxPoint x="701" y="639" as="targetPoint" />
           </mxGeometry>
+        </mxCell>
+        <mxCell id="M9Ocb2jdhmregSc9Uv31-19" value="&lt;h2 style=&quot;box-sizing: border-box; margin-top: 24px; margin-bottom: 16px; line-height: 1.25; padding-bottom: 0.3em; border-bottom: 1px solid rgba(209, 217, 224, 0.7); color: rgb(31, 35, 40); background-color: rgb(255, 255, 255);&quot; dir=&quot;auto&quot; class=&quot;heading-element&quot; tabindex=&quot;-1&quot;&gt;&lt;font face=&quot;Helvetica&quot; style=&quot;font-size: 10px; font-weight: normal;&quot;&gt;(2) Start/restart time attestation/remote verification of agent (includes TPM/location plugin) for integrity and proof of residency on Host using TPM&lt;/font&gt;&lt;/h2&gt;" style="text;html=1;align=center;verticalAlign=middle;whiteSpace=wrap;rounded=0;" parent="1" vertex="1">
+          <mxGeometry x="103" y="259" width="576" height="18" as="geometry" />
+        </mxCell>
+        <mxCell id="CC5dUmVlAGV62EEgw9hK-6" value="&lt;h2 style=&quot;box-sizing: border-box; margin-top: 24px; margin-bottom: 16px; line-height: 1.25; padding-bottom: 0.3em; border-bottom: 1px solid rgba(209, 217, 224, 0.7);&quot; dir=&quot;auto&quot; class=&quot;heading-element&quot; tabindex=&quot;-1&quot;&gt;&lt;span style=&quot;font-weight: normal;&quot;&gt;&lt;font style=&quot;font-size: 10px;&quot;&gt;(2) Agent gets attested geographic boundary using Geo-fencing (GF) service&lt;/font&gt;&lt;/span&gt;&lt;/h2&gt;" style="text;html=1;align=left;verticalAlign=middle;whiteSpace=wrap;rounded=0;fillColor=default;gradientColor=none;" parent="1" vertex="1">
+          <mxGeometry x="106" y="408" width="380" height="21" as="geometry" />
         </mxCell>
       </root>
     </mxGraphModel>
