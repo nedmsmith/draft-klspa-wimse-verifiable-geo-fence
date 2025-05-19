@@ -139,16 +139,16 @@ Data residency use cases can be divided into three categories, (1) server-centri
 
 Enterprises (e.g., healthcare, banking) need cryptographic proof of trustworthy geographic boundary (i.e., region, zone, countries, state etc.) for cloud facing workloads.
 
-* **Server workload <-> Server workload - General**:
+### **Server workload <-> Server workload - General**:
 Enterprises handling of sensitive data relies on dedicated cloud hosts (e.g., EU sovereign cloud providers) that ensure compmliance to data residency laws, while also ensuring appropriate levels of service (e.g., high availability).
 To meet data residency legal requirements, enterprises need to verify workload data is processed by hosts that are within a geographic boundary and workload data is only transmitted between specified geographic boundaries.
 
-* **Server workload <-> Server workload - Agentic AI**:
+### **Server workload <-> Server workload - Agentic AI**:
 Enterprises need to ensure that the AI agent is located in a specific geographic boundary when downloading sensitive data or performing other sensitive operations. A secure AI agent, running on a trusted host with TPM-backed attestation, interacts with geo-location and geo-fencing services to obtain verifiable proof of its geographic boundary. The agent periodically collects location data from trusted sensors, obtains attested composite location from a geo-location service, and enforces geo-fence policies via a geo-fencing service. The resulting attested geo-fence proof is used to bind workload identity to both the host and its geographic location, enabling secure, policy-driven execution of AI workloads and compliance with data residency requirements.
 
-[Cybersecure and Compliant Agentic AI Workflow](https://github.com/nedmsmith/draft-klspa-wimse-verifiable-geo-fence/blob/ramki-mod2/pictures/secure-agentic-workflow.svg/)
+[Cybersecure and Compliant Agentic AI Workflow diagram](https://github.com/nedmsmith/draft-klspa-wimse-verifiable-geo-fence/blob/ramki-mod2/pictures/secure-agentic-workflow.svg/)
 
-* **User workload <-> Server workload**:
+### **User workload <-> Server workload**:
 Enterprises ensure that it is communicating with a server (e.g., cloud services) located within a specific geographic boundary.
 
 ## **Category 2**: User-centric Location
@@ -170,6 +170,7 @@ However, those personnel should not be allowed to support U.S. customers.
 Geo-location enforcement can ensure policy compliance. See [doj-cisa].
 
 ## **Category 3**: Regulatory Compliance
+
 Geographic boundary attestation helps satisfy data residency and data sovereignty requirements for regulatory compliance.
 
 ## Data Residency Requirements
@@ -182,6 +183,7 @@ Data residency use cases motivate the following requirements:
 * Security guarantees that are portable across diverse deployment topologies.
 
 # Approach Summary
+
 Host contains location devices like mobile sensor, GPS sensor, WiFi sensor, GNSS sensor, etc. Host is a compute node, including servers, routers, and end-user appliances like smartphones or tablets or PCs.
 Host has a discrete TPM. Note on TPM -- The EK certificate is a digital certificate signed by the TPM manufacturer's CA which verifies the identity and trustworthiness of the TPM's Endorsement Key (EK);  TPM attestation key (AK) is cryptographically backed by TPM EK.
 For the initial version of the draft, host is bare metal Linux OS host and interactions are with TPM.
@@ -201,19 +203,24 @@ Agent sends attested geographic boundary (e.g., cloud region, city, country etc.
 * WIM gives signed Workload ID (WID) with geographic boundary as an additional field.
 This could be a certificate or a token.
 
-# Attestation for System Bootstrap and Agent Initialization
-This section describes workload attestation based on SPIFFE/SPIRE.
-
-[Modified SPIFFE-SPIRE architecture with new geo-location plugin](https://github.com/nedmsmith/draft-klspa-wimse-verifiable-geo-fence/blob/ramki-mod2/pictures/spiffe-spire.svg)
+# SPIFFE/SPIRE Architecture modifications
 
 In the context of the SPIFFE/SPIRE architecture (spire), the SPIFFE/SPIRE agent includes a new geo-location plugin -- this is depicted in the figure below. The agent is a daemon running on bare-metal Linux OS Host (H) as a process with direct access to TPM (root permissions for TPM 2.0 access may be needed for certain Linux distributions for certain H hardware configurations).
 The agent, using the geo-location plugin, can gather the location from host local location sensors (e.g. GPS, GNSS).
 The agent has a TPM plugin (spire-tpm) which interacts with the TPM.
 The server (SPIFFE/SPIRE server) is running in cluster which is isolated from the cluster in which the agent is running.
 
+[Modified SPIFFE-SPIRE architecture with new geo-location plugin](https://github.com/nedmsmith/draft-klspa-wimse-verifiable-geo-fence/blob/ramki-mod2/pictures/spiffe-spire.svg)
+
+# End-to-End Workflow
+
+The end-to-end workflow for the proposed framework consists of several key steps, including attestation for system bootstrap and agent initialization, agent geo-location and geo-fencing, workload attestation, and remote verification.
 [Fig-End-to-end Workflow](https://github.com/nedmsmith/draft-klspa-wimse-verifiable-geo-fence/blob/ramki-mod2/pictures/end-to-end-flow.svg)
 
-## Attestation of OS Integrity and Proof of Residency on Host
+## Attestation for System Bootstrap and Agent Initialization
+
+### Attestation of OS Integrity and Proof of Residency on Host
+
 As part of system boot/reboot process, boot loader based measured system boot with remote SPIFFE/SPIRE server verification is used to ensure only approved OS is running on an approved hardware platform.
 
 Measurement Collection: During the boot process, the boot loader collects measurements (hashes) of the boot components and configurations.
@@ -233,7 +240,8 @@ Remote Verification: The remote server checks the integrity of the attestation r
 The server also validates that the TPM EK certificate has not been revoked and part of approved list of TPM EK identifiers associated with hardware platform.
 At this point, we can be sure that the hardware platform is approved for running workloads and is running an approved OS.
 
-## Start/restart time attestation/remote verification of agent for integrity and proof of residency on Host
+### Start/restart time attestation/remote verification of agent for integrity and proof of residency on Host
+
 As part of agent start/restart process, linux integrity measurement architecture (linux-ima) is used to ensure that only approved executable for agent is loaded.
 
 Measurement collection: The agent executable is measured by linux-ima before it is loaded.
@@ -260,11 +268,12 @@ TPM attestation and remote server verification:
 * Server creates a SPIFFE ID along with the sha256sum of the TPM AK public key.
 Server stores agent SPIFFE ID mapping to TPM AK public key in a shared datastore.
 
-# Agent geo-location and geo-fencing workflow
+## Agent geo-location and geo-fencing workflow
 
 - this is run periodically (say every 5 minutes) to ensure that the Host is in the same location
 
-## Step 1: Agent gets attested composite location using Geo-location service (GL)
+### Step 1: Agent gets attested composite location using Geo-location service (GL)
+
 Geo-location service (GL) runs outside of Host -- besides the location from device location sources (e.g. GPS, GNSS), it will connect to mobile location service providers (e.g., Telefonica) using GSMA location API (gsma-loc).
 
 * Agent gathers the location from Host local location sensors (e.g. GPS, GNSS).
@@ -287,7 +296,7 @@ Now we have a attested composite location.
 * Agent is returned the attested composite location over the secure connection.
 Agent signs the attested composite location using TPM AK establishing proof of residency of composite location to Host. This is called attested proof-of-residency aware composite location (APL).
 
-## Step 2: Agent gets attested geographic boundary using Geo-fencing (GF) service
+### Step 2: Agent gets attested geographic boundary using Geo-fencing (GF) service
 
 * Geo-fence policies are of four flavours - (1) boolean membership of given boundary (rectangular, circular, state etc.), (2) precise location, (3) precise bounding box/circle of location, (4) approximate location with no definition of boundary.
 The first one, boolean membership of given boundary, is the most common and will be assumed as the default.
@@ -303,7 +312,7 @@ GF performs geo-fence policy enforcement by matching the location against config
 
 * Agent is returned the attested geo-fence policy match result. Agent signs the attested geo-fence policy match result using TPM AK establishing proof of residency of geo-fence policy match result to Host. This is called attested proof-of-residency aware geo-fence policy match result (APGL).
 
-# Workload (W) attestation and remote verification - key steps
+## Workload (W) attestation and remote verification - key steps
 
 * Agent ensures that Workload connects to it on Host local socket (e.g. Unix domain socket).
 Agent generates private/public key pair for Workload. Agent signs the Workload public key with its TPM AK.
@@ -320,7 +329,6 @@ The challenge's secret is encrypted using the Workload public key.
 * Server verifies that the decrypted secret is the same it used to build the challenge.
 It then issues SPIFFE ID for Workload. The SPIFFE ID is signed by the server and contains the Workload public key and the geographic boundary (e.g. cloud region, city, country etc.) of the Host.
 The geographic boundary is obtained from the last known APGL. The server also stores the Workload SPIFFE ID mapping to Workload public key in a shared datastore.
-
 
 
 
