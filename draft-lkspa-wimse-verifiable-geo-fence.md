@@ -146,9 +146,7 @@ To meet data residency legal requirements, enterprises need to verify workload d
 * **Server workload <-> Server workload - Agentic AI**:
 Enterprises need to ensure that the AI agent is located in a specific geographic boundary when downloading sensitive data or performing other sensitive operations. A secure AI agent, running on a trusted host with TPM-backed attestation, interacts with geo-location and geo-fencing services to obtain verifiable proof of its geographic boundary. The agent periodically collects location data from trusted sensors, obtains attested composite location from a geo-location service, and enforces geo-fence policies via a geo-fencing service. The resulting attested geo-fence proof is used to bind workload identity to both the host and its geographic location, enabling secure, policy-driven execution of AI workloads and compliance with data residency requirements.
 
-[Cybersecure and Compliant Agentic AI Workflow](https://github.com/nedmsmith/draft-klspa-wimse-verifiable-geo-fence/blob/ramki-mod2/pictures/secure-agentic-workflow.svg)
-
-{: #fig-secure-agentic-ai artwork-align="center" title="Cybersecure and Compliant Agentic AI Workflow"}
+[Cybersecure and Compliant Agentic AI Workflow](https://github.com/nedmsmith/draft-klspa-wimse-verifiable-geo-fence/blob/ramki-mod2/pictures/secure-agentic-workflow.svg/)
 
 * **User workload <-> Server workload**:
 Enterprises ensure that it is communicating with a server (e.g., cloud services) located within a specific geographic boundary.
@@ -206,15 +204,14 @@ This could be a certificate or a token.
 # Attestation for System Bootstrap and Agent Initialization
 This section describes workload attestation based on SPIFFE/SPIRE.
 
-[LINK-TEXT](https://github.com/nedmsmith/draft-klspa-wimse-verifiable-geo-fence/blob/ramki-mod2/pictures/spiffe-spire.svg)
-
-**Figure 1: Modified SPIFFE/SPIRE architecture with new geo-location plugin**
-{: #fig-modified-spiffe-spire artwork-align="center" title="Modified SPIFFE/SPIRE architecture with new geo-location plugin"}
+[Modified SPIFFE-SPIRE architecture with new geo-location plugin](https://github.com/nedmsmith/draft-klspa-wimse-verifiable-geo-fence/blob/ramki-mod2/pictures/spiffe-spire.svg)
 
 In the context of the SPIFFE/SPIRE architecture (spire), the SPIFFE/SPIRE agent includes a new geo-location plugin -- this is depicted in the figure below. The agent is a daemon running on bare-metal Linux OS Host (H) as a process with direct access to TPM (root permissions for TPM 2.0 access may be needed for certain Linux distributions for certain H hardware configurations).
 The agent, using the geo-location plugin, can gather the location from host local location sensors (e.g. GPS, GNSS).
 The agent has a TPM plugin (spire-tpm) which interacts with the TPM.
 The server (SPIFFE/SPIRE server) is running in cluster which is isolated from the cluster in which the agent is running.
+
+[Fig-End-to-end Workflow](https://github.com/nedmsmith/draft-klspa-wimse-verifiable-geo-fence/blob/ramki-mod2/pictures/end-to-end-flow.svg)
 
 ## Attestation of OS Integrity and Proof of Residency on Host
 As part of system boot/reboot process, boot loader based measured system boot with remote SPIFFE/SPIRE server verification is used to ensure only approved OS is running on an approved hardware platform.
@@ -324,9 +321,8 @@ The challenge's secret is encrypted using the Workload public key.
 It then issues SPIFFE ID for Workload. The SPIFFE ID is signed by the server and contains the Workload public key and the geographic boundary (e.g. cloud region, city, country etc.) of the Host.
 The geographic boundary is obtained from the last known APGL. The server also stores the Workload SPIFFE ID mapping to Workload public key in a shared datastore.
 
-[LINK-TEXT](https://github.com/nedmsmith/draft-klspa-wimse-verifiable-geo-fence/blob/ramki-mod2/pictures/end-to-end-flow.svg)
 
-{: #fig-end-to-end artwork-align="center" title="End-to-end Workflow"}
+
 
 # Networking Protocol Changes
 Workload ID (WID), with location field, in the form of a proof-of-residency certificate or token needs to be conveyed to the peer during connection establishment. The connection is end-to-end across proxies like
