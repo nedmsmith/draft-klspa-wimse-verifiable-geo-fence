@@ -555,45 +555,41 @@ Table of Contents
 
 8.  Host Composition Table
 
-     +==============+=================================+==============+
-     | Component    | Functionality                   | Comments     |
-     +==============+=================================+==============+
-     | Host         | The system that is composed of  |              |
-     |              | all of the following software   |              |
-     |              | or hardware components.         |              |
-     +--------------+---------------------------------+--------------+
-     | Trusted      | Storage root of trust: * TPM -  |              |
-     | hardware     | Location root of trust options: |              |
-     | devices      | GPS sensor, GNSS sensor -       |              |
-     | (focus on    | signal authentication prevents  |              |
-     | geolocation) | spoofing [galileo], Mobile      |              |
-     |              | sensor: modem, antenna, SIM -   |              |
-     |              | Mobile device location is       |              |
-     |              | obtained from mobile network    |              |
-     |              | operator and not from device    |              |
-     +--------------+---------------------------------+--------------+
-     | Boot loader  | All the devices (version/       |              |
-     |              | firmware) in a platform are     |              |
-     |              | trusted and measured during     |              |
-     |              | each boot (boot loader          |              |
-     |              | enhancement).  Any new device   |              |
-     |              | (e.g., mobile location sensor)  |              |
-     |              | which is hot-swapped in will be |              |
-     |              | evaluated for inclusion only    |              |
-     |              | during next reboot.             |              |
-     +--------------+---------------------------------+--------------+
-     | Trusted OS   | Trusted drivers for storage/    |              |
-     |              | location root of trust.  Does   |              |
-     |              | not tamper GPS location/GNSS    |              |
-     |              | location data.                  |              |
-     +--------------+---------------------------------+--------------+
-     | Geolocation  | Trusted application.  Does not  | Possibly a   |
-     | Agent SW -   | tamper GPS location/GNSS        | SPIRE-agent  |
-     | OS level     | location data.  Signs GPS/GNSS  | plug-in with |
-     | service      | location data                   | TPM          |
-     |              | (latitude/longitude/altitude)   | attestation. |
-     |              | using TPM attestation key.      |              |
-     +--------------+---------------------------------+--------------+
+   +==============+=========================================+==========+
+   | Component    | Functionality                           | Comments |
+   +==============+=========================================+==========+
+   | Host         | The system that is composed of all      |          |
+   |              | of the following software or            |          |
+   |              | hardware components.                    |          |
+   +--------------+-----------------------------------------+----------+
+   | Trusted      | Storage root of trust: * TPM -          |          |
+   | hardware     | Location root of trust options: GPS     |          |
+   | devices      | sensor, GNSS sensor - signal            |          |
+   | (focus on    | authentication prevents spoofing        |          |
+   | geolocation) | [galileo], Mobile sensor: modem,        |          |
+   |              | antenna, SIM - Mobile device            |          |
+   |              | location is obtained from mobile        |          |
+   |              | network operator and not from device    |          |
+   +--------------+-----------------------------------------+----------+
+   | Boot loader  | All the devices (version/firmware)      |          |
+   |              | in a platform are trusted and           |          |
+   |              | measured during each boot (boot         |          |
+   |              | loader enhancement).  Any new device    |          |
+   |              | (e.g., mobile location sensor) which    |          |
+   |              | is hot-swapped in will be evaluated     |          |
+   |              | for inclusion only during next          |          |
+   |              | reboot.                                 |          |
+   +--------------+-----------------------------------------+----------+
+   | Trusted OS   | Trusted drivers for storage/location    |          |
+   |              | root of trust.  Does not tamper GPS     |          |
+   |              | location/GNSS location data.            |          |
+   +--------------+-----------------------------------------+----------+
+   | Geolocation  | Trusted application.  Does not          |          |
+   | Agent SW -   | tamper GPS location/GNSS location       |          |
+   | OS level     | data.  Signs GPS/GNSS location data     |          |
+   | service      | (latitude/longitude/altitude) using     |          |
+   |              | TPM attestation key.                    |          |
+   +--------------+-----------------------------------------+----------+
 
                                   Table 1
 
