@@ -567,7 +567,7 @@ Table of Contents
      | devices      | root of trust options: <ul><li>GPS |          |
      | (focus on    | sensor</li><li>GNSS sensor -       |          |
      | geolocation) | signal authentication prevents     |          |
-     |              | spoofing [galileo]</li></li>Mobile |          |
+     |              | spoofing [galileo]</ul></li>Mobile |          |
      |              | sensor - modem, antenna, SIM -     |          |
      |              | Mobile device location is obtained |          |
      |              | from mobile network operator and   |          |
