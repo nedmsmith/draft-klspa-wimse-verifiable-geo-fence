@@ -1430,7 +1430,7 @@ Geolocation enforcement can ensure policy compliance. See <span>[<a href="#doj-c
       <h2 id="name-approach-summary">
 <a href="#section-4" class="section-number selfRef">4. </a><a href="#name-approach-summary" class="section-name selfRef">Approach Summary</a>
       </h2>
-<p id="section-4-1">Host contains location devices like mobile sensor, GPS sensor, Wi-Fi sensor, GNSS sensor, etc. Host is a compute node, including servers, routers, and end-user appliances like smartphones, tablets, or PCs.
+<p id="section-4-1">Host contains location devices like mobile sensor, GPS sensor, GNSS sensor, etc. Host is a compute node, including servers, routers, and end-user appliances like smartphones, tablets, or PCs.
 Host has a discrete TPM. Note on TPM: The EK certificate is a digital certificate signed by the TPM manufacturer's CA which verifies the identity and trustworthiness of the TPM's Endorsement Key (EK); TPM attestation key (AK) is cryptographically backed by TPM EK.
 For the initial version of the draft, host is bare metal Linux OS host and interactions are with TPM.<a href="#section-4-1" class="pilcrow">¶</a></p>
 <p id="section-4-2">Trusted hosts are the hosts which have trustworthy device composition (TPM EK, Mobile-SIM, GPS device ID, etc.), endorsed by manufacturer/owner, and use a trustworthy OS.
@@ -1732,7 +1732,7 @@ The geographic boundary is obtained from the last known APGL. The server also st
           </tr>
           <tr>
             <td class="text-left" rowspan="1" colspan="1">Trusted hardware devices (focus on geolocation)</td>
-            <td class="text-left" rowspan="1" colspan="1">Storage root of trust: * TPM - Location root of trust options: GPS sensor, GNSS sensor - signal authentication prevents spoofing <span>[<a href="#galileo" class="cite xref">galileo</a>]</span>, Mobile sensor: modem, antenna, SIM - Mobile device location is obtained from mobile network operator and not from device, Wi-Fi sensor: modem, antenna</td>
+            <td class="text-left" rowspan="1" colspan="1">Storage root of trust: * TPM - Location root of trust options: GPS sensor, GNSS sensor - signal authentication prevents spoofing <span>[<a href="#galileo" class="cite xref">galileo</a>]</span>, Mobile sensor: modem, antenna, SIM - Mobile device location is obtained from mobile network operator and not from device</td>
             <td class="text-left" rowspan="1" colspan="1"> </td>
           </tr>
           <tr>
@@ -1742,17 +1742,16 @@ The geographic boundary is obtained from the last known APGL. The server also st
           </tr>
           <tr>
             <td class="text-left" rowspan="1" colspan="1">Trusted OS</td>
-            <td class="text-left" rowspan="1" colspan="1">Trusted drivers for storage/location root of trust. Does not tamper GPS location/Wi-Fi data.</td>
+            <td class="text-left" rowspan="1" colspan="1">Trusted drivers for storage/location root of trust. Does not tamper GPS location/GNSS location data.</td>
             <td class="text-left" rowspan="1" colspan="1"> </td>
           </tr>
           <tr>
             <td class="text-left" rowspan="1" colspan="1">Geolocation Agent SW - OS level service</td>
-            <td class="text-left" rowspan="1" colspan="1">Trusted application. Does not tamper GPS location/Wi-Fi data. Signs GPS location data (latitude/longitude/altitude), proximal Wi-Fi access points using TPM attestation key.</td>
+            <td class="text-left" rowspan="1" colspan="1">Trusted application. Does not tamper GPS location/GNSS location data. Signs GPS/GNSS location data (latitude/longitude/altitude) using TPM attestation key.</td>
             <td class="text-left" rowspan="1" colspan="1">Possibly a SPIRE-agent plug-in with TPM attestation.</td>
           </tr>
         </tbody>
       </table>
-<p id="section-8-2"><strong>Note</strong>: A GPS sensor with a cryptographic signature, also known as GNSS signal authentication, uses digital signatures in the broadcast signal to ensure the authenticity and integrity of the GPS data, protecting against spoofing attacks.<a href="#section-8-2" class="pilcrow">¶</a></p>
 </section>
 </div>
 <div id="authorization-policy-implementers">

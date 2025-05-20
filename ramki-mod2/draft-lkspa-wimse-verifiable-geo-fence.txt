@@ -258,15 +258,15 @@ Table of Contents
 
 4.  Approach Summary
 
-   Host contains location devices like mobile sensor, GPS sensor, Wi-Fi
-   sensor, GNSS sensor, etc.  Host is a compute node, including servers,
-   routers, and end-user appliances like smartphones, tablets, or PCs.
-   Host has a discrete TPM.  Note on TPM: The EK certificate is a
-   digital certificate signed by the TPM manufacturer's CA which
-   verifies the identity and trustworthiness of the TPM's Endorsement
-   Key (EK); TPM attestation key (AK) is cryptographically backed by TPM
-   EK.  For the initial version of the draft, host is bare metal Linux
-   OS host and interactions are with TPM.
+   Host contains location devices like mobile sensor, GPS sensor, GNSS
+   sensor, etc.  Host is a compute node, including servers, routers, and
+   end-user appliances like smartphones, tablets, or PCs.  Host has a
+   discrete TPM.  Note on TPM: The EK certificate is a digital
+   certificate signed by the TPM manufacturer's CA which verifies the
+   identity and trustworthiness of the TPM's Endorsement Key (EK); TPM
+   attestation key (AK) is cryptographically backed by TPM EK.  For the
+   initial version of the draft, host is bare metal Linux OS host and
+   interactions are with TPM.
 
    Trusted hosts are the hosts which have trustworthy device composition
    (TPM EK, Mobile-SIM, GPS device ID, etc.), endorsed by manufacturer/
@@ -570,8 +570,7 @@ Table of Contents
      |              | sensor: modem, antenna, SIM -   |              |
      |              | Mobile device location is       |              |
      |              | obtained from mobile network    |              |
-     |              | operator and not from device,   |              |
-     |              | Wi-Fi sensor: modem, antenna    |              |
+     |              | operator and not from device    |              |
      +--------------+---------------------------------+--------------+
      | Boot loader  | All the devices (version/       |              |
      |              | firmware) in a platform are     |              |
@@ -585,23 +584,18 @@ Table of Contents
      +--------------+---------------------------------+--------------+
      | Trusted OS   | Trusted drivers for storage/    |              |
      |              | location root of trust.  Does   |              |
-     |              | not tamper GPS location/Wi-Fi   |              |
-     |              | data.                           |              |
+     |              | not tamper GPS location/GNSS    |              |
+     |              | location data.                  |              |
      +--------------+---------------------------------+--------------+
      | Geolocation  | Trusted application.  Does not  | Possibly a   |
-     | Agent SW -   | tamper GPS location/Wi-Fi data. | SPIRE-agent  |
-     | OS level     | Signs GPS location data         | plug-in with |
-     | service      | (latitude/longitude/altitude),  | TPM          |
-     |              | proximal Wi-Fi access points    | attestation. |
+     | Agent SW -   | tamper GPS location/GNSS        | SPIRE-agent  |
+     | OS level     | location data.  Signs GPS/GNSS  | plug-in with |
+     | service      | location data                   | TPM          |
+     |              | (latitude/longitude/altitude)   | attestation. |
      |              | using TPM attestation key.      |              |
      +--------------+---------------------------------+--------------+
 
                                   Table 1
-
-   *Note*: A GPS sensor with a cryptographic signature, also known as
-   GNSS signal authentication, uses digital signatures in the broadcast
-   signal to ensure the authenticity and integrity of the GPS data,
-   protecting against spoofing attacks.
 
 9.  Authorization Policy Implementers
 
