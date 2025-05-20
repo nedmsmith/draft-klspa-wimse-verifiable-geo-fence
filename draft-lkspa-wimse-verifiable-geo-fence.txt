@@ -201,7 +201,7 @@ Table of Contents
 
    Figure -- Cybersecure and Compliant Agentic AI Workflow
    (https://github.com/nedmsmith/draft-klspa-wimse-verifiable-geo-
-   fence/blob/ramki-mod2/pictures/secure-agentic-workflow.svg/)
+   fence/blob/main/pictures/secure-agentic-workflow.svg/)
 
 3.1.3.  User workload <-> Server workload:
 
@@ -258,15 +258,15 @@ Table of Contents
 
 4.  Approach Summary
 
-   Host contains location devices like mobile sensor, GPS sensor, Wi-Fi
-   sensor, GNSS sensor, etc.  Host is a compute node, including servers,
-   routers, and end-user appliances like smartphones, tablets, or PCs.
-   Host has a discrete TPM.  Note on TPM: The EK certificate is a
-   digital certificate signed by the TPM manufacturer's CA which
-   verifies the identity and trustworthiness of the TPM's Endorsement
-   Key (EK); TPM attestation key (AK) is cryptographically backed by TPM
-   EK.  For the initial version of the draft, host is bare metal Linux
-   OS host and interactions are with TPM.
+   Host contains location devices like mobile sensor, GPS sensor, GNSS
+   sensor, etc.  Host is a compute node, including servers, routers, and
+   end-user appliances like smartphones, tablets, or PCs.  Host has a
+   discrete TPM.  Note on TPM: The EK certificate is a digital
+   certificate signed by the TPM manufacturer's CA which verifies the
+   identity and trustworthiness of the TPM's Endorsement Key (EK); TPM
+   attestation key (AK) is cryptographically backed by TPM EK.  For the
+   initial version of the draft, host is bare metal Linux OS host and
+   interactions are with TPM.
 
    Trusted hosts are the hosts which have trustworthy device composition
    (TPM EK, Mobile-SIM, GPS device ID, etc.), endorsed by manufacturer/
@@ -309,7 +309,7 @@ Table of Contents
 
    Figure -- Modified SPIFFE-SPIRE architecture with new geolocation
    plugin (https://github.com/nedmsmith/draft-klspa-wimse-verifiable-
-   geo-fence/blob/ramki-mod2/pictures/spiffe-spire.svg)
+   geo-fence/blob/main/pictures/spiffe-spire.svg)
 
 6.  End-to-End Workflow
 
@@ -319,7 +319,7 @@ Table of Contents
    workload attestation, and remote verification.
 
    Figure -- End-to-end Workflow (https://github.com/nedmsmith/draft-
-   klspa-wimse-verifiable-geo-fence/blob/ramki-mod2/pictures/end-to-end-
+   klspa-wimse-verifiable-geo-fence/blob/main/pictures/end-to-end-
    flow.svg)
 
 6.1.  Attestation for System Bootstrap and Agent Initialization
@@ -555,53 +555,47 @@ Table of Contents
 
 8.  Host Composition Table
 
-     +==============+=================================+==============+
-     | Component    | Functionality                   | Comments     |
-     +==============+=================================+==============+
-     | Host         | The system that is composed of  |              |
-     |              | all of the following software   |              |
-     |              | or hardware components.         |              |
-     +--------------+---------------------------------+--------------+
-     | Trusted      | Storage root of trust: * TPM -  |              |
-     | hardware     | Location root of trust options: |              |
-     | devices      | GPS sensor, GNSS sensor -       |              |
-     | (focus on    | signal authentication prevents  |              |
-     | geolocation) | spoofing [galileo], Mobile      |              |
-     |              | sensor: modem, antenna, SIM -   |              |
-     |              | Mobile device location is       |              |
-     |              | obtained from mobile network    |              |
-     |              | operator and not from device,   |              |
-     |              | Wi-Fi sensor: modem, antenna    |              |
-     +--------------+---------------------------------+--------------+
-     | Boot loader  | All the devices (version/       |              |
-     |              | firmware) in a platform are     |              |
-     |              | trusted and measured during     |              |
-     |              | each boot (boot loader          |              |
-     |              | enhancement).  Any new device   |              |
-     |              | (e.g., mobile location sensor)  |              |
-     |              | which is hot-swapped in will be |              |
-     |              | evaluated for inclusion only    |              |
-     |              | during next reboot.             |              |
-     +--------------+---------------------------------+--------------+
-     | Trusted OS   | Trusted drivers for storage/    |              |
-     |              | location root of trust.  Does   |              |
-     |              | not tamper GPS location/Wi-Fi   |              |
-     |              | data.                           |              |
-     +--------------+---------------------------------+--------------+
-     | Geolocation  | Trusted application.  Does not  | Possibly a   |
-     | Agent SW -   | tamper GPS location/Wi-Fi data. | SPIRE-agent  |
-     | OS level     | Signs GPS location data         | plug-in with |
-     | service      | (latitude/longitude/altitude),  | TPM          |
-     |              | proximal Wi-Fi access points    | attestation. |
-     |              | using TPM attestation key.      |              |
-     +--------------+---------------------------------+--------------+
+     +==============+====================================+==========+
+     | Component    | Functionality                      | Comments |
+     +==============+====================================+==========+
+     | Host         | The system that is composed of all |          |
+     |              | of the following software or       |          |
+     |              | hardware components.               |          |
+     +--------------+------------------------------------+----------+
+     | Trusted      | Storage root of trust:             |          |
+     | hardware     | <ul><li>TPM</li></ul> Location     |          |
+     | devices      | root of trust options: <ul><li>GPS |          |
+     | (focus on    | sensor</li><li>GNSS sensor -       |          |
+     | geolocation) | signal authentication prevents     |          |
+     |              | spoofing [galileo]</li><li>Mobile  |          |
+     |              | sensor - modem, antenna, SIM -     |          |
+     |              | Mobile device location is obtained |          |
+     |              | from mobile network operator and   |          |
+     |              | not from device</li></ul>          |          |
+     +--------------+------------------------------------+----------+
+     | Boot loader  | All the devices (version/firmware) |          |
+     |              | in a platform are trusted and      |          |
+     |              | measured during each boot (boot    |          |
+     |              | loader enhancement).  Any new      |          |
+     |              | device (e.g., mobile location      |          |
+     |              | sensor) which is hot-swapped in    |          |
+     |              | will be evaluated for inclusion    |          |
+     |              | only during next reboot.           |          |
+     +--------------+------------------------------------+----------+
+     | Trusted OS   | Trusted drivers for storage/       |          |
+     |              | location root of trust.  Does not  |          |
+     |              | tamper with GPS location/GNSS      |          |
+     |              | location data.                     |          |
+     +--------------+------------------------------------+----------+
+     | Geolocation  | Trusted application.  Does not     |          |
+     | Agent SW -   | tamper with GPS location and GNSS  |          |
+     | OS level     | location data.  Signs GPS and GNSS |          |
+     | service      | location data (latitude/longitude/ |          |
+     |              | altitude) using TPM attestation    |          |
+     |              | key.                               |          |
+     +--------------+------------------------------------+----------+
 
-                                  Table 1
-
-   *Note*: A GPS sensor with a cryptographic signature, also known as
-   GNSS signal authentication, uses digital signatures in the broadcast
-   signal to ensure the authenticity and integrity of the GPS data,
-   protecting against spoofing attacks.
+                                 Table 1
 
 9.  Authorization Policy Implementers
 
