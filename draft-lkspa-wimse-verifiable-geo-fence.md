@@ -146,7 +146,7 @@ To meet data residency legal requirements, enterprises need to verify that workl
 ### Server workload <-> Server workload - Agentic AI:
 Enterprises need to ensure that the AI agent is located within a specific geographic boundary when downloading sensitive data or performing other sensitive operations. A secure AI agent, running on a trusted host with TPM-backed attestation, interacts with geolocation and geofencing services to obtain verifiable proof of its geographic boundary. The agent periodically collects location data from trusted sensors, obtains attested composite location from a geolocation service, and enforces geofence policies via a geofencing service. The resulting attested geofence proof is used to bind workload identity to both the host and its geographic location, enabling secure, policy-driven execution of AI workloads and compliance with data residency requirements.
 
-[Figure -- Cybersecure and Compliant Agentic AI Workflow](https://github.com/nedmsmith/draft-klspa-wimse-verifiable-geo-fence/blob/ramki-mod2/pictures/secure-agentic-workflow.svg/)
+[Figure -- Cybersecure and Compliant Agentic AI Workflow](https://github.com/nedmsmith/draft-klspa-wimse-verifiable-geo-fence/blob/main/pictures/secure-agentic-workflow.svg/)
 
 ### User workload <-> Server workload:
 Enterprises ensure that they are communicating with a server (e.g., cloud services) located within a specific geographic boundary.
@@ -184,7 +184,7 @@ Data residency use cases motivate the following requirements:
 
 # Approach Summary
 
-Host contains location devices like mobile sensor, GPS sensor, Wi-Fi sensor, GNSS sensor, etc. Host is a compute node, including servers, routers, and end-user appliances like smartphones, tablets, or PCs.
+Host contains location devices like mobile sensor, GPS sensor, GNSS sensor, etc. Host is a compute node, including servers, routers, and end-user appliances like smartphones, tablets, or PCs.
 Host has a discrete TPM. Note on TPM: The EK certificate is a digital certificate signed by the TPM manufacturer's CA which verifies the identity and trustworthiness of the TPM's Endorsement Key (EK); TPM attestation key (AK) is cryptographically backed by TPM EK.
 For the initial version of the draft, host is bare metal Linux OS host and interactions are with TPM.
 
@@ -210,13 +210,13 @@ The agent, using the geolocation plugin, can gather the location from host-local
 The agent has a TPM plugin (spire-tpm) which interacts with the TPM.
 The server (SPIFFE/SPIRE server) is running in a cluster which is isolated from the cluster in which the agent is running.
 
-[Figure -- Modified SPIFFE-SPIRE architecture with new geolocation plugin](https://github.com/nedmsmith/draft-klspa-wimse-verifiable-geo-fence/blob/ramki-mod2/pictures/spiffe-spire.svg)
+[Figure -- Modified SPIFFE-SPIRE architecture with new geolocation plugin](https://github.com/nedmsmith/draft-klspa-wimse-verifiable-geo-fence/blob/main/pictures/spiffe-spire.svg)
 
 # End-to-End Workflow
 
 The end-to-end workflow for the proposed framework consists of several key steps, including attestation for system bootstrap and agent initialization, agent geolocation and geofencing processing, workload attestation, and remote verification.
 
-[Figure -- End-to-end Workflow](https://github.com/nedmsmith/draft-klspa-wimse-verifiable-geo-fence/blob/ramki-mod2/pictures/end-to-end-flow.svg)
+[Figure -- End-to-end Workflow](https://github.com/nedmsmith/draft-klspa-wimse-verifiable-geo-fence/blob/main/pictures/end-to-end-flow.svg)
 
 ## Attestation for System Bootstrap and Agent Initialization
 
@@ -366,12 +366,10 @@ Workload ID (WID), with location field, in the form of a proof-of-residency cert
 | Component  | Functionality       | Comments |
 |---|---|---|
 | Host | The system that is composed of all of the following software or hardware components. | |
-| Trusted hardware devices (focus on geolocation) | Storage root of trust: * TPM - Location root of trust options: GPS sensor, GNSS sensor - signal authentication prevents spoofing [galileo], Mobile sensor: modem, antenna, SIM - Mobile device location is obtained from mobile network operator and not from device, Wi-Fi sensor: modem, antenna | |
+| Trusted hardware devices (focus on geolocation) | Storage root of trust: <ul><li>TPM</li></ul> Location root of trust options: <ul><li>GPS sensor</li><li>GNSS sensor - signal authentication prevents spoofing [galileo]</li><li>Mobile sensor - modem, antenna, SIM - Mobile device location is obtained from mobile network operator and not from device</li></ul> | |
 | Boot loader | All the devices (version/firmware) in a platform are trusted and measured during each boot (boot loader enhancement). Any new device (e.g., mobile location sensor) which is hot-swapped in will be evaluated for inclusion only during next reboot. | |
-| Trusted OS | Trusted drivers for storage/location root of trust. Does not tamper GPS location/Wi-Fi data. | |
-| Geolocation Agent SW - OS level service | Trusted application. Does not tamper GPS location/Wi-Fi data. Signs GPS location data (latitude/longitude/altitude), proximal Wi-Fi access points using TPM attestation key. | Possibly a SPIRE-agent plug-in with TPM attestation. |
-
-**Note**: A GPS sensor with a cryptographic signature, also known as GNSS signal authentication, uses digital signatures in the broadcast signal to ensure the authenticity and integrity of the GPS data, protecting against spoofing attacks.
+| Trusted OS | Trusted drivers for storage/location root of trust. Does not tamper with GPS location/GNSS location data. | |
+| Geolocation Agent SW - OS level service | Trusted application. Does not tamper with GPS location and GNSS location data. Signs GPS and GNSS location data (latitude/longitude/altitude) using TPM attestation key. | |
 
 # Authorization Policy Implementers
 
