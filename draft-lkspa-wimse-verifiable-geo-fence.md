@@ -184,7 +184,7 @@ Data residency use cases motivate the following requirements:
 
 # Approach Summary
 
-Host contains location devices like mobile sensor, GPS sensor, Wi-Fi sensor, GNSS sensor, etc. Host is a compute node, including servers, routers, and end-user appliances like smartphones, tablets, or PCs.
+Host contains location devices like mobile sensor, GPS sensor, GNSS sensor, etc. Host is a compute node, including servers, routers, and end-user appliances like smartphones, tablets, or PCs.
 Host has a discrete TPM. Note on TPM: The EK certificate is a digital certificate signed by the TPM manufacturer's CA which verifies the identity and trustworthiness of the TPM's Endorsement Key (EK); TPM attestation key (AK) is cryptographically backed by TPM EK.
 For the initial version of the draft, host is bare metal Linux OS host and interactions are with TPM.
 
@@ -366,12 +366,10 @@ Workload ID (WID), with location field, in the form of a proof-of-residency cert
 | Component  | Functionality       | Comments |
 |---|---|---|
 | Host | The system that is composed of all of the following software or hardware components. | |
-| Trusted hardware devices (focus on geolocation) | Storage root of trust: * TPM - Location root of trust options: GPS sensor, GNSS sensor - signal authentication prevents spoofing [galileo], Mobile sensor: modem, antenna, SIM - Mobile device location is obtained from mobile network operator and not from device, Wi-Fi sensor: modem, antenna | |
+| Trusted hardware devices (focus on geolocation) | Storage root of trust: * TPM - Location root of trust options: GPS sensor, GNSS sensor - signal authentication prevents spoofing [galileo], Mobile sensor: modem, antenna, SIM - Mobile device location is obtained from mobile network operator and not from device | |
 | Boot loader | All the devices (version/firmware) in a platform are trusted and measured during each boot (boot loader enhancement). Any new device (e.g., mobile location sensor) which is hot-swapped in will be evaluated for inclusion only during next reboot. | |
-| Trusted OS | Trusted drivers for storage/location root of trust. Does not tamper GPS location/Wi-Fi data. | |
-| Geolocation Agent SW - OS level service | Trusted application. Does not tamper GPS location/Wi-Fi data. Signs GPS location data (latitude/longitude/altitude), proximal Wi-Fi access points using TPM attestation key. | Possibly a SPIRE-agent plug-in with TPM attestation. |
-
-**Note**: A GPS sensor with a cryptographic signature, also known as GNSS signal authentication, uses digital signatures in the broadcast signal to ensure the authenticity and integrity of the GPS data, protecting against spoofing attacks.
+| Trusted OS | Trusted drivers for storage/location root of trust. Does not tamper GPS location/GNSS location data. | |
+| Geolocation Agent SW - OS level service | Trusted application. Does not tamper GPS location/GNSS location data. Signs GPS/GNSS location data (latitude/longitude/altitude) using TPM attestation key. | Possibly a SPIRE-agent plug-in with TPM attestation. |
 
 # Authorization Policy Implementers
 
