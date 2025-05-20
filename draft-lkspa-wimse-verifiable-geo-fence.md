@@ -368,8 +368,8 @@ Workload ID (WID), with location field, in the form of a proof-of-residency cert
 | Host | The system that is composed of all of the following software or hardware components. | |
 | Trusted hardware devices (focus on geolocation) | Storage root of trust: <ul><li>TPM</li></ul> Location root of trust options: <ul><li>GPS sensor</li><li>GNSS sensor - signal authentication prevents spoofing [galileo]</li></ul> Mobile sensor: <ul><li>modem</li><li>antenna</li><li>SIM - Mobile device location is obtained from mobile network operator and not from device</li></ul> | |
 | Boot loader | All the devices (version/firmware) in a platform are trusted and measured during each boot (boot loader enhancement). Any new device (e.g., mobile location sensor) which is hot-swapped in will be evaluated for inclusion only during next reboot. | |
-| Trusted OS | Trusted drivers for storage/location root of trust. Does not tamper GPS location/GNSS location data. | |
-| Geolocation Agent SW - OS level service | Trusted application. Does not tamper GPS location and GNSS location data. Signs GPS and GNSS location data (latitude/longitude/altitude) using TPM attestation key. | |
+| Trusted OS | Trusted drivers for storage/location root of trust. Does not tamper with GPS location/GNSS location data. | |
+| Geolocation Agent SW - OS level service | Trusted application. Does not tamper with GPS location and GNSS location data. Signs GPS and GNSS location data (latitude/longitude/altitude) using TPM attestation key. | |
 
 # Authorization Policy Implementers
 
