@@ -201,7 +201,7 @@ Table of Contents
 
    Figure -- Cybersecure and Compliant Agentic AI Workflow
    (https://github.com/nedmsmith/draft-klspa-wimse-verifiable-geo-
-   fence/blob/ramki-mod2/pictures/secure-agentic-workflow.svg/)
+   fence/blob/main/pictures/secure-agentic-workflow.svg/)
 
 3.1.3.  User workload <-> Server workload:
 
@@ -309,7 +309,7 @@ Table of Contents
 
    Figure -- Modified SPIFFE-SPIRE architecture with new geolocation
    plugin (https://github.com/nedmsmith/draft-klspa-wimse-verifiable-
-   geo-fence/blob/ramki-mod2/pictures/spiffe-spire.svg)
+   geo-fence/blob/main/pictures/spiffe-spire.svg)
 
 6.  End-to-End Workflow
 
@@ -319,7 +319,7 @@ Table of Contents
    workload attestation, and remote verification.
 
    Figure -- End-to-end Workflow (https://github.com/nedmsmith/draft-
-   klspa-wimse-verifiable-geo-fence/blob/ramki-mod2/pictures/end-to-end-
+   klspa-wimse-verifiable-geo-fence/blob/main/pictures/end-to-end-
    flow.svg)
 
 6.1.  Attestation for System Bootstrap and Agent Initialization
