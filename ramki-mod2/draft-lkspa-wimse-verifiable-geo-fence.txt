@@ -568,7 +568,7 @@ Table of Contents
      | (focus on    | sensor</li><li>GNSS sensor -       |          |
      | geolocation) | signal authentication prevents     |          |
      |              | spoofing [galileo]</li><li>Mobile  |          |
-     |              | sensor -- modem, antenna, SIM --   |          |
+     |              | sensor - modem, antenna, SIM -     |          |
      |              | Mobile device location is obtained |          |
      |              | from mobile network operator and   |          |
      |              | not from device</li></ul>          |          |
