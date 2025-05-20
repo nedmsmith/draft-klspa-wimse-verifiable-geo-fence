@@ -87,10 +87,10 @@ Table of Contents
      3.1.  Category 1: Server-centric Location
        3.1.1.  Server workload <-> Server workload - General:
        3.1.2.  Server workload <-> Server workload - Agentic AI:
-       3.1.3.  User workload <-> Server workload:
+       3.1.3.  Server workload <-> Server workload - Federated AI:
+       3.1.4.  User workload <-> Server workload:
      3.2.  Category 2: User-centric Location
      3.3.  Category 3: Regulatory Compliance
-     3.4.  Data Residency Requirements
    4.  Approach Summary
    5.  SPIFFE/SPIRE Architecture Modifications
    6.  End-to-End Workflow
@@ -203,7 +203,16 @@ Table of Contents
    (https://github.com/nedmsmith/draft-klspa-wimse-verifiable-geo-
    fence/blob/main/pictures/secure-agentic-workflow.svg/)
 
-3.1.3.  User workload <-> Server workload:
+3.1.3.  Server workload <-> Server workload - Federated AI:
+
+   In federated learning scenarios, multiple organizations collaborate
+   to train machine learning models without sharing raw data.  Each
+   organization needs to ensure that its training data remains within a
+   specific geographic boundary.  This requires cryptographic proof that
+   the training process is occurring on trusted hosts within the defined
+   boundaries.
+
+3.1.4.  User workload <-> Server workload:
 
    Enterprises ensure that they are communicating with a server (e.g.,
    cloud services) located within a specific geographic boundary.
@@ -242,19 +251,6 @@ Table of Contents
 
    Geographic boundary attestation helps satisfy data residency and data
    sovereignty requirements for regulatory compliance.
-
-3.4.  Data Residency Requirements
-
-   Data residency use cases motivate the following requirements:
-
-   *  Location-specific verifiable claims.
-
-   *  Standards-based attestation of geographic location claims.
-
-   *  Interoperable policy enforcement for audit and compliance.
-
-   *  Security guarantees that are portable across diverse deployment
-      topologies.
 
 4.  Approach Summary
 
