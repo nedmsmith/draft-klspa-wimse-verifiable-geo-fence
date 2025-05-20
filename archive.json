@@ -1,6 +1,6 @@
 {
   "magic": "E!vIA5L86J2I",
-  "timestamp": "2025-05-18T01:15:27.310388+00:00",
+  "timestamp": "2025-05-20T01:12:06.666909+00:00",
   "repo": "nedmsmith/draft-klspa-wimse-verifiable-geo-fence",
   "labels": [
     {
@@ -424,26 +424,42 @@
       "id": "PR_kwDOOmshaM6WaU1b",
       "title": "Ramki mod2",
       "url": "https://github.com/nedmsmith/draft-klspa-wimse-verifiable-geo-fence/pull/8",
-      "state": "OPEN",
+      "state": "MERGED",
       "author": "ramkri123",
       "authorAssociation": "COLLABORATOR",
       "assignees": [],
       "labels": [],
       "body": "",
       "createdAt": "2025-05-16T02:59:37Z",
-      "updatedAt": "2025-05-17T22:13:37Z",
+      "updatedAt": "2025-05-19T22:50:43Z",
       "baseRepository": "nedmsmith/draft-klspa-wimse-verifiable-geo-fence",
       "baseRefName": "main",
       "baseRefOid": "e5f6dc980acf68bbd9781e78c2b3d30793afe9e9",
       "headRepository": "nedmsmith/draft-klspa-wimse-verifiable-geo-fence",
       "headRefName": "ramki-mod2",
-      "headRefOid": "c13541a4dbb8c77ac56ac314fcb136eef5cf056d",
-      "closedAt": null,
-      "mergedAt": null,
-      "mergedBy": null,
-      "mergeCommit": null,
+      "headRefOid": "7dcc828a9da60ce109c4cbed4b2600b7678365f0",
+      "closedAt": "2025-05-19T22:50:43Z",
+      "mergedAt": "2025-05-19T22:50:42Z",
+      "mergedBy": "ramkri123",
+      "mergeCommit": {
+        "oid": "6f1c756d137d9cb2ab43093b0c2ce1f43e1a6b65"
+      },
       "comments": [],
-      "reviews": []
+      "reviews": [
+        {
+          "id": "PRR_kwDOOmshaM6qACgE",
+          "commit": {
+            "abbreviatedOid": "7dcc828"
+          },
+          "author": "nedmsmith",
+          "authorAssociation": "OWNER",
+          "state": "APPROVED",
+          "body": "LGTM",
+          "createdAt": "2025-05-19T22:49:42Z",
+          "updatedAt": "2025-05-19T22:49:42Z",
+          "comments": []
+        }
+      ]
     },
     {
       "number": 9,
@@ -470,6 +486,193 @@
       "mergeCommit": null,
       "comments": [],
       "reviews": []
+    },
+    {
+      "number": 10,
+      "id": "PR_kwDOOmshaM6WmXwr",
+      "title": "Update draft-lkspa-wimse-verifiable-geo-fence.md",
+      "url": "https://github.com/nedmsmith/draft-klspa-wimse-verifiable-geo-fence/pull/10",
+      "state": "CLOSED",
+      "author": "ramkri123",
+      "authorAssociation": "COLLABORATOR",
+      "assignees": [],
+      "labels": [],
+      "body": "",
+      "createdAt": "2025-05-18T05:18:00Z",
+      "updatedAt": "2025-05-18T05:19:46Z",
+      "baseRepository": "nedmsmith/draft-klspa-wimse-verifiable-geo-fence",
+      "baseRefName": "main",
+      "baseRefOid": "e5f6dc980acf68bbd9781e78c2b3d30793afe9e9",
+      "headRepository": "nedmsmith/draft-klspa-wimse-verifiable-geo-fence",
+      "headRefName": "ramkri123-patch-2",
+      "headRefOid": "3f3dbf7189f97a51496973bff4e64fc44babbff7",
+      "closedAt": "2025-05-18T05:19:45Z",
+      "mergedAt": null,
+      "mergedBy": null,
+      "mergeCommit": null,
+      "comments": [],
+      "reviews": []
+    },
+    {
+      "number": 11,
+      "id": "PR_kwDOOmshaM6WzCtx",
+      "title": "Ramki mod2",
+      "url": "https://github.com/nedmsmith/draft-klspa-wimse-verifiable-geo-fence/pull/11",
+      "state": "MERGED",
+      "author": "ramkri123",
+      "authorAssociation": "COLLABORATOR",
+      "assignees": [],
+      "labels": [],
+      "body": "more cleanup",
+      "createdAt": "2025-05-19T23:24:06Z",
+      "updatedAt": "2025-05-20T00:55:46Z",
+      "baseRepository": "nedmsmith/draft-klspa-wimse-verifiable-geo-fence",
+      "baseRefName": "main",
+      "baseRefOid": "6f1c756d137d9cb2ab43093b0c2ce1f43e1a6b65",
+      "headRepository": "nedmsmith/draft-klspa-wimse-verifiable-geo-fence",
+      "headRefName": "ramki-mod2",
+      "headRefOid": "4fd93a87952fc1fd56350693e93b8aa06b1f8c2c",
+      "closedAt": "2025-05-20T00:55:46Z",
+      "mergedAt": "2025-05-20T00:55:46Z",
+      "mergedBy": "ramkri123",
+      "mergeCommit": {
+        "oid": "a5a8005b38e32a565eb98b808ef4341fd59f61bc"
+      },
+      "comments": [
+        {
+          "author": "ramkri123",
+          "authorAssociation": "COLLABORATOR",
+          "body": "fixed",
+          "createdAt": "2025-05-20T00:07:21Z",
+          "updatedAt": "2025-05-20T00:07:21Z"
+        }
+      ],
+      "reviews": [
+        {
+          "id": "PRR_kwDOOmshaM6qALNi",
+          "commit": {
+            "abbreviatedOid": "b2a0f59"
+          },
+          "author": "copilot-pull-request-reviewer",
+          "authorAssociation": "NONE",
+          "state": "COMMENTED",
+          "body": "## Pull Request Overview\n\nThis PR cleans up the markdown document by refining heading levels, standardizing figure labels, and improving whitespace for readability.\n\n- Converted key bullet items into proper markdown headers (`###`, `##`, etc.).\n- Standardized figure link captions with a consistent prefix.\n- Reorganized sections around SPIFFE/SPIRE architecture and end-to-end workflow with added blank lines.\n\n\n<details>\n<summary>Comments suppressed due to low confidence (1)</summary>\n\n**draft-lkspa-wimse-verifiable-geo-fence.md:143**\n* Fix the typo 'compmliance' to 'compliance'.\n```\nEnterprises handling of sensitive data relies on dedicated cloud hosts (e.g., EU sovereign cloud providers) that ensure compmliance to data residency laws, while also ensuring appropriate levels of service (e.g., high availability).\n```\n</details>\n\n",
+          "createdAt": "2025-05-19T23:26:03Z",
+          "updatedAt": "2025-05-19T23:26:04Z",
+          "comments": [
+            {
+              "originalPosition": 17,
+              "body": "[nitpick] Bold formatting inside an H3 header is redundant; consider removing the `**` markers and relying on the heading style alone.",
+              "createdAt": "2025-05-19T23:26:03Z",
+              "updatedAt": "2025-05-19T23:26:04Z"
+            },
+            {
+              "originalPosition": 14,
+              "body": "[nitpick] Consider using sequential figure numbers (e.g., 'Figure 1:') instead of '--' to improve cross-references in the document.\n```suggestion\n[Figure 1: Cybersecure and Compliant Agentic AI Workflow](https://github.com/nedmsmith/draft-klspa-wimse-verifiable-geo-fence/blob/ramki-mod2/pictures/secure-agentic-workflow.svg/)\n```",
+              "createdAt": "2025-05-19T23:26:03Z",
+              "updatedAt": "2025-05-19T23:26:04Z"
+            },
+            {
+              "originalPosition": 45,
+              "body": "[nitpick] This main section appears under higher\u2010level headings; use `##` instead of `#` to keep a consistent hierarchy.\n```suggestion\n## SPIFFE/SPIRE Architecture modifications\n```",
+              "createdAt": "2025-05-19T23:26:03Z",
+              "updatedAt": "2025-05-19T23:26:04Z"
+            },
+            {
+              "originalPosition": 55,
+              "body": "[nitpick] Use `##` for this section header to maintain consistency with other level\u20102 headings.\n```suggestion\n## End-to-End Workflow\n```",
+              "createdAt": "2025-05-19T23:26:03Z",
+              "updatedAt": "2025-05-19T23:26:04Z"
+            }
+          ]
+        },
+        {
+          "id": "PRR_kwDOOmshaM6qAUKo",
+          "commit": {
+            "abbreviatedOid": "b2a0f59"
+          },
+          "author": "ramkri123",
+          "authorAssociation": "COLLABORATOR",
+          "state": "COMMENTED",
+          "body": "",
+          "createdAt": "2025-05-20T00:06:02Z",
+          "updatedAt": "2025-05-20T00:06:03Z",
+          "comments": [
+            {
+              "originalPosition": 14,
+              "body": "LGTM",
+              "createdAt": "2025-05-20T00:06:02Z",
+              "updatedAt": "2025-05-20T00:06:03Z"
+            }
+          ]
+        },
+        {
+          "id": "PRR_kwDOOmshaM6qAYpq",
+          "commit": {
+            "abbreviatedOid": "4fd93a8"
+          },
+          "author": "nedmsmith",
+          "authorAssociation": "OWNER",
+          "state": "APPROVED",
+          "body": "LGTM",
+          "createdAt": "2025-05-20T00:25:40Z",
+          "updatedAt": "2025-05-20T00:25:40Z",
+          "comments": []
+        }
+      ]
+    },
+    {
+      "number": 12,
+      "id": "PR_kwDOOmshaM6WzaF7",
+      "title": "Update draft-lkspa-wimse-verifiable-geo-fence.md",
+      "url": "https://github.com/nedmsmith/draft-klspa-wimse-verifiable-geo-fence/pull/12",
+      "state": "OPEN",
+      "author": "ramkri123",
+      "authorAssociation": "COLLABORATOR",
+      "assignees": [],
+      "labels": [],
+      "body": "more cleanup",
+      "createdAt": "2025-05-20T01:05:06Z",
+      "updatedAt": "2025-05-20T01:09:13Z",
+      "baseRepository": "nedmsmith/draft-klspa-wimse-verifiable-geo-fence",
+      "baseRefName": "main",
+      "baseRefOid": "a5a8005b38e32a565eb98b808ef4341fd59f61bc",
+      "headRepository": "nedmsmith/draft-klspa-wimse-verifiable-geo-fence",
+      "headRefName": "ramki-mod2",
+      "headRefOid": "2d0a5b4e376b73d74b6ab5fd6b92b142c7f9b5e3",
+      "closedAt": null,
+      "mergedAt": null,
+      "mergedBy": null,
+      "mergeCommit": null,
+      "comments": [],
+      "reviews": [
+        {
+          "id": "PRR_kwDOOmshaM6qAiUU",
+          "commit": {
+            "abbreviatedOid": "0258bd2"
+          },
+          "author": "copilot-pull-request-reviewer",
+          "authorAssociation": "NONE",
+          "state": "COMMENTED",
+          "body": "## Pull Request Overview\n\nCleanup of sensor references and standardization of GNSS terminology in the verifiable geo-fence draft.\n\n- Removed Wi-Fi sensor references from host description and geolocation components\n- Updated table rows for Trusted OS and Geolocation Agent to replace Wi-Fi with GNSS and harmonize terminology\n\n\n<details>\n<summary>Comments suppressed due to low confidence (1)</summary>\n\n**draft-lkspa-wimse-verifiable-geo-fence.md:186**\n* Add a space after the markdown list dash (e.g., `- Host`) to ensure proper rendering of the bullet item.\n```\n-Host contains location devices like mobile sensor, GPS sensor, GNSS sensor, etc. Host is a compute node, including servers, routers, and end-user appliances like smartphones, tablets, or PCs.\n```\n</details>\n\n",
+          "createdAt": "2025-05-20T01:06:25Z",
+          "updatedAt": "2025-05-20T01:06:26Z",
+          "comments": [
+            {
+              "originalPosition": 21,
+              "body": "Include \"with\" after \"tamper\" (e.g., \"Does not tamper with GPS/GNSS location data\") for correct grammar.\n```suggestion\n| Trusted OS | Trusted drivers for storage/location root of trust. Does not tamper with GPS location/GNSS location data. | |\n| Geolocation Agent SW - OS level service | Trusted application. Does not tamper with GPS location/GNSS location data. Signs GPS/GNSS location data (latitude/longitude/altitude) using TPM attestation key. | Possibly a SPIRE-agent plug-in with TPM attestation. |\n```",
+              "createdAt": "2025-05-20T01:06:25Z",
+              "updatedAt": "2025-05-20T01:06:26Z"
+            },
+            {
+              "originalPosition": 21,
+              "body": "Include \"with\" after \"tamper\" (e.g., \"Does not tamper with GPS/GNSS location data\") for correct grammar.\n```suggestion\n| Geolocation Agent SW - OS level service | Trusted application. Does not tamper with GPS location/GNSS location data. Signs GPS/GNSS location data (latitude/longitude/altitude) using TPM attestation key. | Possibly a SPIRE-agent plug-in with TPM attestation. |\n```",
+              "createdAt": "2025-05-20T01:06:26Z",
+              "updatedAt": "2025-05-20T01:06:26Z"
+            }
+          ]
+        }
+      ]
     }
   ]
 }
