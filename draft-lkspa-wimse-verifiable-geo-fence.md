@@ -148,6 +148,9 @@ Enterprises need to ensure that the AI agent is located within a specific geogra
 
 [Figure -- Cybersecure and Compliant Agentic AI Workflow](https://github.com/nedmsmith/draft-klspa-wimse-verifiable-geo-fence/blob/main/pictures/secure-agentic-workflow.svg/)
 
+### Server workload <-> Server workload - Federated AI:
+In federated learning scenarios, multiple organizations collaborate to train machine learning models without sharing raw data. Each organization needs to ensure that its training data remains within a specific geographic boundary. This requires cryptographic proof that the training process is occurring on trusted hosts within the defined boundaries.
+
 ### User workload <-> Server workload:
 Enterprises ensure that they are communicating with a server (e.g., cloud services) located within a specific geographic boundary.
 
@@ -173,14 +176,6 @@ Geolocation enforcement can ensure policy compliance. See [doj-cisa].
 
 Geographic boundary attestation helps satisfy data residency and data sovereignty requirements for regulatory compliance.
 
-## Data Residency Requirements
-
-Data residency use cases motivate the following requirements:
-
-* Location-specific verifiable claims.
-* Standards-based attestation of geographic location claims.
-* Interoperable policy enforcement for audit and compliance.
-* Security guarantees that are portable across diverse deployment topologies.
 
 # Approach Summary
 
