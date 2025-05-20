@@ -135,23 +135,23 @@ An example of platform identity binding (i.e., host affinity) is described in [t
 
 Data residency use cases can be divided into three categories, (1) server-centric location, (2) user-centric location, and (3) regulatority compliance.
 
-## **Category 1**: Server-centric Location
+## Category 1: Server-centric Location
 
 Enterprises (e.g., healthcare, banking) need cryptographic proof of trustworthy geographic boundary (i.e., region, zone, countries, state etc.) for cloud facing workloads.
 
-### **Server workload <-> Server workload - General**:
-Enterprises handling of sensitive data relies on dedicated cloud hosts (e.g., EU sovereign cloud providers) that ensure compmliance to data residency laws, while also ensuring appropriate levels of service (e.g., high availability).
+### Server workload <-> Server workload - General:
+Enterprises handling of sensitive data relies on dedicated cloud hosts (e.g., EU sovereign cloud providers) that ensure compliance to data residency laws, while also ensuring appropriate levels of service (e.g., high availability).
 To meet data residency legal requirements, enterprises need to verify workload data is processed by hosts that are within a geographic boundary and workload data is only transmitted between specified geographic boundaries.
 
-### **Server workload <-> Server workload - Agentic AI**:
+### Server workload <-> Server workload - Agentic AI:
 Enterprises need to ensure that the AI agent is located in a specific geographic boundary when downloading sensitive data or performing other sensitive operations. A secure AI agent, running on a trusted host with TPM-backed attestation, interacts with geo-location and geo-fencing services to obtain verifiable proof of its geographic boundary. The agent periodically collects location data from trusted sensors, obtains attested composite location from a geo-location service, and enforces geo-fence policies via a geo-fencing service. The resulting attested geo-fence proof is used to bind workload identity to both the host and its geographic location, enabling secure, policy-driven execution of AI workloads and compliance with data residency requirements.
 
 [Figure -- Cybersecure and Compliant Agentic AI Workflow](https://github.com/nedmsmith/draft-klspa-wimse-verifiable-geo-fence/blob/ramki-mod2/pictures/secure-agentic-workflow.svg/)
 
-### **User workload <-> Server workload**:
+### User workload <-> Server workload:
 Enterprises ensure that it is communicating with a server (e.g., cloud services) located within a specific geographic boundary.
 
-## **Category 2**: User-centric Location
+## Category 2: User-centric Location
 
 Enterprises need cryptographic proof of trustworthy geographic boundary for user facing workloads.
 
@@ -169,7 +169,7 @@ Enabling per-user or group-level geo-fencing helps prevent fraudulent access ori
 However, those personnel should not be allowed to support U.S. customers.
 Geo-location enforcement can ensure policy compliance. See [doj-cisa].
 
-## **Category 3**: Regulatory Compliance
+## Category 3: Regulatory Compliance
 
 Geographic boundary attestation helps satisfy data residency and data sovereignty requirements for regulatory compliance.
 
