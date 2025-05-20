@@ -581,12 +581,12 @@ Table of Contents
     |            | for inclusion only during next reboot.    |        |
     +------------+-------------------------------------------+--------+
     |Trusted OS  | Trusted drivers for storage/location root |        |
-    |            | of trust.  Does not tamper GPS location/  |        |
-    |            | GNSS location data.                       |        |
+    |            | of trust.  Does not tamper with GPS       |        |
+    |            | location/GNSS location data.              |        |
     +------------+-------------------------------------------+--------+
-    |Geolocation | Trusted application.  Does not tamper GPS |        |
-    |Agent SW -  | location and GNSS location data.  Signs   |        |
-    |OS level    | GPS and GNSS location data                |        |
+    |Geolocation | Trusted application.  Does not tamper     |        |
+    |Agent SW -  | with GPS location and GNSS location data. |        |
+    |OS level    | Signs GPS and GNSS location data          |        |
     |service     | (latitude/longitude/altitude) using TPM   |        |
     |            | attestation key.                          |        |
     +------------+-------------------------------------------+--------+
