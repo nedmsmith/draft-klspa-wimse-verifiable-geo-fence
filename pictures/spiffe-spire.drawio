@@ -1,13 +1,13 @@
 <mxfile host="Electron" agent="Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) AppleWebKit/537.36 (KHTML, like Gecko) draw.io/27.0.5 Chrome/134.0.6998.205 Electron/35.3.0 Safari/537.36" version="27.0.5">
   <diagram id="2VQHhJNhCnzlioAi6BD_" name="aaa - spiffe/spire changes">
-    <mxGraphModel dx="674" dy="484" grid="1" gridSize="10" guides="1" tooltips="1" connect="1" arrows="1" fold="1" page="1" pageScale="1" pageWidth="850" pageHeight="1100" math="0" shadow="0">
+    <mxGraphModel dx="1226" dy="484" grid="1" gridSize="10" guides="1" tooltips="1" connect="1" arrows="1" fold="1" page="1" pageScale="1" pageWidth="850" pageHeight="1100" math="0" shadow="0">
       <root>
         <mxCell id="0" />
         <mxCell id="1" parent="0" />
         <mxCell id="-SUvIGbLGrSTdE-WU8yp-4" value="SPIFFE/SPIRE server" style="shape=umlLifeline;perimeter=lifelinePerimeter;whiteSpace=wrap;html=1;container=0;dropTarget=0;collapsible=0;recursiveResize=0;outlineConnect=0;portConstraint=eastwest;newEdgeStyle={&quot;edgeStyle&quot;:&quot;elbowEdgeStyle&quot;,&quot;elbow&quot;:&quot;vertical&quot;,&quot;curved&quot;:0,&quot;rounded&quot;:0};" parent="1" vertex="1">
           <mxGeometry x="181" y="120" width="560" height="38" as="geometry" />
         </mxCell>
-        <mxCell id="DD6ECQUUG42n5GaF7X_1-1" value="" style="endArrow=classic;html=1;rounded=0;exitX=0.286;exitY=0;exitDx=0;exitDy=0;exitPerimeter=0;" parent="1" edge="1" source="f60JIynMeADsgDPcnIz2-1">
+        <mxCell id="DD6ECQUUG42n5GaF7X_1-1" value="" style="endArrow=classic;html=1;rounded=0;exitX=0.286;exitY=0;exitDx=0;exitDy=0;exitPerimeter=0;" parent="1" source="f60JIynMeADsgDPcnIz2-1" edge="1">
           <mxGeometry width="50" height="50" relative="1" as="geometry">
             <mxPoint x="120" y="260" as="sourcePoint" />
             <mxPoint x="280" y="160" as="targetPoint" />
@@ -16,7 +16,7 @@
         <mxCell id="DD6ECQUUG42n5GaF7X_1-2" value="Agent sends proof of residency (TPM plugin) and geographic boundary (geo-location plugin) to server" style="text;html=1;align=center;verticalAlign=middle;whiteSpace=wrap;rounded=0;" parent="1" vertex="1">
           <mxGeometry x="127" y="192" width="205" height="60" as="geometry" />
         </mxCell>
-        <mxCell id="DD6ECQUUG42n5GaF7X_1-3" value="" style="endArrow=classic;html=1;rounded=0;entryX=0.704;entryY=0;entryDx=0;entryDy=0;entryPerimeter=0;" parent="1" edge="1" target="f60JIynMeADsgDPcnIz2-1">
+        <mxCell id="DD6ECQUUG42n5GaF7X_1-3" value="" style="endArrow=classic;html=1;rounded=0;entryX=0.704;entryY=0;entryDx=0;entryDy=0;entryPerimeter=0;" parent="1" target="f60JIynMeADsgDPcnIz2-1" edge="1">
           <mxGeometry width="50" height="50" relative="1" as="geometry">
             <mxPoint x="640" y="160" as="sourcePoint" />
             <mxPoint x="280" y="260" as="targetPoint" />
@@ -25,10 +25,10 @@
         <mxCell id="DD6ECQUUG42n5GaF7X_1-4" value="If validation successful, server issues agent identity in the form of X.509 SVID with TPM public key and geographic boundary (e.g. Russia)" style="text;html=1;align=center;verticalAlign=middle;whiteSpace=wrap;rounded=0;" parent="1" vertex="1">
           <mxGeometry x="614" y="177" width="200" height="70" as="geometry" />
         </mxCell>
-        <mxCell id="f60JIynMeADsgDPcnIz2-2" value="" style="group" vertex="1" connectable="0" parent="1">
+        <mxCell id="f60JIynMeADsgDPcnIz2-2" value="" style="group" parent="1" vertex="1" connectable="0">
           <mxGeometry x="320" y="260" width="280" height="220" as="geometry" />
         </mxCell>
-        <mxCell id="f60JIynMeADsgDPcnIz2-1" value="&lt;div&gt;&lt;br&gt;&lt;/div&gt;&lt;div&gt;&lt;br&gt;&lt;/div&gt;&lt;div&gt;&lt;br&gt;&lt;/div&gt;&lt;div&gt;&lt;br&gt;&lt;/div&gt;&lt;div&gt;&lt;br&gt;&lt;/div&gt;&lt;div&gt;&lt;br&gt;&lt;/div&gt;&lt;div&gt;&lt;br&gt;&lt;/div&gt;&lt;div&gt;&lt;br&gt;&lt;/div&gt;&lt;div&gt;&lt;br&gt;&lt;/div&gt;&lt;div&gt;&lt;br&gt;&lt;/div&gt;&lt;div&gt;&lt;br&gt;&lt;/div&gt;&lt;div&gt;&lt;br&gt;&lt;/div&gt;&lt;div&gt;Host (H)&lt;/div&gt;" style="rounded=0;whiteSpace=wrap;html=1;" vertex="1" parent="f60JIynMeADsgDPcnIz2-2">
+        <mxCell id="f60JIynMeADsgDPcnIz2-1" value="&lt;div&gt;&lt;br&gt;&lt;/div&gt;&lt;div&gt;&lt;br&gt;&lt;/div&gt;&lt;div&gt;&lt;br&gt;&lt;/div&gt;&lt;div&gt;&lt;br&gt;&lt;/div&gt;&lt;div&gt;&lt;br&gt;&lt;/div&gt;&lt;div&gt;&lt;br&gt;&lt;/div&gt;&lt;div&gt;&lt;br&gt;&lt;/div&gt;&lt;div&gt;&lt;br&gt;&lt;/div&gt;&lt;div&gt;&lt;br&gt;&lt;/div&gt;&lt;div&gt;&lt;br&gt;&lt;/div&gt;&lt;div&gt;&lt;br&gt;&lt;/div&gt;&lt;div&gt;&lt;br&gt;&lt;/div&gt;&lt;div&gt;Host (H)&lt;/div&gt;" style="rounded=0;whiteSpace=wrap;html=1;" parent="f60JIynMeADsgDPcnIz2-2" vertex="1">
           <mxGeometry width="280" height="220" as="geometry" />
         </mxCell>
         <mxCell id="-SUvIGbLGrSTdE-WU8yp-1" value="SPIFFE/SPIRE agent" style="shape=umlLifeline;perimeter=lifelinePerimeter;whiteSpace=wrap;html=1;container=0;dropTarget=0;collapsible=0;recursiveResize=0;outlineConnect=0;portConstraint=eastwest;newEdgeStyle={&quot;edgeStyle&quot;:&quot;elbowEdgeStyle&quot;,&quot;elbow&quot;:&quot;vertical&quot;,&quot;curved&quot;:0,&quot;rounded&quot;:0};" parent="f60JIynMeADsgDPcnIz2-2" vertex="1">
@@ -40,19 +40,19 @@
         <mxCell id="WhLGUPPFHZQR5hXoAFzZ-3" value="TPM plugin" style="shape=umlLifeline;perimeter=lifelinePerimeter;whiteSpace=wrap;html=1;container=0;dropTarget=0;collapsible=0;recursiveResize=0;outlineConnect=0;portConstraint=eastwest;newEdgeStyle={&quot;edgeStyle&quot;:&quot;elbowEdgeStyle&quot;,&quot;elbow&quot;:&quot;vertical&quot;,&quot;curved&quot;:0,&quot;rounded&quot;:0};" parent="f60JIynMeADsgDPcnIz2-2" vertex="1">
           <mxGeometry x="20" y="74" width="90" height="32" as="geometry" />
         </mxCell>
-        <mxCell id="f60JIynMeADsgDPcnIz2-5" value="GPS Hardware" style="shape=umlLifeline;perimeter=lifelinePerimeter;whiteSpace=wrap;html=1;container=0;dropTarget=0;collapsible=0;recursiveResize=0;outlineConnect=0;portConstraint=eastwest;newEdgeStyle={&quot;edgeStyle&quot;:&quot;elbowEdgeStyle&quot;,&quot;elbow&quot;:&quot;vertical&quot;,&quot;curved&quot;:0,&quot;rounded&quot;:0};" vertex="1" parent="f60JIynMeADsgDPcnIz2-2">
+        <mxCell id="f60JIynMeADsgDPcnIz2-5" value="GNSS Hardware" style="shape=umlLifeline;perimeter=lifelinePerimeter;whiteSpace=wrap;html=1;container=0;dropTarget=0;collapsible=0;recursiveResize=0;outlineConnect=0;portConstraint=eastwest;newEdgeStyle={&quot;edgeStyle&quot;:&quot;elbowEdgeStyle&quot;,&quot;elbow&quot;:&quot;vertical&quot;,&quot;curved&quot;:0,&quot;rounded&quot;:0};" parent="f60JIynMeADsgDPcnIz2-2" vertex="1">
           <mxGeometry x="150" y="137" width="100" height="32" as="geometry" />
         </mxCell>
-        <mxCell id="f60JIynMeADsgDPcnIz2-4" value="TPM Hardware" style="shape=umlLifeline;perimeter=lifelinePerimeter;whiteSpace=wrap;html=1;container=0;dropTarget=0;collapsible=0;recursiveResize=0;outlineConnect=0;portConstraint=eastwest;newEdgeStyle={&quot;edgeStyle&quot;:&quot;elbowEdgeStyle&quot;,&quot;elbow&quot;:&quot;vertical&quot;,&quot;curved&quot;:0,&quot;rounded&quot;:0};" vertex="1" parent="1">
+        <mxCell id="f60JIynMeADsgDPcnIz2-4" value="TPM Hardware" style="shape=umlLifeline;perimeter=lifelinePerimeter;whiteSpace=wrap;html=1;container=0;dropTarget=0;collapsible=0;recursiveResize=0;outlineConnect=0;portConstraint=eastwest;newEdgeStyle={&quot;edgeStyle&quot;:&quot;elbowEdgeStyle&quot;,&quot;elbow&quot;:&quot;vertical&quot;,&quot;curved&quot;:0,&quot;rounded&quot;:0};" parent="1" vertex="1">
           <mxGeometry x="340" y="397" width="90" height="32" as="geometry" />
         </mxCell>
-        <mxCell id="f60JIynMeADsgDPcnIz2-6" value="" style="endArrow=classic;html=1;rounded=0;" edge="1" parent="1">
+        <mxCell id="f60JIynMeADsgDPcnIz2-6" value="" style="endArrow=classic;html=1;rounded=0;" parent="1" edge="1">
           <mxGeometry width="50" height="50" relative="1" as="geometry">
             <mxPoint x="387" y="366" as="sourcePoint" />
             <mxPoint x="386.5" y="399" as="targetPoint" />
           </mxGeometry>
         </mxCell>
-        <mxCell id="f60JIynMeADsgDPcnIz2-7" value="" style="endArrow=classic;html=1;rounded=0;" edge="1" parent="1">
+        <mxCell id="f60JIynMeADsgDPcnIz2-7" value="" style="endArrow=classic;html=1;rounded=0;" parent="1" edge="1">
           <mxGeometry width="50" height="50" relative="1" as="geometry">
             <mxPoint x="519" y="366" as="sourcePoint" />
             <mxPoint x="518.5" y="399" as="targetPoint" />

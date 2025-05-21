@@ -1,9 +1,12 @@
 <mxfile host="Electron" agent="Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) AppleWebKit/537.36 (KHTML, like Gecko) draw.io/27.0.5 Chrome/134.0.6998.205 Electron/35.3.0 Safari/537.36" version="27.0.5">
   <diagram name="Page-1" id="xFBABuUxaobWXg4LbbgL">
-    <mxGraphModel dx="913" dy="484" grid="1" gridSize="10" guides="1" tooltips="1" connect="1" arrows="1" fold="1" page="1" pageScale="1" pageWidth="850" pageHeight="1100" math="0" shadow="0">
+    <mxGraphModel dx="1226" dy="484" grid="1" gridSize="10" guides="1" tooltips="1" connect="1" arrows="1" fold="1" page="1" pageScale="1" pageWidth="850" pageHeight="1100" math="0" shadow="0">
       <root>
         <mxCell id="0" />
         <mxCell id="1" parent="0" />
+        <mxCell id="nGVYVPovc6NEXlwRWxdk-8" value="&lt;div&gt;&lt;font style=&quot;font-size: 10px;&quot;&gt;&lt;br&gt;&lt;/font&gt;&lt;/div&gt;&lt;div&gt;&lt;font style=&quot;font-size: 10px;&quot;&gt;&lt;br&gt;&lt;/font&gt;&lt;/div&gt;&lt;div&gt;&lt;font style=&quot;font-size: 10px;&quot;&gt;&lt;br&gt;&lt;/font&gt;&lt;/div&gt;&lt;div&gt;&lt;font style=&quot;font-size: 10px;&quot;&gt;&lt;br&gt;&lt;/font&gt;&lt;/div&gt;&lt;div&gt;&lt;font style=&quot;font-size: 10px;&quot;&gt;&lt;br&gt;&lt;/font&gt;&lt;/div&gt;&lt;b&gt;&lt;font style=&quot;font-size: 10px;&quot;&gt;Server Host&lt;/font&gt;&lt;/b&gt;" style="whiteSpace=wrap;html=1;aspect=fixed;" vertex="1" parent="1">
+          <mxGeometry x="682" y="241" width="88" height="88" as="geometry" />
+        </mxCell>
         <mxCell id="Ej8hDgJhuvleFJYb6pgI-1" value="&lt;b&gt;&lt;font style=&quot;font-size: 24px;&quot;&gt;LLM&lt;/font&gt;&lt;/b&gt;" style="shape=process;whiteSpace=wrap;html=1;backgroundOutline=1;" parent="1" vertex="1">
           <mxGeometry x="40" y="21" width="800" height="80" as="geometry" />
         </mxCell>
@@ -52,7 +55,7 @@
         <mxCell id="9C-nL1wVZKxt1_RIX7sx-3" value="&lt;p&gt;&lt;b&gt;&lt;font style=&quot;font-size: 12px;&quot;&gt;(2) Agent Prompt 1&lt;/font&gt;&lt;/b&gt;: User prompt + tools it supports - SIEM + ZTNA gateway with MCP schema&lt;/p&gt;" style="text;html=1;align=center;verticalAlign=middle;whiteSpace=wrap;rounded=0;" parent="1" vertex="1">
           <mxGeometry x="6" y="165" width="114" height="80" as="geometry" />
         </mxCell>
-        <mxCell id="9C-nL1wVZKxt1_RIX7sx-7" value="&lt;b&gt;&lt;font style=&quot;font-size: 18px;&quot;&gt;AI Agent&lt;/font&gt;&lt;/b&gt;&lt;div&gt;&lt;b style=&quot;font-size: 10px; background-color: rgb(250, 250, 250); color: rgb(66, 66, 66); font-family: Aptos, sans-serif; text-align: start;&quot;&gt;&lt;span style=&quot;font-family: &amp;quot;Segoe UI&amp;quot;, sans-serif;&quot;&gt;Proof of residency&lt;/span&gt;&lt;/b&gt;&lt;span style=&quot;font-size: 10px; background-color: rgb(250, 250, 250); color: rgb(66, 66, 66); text-align: start; font-family: &amp;quot;Segoe UI&amp;quot;, sans-serif;&quot;&gt;&amp;nbsp;on a trusted host(s)&lt;/span&gt;&lt;/div&gt;&lt;div&gt;&lt;b style=&quot;color: rgb(66, 66, 66); font-family: Aptos, sans-serif; text-align: start;&quot;&gt;&lt;span style=&quot;font-family: &amp;quot;Segoe UI&amp;quot;, sans-serif;&quot;&gt;&lt;font style=&quot;font-size: 10px;&quot;&gt;Proof of geographic boundary&lt;/font&gt;&lt;/span&gt;&lt;/b&gt;&lt;span style=&quot;color: rgb(66, 66, 66); text-align: start; font-family: &amp;quot;Segoe UI&amp;quot;, sans-serif;&quot;&gt;&lt;font style=&quot;font-size: 10px;&quot;&gt; using trustworthy location sensors on trusted host(s)&lt;/font&gt;&lt;/span&gt;&lt;/div&gt;" style="rounded=1;whiteSpace=wrap;html=1;" parent="1" vertex="1">
+        <mxCell id="9C-nL1wVZKxt1_RIX7sx-7" value="&lt;b&gt;&lt;font style=&quot;font-size: 18px; background-color: light-dark(#ffffff, var(--ge-dark-color, #121212));&quot;&gt;AI Agent&lt;/font&gt;&lt;/b&gt;&lt;div&gt;&lt;span&gt;&lt;b style=&quot;font-size: 10px; color: rgb(66, 66, 66); font-family: Aptos, sans-serif; text-align: start; background-color: rgb(250, 250, 250);&quot;&gt;&lt;span style=&quot;font-family: &amp;quot;Segoe UI&amp;quot;, sans-serif;&quot;&gt;Proof of residency&lt;/span&gt;&lt;/b&gt;&lt;span style=&quot;font-size: 10px; color: rgb(66, 66, 66); text-align: start; font-family: &amp;quot;Segoe UI&amp;quot;, sans-serif; background-color: rgb(250, 250, 250);&quot;&gt;&amp;nbsp;on trusted host(s)&lt;/span&gt;&lt;/span&gt;&lt;/div&gt;&lt;div&gt;&lt;span&gt;&lt;b style=&quot;color: rgb(66, 66, 66); font-family: Aptos, sans-serif; text-align: start;&quot;&gt;&lt;span style=&quot;font-family: &amp;quot;Segoe UI&amp;quot;, sans-serif;&quot;&gt;&lt;font style=&quot;font-size: 10px;&quot;&gt;Proof of geographic boundary&lt;/font&gt;&lt;/span&gt;&lt;/b&gt;&lt;span style=&quot;color: rgb(66, 66, 66); text-align: start; font-family: &amp;quot;Segoe UI&amp;quot;, sans-serif;&quot;&gt;&lt;font style=&quot;font-size: 10px;&quot;&gt;&amp;nbsp;using trustworthy location sensors on trusted host(s)&lt;/font&gt;&lt;/span&gt;&lt;/span&gt;&lt;/div&gt;" style="rounded=1;whiteSpace=wrap;html=1;" parent="1" vertex="1">
           <mxGeometry x="200" y="240" width="480" height="70" as="geometry" />
         </mxCell>
         <mxCell id="9C-nL1wVZKxt1_RIX7sx-8" value="" style="endArrow=classic;html=1;rounded=0;exitX=0.5;exitY=0;exitDx=0;exitDy=0;" parent="1" source="9C-nL1wVZKxt1_RIX7sx-7" edge="1">
@@ -81,6 +84,60 @@
         </mxCell>
         <mxCell id="Ej8hDgJhuvleFJYb6pgI-4" value="&lt;p&gt;&lt;b&gt;&lt;font style=&quot;font-size: 12px;&quot;&gt;(1) User Prompt&lt;/font&gt;&lt;/b&gt;: Identify end user devices with ZTNA threat score &amp;lt; threshold for last x minutes and block VPN access&lt;br&gt;&lt;b&gt;(12) Final response from LLM: &lt;/b&gt;Action complete&lt;/p&gt;" style="text;html=1;align=center;verticalAlign=middle;whiteSpace=wrap;rounded=0;fillColor=default;" parent="1" vertex="1">
           <mxGeometry x="40" y="271" width="147" height="110" as="geometry" />
+        </mxCell>
+        <mxCell id="1PgXYpEJVwVY7RyIqTZX-2" value="" style="image;html=1;image=img/lib/clip_art/computers/IBM_Tablet_128x128.png" parent="1" vertex="1">
+          <mxGeometry x="582" y="560" width="50" height="40" as="geometry" />
+        </mxCell>
+        <mxCell id="1PgXYpEJVwVY7RyIqTZX-3" value="" style="image;html=1;image=img/lib/clip_art/computers/IBM_Tablet_128x128.png" parent="1" vertex="1">
+          <mxGeometry x="643" y="560" width="50" height="40" as="geometry" />
+        </mxCell>
+        <mxCell id="1PgXYpEJVwVY7RyIqTZX-4" value="" style="image;html=1;image=img/lib/clip_art/computers/IBM_Tablet_128x128.png" parent="1" vertex="1">
+          <mxGeometry x="703" y="560" width="50" height="40" as="geometry" />
+        </mxCell>
+        <mxCell id="1PgXYpEJVwVY7RyIqTZX-5" value="&lt;font style=&quot;font-size: 8px;&quot;&gt;ZTNA Agent&lt;/font&gt;" style="text;html=1;align=center;verticalAlign=middle;whiteSpace=wrap;rounded=0;" parent="1" vertex="1">
+          <mxGeometry x="577" y="543" width="50" height="20" as="geometry" />
+        </mxCell>
+        <mxCell id="1PgXYpEJVwVY7RyIqTZX-6" value="&lt;font style=&quot;font-size: 8px;&quot;&gt;ZTNA Agent&lt;/font&gt;" style="text;html=1;align=center;verticalAlign=middle;whiteSpace=wrap;rounded=0;" parent="1" vertex="1">
+          <mxGeometry x="637" y="543" width="50" height="20" as="geometry" />
+        </mxCell>
+        <mxCell id="1PgXYpEJVwVY7RyIqTZX-7" value="&lt;font style=&quot;font-size: 8px;&quot;&gt;ZTNA Agent&lt;/font&gt;" style="text;html=1;align=center;verticalAlign=middle;whiteSpace=wrap;rounded=0;" parent="1" vertex="1">
+          <mxGeometry x="697" y="544" width="50" height="20" as="geometry" />
+        </mxCell>
+        <mxCell id="1PgXYpEJVwVY7RyIqTZX-8" value="" style="endArrow=classic;html=1;rounded=0;entryX=0.5;entryY=0;entryDx=0;entryDy=0;exitX=0.5;exitY=1;exitDx=0;exitDy=0;" parent="1" source="Ej8hDgJhuvleFJYb6pgI-10" target="1PgXYpEJVwVY7RyIqTZX-5" edge="1">
+          <mxGeometry width="50" height="50" relative="1" as="geometry">
+            <mxPoint x="516" y="510" as="sourcePoint" />
+            <mxPoint x="460" y="570" as="targetPoint" />
+          </mxGeometry>
+        </mxCell>
+        <mxCell id="1PgXYpEJVwVY7RyIqTZX-9" value="" style="endArrow=classic;html=1;rounded=0;entryX=0.5;entryY=0;entryDx=0;entryDy=0;" parent="1" target="1PgXYpEJVwVY7RyIqTZX-6" edge="1">
+          <mxGeometry width="50" height="50" relative="1" as="geometry">
+            <mxPoint x="660" y="520" as="sourcePoint" />
+            <mxPoint x="612" y="553" as="targetPoint" />
+          </mxGeometry>
+        </mxCell>
+        <mxCell id="1PgXYpEJVwVY7RyIqTZX-10" value="" style="endArrow=classic;html=1;rounded=0;entryX=0.5;entryY=0;entryDx=0;entryDy=0;" parent="1" target="1PgXYpEJVwVY7RyIqTZX-7" edge="1">
+          <mxGeometry width="50" height="50" relative="1" as="geometry">
+            <mxPoint x="660" y="520" as="sourcePoint" />
+            <mxPoint x="672" y="553" as="targetPoint" />
+          </mxGeometry>
+        </mxCell>
+        <mxCell id="1PgXYpEJVwVY7RyIqTZX-11" value="&lt;div style=&quot;forced-color-adjust: none; color: rgb(0, 0, 0); font-family: Helvetica; font-size: 12px; font-style: normal; font-variant-ligatures: normal; font-variant-caps: normal; font-weight: 400; letter-spacing: normal; orphans: 2; text-indent: 0px; text-transform: none; widows: 2; word-spacing: 0px; -webkit-text-stroke-width: 0px; white-space: normal; text-decoration-thickness: initial; text-decoration-style: initial; text-decoration-color: initial;&quot;&gt;&lt;b style=&quot;font-size: 10px; color: rgb(66, 66, 66); font-family: Aptos, sans-serif; background-color: rgb(250, 250, 250);&quot;&gt;&lt;span style=&quot;font-family: &amp;quot;Segoe UI&amp;quot;, sans-serif;&quot;&gt;Proof of residency&lt;/span&gt;&lt;/b&gt;&lt;span style=&quot;font-size: 10px; color: rgb(66, 66, 66); text-align: start; font-family: &amp;quot;Segoe UI&amp;quot;, sans-serif; background-color: rgb(250, 250, 250);&quot;&gt;&amp;nbsp;on trusted end user devices&lt;/span&gt;&lt;/div&gt;&lt;div style=&quot;forced-color-adjust: none; color: rgb(0, 0, 0); font-family: Helvetica; font-size: 12px; font-style: normal; font-variant-ligatures: normal; font-variant-caps: normal; font-weight: 400; letter-spacing: normal; orphans: 2; text-indent: 0px; text-transform: none; widows: 2; word-spacing: 0px; -webkit-text-stroke-width: 0px; white-space: normal; text-decoration-thickness: initial; text-decoration-style: initial; text-decoration-color: initial;&quot;&gt;&lt;b style=&quot;background-color: transparent; color: rgb(66, 66, 66); font-family: Aptos, sans-serif;&quot;&gt;&lt;span style=&quot;font-family: &amp;quot;Segoe UI&amp;quot;, sans-serif;&quot;&gt;&lt;font style=&quot;font-size: 10px;&quot;&gt;Proof of geographic boundary&lt;/font&gt;&lt;/span&gt;&lt;/b&gt;&lt;span style=&quot;background-color: transparent; color: rgb(66, 66, 66); text-align: start; font-family: &amp;quot;Segoe UI&amp;quot;, sans-serif;&quot;&gt;&lt;font style=&quot;font-size: 10px;&quot;&gt;&amp;nbsp;using trustworthy location sensors on trusted devices&lt;/font&gt;&lt;/span&gt;&lt;/div&gt;" style="text;whiteSpace=wrap;html=1;" parent="1" vertex="1">
+          <mxGeometry x="559" y="607" width="240" height="70" as="geometry" />
+        </mxCell>
+        <mxCell id="krnoLOXVVp5_w_l_0iW4-2" value="&lt;font style=&quot;font-size: 8px;&quot;&gt;GNSS Hardware&lt;/font&gt;" style="shape=umlLifeline;perimeter=lifelinePerimeter;whiteSpace=wrap;html=1;container=0;dropTarget=0;collapsible=0;recursiveResize=0;outlineConnect=0;portConstraint=eastwest;newEdgeStyle={&quot;edgeStyle&quot;:&quot;elbowEdgeStyle&quot;,&quot;elbow&quot;:&quot;vertical&quot;,&quot;curved&quot;:0,&quot;rounded&quot;:0};" parent="1" vertex="1">
+          <mxGeometry x="690" y="280" width="73" height="32" as="geometry" />
+        </mxCell>
+        <mxCell id="krnoLOXVVp5_w_l_0iW4-3" value="&lt;font style=&quot;font-size: 8px;&quot;&gt;TPM Hardware&lt;/font&gt;" style="shape=umlLifeline;perimeter=lifelinePerimeter;whiteSpace=wrap;html=1;container=0;dropTarget=0;collapsible=0;recursiveResize=0;outlineConnect=0;portConstraint=eastwest;newEdgeStyle={&quot;edgeStyle&quot;:&quot;elbowEdgeStyle&quot;,&quot;elbow&quot;:&quot;vertical&quot;,&quot;curved&quot;:0,&quot;rounded&quot;:0};" parent="1" vertex="1">
+          <mxGeometry x="690" y="244" width="73" height="32" as="geometry" />
+        </mxCell>
+        <mxCell id="nGVYVPovc6NEXlwRWxdk-9" value="&lt;font style=&quot;font-size: 8px;&quot;&gt;GNSS Hardware&lt;/font&gt;" style="shape=umlLifeline;perimeter=lifelinePerimeter;whiteSpace=wrap;html=1;container=0;dropTarget=0;collapsible=0;recursiveResize=0;outlineConnect=0;portConstraint=eastwest;newEdgeStyle={&quot;edgeStyle&quot;:&quot;elbowEdgeStyle&quot;,&quot;elbow&quot;:&quot;vertical&quot;,&quot;curved&quot;:0,&quot;rounded&quot;:0};" vertex="1" parent="1">
+          <mxGeometry x="747" y="590" width="67" height="13" as="geometry" />
+        </mxCell>
+        <mxCell id="nGVYVPovc6NEXlwRWxdk-10" value="&lt;font style=&quot;font-size: 8px;&quot;&gt;TPM Hardware&lt;/font&gt;" style="shape=umlLifeline;perimeter=lifelinePerimeter;whiteSpace=wrap;html=1;container=0;dropTarget=0;collapsible=0;recursiveResize=0;outlineConnect=0;portConstraint=eastwest;newEdgeStyle={&quot;edgeStyle&quot;:&quot;elbowEdgeStyle&quot;,&quot;elbow&quot;:&quot;vertical&quot;,&quot;curved&quot;:0,&quot;rounded&quot;:0};" vertex="1" parent="1">
+          <mxGeometry x="747" y="572.5" width="67" height="15" as="geometry" />
+        </mxCell>
+        <mxCell id="nGVYVPovc6NEXlwRWxdk-15" value="&lt;font style=&quot;font-size: 10px;&quot;&gt;&lt;b&gt;Laptop Hosts&lt;/b&gt;&lt;/font&gt;" style="text;html=1;align=center;verticalAlign=middle;whiteSpace=wrap;rounded=0;" vertex="1" parent="1">
+          <mxGeometry x="630" y="591" width="70" height="30" as="geometry" />
         </mxCell>
       </root>
     </mxGraphModel>
