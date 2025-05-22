@@ -1,6 +1,6 @@
 {
   "magic": "E!vIA5L86J2I",
-  "timestamp": "2025-05-20T01:12:06.666909+00:00",
+  "timestamp": "2025-05-22T01:11:05.367551+00:00",
   "repo": "nedmsmith/draft-klspa-wimse-verifiable-geo-fence",
   "labels": [
     {
@@ -626,24 +626,26 @@
       "id": "PR_kwDOOmshaM6WzaF7",
       "title": "Update draft-lkspa-wimse-verifiable-geo-fence.md",
       "url": "https://github.com/nedmsmith/draft-klspa-wimse-verifiable-geo-fence/pull/12",
-      "state": "OPEN",
+      "state": "MERGED",
       "author": "ramkri123",
       "authorAssociation": "COLLABORATOR",
       "assignees": [],
       "labels": [],
       "body": "more cleanup",
       "createdAt": "2025-05-20T01:05:06Z",
-      "updatedAt": "2025-05-20T01:09:13Z",
+      "updatedAt": "2025-05-20T16:36:01Z",
       "baseRepository": "nedmsmith/draft-klspa-wimse-verifiable-geo-fence",
       "baseRefName": "main",
       "baseRefOid": "a5a8005b38e32a565eb98b808ef4341fd59f61bc",
       "headRepository": "nedmsmith/draft-klspa-wimse-verifiable-geo-fence",
       "headRefName": "ramki-mod2",
-      "headRefOid": "2d0a5b4e376b73d74b6ab5fd6b92b142c7f9b5e3",
-      "closedAt": null,
-      "mergedAt": null,
-      "mergedBy": null,
-      "mergeCommit": null,
+      "headRefOid": "09c33988653928e2c3756617f9b9c7e7bbd82d85",
+      "closedAt": "2025-05-20T16:36:01Z",
+      "mergedAt": "2025-05-20T16:36:01Z",
+      "mergedBy": "ramkri123",
+      "mergeCommit": {
+        "oid": "184963ac4b7967282b2b6517957f563d099775a6"
+      },
       "comments": [],
       "reviews": [
         {
@@ -652,7 +654,7 @@
             "abbreviatedOid": "0258bd2"
           },
           "author": "copilot-pull-request-reviewer",
-          "authorAssociation": "NONE",
+          "authorAssociation": "CONTRIBUTOR",
           "state": "COMMENTED",
           "body": "## Pull Request Overview\n\nCleanup of sensor references and standardization of GNSS terminology in the verifiable geo-fence draft.\n\n- Removed Wi-Fi sensor references from host description and geolocation components\n- Updated table rows for Trusted OS and Geolocation Agent to replace Wi-Fi with GNSS and harmonize terminology\n\n\n<details>\n<summary>Comments suppressed due to low confidence (1)</summary>\n\n**draft-lkspa-wimse-verifiable-geo-fence.md:186**\n* Add a space after the markdown list dash (e.g., `- Host`) to ensure proper rendering of the bullet item.\n```\n-Host contains location devices like mobile sensor, GPS sensor, GNSS sensor, etc. Host is a compute node, including servers, routers, and end-user appliances like smartphones, tablets, or PCs.\n```\n</details>\n\n",
           "createdAt": "2025-05-20T01:06:25Z",
@@ -671,6 +673,177 @@
               "updatedAt": "2025-05-20T01:06:26Z"
             }
           ]
+        },
+        {
+          "id": "PRR_kwDOOmshaM6qAkSi",
+          "commit": {
+            "abbreviatedOid": "2d0a5b4"
+          },
+          "author": "copilot-pull-request-reviewer",
+          "authorAssociation": "CONTRIBUTOR",
+          "state": "COMMENTED",
+          "body": "## Pull Request Overview\n\nThis PR cleans up the draft by updating image paths to the main branch, removing Wi-Fi sensor references, and aligning terminology around geolocation data.\n\n- Updated figure URLs to use the `main` branch instead of `ramki-mod2`\n- Removed Wi-Fi sensor entries and standardized on GPS/GNSS in text and tables\n- Adjusted table rows for Trusted OS and Geolocation Agent SW to reflect GPS/GNSS changes\n\n\n<details>\n<summary>Comments suppressed due to low confidence (3)</summary>\n\n**draft-lkspa-wimse-verifiable-geo-fence.md:187**\n* [nitpick] The term \"mobile sensor\" is ambiguous; consider specifying the exact sensor type (e.g., \"mobile network sensor\") to improve clarity.\n```\nHost contains location devices like mobile sensor, GPS sensor, GNSS sensor, etc. Host is a compute node, including servers, routers, and end-user appliances like smartphones, tablets, or PCs.\n```\n**draft-lkspa-wimse-verifiable-geo-fence.md:371**\n* You removed the GNSS signal authentication note here. It provides valuable context on anti-spoofing measures; consider re-adding or relocating it.\n```\n**Note**: A GPS sensor with a cryptographic signature, also known as GNSS signal authentication, uses digital signatures in the broadcast signal to ensure the authenticity and integrity of the GPS data, protecting against spoofing attacks.\n```\n**draft-lkspa-wimse-verifiable-geo-fence.md:370**\n* [nitpick] The comment about a SPIRE-agent plug-in implementation was removed; reintroducing it (or a similar note) could help readers understand integration options.\n```\nPossibly a SPIRE-agent plug-in with TPM attestation.\n```\n</details>\n\n",
+          "createdAt": "2025-05-20T01:12:50Z",
+          "updatedAt": "2025-05-20T01:12:50Z",
+          "comments": []
+        },
+        {
+          "id": "PRR_kwDOOmshaM6qAkt6",
+          "commit": {
+            "abbreviatedOid": "2d0a5b4"
+          },
+          "author": "copilot-pull-request-reviewer",
+          "authorAssociation": "CONTRIBUTOR",
+          "state": "COMMENTED",
+          "body": "## Pull Request Overview\n\nThis PR cleans up the verifiable geo-fence draft by updating asset references and refining the hardware/device descriptions.\n\n- Updated figure URLs to point at the `main` branch instead of `ramki-mod2`\n- Removed \u201cWi-Fi sensor\u201d mentions from host device lists and hardware table\n- Simplified table entries for trusted OS and geolocation agent\n\n\n<details>\n<summary>Comments suppressed due to low confidence (1)</summary>\n\n**draft-lkspa-wimse-verifiable-geo-fence.md:187**\n* After removing 'Wi-Fi sensor' from the host devices list, clarify whether Wi-Fi-based geolocation is no longer supported or intentionally omitted to prevent reader confusion.\n```\nHost contains location devices like mobile sensor, GPS sensor, GNSS sensor, etc. Host is a compute node, including servers, routers, and end-user appliances like smartphones, tablets, or PCs.\n```\n</details>\n\n",
+          "createdAt": "2025-05-20T01:14:44Z",
+          "updatedAt": "2025-05-20T01:14:46Z",
+          "comments": [
+            {
+              "originalPosition": 39,
+              "body": "[nitpick] The table cell content is dense and mixes inline bullets and dashes; consider reformatting as a sub-list or separate bullet points for each root of trust option to improve clarity.\n```suggestion\n| Trusted hardware devices (focus on geolocation) | Storage root of trust: <ul><li>TPM</li></ul> Location root of trust options: <ul><li>GPS sensor</li><li>GNSS sensor - signal authentication prevents spoofing [galileo]</li></ul> Mobile sensor: <ul><li>modem</li><li>antenna</li><li>SIM - Mobile device location is obtained from mobile network operator and not from device</li></ul> | |\n```",
+              "createdAt": "2025-05-20T01:14:45Z",
+              "updatedAt": "2025-05-20T01:14:46Z"
+            },
+            {
+              "originalPosition": 46,
+              "body": "[nitpick] Consider using 'and' instead of a slash in 'GPS/GNSS' (e.g., 'GPS and GNSS') for readability and consistency with surrounding text.\n```suggestion\n| Geolocation Agent SW - OS level service | Trusted application. Does not tamper GPS location and GNSS location data. Signs GPS and GNSS location data (latitude/longitude/altitude) using TPM attestation key. | |\n```",
+              "createdAt": "2025-05-20T01:14:45Z",
+              "updatedAt": "2025-05-20T01:14:46Z"
+            }
+          ]
+        },
+        {
+          "id": "PRR_kwDOOmshaM6qAukf",
+          "commit": {
+            "abbreviatedOid": "09c3398"
+          },
+          "author": "copilot-pull-request-reviewer",
+          "authorAssociation": "CONTRIBUTOR",
+          "state": "COMMENTED",
+          "body": "## Pull Request Overview\n\nThis PR updates the verifiable geo-fence draft documentation by cleaning up figure URL references and table formatting.  \n- Updated figure links to point to the main branch.  \n- Improved table formatting for listing trusted hardware and OS components.  \n- Removed references to the Wi\u2011Fi sensor and updated component descriptions for consistency.\n\n\n<details>\n<summary>Comments suppressed due to low confidence (2)</summary>\n\n**draft-lkspa-wimse-verifiable-geo-fence.md:187**\n* The removal of the Wi\u2011Fi sensor from the host devices list might affect documentation consistency. Confirm that this change is intentional and update other related references if necessary.\n```\nHost contains location devices like mobile sensor, GPS sensor, GNSS sensor, etc.\n```\n**draft-lkspa-wimse-verifiable-geo-fence.md:369**\n* [nitpick] The conversion to HTML list formatting in the 'Trusted hardware devices' row improves readability; please verify that the target markdown renderer supports inline HTML for consistent display.\n```\n<ul><li>TPM</li></ul>\n```\n</details>\n\n",
+          "createdAt": "2025-05-20T01:50:49Z",
+          "updatedAt": "2025-05-20T01:50:49Z",
+          "comments": []
+        },
+        {
+          "id": "PRR_kwDOOmshaM6qKfrn",
+          "commit": {
+            "abbreviatedOid": "09c3398"
+          },
+          "author": "nedmsmith",
+          "authorAssociation": "OWNER",
+          "state": "APPROVED",
+          "body": "LGTM",
+          "createdAt": "2025-05-20T16:28:55Z",
+          "updatedAt": "2025-05-20T16:28:55Z",
+          "comments": []
+        }
+      ]
+    },
+    {
+      "number": 13,
+      "id": "PR_kwDOOmshaM6W837f",
+      "title": "more use case cleanup",
+      "url": "https://github.com/nedmsmith/draft-klspa-wimse-verifiable-geo-fence/pull/13",
+      "state": "MERGED",
+      "author": "ramkri123",
+      "authorAssociation": "COLLABORATOR",
+      "assignees": [],
+      "labels": [],
+      "body": "",
+      "createdAt": "2025-05-20T20:18:49Z",
+      "updatedAt": "2025-05-20T20:35:00Z",
+      "baseRepository": "nedmsmith/draft-klspa-wimse-verifiable-geo-fence",
+      "baseRefName": "main",
+      "baseRefOid": "184963ac4b7967282b2b6517957f563d099775a6",
+      "headRepository": "nedmsmith/draft-klspa-wimse-verifiable-geo-fence",
+      "headRefName": "ramki-mod2",
+      "headRefOid": "13e21ab72e8d4e789eb58a4c9dcf0f78f17d3a73",
+      "closedAt": "2025-05-20T20:22:45Z",
+      "mergedAt": "2025-05-20T20:22:45Z",
+      "mergedBy": "ramkri123",
+      "mergeCommit": {
+        "oid": "437201d1daad990dd2ea6c9ea85f055f3ea3f08f"
+      },
+      "comments": [],
+      "reviews": [
+        {
+          "id": "PRR_kwDOOmshaM6qMxmr",
+          "commit": {
+            "abbreviatedOid": "13e21ab"
+          },
+          "author": "nedmsmith",
+          "authorAssociation": "OWNER",
+          "state": "APPROVED",
+          "body": "",
+          "createdAt": "2025-05-20T20:20:02Z",
+          "updatedAt": "2025-05-20T20:20:02Z",
+          "comments": []
+        },
+        {
+          "id": "PRR_kwDOOmshaM6qMywh",
+          "commit": {
+            "abbreviatedOid": "13e21ab"
+          },
+          "author": "copilot-pull-request-reviewer",
+          "authorAssociation": "CONTRIBUTOR",
+          "state": "COMMENTED",
+          "body": "## Pull Request Overview\n\nThis PR cleans up use-case sections by introducing a federated learning scenario and removing the standalone Data Residency Requirements subsection.\n\n- Added a new \u201cServer workload \u2194 Server workload \u2013 Federated AI\u201d use case\n- Removed the \u201cData Residency Requirements\u201d heading and its bullet list\n- Shifted content around the approach summary\n\n\n<details>\n<summary>Comments suppressed due to low confidence (1)</summary>\n\n**draft-lkspa-wimse-verifiable-geo-fence.md:178**\n* The 'Data Residency Requirements' section and its list of core requirements were removed. If this content has been relocated, please add a cross-reference or note where it now resides; otherwise, consider retaining or summarizing these key requirements to preserve important context.\n```\n-## Data Residency Requirements\n```\n</details>\n\n",
+          "createdAt": "2025-05-20T20:20:46Z",
+          "updatedAt": "2025-05-20T20:35:00Z",
+          "comments": [
+            {
+              "originalPosition": 4,
+              "body": "[nitpick] The section header repeats 'Server workload' on both sides of the arrow, which may confuse readers. Consider renaming the roles to clearly distinguish participants (e.g., 'Server workload (Data Owner) <-> Server workload (Federated AI Coordinator)').",
+              "createdAt": "2025-05-20T20:35:00Z",
+              "updatedAt": "2025-05-20T20:35:00Z"
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "number": 14,
+      "id": "PR_kwDOOmshaM6XI4uJ",
+      "title": "changes",
+      "url": "https://github.com/nedmsmith/draft-klspa-wimse-verifiable-geo-fence/pull/14",
+      "state": "MERGED",
+      "author": "ramkri123",
+      "authorAssociation": "COLLABORATOR",
+      "assignees": [
+        "ramkri123"
+      ],
+      "labels": [],
+      "body": "",
+      "createdAt": "2025-05-21T23:57:42Z",
+      "updatedAt": "2025-05-22T00:30:35Z",
+      "baseRepository": "nedmsmith/draft-klspa-wimse-verifiable-geo-fence",
+      "baseRefName": "main",
+      "baseRefOid": "437201d1daad990dd2ea6c9ea85f055f3ea3f08f",
+      "headRepository": "nedmsmith/draft-klspa-wimse-verifiable-geo-fence",
+      "headRefName": "ramki-mod2",
+      "headRefOid": "95729ab8a71bb872fd01ac15ef278b2af12a477b",
+      "closedAt": "2025-05-22T00:30:35Z",
+      "mergedAt": "2025-05-22T00:30:35Z",
+      "mergedBy": "ramkri123",
+      "mergeCommit": {
+        "oid": "4c02c85d935f4e14e0d17d91e8def52299083d7c"
+      },
+      "comments": [],
+      "reviews": [
+        {
+          "id": "PRR_kwDOOmshaM6qb0Ll",
+          "commit": {
+            "abbreviatedOid": "95729ab"
+          },
+          "author": "nedmsmith",
+          "authorAssociation": "OWNER",
+          "state": "APPROVED",
+          "body": "LGTM",
+          "createdAt": "2025-05-22T00:03:11Z",
+          "updatedAt": "2025-05-22T00:03:11Z",
+          "comments": []
         }
       ]
     }
