@@ -5,13 +5,13 @@
 Workload Identity in Multi System Environments               R. Krishnan
 Internet-Draft                                                  N. Smith
 Intended status: Informational                                     Intel
-Expires: 23 November 2025                                       D. Lopez
+Expires: 30 November 2025                                       D. Lopez
                                                               Telefonica
                                                                A. Prasad
                                                                   Oracle
                                                             S. Addepalli
                                                                   Aryaka
-                                                             22 May 2025
+                                                             29 May 2025
 
 
           Trustworthy and Verifiable Geofencing for Workloads
@@ -63,7 +63,7 @@ Status of This Memo
    time.  It is inappropriate to use Internet-Drafts as reference
    material or to cite them other than as "work in progress."
 
-   This Internet-Draft will expire on 23 November 2025.
+   This Internet-Draft will expire on 30 November 2025.
 
 Copyright Notice
 
@@ -737,6 +737,11 @@ Contributors
    Ghada Arfaoui
    Orange
    Email: ghada.arfaoui@orange.com
+
+
+   Michael Epley
+   Red Hat
+   Email: mepley@redhat.com
 
 
 Authors' Addresses
