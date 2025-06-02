@@ -1,0 +1,19 @@
+{
+  "name": "GeoHeader Injector",
+  "version": "1.0",
+  "manifest_version": 3,
+  "permissions": [
+    "geolocation",
+    "storage",
+    "webRequest",
+    "webRequestBlocking",
+    "declarativeNetRequestWithHostAccess"
+  ],
+  "host_permissions": ["<all_urls>"],
+  "background": {
+    "service_worker": "background.js"
+  },
+  "action": {
+    "default_popup": "popup.html"
+  }
+}
