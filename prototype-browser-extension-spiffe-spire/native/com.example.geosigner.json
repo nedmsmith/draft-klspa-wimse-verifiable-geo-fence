@@ -1,8 +1,0 @@
-{
-  "name": "com.example.geosigner",
-  "description": "Signs geolocation using TPM",
-  "path": "C:\\Path\\To\\Python\\python.exe",
-  "args": ["C:\\Path\\To\\native\\geosigner.py"],
-  "type": "stdio",
-  "allowed_extensions": ["geoheader@example.com"]
-}

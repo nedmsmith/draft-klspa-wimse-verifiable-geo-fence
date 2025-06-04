@@ -7,9 +7,9 @@ app = Flask(__name__)
 def infer_location_source(accuracy):
     if accuracy < 10:
         return "GPS (likely outdoor)"
-    elif accuracy < 20:
-        return "Wi-Fi"
     elif accuracy < 100:
+        return "Wi-Fi"
+    elif accuracy < 500:
         return "Cell Tower"
     else:
         return "IP-based or coarse location"
@@ -27,23 +27,24 @@ def index():
             accuracy = float(parts.get("accuracy", -1))
             source = infer_location_source(accuracy)
 
+            coord = lat, lon
+            geo = reverse_geocode.get(coord)
             location_data = {
                 "latitude": lat,
                 "longitude": lon,
                 "accuracy_meters": accuracy,
-                "inferred_source": source
+                "inferred_source": source,
+                "City": geo['city'],
+                "Country": geo['country'],
+                "State": geo['state'],
             }
-
             print("GeoLocation data:", location_data)
-
-            coord = lat, lon
-            print("Geographic boundary data:", reverse_geocode.get(coord))
 
         except Exception as e:
             location_data = {"error": f"Failed to parse geolocation: {str(e)}"}
 
     return jsonify({
-        "message": "Received request from browser",
+        "message": "From server: converted geolocation (lat/lon) from browser to geographic region (city/state/country)",
         "geolocation": location_data or geo_header
     })
 
@@ -58,7 +59,7 @@ def favicon():
 if __name__ == "__main__":
     app.run(
         host="0.0.0.0",
-        port=8443,
+        port=443,
         ssl_context=("cert.pem", "key.pem")
     )
 

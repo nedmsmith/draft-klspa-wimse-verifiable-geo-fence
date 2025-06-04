@@ -1,51 +1,6 @@
-from flask import Flask, request, jsonify, send_from_directory
-import os
-import reverse_geocode
+from flask import Flask, request, jsonify
 
 app = Flask(__name__)
-
-def infer_location_source(accuracy):
-    if accuracy < 10:
-        return "GPS (likely outdoor)"
-    elif accuracy < 20:
-        return "Wi-Fi"
-    elif accuracy < 100:
-        return "Cell Tower"
-    else:
-        return "IP-based or coarse location"
-
-@app.route("/")
-def index():
-    geo_header = request.headers.get("X-Custom-Geolocation", "Not Provided")
-    location_data = {}
-
-    if geo_header != "Not Provided":
-        try:
-            parts = dict(item.split("=") for item in geo_header.split(";"))
-            lat = float(parts.get("lat", 0))
-            lon = float(parts.get("lon", 0))
-            accuracy = float(parts.get("accuracy", -1))
-            source = infer_location_source(accuracy)
-
-            location_data = {
-                "latitude": lat,
-                "longitude": lon,
-                "accuracy_meters": accuracy,
-                "inferred_source": source
-            }
-
-            print("GeoLocation data:", location_data)
-
-            coord = lat, lon
-            print("Geographic boundary data:", reverse_geocode.get(coord))
-
-        except Exception as e:
-            location_data = {"error": f"Failed to parse geolocation: {str(e)}"}
-
-    return jsonify({
-        "message": "Received request from browser",
-        "geolocation": location_data or geo_header
-    })
 
 @app.route('/favicon.ico')
 def favicon():
@@ -55,10 +10,27 @@ def favicon():
         mimetype='image/vnd.microsoft.icon'
     )
 
+@app.route("/", methods=["GET", "POST"])
+def index():
+    geo_header = request.headers.get("X-Geo-Sign")
+    if geo_header:
+        # In production, you would verify the TPM-backed signature.
+        print(jsonify(geo_header))
+        return jsonify({
+            "message": "Geo header received",
+            "X-Geo-Sign": geo_header
+        }), 200
+    else:
+        return jsonify({
+            "message": "X-Geo-Sign header not provided."
+        }), 400
+
 if __name__ == "__main__":
-    app.run(
-        host="0.0.0.0",
-        port=8443,
-        ssl_context=("cert.pem", "key.pem")
-    )
+    # IMPORTANT: Before running, make sure you have generated SSL certificate and key files.
+    # For testing on Windows, you can create a self-signed certificate. For example, using OpenSSL:
+    #   openssl req -x509 -newkey rsa:4096 -keyout key.pem -out cert.pem -days 365 -nodes
+    #
+    # Then, run this script. The server will be accessible via:
+    #   https://localhost:443/
+    app.run(host="0.0.0.0", port=443, ssl_context=("cert.pem", "key.pem"))
 

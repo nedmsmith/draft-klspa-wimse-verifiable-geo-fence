@@ -1,25 +1,26 @@
 {
   "manifest_version": 2,
-  "name": "GeoHeader Injector",
+  "name": "GeoLocation Header Injector",
   "version": "1.0",
-  "description": "Injects geolocation headers into HTTPS requests for selected domains.",
+  "description": "Intercepts HTTPS requests for configured domains and adds a geolocation signature header.",
   "permissions": [
     "webRequest",
     "webRequestBlocking",
-    "storage",
+    "*://*/*",
     "nativeMessaging",
-    "<all_urls>"
+    "geolocation",
+    "storage"
   ],
   "background": {
     "scripts": ["background.js"]
   },
   "browser_action": {
-    "default_popup": "popup.html"
+    "default_popup": "popup.html",
+    "default_title": "Configure Domains"
   },
   "applications": {
     "gecko": {
-      "id": "geoheader@example.com",
-      "strict_min_version": "68.0"
+      "id": "geosign@example.com"
     }
   }
 }
