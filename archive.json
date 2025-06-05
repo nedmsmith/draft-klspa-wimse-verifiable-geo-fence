@@ -1,6 +1,6 @@
 {
   "magic": "E!vIA5L86J2I",
-  "timestamp": "2025-06-03T01:13:01.155604+00:00",
+  "timestamp": "2025-06-05T01:11:57.655093+00:00",
   "repo": "nedmsmith/draft-klspa-wimse-verifiable-geo-fence",
   "labels": [
     {
@@ -953,6 +953,61 @@
           "body": "",
           "createdAt": "2025-06-02T08:05:33Z",
           "updatedAt": "2025-06-02T08:05:33Z",
+          "comments": []
+        }
+      ]
+    },
+    {
+      "number": 17,
+      "id": "PR_kwDOOmshaM6Y7YMR",
+      "title": "Ramki mod - browser extension prototype",
+      "url": "https://github.com/nedmsmith/draft-klspa-wimse-verifiable-geo-fence/pull/17",
+      "state": "MERGED",
+      "author": "ramkri123",
+      "authorAssociation": "COLLABORATOR",
+      "assignees": [],
+      "labels": [],
+      "body": "",
+      "createdAt": "2025-06-04T01:28:58Z",
+      "updatedAt": "2025-06-04T13:43:53Z",
+      "baseRepository": "nedmsmith/draft-klspa-wimse-verifiable-geo-fence",
+      "baseRefName": "main",
+      "baseRefOid": "0a1d4ed461ac406786a08224a50e90f1615dc8c2",
+      "headRepository": "nedmsmith/draft-klspa-wimse-verifiable-geo-fence",
+      "headRefName": "ramki-mod",
+      "headRefOid": "d317a0d885086e4fb83da93b15dc6aca501ba893",
+      "closedAt": "2025-06-04T13:43:53Z",
+      "mergedAt": "2025-06-04T13:43:53Z",
+      "mergedBy": "ramkri123",
+      "mergeCommit": {
+        "oid": "b25c2d884f5df03d2090e8a33182afb16d0fc6a5"
+      },
+      "comments": [],
+      "reviews": [
+        {
+          "id": "PRR_kwDOOmshaM6sqQ9P",
+          "commit": {
+            "abbreviatedOid": "d317a0d"
+          },
+          "author": "nedmsmith",
+          "authorAssociation": "OWNER",
+          "state": "APPROVED",
+          "body": "",
+          "createdAt": "2025-06-04T13:32:30Z",
+          "updatedAt": "2025-06-04T13:32:30Z",
+          "comments": []
+        },
+        {
+          "id": "PRR_kwDOOmshaM6sqTLS",
+          "commit": {
+            "abbreviatedOid": "d317a0d"
+          },
+          "author": "dr2lopez",
+          "authorAssociation": "COLLABORATOR",
+          "state": "APPROVED",
+          "body": "Did not spot anything to object\r\n",
+          "createdAt": "2025-06-04T13:35:08Z",
+          "updatedAt": "2025-06-04T13:35:08Z",
           "comments": []
         }
       ]
