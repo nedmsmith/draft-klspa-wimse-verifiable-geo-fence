@@ -1,0 +1,9 @@
+{
+  "name": "com.mycompany.geosign",
+  "description": "Production native messaging host for geolocation signing with TPM attestation via SPIRE agent.",
+  "path": "C:\\Users\\ramkr\\OneDrive\\Desktop\\draft-klspa-wimse-verifiable-geo-fence\\prototype-browser-extension-tpm\\win-app.bat",
+  "type": "stdio",
+  "allowed_extensions": [
+    "geoheader@example.com"
+  ]
+}
