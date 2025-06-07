@@ -1,9 +1,0 @@
-{
-  "name": "com.mycompany.geosign",
-  "description": "Production native messaging host for geolocation signing with TPM attestation via SPIRE agent.",
-  "path": "C:\\Users\\ramkr\\OneDrive\\Desktop\\draft-klspa-wimse-verifiable-geo-fence\\prototype-browser-extension-spiffe-spire\\native\\native_app_production.py",
-  "type": "stdio",
-  "allowed_extensions": [
-    "geosign@example.com"
-  ]
-}
