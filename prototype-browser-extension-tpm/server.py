@@ -12,6 +12,10 @@ from cryptography.exceptions import InvalidSignature
 
 app = Flask(__name__)
 
+# ----- Global In-Memory Nonce Store -----
+# We assume only one TPM certificate is used. The nonce is incremented per API request.
+current_nonce = 1
+
 # ----- Helper Functions and Configuration -----
 
 def load_tpm_cert():
@@ -50,23 +54,32 @@ def verify_tpm_signature_with_cert(payload, signature_b64, cert):
         app.logger.error(f"Signature verification error: {e}")
         return False
 
-# ----- Route Handlers -----
+# ----- Nonce Initialization Endpoint -----
+@app.route("/init_nonce", methods=["GET"])
+def init_nonce():
+    """Endpoint for background.js to fetch the initial nonce value."""
+    global current_nonce
+    return jsonify({"nonce": current_nonce})
+
+# ----- Main Route Handler -----
 
 @app.route("/")
 def index():
+    global current_nonce
     geo_header = request.headers.get("X-Custom-Geolocation", "Not Provided")
     location_data = {}
     app.logger.info(f"Received X-Custom-Geolocation header: {geo_header}")
-    
+
     if geo_header != "Not Provided":
         try:
+            # Parse the header (semicolon-separated key=value pairs)
             parts = geo_header.split(";")
             header_dict = {}
             for part in parts:
                 if "=" in part:
                     key, value = part.split("=", 1)
                     header_dict[key.strip()] = value.strip()
-                    
+
             lat = float(header_dict.get("lat", "0"))
             lon = float(header_dict.get("lon", "0"))
             accuracy = float(header_dict.get("accuracy", "-1"))
@@ -74,9 +87,25 @@ def index():
             nonce_value = header_dict.get("nonce", "undefined")
             source = header_dict.get("source", "N/A")
             tpm_token = header_dict.get("sig", None)
-            
+
             app.logger.info(f"Header parsed: lat={lat}, lon={lon}, accuracy={accuracy}, time={time_value}, nonce={nonce_value}, source={source}")
-            
+
+            # Validate nonce from the header against our in-memory store.
+            try:
+                received_nonce = int(nonce_value)
+            except Exception as ex:
+                app.logger.error(f"Invalid nonce received: {nonce_value}. Error: {ex}")
+                received_nonce = None
+
+            if received_nonce is not None:
+                if received_nonce != current_nonce:
+                    app.logger.warning(f"Nonce mismatch: expected {current_nonce}, received {received_nonce}")
+                else:
+                    app.logger.info(f"Nonce match: {received_nonce} is as expected.")
+                    current_nonce += 1  # Increment nonce after a valid match.
+            else:
+                app.logger.warning("No valid nonce received; skipping nonce check.")
+
             verified = None
             if tpm_token:
                 if "|sig=" in tpm_token:
@@ -105,7 +134,7 @@ def index():
                     verified = False
             else:
                 app.logger.info("No TPM token provided in header.")
-            
+
             coord = (lat, lon)
             geo = reverse_geocode.get(coord)
             location_data = {
@@ -121,11 +150,11 @@ def index():
             }
             if tpm_token:
                 location_data["TPM_signature_Verified"] = verified
-                
+
         except Exception as e:
             app.logger.error(f"Failed to parse geolocation: {e}")
             location_data = {"error": f"Failed to parse geolocation: {str(e)}"}
-    
+
     return jsonify({
         "message": "Verified TPM signature and geolocation converted to geographic region",
         "geolocation": location_data or geo_header
