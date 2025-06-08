@@ -1,131 +1,212 @@
-let targetDomains = ["localhost"];
+console.log("[Background] Background script loaded.");
 
-// Load domains from storage
+let targetDomains = ["localhost"];
+let latestPosition = null; // Global cache for the latest geolocation.
+let currentNonce = null;   // Global nonce, retrieved once from the server.
+
+//
+// Retrieve target domains from storage.
 browser.storage.sync.get("domains").then((data) => {
   targetDomains = data.domains || targetDomains;
 });
-
-// Update domains if changed
 browser.storage.onChanged.addListener((changes) => {
   if (changes.domains) {
     targetDomains = changes.domains.newValue;
   }
 });
 
-/**
- * Heuristically determines the likely location source based on geolocation accuracy.
- *
- * @param {number} accuracy - The geolocation accuracy in meters.
- * @returns {string} - One of: "GPS", "Wi-Fi", "Cellular", or "IP-based".
- */
+//
+// Fetch initial nonce from the server's /init_nonce endpoint.
+function fetchInitialNonce() {
+  console.log("[Background] Fetching initial nonce...");
+  // Adjust the URL if needed.
+  fetch("https://127.0.0.1:8443/init_nonce")
+    .then((response) => response.json())
+    .then((data) => {
+      currentNonce = data.nonce;
+      console.log("[Background] Initial nonce fetched from server:", currentNonce);
+    })
+    .catch((err) => {
+      console.error("[Background] Error fetching initial nonce:", err);
+    });
+}
+fetchInitialNonce();
+
+//
+// Listen for responses from the server via onHeadersReceived.
+// We’re broadening the URL filter to <all_urls> (since your extension has <all_urls> permission)
+// so that we catch any 400 responses coming back. Then we log details and check if the response
+// contains the custom header "X-Nonce-Error" with the expected content. If so, we call fetchInitialNonce().
+browser.webRequest.onHeadersReceived.addListener(
+  (details) => {
+    console.log("[Background] onHeadersReceived fired for URL:", details.url, "statusCode:", details.statusCode);
+    if (details.statusCode === 400) {
+      const headers = details.responseHeaders || [];
+      let foundHeader = false;
+      for (let header of headers) {
+        console.log("[Background] Checking header:", header.name, header.value);
+        if (
+          header.name.toLowerCase() === "x-nonce-error" &&
+          header.value.includes("Nonce out-of-sync; please reinitialize nonce via /init_nonce")
+        ) {
+          foundHeader = true;
+          console.warn("[Background] Detected nonce out-of-sync error in response for URL:", details.url);
+          fetchInitialNonce();
+          break;
+        }
+      }
+      if (!foundHeader) {
+        console.log("[Background] 400 response did not contain the expected X-Nonce-Error header for URL:", details.url);
+      }
+    }
+  },
+  { urls: ["<all_urls>"] },
+  ["responseHeaders"]
+);
+
+//
+// Determine the likely location source based on accuracy.
 function guessLocationSource(accuracy) {
-  if (accuracy <= 10) {
-    return "GPS";
-  } else if (accuracy <= 100) {
-    return "Wi-Fi";
-  } else if (accuracy <= 250) {
-    return "Cellular";
-  } else {
-    return "IP-based";
-  }
+  if (accuracy <= 10) return "GPS";
+  else if (accuracy <= 100) return "Wi-Fi";
+  else if (accuracy <= 250) return "Cellular";
+  else return "IP-based";
 }
 
-/**
- * Connects to the native messaging host and sends geolocation data to request a TPM attestation token.
- *
- * @param {number} lat - Latitude.
- * @param {number} lon - Longitude.
- * @param {number} accuracy - Geolocation accuracy in meters.
- * @param {string} source - The derived geolocation source.
- * @returns {Promise<string>} - A promise that resolves with the attestation token.
- */
-function getTPMAttestation(lat, lon, accuracy, source) {
+//
+// Poll for geolocation using high-accuracy options and update the global position.
+function updatePosition() {
+  navigator.geolocation.getCurrentPosition(
+    (position) => {
+      latestPosition = position;
+      console.log(
+        `[Background] Position updated: lat=${position.coords.latitude}, lon=${position.coords.longitude}, accuracy=${position.coords.accuracy}`
+      );
+    },
+    (error) => {
+      console.warn("[Background] Error updating position:", error);
+    },
+    {
+      enableHighAccuracy: true,
+      timeout: 10000, // 10 sec timeout for precise location.
+      maximumAge: 0,
+    }
+  );
+}
+updatePosition();
+setInterval(updatePosition, 30000); // Update every 30 seconds.
+
+//
+// Wait for latestPosition to become non-null.
+// Poll every 'interval' ms and reject after 'timeout' ms.
+function waitForPosition(timeout = 10000, interval = 500) {
+  return new Promise((resolve, reject) => {
+    const start = Date.now();
+    const check = () => {
+      if (latestPosition) {
+        resolve(latestPosition);
+      } else if (Date.now() - start > timeout) {
+        reject(new Error("Timed out waiting for position"));
+      } else {
+        setTimeout(check, interval);
+      }
+    };
+    check();
+  });
+}
+
+//
+// Request TPM attestation from the native messaging host.
+function getTPMAttestation(lat, lon, accuracy, source, timestamp, nonce) {
   console.log(
-    `[Background] Requesting TPM Attestation for lat:${lat}, lon:${lon}, accuracy:${accuracy}, source:${source}`
+    `[Background] Requesting TPM Attestation for lat:${lat}, lon:${lon}, accuracy:${accuracy}, source:${source}, time:${timestamp}, nonce:${nonce}`
   );
   return new Promise((resolve, reject) => {
-    // IMPORTANT: Use the exact same host name as in your native messaging host manifest.
     const nativePort = browser.runtime.connectNative("com.mycompany.geosign");
-    console.log("[Background] New native messaging connection created.");
-
-    // Increase timeout to 15 seconds.
+    console.log("[Background] Native messaging connection created.");
+    let resolved = false;
     const timeoutId = setTimeout(() => {
-      nativePort.onMessage.removeListener(responseListener);
-      console.error("[Background] Timeout waiting for TPM attestation.");
-      reject("Timeout waiting for TPM attestation");
-    }, 15000);
-
-    // Define a listener for the response.
+      if (!resolved) {
+        resolved = true;
+        nativePort.onMessage.removeListener(responseListener);
+        console.error("[Background] Timeout waiting for TPM attestation.");
+        reject("Timeout waiting for TPM attestation");
+      }
+    }, 30000);
+    
     function responseListener(response) {
-      console.log("[Background] Received response from native host:", response);
-      if (response.token) {
+      if (resolved) return;
+      if (response && response.token) {
+        resolved = true;
         clearTimeout(timeoutId);
         nativePort.onMessage.removeListener(responseListener);
-        console.log("[Background] TPM Attestation token received.");
-        resolve(response.token);
-      } else if (response.error) {
+        console.log("[Background] TPM Attestation received.");
+        resolve({ token: response.token });
+      } else if (response && response.error) {
+        resolved = true;
         clearTimeout(timeoutId);
         nativePort.onMessage.removeListener(responseListener);
-        console.error("[Background] Error from native host:", response.error);
+        console.error("[Background] TPM error:", response.error);
         reject(response.error);
       }
     }
     nativePort.onMessage.addListener(responseListener);
-
-    // Create a payload string that includes geolocation data and a source.
-    // (Using commas here for the TPM process; the returned token will be incorporated into the header.)
-    const payloadString = `lat=${lat},lon=${lon},accuracy=${accuracy},source=${source}`;
-
-    // Send the message with the "command" and the "payload" field.
-    nativePort.postMessage({
-      command: "attest",
-      payload: payloadString
-    });
-    console.log("[Background] Posted geolocation data (as payload) to native host.");
+    const payloadString = `lat=${lat},lon=${lon},accuracy=${accuracy},source=${source},time=${timestamp},nonce=${nonce}`;
+    nativePort.postMessage({ command: "attest", payload: payloadString });
+    console.log("[Background] Posted payload to native host:", payloadString);
   });
 }
 
-// Intercept outgoing HTTP requests to inject the custom header.
-// This version obtains geolocation (plus TPM attestation token if available) and builds a header
-// in the expected format for the Flask server.
+//
+// Intercept outgoing requests to inject the custom geolocation header.
+// Uses the cached global position and the in-memory nonce.
 browser.webRequest.onBeforeSendHeaders.addListener(
   async (details) => {
     const url = new URL(details.url);
     if (!targetDomains.includes(url.hostname)) return;
-
-    try {
-      // Obtain geolocation with a 5-second timeout.
-      const position = await new Promise((resolve, reject) => {
-        navigator.geolocation.getCurrentPosition(resolve, reject, { timeout: 5000 });
-      });
-      const { latitude, longitude, accuracy } = position.coords;
-      console.log(`[Background] Geolocation obtained: lat=${latitude}, lon=${longitude}, accuracy=${accuracy}`);
-
-      // Determine the likely source based on accuracy.
-      const source = guessLocationSource(accuracy);
-
-      // Build the header value with required geolocation data.
-      let headerValue = `lat=${latitude};lon=${longitude};accuracy=${accuracy}`;
-
-      // Attempt to obtain a TPM attestation token.
+    
+    // Wait for latestPosition if not available.
+    if (!latestPosition) {
       try {
-        const tpmToken = await getTPMAttestation(latitude, longitude, accuracy, source);
-        // Append the signature to the header value.
-        headerValue += `;sig=${tpmToken}`;
-      } catch (attestError) {
-        console.warn("[Background] TPM attestation failed:", attestError);
+        console.log("[Background] Waiting for a valid position...");
+        await waitForPosition();
+        console.log("[Background] Position obtained after waiting.");
+      } catch (err) {
+        console.warn("[Background] Position not available after waiting; skipping header injection.");
+        return { requestHeaders: details.requestHeaders };
       }
-
-      // Inject the constructed header.
-      details.requestHeaders.push({
-        name: "X-Custom-Geolocation",
-        value: headerValue
-      });
-      console.log("[Background] Injected X-Custom-Geolocation header:", headerValue);
-    } catch (err) {
-      console.warn("Geolocation error:", err);
     }
-
+    
+    const { latitude, longitude, accuracy } = latestPosition.coords;
+    console.log(`[Background] Using cached position: lat=${latitude}, lon=${longitude}, accuracy=${accuracy}`);
+    
+    const timestamp = new Date().toISOString();
+    console.log(`[Background] Timestamp: ${timestamp}`);
+    
+    // Use the in-memory nonce fetched from the server.
+    if (currentNonce === null) {
+      console.warn("[Background] No nonce available; skipping header injection.");
+      return { requestHeaders: details.requestHeaders };
+    }
+    let nonceToUse = currentNonce;
+    currentNonce++;
+    console.log(`[Background] Nonce used: ${nonceToUse}, new local nonce: ${currentNonce}`);
+    
+    const source = guessLocationSource(accuracy);
+    console.log(`[Background] Computed source: ${source}`);
+    
+    let headerValue = `lat=${latitude};lon=${longitude};accuracy=${accuracy};time=${timestamp};nonce=${nonceToUse};source=${source}`;
+    
+    try {
+      const attestation = await getTPMAttestation(latitude, longitude, accuracy, source, timestamp, nonceToUse);
+      headerValue += `;sig=${attestation.token}`;
+      console.log("[Background] Attestation appended to header.");
+    } catch (attestError) {
+      console.warn("[Background] TPM attestation error:", attestError);
+    }
+    
+    details.requestHeaders.push({ name: "X-Custom-Geolocation", value: headerValue });
+    console.log("[Background] Injected X-Custom-Geolocation header:", headerValue);
     return { requestHeaders: details.requestHeaders };
   },
   { urls: ["<all_urls>"] },

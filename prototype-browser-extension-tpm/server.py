@@ -2,40 +2,39 @@ from flask import Flask, request, jsonify, send_from_directory
 import os
 import base64
 import reverse_geocode
-
+import math
+import logging
 from cryptography import x509
 from cryptography.hazmat.backends import default_backend
 from cryptography.hazmat.primitives import hashes
 from cryptography.hazmat.primitives.asymmetric import padding
-from cryptography.exceptions import InvalidSignature
 
 app = Flask(__name__)
+
+# ----- Global In-Memory Nonce Store -----
+# We assume only one TPM certificate is used.
+# current_nonce is incremented only when a request is valid.
+current_nonce = 1
 
 # ----- Helper Functions and Configuration -----
 
 def load_tpm_cert():
     """Load the TPM certificate from a PEM file."""
+    pem_file = "tpm_cert.pem"
     try:
-        with open("tpm_cert.pem", "rb") as cert_file:
-            cert_data = cert_file.read()
-            return x509.load_pem_x509_certificate(cert_data, default_backend())
+        with open(pem_file, "rb") as f:
+            pem_data = f.read()
+        cert = x509.load_pem_x509_certificate(pem_data, default_backend())
+        return cert
     except Exception as e:
-        app.logger.error(f"Error loading TPM certificate: {e}")
+        app.logger.error("Error loading TPM certificate from PEM file: " + str(e))
         return None
 
-TPM_CERT = load_tpm_cert()
-
-def verify_tpm_signature(payload, signature_b64):
+def verify_tpm_signature_with_cert(payload, signature_b64, cert):
     """
-    Verify the TPM signature (base64‑encoded) against the payload string 
-    using the public key extracted from the TPM certificate.
-    Returns True if the signature is valid; otherwise, False.
+    Verify the TPM signature for the payload using the provided certificate.
+    Returns True if valid; False otherwise.
     """
-    if TPM_CERT is None:
-        app.logger.error("TPM certificate not loaded.")
-        return False
-
-    public_key = TPM_CERT.public_key()
     try:
         signature = base64.b64decode(signature_b64)
     except Exception as e:
@@ -43,6 +42,7 @@ def verify_tpm_signature(payload, signature_b64):
         return False
 
     try:
+        public_key = cert.public_key()
         public_key.verify(
             signature,
             payload.encode("utf-8"),
@@ -50,102 +50,145 @@ def verify_tpm_signature(payload, signature_b64):
             hashes.SHA256()
         )
         return True
-    except InvalidSignature:
-        app.logger.error("TPM signature is invalid.")
-        return False
     except Exception as e:
-        app.logger.error(f"Error during signature verification: {e}")
+        app.logger.error(f"Signature verification error: {e}")
         return False
 
-# ----- Flask Routes -----
+# ----- Nonce Initialization Endpoint -----
+@app.route("/init_nonce", methods=["GET"])
+def init_nonce():
+    """Endpoint for background.js to fetch the initial nonce value."""
+    global current_nonce
+    return jsonify({"nonce": current_nonce})
 
+# ----- Main Route Handler -----
 @app.route("/")
 def index():
-    # Retrieve the custom header.
+    global current_nonce
     geo_header = request.headers.get("X-Custom-Geolocation", "Not Provided")
     location_data = {}
+    app.logger.info(f"Received X-Custom-Geolocation header: {geo_header}")
 
-    if geo_header != "Not Provided":
+    if geo_header == "Not Provided":
+        return jsonify({
+            "message": "No X-Custom-Geolocation header provided",
+            "geolocation": None
+        })
+
+    try:
+        # Parse the header (semicolon-separated key=value pairs)
+        parts = geo_header.split(";")
+        header_dict = {}
+        for part in parts:
+            if "=" in part:
+                key, value = part.split("=", 1)
+                header_dict[key.strip()] = value.strip()
+
+        lat = float(header_dict.get("lat", "0"))
+        lon = float(header_dict.get("lon", "0"))
+        accuracy = float(header_dict.get("accuracy", "-1"))
+        time_value = header_dict.get("time", "undefined")
+        nonce_value = header_dict.get("nonce", "undefined")
+        source = header_dict.get("source", "N/A")
+        tpm_token = header_dict.get("sig", None)
+
+        app.logger.info(f"Header parsed: lat={lat}, lon={lon}, accuracy={accuracy}, time={time_value}, nonce={nonce_value}, source={source}")
+
+        # Validate nonce from the header.
         try:
-            # Expected header format:
-            # "lat=<value>;lon=<value>;accuracy=<value>[;sig=<TPM token>]"
-            header_parts = geo_header.split(";")
-            parsed = {}
-            for part in header_parts:
-                if "=" in part:
-                    key, value = part.split("=", 1)
-                    parsed[key.strip()] = value.strip()
+            received_nonce = int(nonce_value)
+        except Exception as ex:
+            app.logger.error(f"Invalid nonce received: {nonce_value}. Error: {ex}")
+            return jsonify({"error": "Invalid nonce received"}), 400
 
-            # Extract basic geolocation values.
-            accuracy_str = parsed.get("accuracy", "-1")
-            lat = float(parsed.get("lat", "0"))
-            lon = float(parsed.get("lon", "0"))
-            accuracy = float(accuracy_str)
-            tpm_token = parsed.get("sig", None)
+        # Check for nonce out-of-sync due to a server restart.
+        if current_nonce == 1 and received_nonce > 1:
+            app.logger.error("Server nonce is 1 and client nonce is greater than 1. Please reinitialize nonce via /init_nonce.")
+            response = jsonify({"error": "Nonce out-of-sync due to server restart; client should reinitialize nonce via /init_nonce"})
+            response.status_code = 400
+            response.headers["X-Nonce-Error"] = "Nonce out-of-sync; please reinitialize nonce via /init_nonce"
+            response.headers["Access-Control-Expose-Headers"] = "X-Nonce-Error"
+            return response
 
-            # If a TPM token is provided, extract the attestation payload and signature.
-            source = "N/A"
-            verified = None
-            if tpm_token:
-                if "|sig=" in tpm_token:
-                    attestation_payload, signature_b64 = tpm_token.split("|sig=", 1)
-                    # Parse the attestation payload fields.
-                    att_parts = {}
-                    for part in attestation_payload.split(","):
-                        if "=" in part:
-                            k, v = part.split("=", 1)
-                            att_parts[k.strip()] = v.strip()
-                    # Extract the source from the attestation payload.
-                    source = att_parts.get("source", "unknown")
-                    
-                    # Compare the fields numerically (or as strings for source).
-                    lat_match = abs(float(att_parts.get("lat", 0)) - lat) < 1e-6
-                    lon_match = abs(float(att_parts.get("lon", 0)) - lon) < 1e-6
-                    acc_match = abs(float(att_parts.get("accuracy", 0)) - accuracy) < 1e-6
-                    source_match = att_parts.get("source", "").strip() == source
-                    if not (lat_match and lon_match and acc_match and source_match):
-                        app.logger.warning("Attestation payload does not match header values.")
-                    verified = verify_tpm_signature(attestation_payload.strip(), signature_b64.strip())
+        if received_nonce != current_nonce:
+            app.logger.error(f"Nonce mismatch: expected {current_nonce}, received {received_nonce}")
+            return jsonify({"error": f"Nonce mismatch: expected {current_nonce}, received {received_nonce}"}), 400
+        else:
+            app.logger.info(f"Nonce match: {received_nonce} is as expected.")
+            # Valid request: increment nonce.
+            current_nonce += 1
+
+        verified = None
+        if tpm_token:
+            if "|sig=" in tpm_token:
+                att_payload, signature_b64 = tpm_token.split("|sig=", 1)
+                att_dict = {}
+                for pair in att_payload.split(","):
+                    if "=" in pair:
+                        k, v = pair.split("=", 1)
+                        att_dict[k.strip()] = v.strip()
+                lat_match = math.isclose(float(att_dict.get("lat", "0")), lat, rel_tol=1e-6)
+                lon_match = math.isclose(float(att_dict.get("lon", "0")), lon, rel_tol=1e-6)
+                acc_match = math.isclose(float(att_dict.get("accuracy", "0")), accuracy, rel_tol=1e-6)
+                time_match = (att_dict.get("time", "") == time_value)
+                nonce_match = (att_dict.get("nonce", "") == nonce_value)
+                if not (lat_match and lon_match and acc_match and time_match and nonce_match):
+                    app.logger.error("Attestation payload mismatch.")
+                    return jsonify({"error": "Attestation payload mismatch."}), 400
+                tpm_cert = load_tpm_cert()
+                if tpm_cert:
+                    verified = verify_tpm_signature_with_cert(att_payload, signature_b64.strip(), tpm_cert)
+                    if not verified:
+                        app.logger.error("TPM signature verification failed.")
+                        return jsonify({"error": "TPM signature verification failed."}), 400
                 else:
-                    # Fallback if token is not in expected format.
-                    app.logger.warning("TPM token is not in the expected format.")
-                    source = "unknown"
-                    expected_payload = f"lat={lat},lon={lon},accuracy={accuracy_str},source={source}"
-                    verified = verify_tpm_signature(expected_payload, tpm_token.strip())
+                    app.logger.error("No TPM certificate available for signature verification.")
+                    return jsonify({"error": "No TPM certificate available for signature verification."}), 400
             else:
-                # If no TPM token, source remains unavailable.
-                source = "N/A"
+                app.logger.error("TPM token not in expected format.")
+                return jsonify({"error": "TPM token not in expected format."}), 400
+        else:
+            app.logger.info("No TPM token provided in header.")
 
-            # Use reverse_geocode to convert coordinates to geographic details.
-            coord = (lat, lon)
-            geo = reverse_geocode.get(coord)
-            location_data = {
-                "latitude": lat,
-                "longitude": lon,
-                "accuracy_meters": accuracy,
-                "source": source,
-                "City": geo.get("city", "Unknown"),
-                "State": geo.get("state", "Unknown"),
-                "Country": geo.get("country", "Unknown")
-            }
-            if tpm_token:
-                location_data["TPM_signature_Verified"] = verified
+        coord = (lat, lon)
+        geo = reverse_geocode.get(coord)
+        location_data = {
+            "latitude": lat,
+            "longitude": lon,
+            "accuracy_meters": accuracy,
+            "time": time_value,
+            "nonce": nonce_value,
+            "source": source,
+            "City": geo.get("city", "Unknown"),
+            "State": geo.get("state", "Unknown"),
+            "Country": geo.get("country", "Unknown")
+        }
+        if tpm_token:
+            location_data["TPM_signature_Verified"] = True
 
-        except Exception as e:
-            location_data = {"error": f"Failed to parse geolocation: {str(e)}"}
+    except Exception as e:
+        app.logger.error(f"Failed to parse geolocation: {e}")
+        return jsonify({"error": f"Failed to parse geolocation: {str(e)}"}), 400
 
     return jsonify({
-        "message": "Verified TPM signature of geolocation (lat/lon) and converted to geographic region (city/state/country)",
-        "geolocation": location_data or geo_header
+        "message": "Verified TPM signature and geolocation converted to geographic region",
+        "geolocation": location_data
     })
 
-@app.route('/favicon.ico')
+@app.route("/favicon.ico")
 def favicon():
-    return send_from_directory(
-        os.path.join(app.root_path, 'static'),
-        'favicon.ico',
-        mimetype='image/vnd.microsoft.icon'
-    )
+    return send_from_directory(os.path.join(app.root_path, "static"),
+                               "favicon.ico",
+                               mimetype="image/vnd.microsoft.icon")
+
+# Use after_request and call_on_close to log a divider after the response is fully sent.
+@app.after_request
+def add_divider(response):
+    response.call_on_close(lambda: app.logger.info("\n----------------------------------------------------\n"))
+    return response
 
 if __name__ == "__main__":
-    app.run(host="0.0.0.0", port=8443, ssl_context=("cert.pem", "key.pem"))
+    logging.basicConfig(level=logging.INFO)
+    app.run(host="0.0.0.0",
+            port=8443,
+            ssl_context=("cert.pem", "key.pem"))
