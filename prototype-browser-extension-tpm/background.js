@@ -1,3 +1,5 @@
+console.log("[Background] Background script loaded.");
+
 let targetDomains = ["localhost"];
 let latestPosition = null; // Global cache for the latest geolocation.
 let currentNonce = null;   // Global nonce, retrieved once from the server.
@@ -16,7 +18,8 @@ browser.storage.onChanged.addListener((changes) => {
 //
 // Fetch initial nonce from the server's /init_nonce endpoint.
 function fetchInitialNonce() {
-  // Adjust the URL to point to your server (e.g., using https://127.0.0.1:8443/init_nonce).
+  console.log("[Background] Fetching initial nonce...");
+  // Adjust the URL if needed.
   fetch("https://127.0.0.1:8443/init_nonce")
     .then((response) => response.json())
     .then((data) => {
@@ -28,6 +31,38 @@ function fetchInitialNonce() {
     });
 }
 fetchInitialNonce();
+
+//
+// Listen for responses from the server via onHeadersReceived.
+// We’re broadening the URL filter to <all_urls> (since your extension has <all_urls> permission)
+// so that we catch any 400 responses coming back. Then we log details and check if the response
+// contains the custom header "X-Nonce-Error" with the expected content. If so, we call fetchInitialNonce().
+browser.webRequest.onHeadersReceived.addListener(
+  (details) => {
+    console.log("[Background] onHeadersReceived fired for URL:", details.url, "statusCode:", details.statusCode);
+    if (details.statusCode === 400) {
+      const headers = details.responseHeaders || [];
+      let foundHeader = false;
+      for (let header of headers) {
+        console.log("[Background] Checking header:", header.name, header.value);
+        if (
+          header.name.toLowerCase() === "x-nonce-error" &&
+          header.value.includes("Nonce out-of-sync; please reinitialize nonce via /init_nonce")
+        ) {
+          foundHeader = true;
+          console.warn("[Background] Detected nonce out-of-sync error in response for URL:", details.url);
+          fetchInitialNonce();
+          break;
+        }
+      }
+      if (!foundHeader) {
+        console.log("[Background] 400 response did not contain the expected X-Nonce-Error header for URL:", details.url);
+      }
+    }
+  },
+  { urls: ["<all_urls>"] },
+  ["responseHeaders"]
+);
 
 //
 // Determine the likely location source based on accuracy.
@@ -62,6 +97,25 @@ updatePosition();
 setInterval(updatePosition, 30000); // Update every 30 seconds.
 
 //
+// Wait for latestPosition to become non-null.
+// Poll every 'interval' ms and reject after 'timeout' ms.
+function waitForPosition(timeout = 10000, interval = 500) {
+  return new Promise((resolve, reject) => {
+    const start = Date.now();
+    const check = () => {
+      if (latestPosition) {
+        resolve(latestPosition);
+      } else if (Date.now() - start > timeout) {
+        reject(new Error("Timed out waiting for position"));
+      } else {
+        setTimeout(check, interval);
+      }
+    };
+    check();
+  });
+}
+
+//
 // Request TPM attestation from the native messaging host.
 function getTPMAttestation(lat, lon, accuracy, source, timestamp, nonce) {
   console.log(
@@ -70,7 +124,6 @@ function getTPMAttestation(lat, lon, accuracy, source, timestamp, nonce) {
   return new Promise((resolve, reject) => {
     const nativePort = browser.runtime.connectNative("com.mycompany.geosign");
     console.log("[Background] Native messaging connection created.");
-
     let resolved = false;
     const timeoutId = setTimeout(() => {
       if (!resolved) {
@@ -79,8 +132,8 @@ function getTPMAttestation(lat, lon, accuracy, source, timestamp, nonce) {
         console.error("[Background] Timeout waiting for TPM attestation.");
         reject("Timeout waiting for TPM attestation");
       }
-    }, 30000); // 30-sec timeout.
-
+    }, 30000);
+    
     function responseListener(response) {
       if (resolved) return;
       if (response && response.token) {
@@ -98,7 +151,6 @@ function getTPMAttestation(lat, lon, accuracy, source, timestamp, nonce) {
       }
     }
     nativePort.onMessage.addListener(responseListener);
-
     const payloadString = `lat=${lat},lon=${lon},accuracy=${accuracy},source=${source},time=${timestamp},nonce=${nonce}`;
     nativePort.postMessage({ command: "attest", payload: payloadString });
     console.log("[Background] Posted payload to native host:", payloadString);
@@ -112,33 +164,39 @@ browser.webRequest.onBeforeSendHeaders.addListener(
   async (details) => {
     const url = new URL(details.url);
     if (!targetDomains.includes(url.hostname)) return;
-
+    
+    // Wait for latestPosition if not available.
     if (!latestPosition) {
-      console.warn("[Background] No cached position available; skipping header injection.");
-      return { requestHeaders: details.requestHeaders };
+      try {
+        console.log("[Background] Waiting for a valid position...");
+        await waitForPosition();
+        console.log("[Background] Position obtained after waiting.");
+      } catch (err) {
+        console.warn("[Background] Position not available after waiting; skipping header injection.");
+        return { requestHeaders: details.requestHeaders };
+      }
     }
-
+    
     const { latitude, longitude, accuracy } = latestPosition.coords;
     console.log(`[Background] Using cached position: lat=${latitude}, lon=${longitude}, accuracy=${accuracy}`);
-
+    
     const timestamp = new Date().toISOString();
     console.log(`[Background] Timestamp: ${timestamp}`);
-
+    
     // Use the in-memory nonce fetched from the server.
     if (currentNonce === null) {
       console.warn("[Background] No nonce available; skipping header injection.");
       return { requestHeaders: details.requestHeaders };
     }
-    // Save the value to use and then increment locally.
     let nonceToUse = currentNonce;
-    currentNonce++; 
+    currentNonce++;
     console.log(`[Background] Nonce used: ${nonceToUse}, new local nonce: ${currentNonce}`);
-
+    
     const source = guessLocationSource(accuracy);
     console.log(`[Background] Computed source: ${source}`);
-
+    
     let headerValue = `lat=${latitude};lon=${longitude};accuracy=${accuracy};time=${timestamp};nonce=${nonceToUse};source=${source}`;
-
+    
     try {
       const attestation = await getTPMAttestation(latitude, longitude, accuracy, source, timestamp, nonceToUse);
       headerValue += `;sig=${attestation.token}`;
@@ -146,7 +204,7 @@ browser.webRequest.onBeforeSendHeaders.addListener(
     } catch (attestError) {
       console.warn("[Background] TPM attestation error:", attestError);
     }
-
+    
     details.requestHeaders.push({ name: "X-Custom-Geolocation", value: headerValue });
     console.log("[Background] Injected X-Custom-Geolocation header:", headerValue);
     return { requestHeaders: details.requestHeaders };
