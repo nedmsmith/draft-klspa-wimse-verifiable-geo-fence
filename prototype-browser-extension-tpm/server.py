@@ -10,9 +10,9 @@ from cryptography.hazmat.primitives import hashes
 from cryptography.hazmat.primitives.asymmetric import padding
 
 app = Flask(__name__)
+logging.basicConfig(level=logging.INFO)
 
 # ----- Global In-Memory Nonce Store -----
-# We assume only one TPM certificate is used.
 # current_nonce is incremented only when a request is valid.
 current_nonce = 1
 
@@ -54,14 +54,12 @@ def verify_tpm_signature_with_cert(payload, signature_b64, cert):
         app.logger.error(f"Signature verification error: {e}")
         return False
 
-# ----- Nonce Initialization Endpoint -----
 @app.route("/init_nonce", methods=["GET"])
 def init_nonce():
     """Endpoint for background.js to fetch the initial nonce value."""
     global current_nonce
     return jsonify({"nonce": current_nonce})
 
-# ----- Main Route Handler -----
 @app.route("/")
 def index():
     global current_nonce
@@ -74,6 +72,12 @@ def index():
             "message": "No X-Custom-Geolocation header provided",
             "geolocation": None
         })
+
+    # Ensure that the DPI marker is present.
+    if "dpi=processed_by_proxy" in geo_header:
+        app.logger.info("DPI marker dpi=processed_by_proxy is present.")
+    else:
+        app.logger.error("Missing DPI marker in X-Custom-Geolocation header.")
 
     try:
         # Parse the header (semicolon-separated key=value pairs)
@@ -92,7 +96,8 @@ def index():
         source = header_dict.get("source", "N/A")
         tpm_token = header_dict.get("sig", None)
 
-        app.logger.info(f"Header parsed: lat={lat}, lon={lon}, accuracy={accuracy}, time={time_value}, nonce={nonce_value}, source={source}")
+        app.logger.info(f"Header parsed: lat={lat}, lon={lon}, accuracy={accuracy}, "
+                        f"time={time_value}, nonce={nonce_value}, source={source}")
 
         # Validate nonce from the header.
         try:
@@ -181,7 +186,6 @@ def favicon():
                                "favicon.ico",
                                mimetype="image/vnd.microsoft.icon")
 
-# Use after_request and call_on_close to log a divider after the response is fully sent.
 @app.after_request
 def add_divider(response):
     response.call_on_close(lambda: app.logger.info("\n----------------------------------------------------\n"))
@@ -190,5 +194,5 @@ def add_divider(response):
 if __name__ == "__main__":
     logging.basicConfig(level=logging.INFO)
     app.run(host="0.0.0.0",
-            port=8443,
+            port=9443,
             ssl_context=("cert.pem", "key.pem"))
