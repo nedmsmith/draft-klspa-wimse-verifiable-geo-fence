@@ -1,5 +1,3 @@
-<!-- regenerate: on (set to off if you edit this file) -->
-
 # TPM-Backed Geolocation Attestation Prototype
 
 This directory implements a prototype for secure, verifiable geolocation attestation using TPM-backed certificates. It is designed to work with a browser extension that collects geolocation data and communicates with this backend.
