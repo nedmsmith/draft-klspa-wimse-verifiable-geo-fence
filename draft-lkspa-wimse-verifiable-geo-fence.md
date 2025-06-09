@@ -182,7 +182,7 @@ Geographic boundary attestation helps satisfy data residency and data sovereignt
 
 # Problem Statements
 
-* **Bearer Tokens:** Typically generated via user MFA and used to establish HTTP sessions. A malicious actor can steal a bearer token (e.g., from a still-valid HAR file uploaded to a support portal, as seen in the Okta attack) and present it to a server workload. The attacker may be in a forbidden location and on an unauthorized host (e.g., their own laptop). Proof-of-Possession (PoP) tokens ([RFC 7800](https://datatracker.ietf.org/doc/html/rfc7800)) and PoP via mutual TLS ([RFC 8705](https://datatracker.ietf.org/doc/html/rfc8705)) attempt to mitigate this threat, but face the following challenges:
+* **Bearer Tokens:** Typically generated via user MFA and used to establish HTTP sessions. A malicious actor can steal a bearer token (e.g., from a still-valid HAR file uploaded to a support portal, as seen in the Okta attack) and present it to a server workload. The attacker may be in a forbidden location and on an unauthorized host (e.g., their own laptop). Proof-of-Possession (PoP) tokens ([RFC 7800](https://datatracker.ietf.org/doc/html/rfc7800)) and PoP via mutual TLS ([RFC 8705](https://datatracker.ietf.org/doc/html/rfc8705)) attempt to mitigate this threat, but face the challenges described below.
 
 * **PoP Token:** How is trust established between the presenter (client) and the token issuer, so that the presenter can securely connect to the recipient (server)?
 
@@ -192,7 +192,7 @@ Geographic boundary attestation helps satisfy data residency and data sovereignt
 
 * **IP Address-Based Location:** This is the typical approach, but it has limitations: network providers can use geographic-region-based IANA-assigned IP addresses anywhere in the world, and enterprise VPNs can hide the user's real IP address.
 
-* **Wi-Fi-Based Location:** For user laptop endpoints with agents (e.g., ZTNA), traditional geographic enforcement relies on trusting the Wi-Fi access point’s location. However, Wi-Fi access points are mobile and can be moved, undermining this trust. 
+* **Wi-Fi-Based Location:** For user laptop endpoints with agents (e.g., ZTNA), traditional geographic enforcement relies on trusting the Wi-Fi access point’s location. However, Wi-Fi access points are mobile and can be moved, undermining this trust.
 
 # Approach Summary
 
