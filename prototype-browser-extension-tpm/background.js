@@ -157,7 +157,8 @@ function getTPMAttestation(lat, lon, accuracy, source, timestamp, nonce) {
       }
     }
     nativePort.onMessage.addListener(responseListener);
-    const payloadString = `lat=${lat},lon=${lon},accuracy=${accuracy},source=${source},time=${timestamp},nonce=${nonce}`;
+    // Use semicolons (;) instead of commas (,) in the payload string for attestation
+    const payloadString = `lat=${lat};lon=${lon};accuracy=${accuracy};source=${source};time=${timestamp};nonce=${nonce}`;
     nativePort.postMessage({ command: "attest", payload: payloadString });
     console.log("[Background] Posted payload to native host:", payloadString);
   });
@@ -220,3 +221,6 @@ browser.webRequest.onBeforeSendHeaders.addListener(
   { urls: ["<all_urls>"] },
   ["blocking", "requestHeaders"]
 );
+
+// If you check for 'dpi=processed_by_proxy' in any logic, change to 'waf=processed_by_proxy'.
+// This includes any header checks, comments, or related logic.

@@ -125,11 +125,11 @@ def tpm_attest(payload):
 
 def parse_payload(payload_string):
     """
-    Split a comma-separated key=value string into a dictionary.
-    Expected: "lat=...,lon=...,accuracy=...,source=...,time=...,nonce=..."
+    Split a semicolon-separated key=value string into a dictionary.
+    Expected: "lat=...;lon=...;accuracy=...;source=...;time=...;nonce=..."
     """
     data = {}
-    for pair in payload_string.split(","):
+    for pair in payload_string.split(";"):
         if "=" in pair:
             key, value = pair.split("=", 1)
             data[key.strip()] = value.strip()

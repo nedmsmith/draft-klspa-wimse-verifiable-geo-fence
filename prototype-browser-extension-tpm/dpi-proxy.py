@@ -186,7 +186,7 @@ JOFai3j6lNdYkmC8cS7/hkEHYzWGlTpXrrJT1tqo6gE+/pFDdtKVs1KshWXmMsbK
     return True, 'OK'
 
 # -----------------------
-# DPI Proxy Route
+# WAF Proxy Route
 # -----------------------
 
 @app.route('/', defaults={'path': ''}, methods=['GET', 'POST', 'PUT', 'DELETE', 'PATCH', 'OPTIONS'])
@@ -194,9 +194,9 @@ JOFai3j6lNdYkmC8cS7/hkEHYzWGlTpXrrJT1tqo6gE+/pFDdtKVs1KshWXmMsbK
 def proxy(path):
     global current_nonce
 
-    # Special-case: handle /get_access_token_with_initial_nonce requests without DPI header processing.
+    # Special-case: handle /get_access_token_with_initial_nonce requests without WAF header processing.
     if path.lower() == "get_access_token_with_initial_nonce":
-        app.logger.info("Processing /get_access_token_with_initial_nonce request without DPI header modifications.")
+        app.logger.info("Processing /get_access_token_with_initial_nonce request without WAF header modifications.")
     else:
         original_geo_header = request.headers.get("X-Custom-Geolocation")
         if original_geo_header:
@@ -256,10 +256,10 @@ def proxy(path):
     headers = dict(request.headers)
     headers.pop("Host", None)
     
-    # For non-/get_access_token_with_initial_nonce requests, append a DPI processing marker.
+    # For non-/get_access_token_with_initial_nonce requests, append a WAF processing marker.
     if "X-Custom-Geolocation" in headers and path.lower() != "get_access_token_with_initial_nonce":
         original_value = headers["X-Custom-Geolocation"]
-        headers["X-Custom-Geolocation"] = original_value + ";dpi=processed_by_proxy"
+        headers["X-Custom-Geolocation"] = original_value + ";waf=processed_by_proxy"
         app.logger.info(f"Updated X-Custom-Geolocation header for forwarding: {headers['X-Custom-Geolocation']}")
 
     try:
@@ -312,6 +312,6 @@ def add_divider(response):
     return response
 
 if __name__ == "__main__":
-    # Run the DPI proxy with TLS termination.
+    # Run the WAF proxy with TLS termination.
     ssl_context = ("cert.pem", "key.pem")
     app.run(host="0.0.0.0", port=8443, ssl_context=ssl_context)

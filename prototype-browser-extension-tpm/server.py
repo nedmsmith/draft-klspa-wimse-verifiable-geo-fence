@@ -172,11 +172,11 @@ def index():
             "geolocation": None
         })
 
-    # Ensure that the DPI marker is present.
-    if "dpi=processed_by_proxy" in geo_header:
-        app.logger.info("DPI marker dpi=processed_by_proxy is present.")
+    # Ensure that the WAF marker is present.
+    if "waf=processed_by_proxy" in geo_header:
+        app.logger.info("WAF marker waf=processed_by_proxy is present.")
     else:
-        app.logger.error("Missing DPI marker in X-Custom-Geolocation header.")
+        app.logger.error("Missing WAF marker in X-Custom-Geolocation header.")
 
     try:
         # Parse the header (semicolon-separated key=value pairs)
@@ -221,6 +221,7 @@ def index():
             return jsonify({"error": f"Nonce mismatch: expected {current_nonce}, received {received_nonce}"}), 400
         else:
             app.logger.info(f"Nonce match: {received_nonce} is as expected.")
+            app.logger.info("Nonce verification passed.")  # Explicit log for successful nonce verification
             # Valid request: increment nonce.
             current_nonce += 1
 
