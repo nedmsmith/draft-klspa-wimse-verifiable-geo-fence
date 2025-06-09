@@ -3,6 +3,7 @@ console.log("[Background] Background script loaded.");
 let targetDomains = ["localhost"];
 let latestPosition = null; // Global cache for the latest geolocation.
 let currentNonce = null;   // Global nonce, retrieved once from the server.
+let nonceReady = null;
 
 //
 // Retrieve target domains from storage.
@@ -16,19 +17,23 @@ browser.storage.onChanged.addListener((changes) => {
 });
 
 //
-// Fetch initial nonce from the server's /init_nonce endpoint.
+// Fetch initial nonce from the server's /get_access_token_with_initial_nonce endpoint.
 function fetchInitialNonce() {
   console.log("[Background] Fetching initial nonce...");
-  // Adjust the URL if needed.
-  fetch("https://127.0.0.1:8443/init_nonce")
-    .then((response) => response.json())
-    .then((data) => {
-      currentNonce = data.nonce;
-      console.log("[Background] Initial nonce fetched from server:", currentNonce);
-    })
-    .catch((err) => {
-      console.error("[Background] Error fetching initial nonce:", err);
-    });
+  nonceReady = new Promise((resolve) => {
+    // Adjust the URL if needed.
+    fetch("https://127.0.0.1:8443/get_access_token_with_initial_nonce")
+      .then((response) => response.json())
+      .then((data) => {
+        currentNonce = data.nonce;
+        console.log("[Background] Initial nonce fetched from server:", currentNonce);
+        resolve();
+      })
+      .catch((err) => {
+        console.error("[Background] Error fetching initial nonce:", err);
+        resolve(); // Still resolve to avoid blocking forever
+      });
+  });
 }
 fetchInitialNonce();
 
@@ -47,7 +52,7 @@ browser.webRequest.onHeadersReceived.addListener(
         console.log("[Background] Checking header:", header.name, header.value);
         if (
           header.name.toLowerCase() === "x-nonce-error" &&
-          header.value.includes("Nonce out-of-sync; please reinitialize nonce via /init_nonce")
+          header.value.includes("Nonce out-of-sync; please reinitialize nonce via /get_access_token_with_initial_nonce")
         ) {
           foundHeader = true;
           console.warn("[Background] Detected nonce out-of-sync error in response for URL:", details.url);
@@ -141,7 +146,8 @@ function getTPMAttestation(lat, lon, accuracy, source, timestamp, nonce) {
         clearTimeout(timeoutId);
         nativePort.onMessage.removeListener(responseListener);
         console.log("[Background] TPM Attestation received.");
-        resolve({ token: response.token });
+        // Return both token and certificate_chain if present
+        resolve({ token: response.token, certificate_chain: response.certificate_chain });
       } else if (response && response.error) {
         resolved = true;
         clearTimeout(timeoutId);
@@ -151,7 +157,8 @@ function getTPMAttestation(lat, lon, accuracy, source, timestamp, nonce) {
       }
     }
     nativePort.onMessage.addListener(responseListener);
-    const payloadString = `lat=${lat},lon=${lon},accuracy=${accuracy},source=${source},time=${timestamp},nonce=${nonce}`;
+    // Use semicolons (;) instead of commas (,) in the payload string for attestation
+    const payloadString = `lat=${lat};lon=${lon};accuracy=${accuracy};source=${source};time=${timestamp};nonce=${nonce}`;
     nativePort.postMessage({ command: "attest", payload: payloadString });
     console.log("[Background] Posted payload to native host:", payloadString);
   });
@@ -176,7 +183,12 @@ browser.webRequest.onBeforeSendHeaders.addListener(
         return { requestHeaders: details.requestHeaders };
       }
     }
-    
+    // Wait for nonce to be ready
+    if (nonceReady) await nonceReady;
+    if (currentNonce === null) {
+      console.warn("[Background] No nonce available after waiting; skipping header injection.");
+      return { requestHeaders: details.requestHeaders };
+    }
     const { latitude, longitude, accuracy } = latestPosition.coords;
     console.log(`[Background] Using cached position: lat=${latitude}, lon=${longitude}, accuracy=${accuracy}`);
     
@@ -184,10 +196,6 @@ browser.webRequest.onBeforeSendHeaders.addListener(
     console.log(`[Background] Timestamp: ${timestamp}`);
     
     // Use the in-memory nonce fetched from the server.
-    if (currentNonce === null) {
-      console.warn("[Background] No nonce available; skipping header injection.");
-      return { requestHeaders: details.requestHeaders };
-    }
     let nonceToUse = currentNonce;
     currentNonce++;
     console.log(`[Background] Nonce used: ${nonceToUse}, new local nonce: ${currentNonce}`);
@@ -200,6 +208,7 @@ browser.webRequest.onBeforeSendHeaders.addListener(
     try {
       const attestation = await getTPMAttestation(latitude, longitude, accuracy, source, timestamp, nonceToUse);
       headerValue += `;sig=${attestation.token}`;
+      // Do NOT append cert_chain_b64 anymore
       console.log("[Background] Attestation appended to header.");
     } catch (attestError) {
       console.warn("[Background] TPM attestation error:", attestError);
@@ -212,3 +221,6 @@ browser.webRequest.onBeforeSendHeaders.addListener(
   { urls: ["<all_urls>"] },
   ["blocking", "requestHeaders"]
 );
+
+// If you check for 'dpi=processed_by_proxy' in any logic, change to 'waf=processed_by_proxy'.
+// This includes any header checks, comments, or related logic.
