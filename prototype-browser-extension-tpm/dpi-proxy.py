@@ -5,12 +5,13 @@ import math
 import os
 import base64
 from cryptography import x509
-from cryptography.hazmat.backends import default_backend
-from cryptography.hazmat.primitives import hashes
+from cryptography.hazmat.primitives import hashes, serialization
 from cryptography.hazmat.primitives.asymmetric import padding
+from cryptography.x509.base import load_pem_x509_certificate
 
 app = Flask(__name__)
-logging.basicConfig(level=logging.INFO)
+# Ensure all logs are visible in the console
+logging.basicConfig(level=logging.DEBUG)
 
 # Global variable for nonce checking.
 current_nonce = None
@@ -27,7 +28,7 @@ def load_tpm_cert():
     try:
         with open("tpm_cert.pem", "rb") as f:
             pem_data = f.read()
-        cert = x509.load_pem_x509_certificate(pem_data, default_backend())
+        cert = x509.load_pem_x509_certificate(pem_data)
         return cert
     except Exception as e:
         app.logger.error(f"Error loading TPM certificate: {e}")
@@ -90,6 +91,100 @@ def parse_geolocation_header(geo_header):
         app.logger.error(f"Error parsing geolocation header: {e}")
     return fields
 
+def verify_certificate_chain_and_signature(token, cert_chain_b64=None):
+    # Hardcoded certificate chain for dev/test (use real newlines, not \n)
+    hardcoded_chain = b"""-----BEGIN CERTIFICATE-----
+MIICzTCCAbWgAwIBAgIUCO+pSNMjARQXT+GiAhHCIr5UgnQwDQYJKoZIhvcNAQEL
+BQAwHTEbMBkGA1UEAwwSVFBNVGVzdENlcnRpZmljYXRlMB4XDTI1MDYwOTA0NDMw
+OFoXDTI2MDYwOTA0NDMwOFowJDEiMCAGA1UEAwwZR2VvTG9jYXRpb24gU2lnbmlu
+ZyBLZXkgWDCCASIwDQYJKoZIhvcNAQEBBQADggEPADCCAQoCggEBALUvzUqd/yDr
+MMpFofcmbZEhh8DVzh7UDxZUgu8d5UArdV0cGBFIrb2+w9yhVPY3MVATKy3BXL+Q
+jCBohycShQqvBJ8YuSrxSqfav2X8JL/78udQImevaT7d8dxDVtKL4YEGKJhK0CwG
+Vzeqk1xU13RDCXOGA6Q8IyxsexyEvEM8zbYRaTJjTRxcuatoTvi0aMlvRqbzhc6K
+wo4faR+KXK/DfdHy77yZnR/yd+sSAVDQ9f5r3QZO8ulq3se4umtr0Zvtv307X6QM
+YC9W+pVEM1NqkXbWXD+ei3zQFEdIoTT1lUS8ZxI6S7PxbMGv0n3/9HnWmcUufoLW
+zboCO8B3658CAwEAATANBgkqhkiG9w0BAQsFAAOCAQEAcr0l60lgxlLJxzjm49Kd
+o92BrPNlcbGtUIMpsSImBStl3tEEFV1zDDjpEZZIkznzNMxLpGwQDPOUb683DaAa
+dQWZoYLPtECyJ4Ry55yYdugDwc9iJ42Bwf16FNnP9phhXxUqW4WZ4mptrNm2xg3u
+sADUr8YpPxY7OfiTT+pQUCQ2wW7vMOQebQa/zf/u4uukddyNwrK726LBWUKanjew
+GJaj3X2g12YXoY+HWh1A99AKS0BnmuoTjOtqKlOP76Yk9P80ulj000Tue2ZKT8E0
++aoHD7eLPVH6ihU1ntmfXuG7dt1K/KwT6URlAnSEFD6Gr/m91g939NdpZToi8QPl
+Hw==
+-----END CERTIFICATE-----
+-----BEGIN CERTIFICATE-----
+MIICxjCCAa6gAwIBAgIUASBt2l02uuaSczMdfJnu7thrnE0wDQYJKoZIhvcNAQEL
+BQAwHTEbMBkGA1UEAwwSVFBNVGVzdENlcnRpZmljYXRlMB4XDTI1MDYwOTA0NDMw
+OFoXDTI2MDYwOTA0NDMwOFowHTEbMBkGA1UEAwwSVFBNVGVzdENlcnRpZmljYXRl
+MIIBIjANBgkqhkiG9w0BAQEFAAOCAQ8AMIIBCgKCAQEA0vm1nGQEbCEivhhM2L+Y
+k0gOV48f/aMHmFs06Hg65yIig49VsZ8cpoPJHWMIkjAw5pBZ9OcywCWcwWmnQ8dJ
+i8Ov8OzFZ/rN2XaZwd0Va74lerZjACE1TfZlOpDj6XWCis4ol0QgTXuXRnMaRJth
+ViVaJej+ktffsaczm0j6kN0gh7Zgq7m8t6BhWhFPsDT6iSSrXOuL8seKTA4PN7WQ
+SplKhqRPSzZCIG67ReS0a9Lv00tLKINSRs82Z6EGWV2ZPEWykIJ0Nx8S3hj9DP7m
+02BiY54xawABwYJHNuSmWSdTTknCNwj6T8v3e3pFwnbkRgH9XXdeTe1snZfar4WF
+VwIDAQABMA0GCSqGSIb3DQEBCwUAA4IBAQAU3oOHKUIla/yWxffV38XlPj4uACOw
+DWcp5+USBz0JcPNrceLW1B/ywuWQzaBEHupQPSEJ4/jYDHL3lyDUujBw7BmDpXuK
+DmRI4zME8XvT0WBeZUvkWNW62d6QIc3vwM7PpqY98SKeTT2kRMdXYbV0vWMjAzC3
+HqG5bSQJnc/sqVTIOUBobB9zhZ2HQ+DPt6d4SHuZnrC3Z/B24hUXeafPKt4niRVd
+JOFai3j6lNdYkmC8cS7/hkEHYzWGlTpXrrJT1tqo6gE+/pFDdtKVs1KshWXmMsbK
++Y0en8sRorqgZiAKTq/R+5XNSa1PFXoiw2PtjTdNTNmB9Ef6vikrjwzq
+-----END CERTIFICATE-----
+"""
+    cert_chain_pem = hardcoded_chain
+    # Split payload and signature
+    if '|sig=' not in token:
+        app.logger.error('[SIGFAIL] Invalid token format: missing |sig=')
+        return False, 'Invalid token format'
+    payload, sig_b64 = token.rsplit('|sig=', 1)
+    try:
+        signature = base64.b64decode(sig_b64)
+    except Exception as e:
+        app.logger.error(f'[SIGFAIL] Error decoding signature: {e}, sig_b64={sig_b64}')
+        return False, f'Error decoding signature: {e}'
+    # Split the chain into x_cert and tpm_cert
+    certs = []
+    for cert in cert_chain_pem.split(b'-----END CERTIFICATE-----'):
+        if b'-----BEGIN CERTIFICATE-----' in cert:
+            cert = cert + b'-----END CERTIFICATE-----\n'
+            certs.append(x509.load_pem_x509_certificate(cert))
+    if len(certs) != 2:
+        app.logger.error(f'[SIGFAIL] Certificate chain must contain 2 certs (x and TPM), got {len(certs)}')
+        return False, 'Certificate chain must contain 2 certs (x and TPM)'
+    x_cert, tpm_cert = certs
+
+    # Verify x_cert is signed by tpm_cert (issuer check and signature)
+    if x_cert.issuer != tpm_cert.subject:
+        app.logger.error(f'[SIGFAIL] x_cert issuer does not match tpm_cert subject')
+        app.logger.error(f'[SIGFAIL] x_cert.pem (PEM):\n{x_cert.public_bytes(serialization.Encoding.PEM).decode()}')
+        return False, 'x_cert not issued by TPM cert'
+    try:
+        tpm_cert.public_key().verify(
+            x_cert.signature,
+            x_cert.tbs_certificate_bytes,
+            padding.PKCS1v15(),
+            x_cert.signature_hash_algorithm,
+        )
+    except Exception as e:
+        app.logger.error(f'[SIGFAIL] x_cert signature invalid: {e}')
+        app.logger.error(f'[SIGFAIL] x_cert.pem (PEM):\n{x_cert.public_bytes(serialization.Encoding.PEM).decode()}')
+        return False, f'x_cert signature invalid: {e}'
+
+    # Verify signature on payload using x_cert
+    try:
+        x_cert.public_key().verify(
+            signature,
+            payload.encode('utf-8'),
+            padding.PKCS1v15(),
+            hashes.SHA256()
+        )
+    except Exception as e:
+        app.logger.error(f'[SIGFAIL] Payload signature invalid: {e}')
+        app.logger.error(f'[SIGFAIL] Payload: {payload}')
+        app.logger.error(f'[SIGFAIL] Payload repr: {repr(payload)}')
+        app.logger.error(f'[SIGFAIL] Signature (base64): {sig_b64}')
+        app.logger.error(f'[SIGFAIL] Signature (hex): {signature.hex()}')
+        return False, f'Payload signature invalid: {e}'
+    return True, 'OK'
+
 # -----------------------
 # DPI Proxy Route
 # -----------------------
@@ -99,9 +194,9 @@ def parse_geolocation_header(geo_header):
 def proxy(path):
     global current_nonce
 
-    # Special-case: handle /init_nonce requests without DPI header processing.
-    if path.lower() == "init_nonce":
-        app.logger.info("Processing /init_nonce request without DPI header modifications.")
+    # Special-case: handle /get_access_token_with_initial_nonce requests without DPI header processing.
+    if path.lower() == "get_access_token_with_initial_nonce":
+        app.logger.info("Processing /get_access_token_with_initial_nonce request without DPI header modifications.")
     else:
         original_geo_header = request.headers.get("X-Custom-Geolocation")
         if original_geo_header:
@@ -120,10 +215,10 @@ def proxy(path):
                 app.logger.info(f"Initial nonce set to: {current_nonce}")
 
             if current_nonce == 1 and received_nonce > 1:
-                app.logger.error("Nonce out-of-sync: expected nonce 1 but received a nonce greater than 1. Please reinitialize nonce via /init_nonce.")
-                response = jsonify({"error": "Nonce out-of-sync; please reinitialize nonce via /init_nonce"})
+                app.logger.error("Nonce out-of-sync: expected nonce 1 but received a nonce greater than 1. Please reinitialize nonce via /get_access_token_with_initial_nonce.")
+                response = jsonify({"error": "Nonce out-of-sync; please reinitialize nonce via /get_access_token_with_initial_nonce"})
                 response.status_code = 400
-                response.headers["X-Nonce-Error"] = "Nonce out-of-sync; please reinitialize nonce via /init_nonce"
+                response.headers["X-Nonce-Error"] = "Nonce out-of-sync; please reinitialize nonce via /get_access_token_with_initial_nonce"
                 response.headers["Access-Control-Expose-Headers"] = "X-Nonce-Error"
                 return response
 
@@ -137,26 +232,18 @@ def proxy(path):
             # Validate TPM signature if present.
             if "sig" in parsed_fields:
                 tpm_token = parsed_fields["sig"]
+                # For dev/test, always use hardcoded chain and ignore cert_chain_b64
                 if "|sig=" in tpm_token:
                     try:
-                        att_payload, signature_b64 = tpm_token.split("|sig=", 1)
-                        att_payload = att_payload.strip()
-                        signature_b64 = signature_b64.strip()
-                        app.logger.info(f"Extracted attestation payload: {att_payload}")
-                        app.logger.info(f"Extracted signature (base64): {signature_b64}")
-                        tpm_cert = load_tpm_cert()
-                        if tpm_cert:
-                            valid = verify_tpm_signature_with_cert(att_payload, signature_b64, tpm_cert)
-                            if not valid:
-                                app.logger.error("Invalid TPM signature in X-Custom-Geolocation header.")
-                            else:
-                                app.logger.info("TPM signature validated successfully.")
+                        valid, reason = verify_certificate_chain_and_signature(tpm_token)
+                        if not valid:
+                            app.logger.error(f"[SIGFAIL] Invalid signature/cert chain in X-Custom-Geolocation header: {reason}")
                         else:
-                            app.logger.error("Failed to load TPM certificate for signature validation.")
+                            app.logger.info("Signature and certificate chain validated successfully.")
                     except Exception as ex:
-                        app.logger.error(f"Error parsing TPM signature from header: {ex}")
+                        app.logger.error(f"Error verifying signature/cert chain from header: {ex}")
                 else:
-                    app.logger.error("TPM token not in expected format (missing '|sig=' delimiter).")
+                    app.logger.error("sig not in expected format (missing '|sig=' delimiter).")
         else:
             app.logger.info("No X-Custom-Geolocation header in request.")
 
@@ -169,8 +256,8 @@ def proxy(path):
     headers = dict(request.headers)
     headers.pop("Host", None)
     
-    # For non-/init_nonce requests, append a DPI processing marker.
-    if "X-Custom-Geolocation" in headers and path.lower() != "init_nonce":
+    # For non-/get_access_token_with_initial_nonce requests, append a DPI processing marker.
+    if "X-Custom-Geolocation" in headers and path.lower() != "get_access_token_with_initial_nonce":
         original_value = headers["X-Custom-Geolocation"]
         headers["X-Custom-Geolocation"] = original_value + ";dpi=processed_by_proxy"
         app.logger.info(f"Updated X-Custom-Geolocation header for forwarding: {headers['X-Custom-Geolocation']}")
@@ -190,18 +277,21 @@ def proxy(path):
         app.logger.error(f"Error connecting to upstream server: {e}")
         return jsonify({"error": "Upstream server error"}), 502
 
-    # If this is an /init_nonce request, update our internal nonce based on the response.
-    if path.lower() == "init_nonce":
+    # If this is an /get_access_token_with_initial_nonce request, update our internal nonce based on the response.
+    if path.lower() == "get_access_token_with_initial_nonce":
         try:
-            data = upstream_response.json()
-            new_nonce = data.get("nonce")
-            if new_nonce is not None:
-                current_nonce = new_nonce
-                app.logger.info(f"Updated nonce from /init_nonce response: {current_nonce}")
+            resp_json = None
+            try:
+                resp_json = upstream_response.json()
+            except Exception as ex:
+                app.logger.error(f"Error decoding JSON from /get_access_token_with_initial_nonce response: {ex}")
+            if resp_json and "nonce" in resp_json:
+                current_nonce = int(resp_json["nonce"])
+                app.logger.info(f"Updated nonce from /get_access_token_with_initial_nonce response: {current_nonce}")
             else:
-                app.logger.error("No nonce field in /init_nonce response.")
+                app.logger.error("No nonce field in /get_access_token_with_initial_nonce response.")
         except Exception as ex:
-            app.logger.error(f"Error parsing /init_nonce response: {ex}")
+            app.logger.error(f"Error parsing /get_access_token_with_initial_nonce response: {ex}")
 
     # Build the final response.
     response = Response(upstream_response.content, status=upstream_response.status_code)
