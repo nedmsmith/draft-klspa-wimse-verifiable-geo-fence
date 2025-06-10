@@ -24,7 +24,7 @@ This is a prototype implementation of a system that:
 
 ### Server Components
 - **[`server.py`](server.py )**: Flask server that validates TPM attestations and processes geolocation data
-- **[`dpi-proxy.py`](dpi-proxy.py )**: Web Application Firewall (WAF) proxy that validates headers before forwarding requests
+- **[`waf-proxy.py`](waf-proxy.py )**: Web Application Firewall (WAF) proxy that validates headers before forwarding requests
 
 ### Cryptographic Components
 - **Key hierarchy**:
