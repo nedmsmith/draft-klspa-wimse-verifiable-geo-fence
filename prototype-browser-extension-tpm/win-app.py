@@ -1,7 +1,8 @@
 #!/usr/bin/env python3
 import sys
-import struct
 import json
+import struct
+import logging
 import subprocess
 import time
 import os
@@ -12,6 +13,13 @@ from cryptography.hazmat.primitives import serialization, hashes
 from cryptography import x509
 from cryptography.x509.oid import NameOID
 import datetime
+
+# Set up more detailed logging
+logging.basicConfig(
+    filename='win_app.log',
+    level=logging.DEBUG,
+    format='%(asctime)s - %(levelname)s: %(message)s'
+)
 
 # (We don’t really use cached_thumbprint since we filter by subject.)
 cached_thumbprint = None
@@ -310,10 +318,12 @@ def process_geolocation(lat, lon, accuracy, source, timestamp, nonce):
         return {"error": f"Signing failed: {e}"}
 
 def main():
+    logging.debug("Native messaging host process started with PID: %s", os.getpid())
     log("Native Messaging App started (long-lived).")
     # Optionally cache certificate here.
     while True:
         try:
+            logging.debug("Waiting for input from browser extension...")
             message = get_message()
             if message.get("command") == "attest":
                 payload_str = message.get("payload")

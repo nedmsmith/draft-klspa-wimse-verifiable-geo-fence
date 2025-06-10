@@ -22,7 +22,7 @@ function fetchInitialNonce() {
   console.log("[Background] Fetching initial nonce...");
   nonceReady = new Promise((resolve) => {
     // Adjust the URL if needed.
-    fetch("https://127.0.0.1:8443/get_access_token_with_initial_nonce")
+    fetch("https://localhost:8443/get_access_token_with_initial_nonce")
       .then((response) => response.json())
       .then((data) => {
         currentNonce = data.nonce;
