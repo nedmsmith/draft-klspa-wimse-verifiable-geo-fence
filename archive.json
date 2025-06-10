@@ -1,6 +1,6 @@
 {
   "magic": "E!vIA5L86J2I",
-  "timestamp": "2025-06-08T01:18:51.165039+00:00",
+  "timestamp": "2025-06-10T01:13:36.072134+00:00",
   "repo": "nedmsmith/draft-klspa-wimse-verifiable-geo-fence",
   "labels": [
     {
@@ -1063,6 +1063,183 @@
           "body": "",
           "createdAt": "2025-06-07T03:10:43Z",
           "updatedAt": "2025-06-07T03:10:43Z",
+          "comments": []
+        }
+      ]
+    },
+    {
+      "number": 19,
+      "id": "PR_kwDOOmshaM6Zjdt6",
+      "title": "more cleanup",
+      "url": "https://github.com/nedmsmith/draft-klspa-wimse-verifiable-geo-fence/pull/19",
+      "state": "MERGED",
+      "author": "ramkri123",
+      "authorAssociation": "COLLABORATOR",
+      "assignees": [],
+      "labels": [],
+      "body": "",
+      "createdAt": "2025-06-08T02:14:47Z",
+      "updatedAt": "2025-06-08T17:03:20Z",
+      "baseRepository": "nedmsmith/draft-klspa-wimse-verifiable-geo-fence",
+      "baseRefName": "main",
+      "baseRefOid": "690e35389b7ff36ba7e90d854623593e00442819",
+      "headRepository": "nedmsmith/draft-klspa-wimse-verifiable-geo-fence",
+      "headRefName": "ramki-mod",
+      "headRefOid": "390dce4daebe8c13b4476c030ce9a6d931442759",
+      "closedAt": "2025-06-08T17:03:20Z",
+      "mergedAt": "2025-06-08T17:03:20Z",
+      "mergedBy": "ramkri123",
+      "mergeCommit": {
+        "oid": "c56b651bc09bdc0441fc8b8d8729457afa6c4637"
+      },
+      "comments": [],
+      "reviews": [
+        {
+          "id": "PRR_kwDOOmshaM6tXTbp",
+          "commit": {
+            "abbreviatedOid": "390dce4"
+          },
+          "author": "gh23600063",
+          "authorAssociation": "COLLABORATOR",
+          "state": "APPROVED",
+          "body": "",
+          "createdAt": "2025-06-08T16:49:29Z",
+          "updatedAt": "2025-06-08T16:49:29Z",
+          "comments": []
+        },
+        {
+          "id": "PRR_kwDOOmshaM6tXTtc",
+          "commit": {
+            "abbreviatedOid": "390dce4"
+          },
+          "author": "gh23600063",
+          "authorAssociation": "COLLABORATOR",
+          "state": "APPROVED",
+          "body": "",
+          "createdAt": "2025-06-08T16:49:55Z",
+          "updatedAt": "2025-06-08T16:49:55Z",
+          "comments": []
+        },
+        {
+          "id": "PRR_kwDOOmshaM6tXTvn",
+          "commit": {
+            "abbreviatedOid": "390dce4"
+          },
+          "author": "gh23600063",
+          "authorAssociation": "COLLABORATOR",
+          "state": "APPROVED",
+          "body": "",
+          "createdAt": "2025-06-08T16:50:12Z",
+          "updatedAt": "2025-06-08T16:50:12Z",
+          "comments": []
+        },
+        {
+          "id": "PRR_kwDOOmshaM6tXTws",
+          "commit": {
+            "abbreviatedOid": "390dce4"
+          },
+          "author": "gh23600063",
+          "authorAssociation": "COLLABORATOR",
+          "state": "APPROVED",
+          "body": "",
+          "createdAt": "2025-06-08T16:50:27Z",
+          "updatedAt": "2025-06-08T16:50:27Z",
+          "comments": []
+        },
+        {
+          "id": "PRR_kwDOOmshaM6tXTyw",
+          "commit": {
+            "abbreviatedOid": "390dce4"
+          },
+          "author": "gh23600063",
+          "authorAssociation": "COLLABORATOR",
+          "state": "APPROVED",
+          "body": "",
+          "createdAt": "2025-06-08T16:50:55Z",
+          "updatedAt": "2025-06-08T16:50:55Z",
+          "comments": []
+        }
+      ]
+    },
+    {
+      "number": 20,
+      "id": "PR_kwDOOmshaM6Zn3rd",
+      "title": "proof of residency tpm prototype fully working",
+      "url": "https://github.com/nedmsmith/draft-klspa-wimse-verifiable-geo-fence/pull/20",
+      "state": "MERGED",
+      "author": "ramkri123",
+      "authorAssociation": "COLLABORATOR",
+      "assignees": [],
+      "labels": [],
+      "body": "",
+      "createdAt": "2025-06-09T05:03:45Z",
+      "updatedAt": "2025-06-09T22:48:32Z",
+      "baseRepository": "nedmsmith/draft-klspa-wimse-verifiable-geo-fence",
+      "baseRefName": "main",
+      "baseRefOid": "c56b651bc09bdc0441fc8b8d8729457afa6c4637",
+      "headRepository": "nedmsmith/draft-klspa-wimse-verifiable-geo-fence",
+      "headRefName": "ramki-mod",
+      "headRefOid": "d002f6754c6600967be7a050a868fe3a312aaf70",
+      "closedAt": "2025-06-09T22:48:32Z",
+      "mergedAt": "2025-06-09T22:48:32Z",
+      "mergedBy": "ramkri123",
+      "mergeCommit": {
+        "oid": "05b2385a44b8c7d05c58d6f944e154fe0d4826dd"
+      },
+      "comments": [
+        {
+          "author": "nedmsmith",
+          "authorAssociation": "OWNER",
+          "body": "I couldn't test that the python code was working as expected since there isn't any Makefile automation in the prototype directories. I assume it is working but can't verify. Does it make sense to have Makefiles in these for reviewers to easily check that it works?",
+          "createdAt": "2025-06-09T21:57:15Z",
+          "updatedAt": "2025-06-09T21:57:15Z"
+        },
+        {
+          "author": "ramkri123",
+          "authorAssociation": "COLLABORATOR",
+          "body": "> I couldn't test that the python code was working as expected since there isn't any Makefile automation in the prototype directories. I assume it is working but can't verify. Does it make sense to have Makefiles in these for reviewers to easily check that it works?\r\n\r\nUnfortunately, Makefile automation is not ready yet. We have follow the readme and manually try it out.",
+          "createdAt": "2025-06-09T22:23:19Z",
+          "updatedAt": "2025-06-09T22:23:19Z"
+        }
+      ],
+      "reviews": [
+        {
+          "id": "PRR_kwDOOmshaM6tYuq4",
+          "commit": {
+            "abbreviatedOid": "ff02122"
+          },
+          "author": "copilot-pull-request-reviewer",
+          "authorAssociation": "CONTRIBUTOR",
+          "state": "COMMENTED",
+          "body": "## Pull Request Overview\n\nA fully working TPM-backed geolocation attestation prototype with end-to-end key/cert generation, signing, verification, and updated extension integration.\n\n- Introduce TPM (\u201ctpm\u201d) and intermediate (\u201cx\u201d) key/cert generation and signing in `win-app.py`\n- Enhance `server.py` and `dpi-proxy.py` to verify full certificate chains, replace `/init_nonce` with `/get_access_token_with_initial_nonce`, and add CORS\n- Update `background.js` to await the new nonce endpoint and integrate attestation token\n\n### Reviewed Changes\n\nCopilot reviewed 14 out of 14 changed files in this pull request and generated 2 comments.\n\n<details>\n<summary>Show a summary per file</summary>\n\n| File                                    | Description                                                      |\r\n|-----------------------------------------|------------------------------------------------------------------|\r\n| x_private_key.pem, x_cert.pem, tpm_*.pem | Prototype private keys and certificates (for local testing only) |\r\n| win-app.py                              | Generate key hierarchy, create and sign certificates locally      |\r\n| server.py                               | Certificate-chain verification, new nonce endpoint, CORS headers |\r\n| dpi-proxy.py                            | Proxy handling for nonce, DPI marker, and chain verification      |\r\n| background.js                           | Async nonce retrieval, header injection for new endpoint          |\r\n| requirements.txt                        | Added `cryptography` and `reverse_geocode` dependencies           |\r\n| README.md (and prototype README)        | Updated usage and replaced `/init_nonce` references               |\n</details>\n\n\n\n<details>\n<summary>Comments suppressed due to low confidence (3)</summary>\n\n**prototype-browser-extension-tpm/README.md:13**\n* The README still refers to `/init_nonce`, but the code now provides `/get_access_token_with_initial_nonce`. Update the docs to match the actual endpoint.\n```\n- Provides an endpoint (`/init_nonce`) for nonce initialization.\n```\n**prototype-browser-extension-tpm/x_private_key.pem:1**\n* Committing raw private keys in the repo is a security risk. Move these keys to a secure store or use environment-based injection and remove them from version control.\n```\n-----BEGIN PRIVATE KEY-----\n```\n**prototype-browser-extension-tpm/background.js:186**\n* Using `await` inside a non-async callback will cause a syntax error. Either mark the `onBeforeSendHeaders` listener as `async` or handle the promise via `.then()`.\n```\n    if (nonceReady) await nonceReady;\n```\n</details>\n\n",
+          "createdAt": "2025-06-09T05:19:25Z",
+          "updatedAt": "2025-06-09T05:19:26Z",
+          "comments": [
+            {
+              "originalPosition": 48,
+              "body": "The `cert_chain_b64` parameter is never used; the function always loads a hardcoded chain. Either remove the unused parameter or use the passed-in chain for verification.\n```suggestion\ndef verify_certificate_chain_and_signature(token, cert_chain_b64=None):\n    # Load certificate chain dynamically if provided, otherwise use hardcoded chain\n    if cert_chain_b64:\n        try:\n            cert_chain_pem = base64.b64decode(cert_chain_b64)\n            cert_chain = x509.load_pem_x509_certificate(cert_chain_pem, default_backend())\n        except Exception as e:\n            app.logger.error(f\"Error decoding or loading provided certificate chain: {e}\")\n            return False\n    else:\n        # Hardcoded certificate chain for dev/test (use real newlines, not \\n)\n        hardcoded_chain = b\"\"\"-----BEGIN CERTIFICATE-----\nMIICzTCCAbWgAwIBAgIUCO+pSNMjARQXT+GiAhHCIr5UgnQwDQYJKoZIhvcNAQEL\nBQAwHTEbMBkGA1UEAwwSVFBNVGVzdENlcnRpZmljYXRlMB4XDTI1MDYwOTA0NDMw\nOFoXDTI2MDYwOTA0NDMwOFowJDEiMCAGA1UEAwwZR2VvTG9jYXRpb24gU2lnbmlu\nZyBLZXkgWDCCASIwDQYJKoZIhvcNAQEBBQADggEPADCCAQoCggEBALUvzUqd/yDr\nMMpFofcmbZEhh8DVzh7UDxZUgu8d5UArdV0cGBFIrb2+w9yhVPY3MVATKy3BXL+Q\njCBohycShQqvBJ8YuSrxSqfav2X8JL/78udQImevaT7d8dxDVtKL4YEGKJhK0CwG\nVzeqk1xU13RDCXOGA6Q8IyxsexyEvEM8zbYRaTJjTRxcuatoTvi0aMlvRqbzhc6K\nwo4faR+KXK/DfdHy77yZnR/yd+sSAVDQ9f5r3QZO8ulq3se4umtr0Zvtv307X6QM\nYC9W+pVEM1NqkXbWXD+ei3zQFEdIoTT1lUS8ZxI6S7PxbMGv0n3/9HnWmcUufoLW\nzboCO8B3658CAwEAATANBgkqhkiG9w0BAQsFAAOCAQEAcr0l60lgxlLJxzjm49Kd\n```",
+              "createdAt": "2025-06-09T05:19:26Z",
+              "updatedAt": "2025-06-09T05:19:26Z"
+            },
+            {
+              "originalPosition": 38,
+              "body": "[nitpick] Embedding a long hardcoded certificate chain hurts readability and maintainability. Consider loading PEM files from disk or configuration.",
+              "createdAt": "2025-06-09T05:19:26Z",
+              "updatedAt": "2025-06-09T05:19:26Z"
+            }
+          ]
+        },
+        {
+          "id": "PRR_kwDOOmshaM6till0",
+          "commit": {
+            "abbreviatedOid": "d002f67"
+          },
+          "author": "nedmsmith",
+          "authorAssociation": "OWNER",
+          "state": "APPROVED",
+          "body": "Approving, but with emphasis on getting the makefiles written to make it easier on reviewers.",
+          "createdAt": "2025-06-09T22:40:52Z",
+          "updatedAt": "2025-06-09T22:40:52Z",
           "comments": []
         }
       ]
