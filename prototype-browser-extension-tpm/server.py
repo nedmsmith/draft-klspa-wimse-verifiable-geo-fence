@@ -17,10 +17,21 @@ logging.basicConfig(level=logging.DEBUG)
 app = Flask(__name__)
 
 # ----- Global In-Memory Nonce Store -----
-# current_nonce is incremented only when a request is valid.
-current_nonce = random.randint(100000, 999999)
 
-# ----- Helper Functions and Configuration -----
+# LCG implementation for deterministic random nonce
+class LCG:
+    def __init__(self, seed):
+        self.m = 2147483648
+        self.a = 1103515245
+        self.c = 12345
+        self.state = seed
+    def next(self):
+        self.state = (self.a * self.state + self.c) % self.m
+        return self.state
+
+# Global LCG instance for nonce validation
+nonce_lcg = None
+nonce_seed = None
 
 def load_tpm_cert():
     """Load the TPM certificate from a PEM file."""
@@ -156,12 +167,15 @@ JOFai3j6lNdYkmC8cS7/hkEHYzWGlTpXrrJT1tqo6gE+/pFDdtKVs1KshWXmMsbK
 @app.route("/get_access_token_with_initial_nonce", methods=["GET"])
 def get_access_token_with_initial_nonce():
     """Endpoint for background.js to fetch the initial nonce value."""
-    global current_nonce
-    return jsonify({"nonce": current_nonce})
+    global nonce_lcg, nonce_seed
+    # Generate a random seed for the LCG
+    nonce_seed = random.randint(100000, 999999)
+    nonce_lcg = LCG(nonce_seed)
+    return jsonify({"nonce": nonce_seed})
 
 @app.route("/")
 def index():
-    global current_nonce
+    global nonce_lcg, nonce_seed
     geo_header = request.headers.get("X-Custom-Geolocation", "Not Provided")
     location_data = {}
     app.logger.info(f"Received X-Custom-Geolocation header: {geo_header}")
@@ -200,31 +214,37 @@ def index():
         app.logger.info(f"Header parsed: lat={lat}, lon={lon}, accuracy={accuracy}, "
                         f"time={time_value}, nonce={nonce_value}, source={source}")
 
-        # Validate nonce from the header.
+        # Validate nonce from the header using LCG
         try:
             received_nonce = int(nonce_value)
         except Exception as ex:
             app.logger.error(f"Invalid nonce received: {nonce_value}. Error: {ex}")
             return jsonify({"error": "Invalid nonce received"}), 400
 
-        # Check for nonce out-of-sync due to a server restart.
-        if current_nonce == 1 and received_nonce > 1:
-            app.logger.error("Server nonce is 1 and client nonce is greater than 1. Please reinitialize nonce via /get_access_token_with_initial_nonce.")
-            response = jsonify({"error": "Nonce out-of-sync due to server restart; client should reinitialize nonce via /get_access_token_with_initial_nonce"})
+        if nonce_lcg is None:
+            app.logger.error("LCG not initialized. Client should reinitialize nonce via /get_access_token_with_initial_nonce")
+            response = jsonify({"error": "LCG not initialized; client should reinitialize nonce via /get_access_token_with_initial_nonce"})
+            response.status_code = 400
+            response.headers["X-Nonce-Error"] = "LCG not initialized; please reinitialize nonce via /get_access_token_with_initial_nonce"
+            response.headers["Access-Control-Expose-Headers"] = "X-Nonce-Error"
+            return response
+
+        # Validate nonce from the header using LCG
+        expected_nonce = nonce_lcg.state
+        app.logger.debug(f"[NONCE] Server LCG state: {nonce_lcg.state}, expected nonce: {expected_nonce}, received nonce: {received_nonce}")
+        if received_nonce != expected_nonce:
+            app.logger.error(f"Nonce mismatch: expected {expected_nonce}, received {received_nonce}")
+            response = jsonify({"error": f"Nonce mismatch: expected {expected_nonce}, received {received_nonce}"})
             response.status_code = 400
             response.headers["X-Nonce-Error"] = "Nonce out-of-sync; please reinitialize nonce via /get_access_token_with_initial_nonce"
             response.headers["Access-Control-Expose-Headers"] = "X-Nonce-Error"
             return response
-
-        if received_nonce != current_nonce:
-            app.logger.error(f"Nonce mismatch: expected {current_nonce}, received {received_nonce}")
-            return jsonify({"error": f"Nonce mismatch: expected {current_nonce}, received {received_nonce}"}), 400
         else:
             app.logger.info(f"Nonce match: {received_nonce} is as expected.")
-            app.logger.info("Nonce verification passed.")  # Explicit log for successful nonce verification
-            # Valid request: increment nonce.
-            current_nonce += 1
+            app.logger.info("Nonce verification passed.")
+            app.logger.debug(f"[NONCE] Advancing server LCG from state {nonce_lcg.state}")
 
+        # Validate TPM signature and all other checks before advancing LCG
         verified = None
         if tpm_token:
             if "|sig=" in tpm_token:
@@ -255,6 +275,10 @@ def index():
                 return jsonify({"error": "TPM token not in expected format."}), 400
         else:
             app.logger.info("No TPM token provided in header.")
+
+        # Only now advance the LCG after all validation passes
+        nonce_lcg.next()
+        app.logger.debug(f"[NONCE] Server LCG advanced to state: {nonce_lcg.state}")
 
         coord = (lat, lon)
         geo = reverse_geocode.get(coord)

@@ -192,8 +192,6 @@ JOFai3j6lNdYkmC8cS7/hkEHYzWGlTpXrrJT1tqo6gE+/pFDdtKVs1KshWXmMsbK
 @app.route('/', defaults={'path': ''}, methods=['GET', 'POST', 'PUT', 'DELETE', 'PATCH', 'OPTIONS'])
 @app.route('/<path:path>', methods=['GET', 'POST', 'PUT', 'DELETE', 'PATCH', 'OPTIONS'])
 def proxy(path):
-    global current_nonce
-
     # Special-case: handle /get_access_token_with_initial_nonce requests without WAF header processing.
     if path.lower() == "get_access_token_with_initial_nonce":
         app.logger.info("Processing /get_access_token_with_initial_nonce request without WAF header modifications.")
@@ -202,37 +200,13 @@ def proxy(path):
         if original_geo_header:
             app.logger.info(f"Received X-Custom-Geolocation header: {original_geo_header}")
             parsed_fields = parse_geolocation_header(original_geo_header)
-            # Nonce checking logic (mirroring server.py):
-            try:
-                received_nonce = int(parsed_fields.get("nonce", ""))
-            except Exception as ex:
-                app.logger.error(f"Invalid nonce received: {parsed_fields.get('nonce','')}. Error: {ex}")
-                return jsonify({"error": "Invalid nonce received"}), 400
-
-            if current_nonce is None:
-                # If no nonce has been set yet, initialize it with the received nonce.
-                current_nonce = received_nonce
-                app.logger.info(f"Initial nonce set to: {current_nonce}")
-
-            if current_nonce == 1 and received_nonce > 1:
-                app.logger.error("Nonce out-of-sync: expected nonce 1 but received a nonce greater than 1. Please reinitialize nonce via /get_access_token_with_initial_nonce.")
-                response = jsonify({"error": "Nonce out-of-sync; please reinitialize nonce via /get_access_token_with_initial_nonce"})
-                response.status_code = 400
-                response.headers["X-Nonce-Error"] = "Nonce out-of-sync; please reinitialize nonce via /get_access_token_with_initial_nonce"
-                response.headers["Access-Control-Expose-Headers"] = "X-Nonce-Error"
-                return response
-
-            if received_nonce != current_nonce:
-                app.logger.error(f"Nonce mismatch: expected {current_nonce}, received {received_nonce}")
-                return jsonify({"error": f"Nonce mismatch: expected {current_nonce}, received {received_nonce}"}), 400
-            else:
-                app.logger.info(f"Nonce match: {received_nonce} is as expected.")
-                current_nonce += 1
-
+            # Nonce logic removed: just log the nonce if present
+            received_nonce = parsed_fields.get("nonce", None)
+            if received_nonce is not None:
+                app.logger.info(f"Received nonce (not validated): {received_nonce}")
             # Validate TPM signature if present.
             if "sig" in parsed_fields:
                 tpm_token = parsed_fields["sig"]
-                # For dev/test, always use hardcoded chain and ignore cert_chain_b64
                 if "|sig=" in tpm_token:
                     try:
                         valid, reason = verify_certificate_chain_and_signature(tpm_token)

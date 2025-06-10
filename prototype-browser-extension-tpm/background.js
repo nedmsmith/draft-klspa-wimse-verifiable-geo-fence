@@ -16,21 +16,46 @@ browser.storage.onChanged.addListener((changes) => {
   }
 });
 
+// LCG implementation for deterministic random nonce
+function LCG(seed) {
+  this.m = 2147483648n;  // modulus 2^31 as BigInt
+  this.a = 1103515245n;  // multiplier as BigInt
+  this.c = 12345n;       // increment as BigInt
+  this.state = BigInt(seed);
+}
+LCG.prototype.next = function() {
+  this.state = (this.a * this.state + this.c) % this.m;
+  if (this.state < 0n) this.state += this.m;
+  return Number(this.state); // Return as Number for compatibility
+};
+
+let nonceGenerator = null;
+
 //
 // Fetch initial nonce from the server's /get_access_token_with_initial_nonce endpoint.
 function fetchInitialNonce() {
   console.log("[Background] Fetching initial nonce...");
   nonceReady = new Promise((resolve) => {
-    // Adjust the URL if needed.
     fetch("https://localhost:8443/get_access_token_with_initial_nonce")
-      .then((response) => response.json())
+      .then((response) => {
+        if (!response.ok) {
+          console.error(`[Background] Initial nonce fetch failed: HTTP ${response.status} ${response.statusText}`);
+          throw new Error(`HTTP ${response.status} ${response.statusText}`);
+        }
+        return response.json();
+      })
       .then((data) => {
         currentNonce = data.nonce;
+        // Initialize LCG with the initial nonce
+        nonceGenerator = new LCG(currentNonce);
         console.log("[Background] Initial nonce fetched from server:", currentNonce);
         resolve();
       })
       .catch((err) => {
         console.error("[Background] Error fetching initial nonce:", err);
+        if (err instanceof TypeError) {
+          console.error("[Background] This may be a network, CORS, or certificate trust issue.");
+        }
         resolve(); // Still resolve to avoid blocking forever
       });
   });
@@ -167,60 +192,97 @@ function getTPMAttestation(lat, lon, accuracy, source, timestamp, nonce) {
 //
 // Intercept outgoing requests to inject the custom geolocation header.
 // Uses the cached global position and the in-memory nonce.
+// In onBeforeSendHeaders, move nonceGenerator.next() to after a successful server response
+// We'll use a flag to track if the last request succeeded
+let lastRequestSucceeded = true;
+
+let useSeedNonce = true; // Use the seed for the very first request
+
+let requestInFlight = false; // Prevent parallel requests
+
+let requestCounter = 0; // Unique request ID for debugging
+
+// Helper to get the correct nonce for each request
+function getCurrentNonce() {
+  requestCounter++;
+  const stack = new Error().stack;
+  console.debug(`[NONCE][DEBUG] getCurrentNonce() called. Request #${requestCounter}. Current LCG state: ${nonceGenerator ? nonceGenerator.state : 'N/A'}`);
+  console.debug(`[NONCE][DEBUG] Stack trace for getCurrentNonce() call #${requestCounter}:\n${stack}`);
+  if (useSeedNonce && nonceGenerator) {
+    // Use the seed (initial state) for the first request, do NOT call .next()
+    useSeedNonce = false;
+    console.debug(`[NONCE] [Client] Using initial seed nonce: ${nonceGenerator.state}`);
+    return nonceGenerator.state;
+  } else if (nonceGenerator) {
+    const before = nonceGenerator.state;
+    const next = nonceGenerator.next();
+    console.debug(`[NONCE] [Client] LCG advanced from state: ${before} to state: ${nonceGenerator.state}, nonce for request: ${next}`);
+    return next;
+  }
+  return null;
+}
+
 browser.webRequest.onBeforeSendHeaders.addListener(
   async (details) => {
     const url = new URL(details.url);
     if (!targetDomains.includes(url.hostname)) return;
-    
-    // Wait for latestPosition if not available.
-    if (!latestPosition) {
-      try {
-        console.log("[Background] Waiting for a valid position...");
-        await waitForPosition();
-        console.log("[Background] Position obtained after waiting.");
-      } catch (err) {
-        console.warn("[Background] Position not available after waiting; skipping header injection.");
-        return { requestHeaders: details.requestHeaders };
-      }
-    }
-    // Wait for nonce to be ready
-    if (nonceReady) await nonceReady;
-    if (currentNonce === null) {
-      console.warn("[Background] No nonce available after waiting; skipping header injection.");
+
+    if (requestInFlight) {
+      console.warn("[Background] Request blocked: another geolocation request is already in flight. Skipping this request to prevent LCG desync.");
       return { requestHeaders: details.requestHeaders };
     }
-    const { latitude, longitude, accuracy } = latestPosition.coords;
-    console.log(`[Background] Using cached position: lat=${latitude}, lon=${longitude}, accuracy=${accuracy}`);
-    
-    const timestamp = new Date().toISOString();
-    console.log(`[Background] Timestamp: ${timestamp}`);
-    
-    // Use the in-memory nonce fetched from the server.
-    let nonceToUse = currentNonce;
-    currentNonce++;
-    console.log(`[Background] Nonce used: ${nonceToUse}, new local nonce: ${currentNonce}`);
-    
-    const source = guessLocationSource(accuracy);
-    console.log(`[Background] Computed source: ${source}`);
-    
-    let headerValue = `lat=${latitude};lon=${longitude};accuracy=${accuracy};time=${timestamp};nonce=${nonceToUse};source=${source}`;
-    
+    requestInFlight = true;
     try {
-      const attestation = await getTPMAttestation(latitude, longitude, accuracy, source, timestamp, nonceToUse);
-      headerValue += `;sig=${attestation.token}`;
-      // Do NOT append cert_chain_b64 anymore
-      console.log("[Background] Attestation appended to header.");
-    } catch (attestError) {
-      console.warn("[Background] TPM attestation error:", attestError);
+      // Wait for latestPosition if not available.
+      if (!latestPosition) {
+        try {
+          console.log("[Background] Waiting for a valid position...");
+          await waitForPosition();
+          console.log("[Background] Position obtained after waiting.");
+        } catch (err) {
+          console.warn("[Background] Position not available after waiting; skipping header injection.");
+          return { requestHeaders: details.requestHeaders };
+        }
+      }
+      // Wait for nonce to be ready
+      if (nonceReady) await nonceReady;
+      if (currentNonce === null) {
+        console.warn("[Background] No nonce available after waiting; skipping header injection.");
+        return { requestHeaders: details.requestHeaders };
+      }
+      const { latitude, longitude, accuracy } = latestPosition.coords;
+      console.log(`[Background] Using cached position: lat=${latitude}, lon=${longitude}, accuracy=${accuracy}`);
+      const timestamp = new Date().toISOString();
+      console.log(`[Background] Timestamp: ${timestamp}`);
+      
+      // Always use next nonce for outgoing requests
+      let nonceToUse = getCurrentNonce();
+      console.log(`[Background] Nonce used: ${nonceToUse}`);
+      if (nonceGenerator) {
+        console.debug(`[NONCE] [Client] LCG state after getCurrentNonce(): ${nonceGenerator.state}`);
+      }
+      const source = guessLocationSource(accuracy);
+      console.log(`[Background] Computed source: ${source}`);
+      let headerValue = `lat=${latitude};lon=${longitude};accuracy=${accuracy};time=${timestamp};nonce=${nonceToUse};source=${source}`;
+      try {
+        const attestation = await getTPMAttestation(latitude, longitude, accuracy, source, timestamp, nonceToUse);
+        headerValue += `;sig=${attestation.token}`;
+        console.log("[Background] Attestation appended to header.");
+      } catch (attestError) {
+        console.warn("[Background] TPM attestation error:", attestError);
+      }
+      details.requestHeaders.push({ name: "X-Custom-Geolocation", value: headerValue });
+      console.log("[Background] Injected X-Custom-Geolocation header:", headerValue);
+      return { requestHeaders: details.requestHeaders };
+    } finally {
+      requestInFlight = false;
     }
-    
-    details.requestHeaders.push({ name: "X-Custom-Geolocation", value: headerValue });
-    console.log("[Background] Injected X-Custom-Geolocation header:", headerValue);
-    return { requestHeaders: details.requestHeaders };
   },
   { urls: ["<all_urls>"] },
   ["blocking", "requestHeaders"]
 );
+
+// Remove lastUsedNonce and onCompleted nonce advancement logic
 
 // If you check for 'dpi=processed_by_proxy' in any logic, change to 'waf=processed_by_proxy'.
 // This includes any header checks, comments, or related logic.
