@@ -13,6 +13,7 @@ from cryptography.hazmat.primitives import serialization, hashes
 from cryptography import x509
 from cryptography.x509.oid import NameOID
 import datetime
+import threading
 
 # Set up more detailed logging
 logging.basicConfig(
@@ -48,36 +49,41 @@ def log(message):
         sys.stderr.write(f"Error writing to log file: {e}\n")
 
 def get_message():
-    """Read a native messaging host message from stdin using a 4-byte length prefix."""
+    """Read a native messaging host message from stdin using a 4-byte length prefix. Never exit on EOF; always wait for new input."""
+    log("[DEBUG] get_message() called, waiting for message from stdin...")
     while True:
-        raw_length = sys.stdin.buffer.read(4)
-        if not raw_length:
-            log("No message length read. Waiting for new input...")
-            time.sleep(1)
-            continue
-        if len(raw_length) < 4:
-            log(f"Incomplete header received ({len(raw_length)} bytes). Waiting...")
-            time.sleep(1)
-            continue
-        message_length = struct.unpack("I", raw_length)[0]
-        message_bytes = b""
-        while len(message_bytes) < message_length:
-            chunk = sys.stdin.buffer.read(message_length - len(message_bytes))
-            if not chunk:
-                log(f"Waiting for full message body: received {len(message_bytes)} of {message_length} bytes...")
-                time.sleep(1)
+        try:
+            raw_length = sys.stdin.buffer.read(4)
+            if not raw_length or len(raw_length) < 4:
+                log("No message length read or incomplete header. Waiting for new input...")
+                time.sleep(0.5)
                 continue
-            message_bytes += chunk
-        try:
-            message = message_bytes.decode("utf-8")
+            message_length = struct.unpack("I", raw_length)[0]
+            message_bytes = b""
+            while len(message_bytes) < message_length:
+                chunk = sys.stdin.buffer.read(message_length - len(message_bytes))
+                if not chunk:
+                    log(f"Waiting for full message body: received {len(message_bytes)} of {message_length} bytes...")
+                    time.sleep(0.5)
+                    continue
+                message_bytes += chunk
+            try:
+                message = message_bytes.decode("utf-8")
+            except Exception as e:
+                log(f"Error decoding message: {e}. Waiting...")
+                continue
+            log(f"[DEBUG] Raw message bytes received: {message_bytes!r}")
+            log(f"Received message: {message}")
+            try:
+                parsed = json.loads(message)
+                log(f"[DEBUG] Parsed JSON message: {parsed}")
+                return parsed
+            except Exception as e:
+                log(f"Error parsing JSON message: {e}. Waiting...")
+                continue
         except Exception as e:
-            log(f"Error decoding message: {e}. Waiting...")
-            continue
-        log(f"Received message: {message}")
-        try:
-            return json.loads(message)
-        except Exception as e:
-            log(f"Error parsing JSON message: {e}. Waiting...")
+            log(f"Exception in get_message: {e}. Waiting...")
+            time.sleep(0.5)
             continue
 
 def send_message(message):
@@ -286,9 +292,59 @@ def get_certificate_chain_pem():
         return b""
     return x_cert.public_bytes(serialization.Encoding.PEM) + tpm_cert.public_bytes(serialization.Encoding.PEM)
 
+# Global cache for tethered phone liveness
+_tethered_phone_liveness = {
+    "present": False,
+    "name": None,
+    "mac": None
+}
+_tethered_phone_liveness_lock = threading.Lock()
+
+def tethered_phone_liveness_thread():
+    import json, subprocess, os, time
+    while True:
+        try:
+            with open(os.path.join(SCRIPT_DIR, "tethered_phone_info.json"), "r") as f:
+                info = json.load(f)
+            phone_name = info.get("name", "Unknown Phone")
+            phone_mac_original = info.get("mac_address", "")
+            phone_mac = phone_mac_original.replace(":", "").upper()
+            result = subprocess.run([
+                'powershell',
+                '-Command',
+                'Get-PnpDevice -Class Bluetooth | Select-Object InstanceId'
+            ], capture_output=True, text=True)
+            phone_connected = False
+            for line in result.stdout.splitlines():
+                if phone_mac and phone_mac in line:
+                    phone_connected = True
+                    log(f"[Liveness] Found tethered phone: {phone_name} ({phone_mac_original})")
+                    break
+            with _tethered_phone_liveness_lock:
+                _tethered_phone_liveness["present"] = phone_connected
+                _tethered_phone_liveness["name"] = phone_name if phone_connected else None
+                _tethered_phone_liveness["mac"] = phone_mac_original if phone_connected else None
+            if not phone_connected:
+                log("[Liveness] Tethered phone not physically connected via Bluetooth")
+        except Exception as e:
+            log(f"[Liveness] Error checking tethered phone: {e}")
+            with _tethered_phone_liveness_lock:
+                _tethered_phone_liveness["present"] = False
+                _tethered_phone_liveness["name"] = None
+                _tethered_phone_liveness["mac"] = None
+        time.sleep(60)
+
+# Start the liveness thread at startup
+threading.Thread(target=tethered_phone_liveness_thread, daemon=True).start()
+
+def is_tethered_phone_present():
+    with _tethered_phone_liveness_lock:
+        return _tethered_phone_liveness["present"]
+
 def process_geolocation(lat, lon, accuracy, source, timestamp, nonce):
     """
     Build a payload including time and nonce, sign it, and return the token.
+    If a Bluetooth tethered phone is found, add its details to the response.
     """
     log(f"Processing: lat={lat}, lon={lon}, accuracy={accuracy}, source={source}, time={timestamp}, nonce={nonce}")
     # Format floats to 6 decimal places for consistency
@@ -298,6 +354,10 @@ def process_geolocation(lat, lon, accuracy, source, timestamp, nonce):
     payload = f"lat={lat_str},lon={lon_str},accuracy={accuracy_str},source={source},time={timestamp},nonce={nonce}"
     log(f"Constructed payload: {payload}")
     log(f"Payload repr: {repr(payload)}")
+    with _tethered_phone_liveness_lock:
+        tethered_phone_name = _tethered_phone_liveness["name"]
+        tethered_phone_mac = _tethered_phone_liveness["mac"]
+        log(f"[Geo] Read liveness cache: present={_tethered_phone_liveness['present']}, name={tethered_phone_name}, mac={tethered_phone_mac}")
     try:
         signature = sign_with_x(payload.encode("utf-8"))
         signature_b64 = base64.b64encode(signature).decode()
@@ -306,16 +366,51 @@ def process_geolocation(lat, lon, accuracy, source, timestamp, nonce):
         cert_chain_b64 = base64.b64encode(get_certificate_chain_pem()).decode()
         token = f"{payload}|sig={signature_b64}"
         log(f"Constructed token: {token}")
-        return {
+        response = {
             "lat": lat,
             "lon": lon,
             "accuracy": accuracy,
             "token": token,
             "certificate_chain": cert_chain_b64
         }
+        if tethered_phone_name and tethered_phone_mac:
+            response["tethered_phone_name"] = tethered_phone_name
+            response["tethered_phone_mac"] = tethered_phone_mac
+        return response
     except Exception as e:
         log(f"Signing with key x failed: {e}")
         return {"error": f"Signing failed: {e}"}
+
+def is_tethered_phone_present():
+    import json, subprocess, os
+    try:
+        # Read phone details from tethered_phone_info.json at runtime
+        with open(os.path.join(SCRIPT_DIR, "tethered_phone_info.json"), "r") as f:
+            info = json.load(f)
+        phone_name = info.get("name", "Unknown Phone")
+        phone_mac_original = info.get("mac_address", "")
+        phone_mac = phone_mac_original.replace(":", "").upper()
+
+        # Use PowerShell to list paired/connected Bluetooth devices
+        result = subprocess.run([
+            'powershell',
+            '-Command',
+            'Get-PnpDevice -Class Bluetooth | Select-Object InstanceId'
+        ], capture_output=True, text=True)
+
+        phone_connected = False
+        for line in result.stdout.splitlines():
+            if phone_mac and phone_mac in line:
+                phone_connected = True
+                log(f"Found tethered phone: {phone_name} ({phone_mac_original})")
+                break
+        if not phone_connected:
+            log("Tethered phone not physically connected via Bluetooth")
+            return False
+        return phone_connected
+    except Exception as e:
+        log(f"Error checking tethered phone: {e}")
+        return False
 
 def main():
     logging.debug("Native messaging host process started with PID: %s", os.getpid())
@@ -325,12 +420,16 @@ def main():
         try:
             logging.debug("Waiting for input from browser extension...")
             message = get_message()
+            request_id = message.get("requestId")
             if message.get("command") == "attest":
                 payload_str = message.get("payload")
                 if not payload_str:
                     error_msg = "Missing payload in message."
                     log(error_msg)
-                    send_message({"error": error_msg})
+                    response = {"error": error_msg}
+                    if request_id is not None:
+                        response["requestId"] = request_id
+                    send_message(response)
                     continue
                 parsed = parse_payload(payload_str)
                 try:
@@ -343,10 +442,21 @@ def main():
                 except Exception as e:
                     error_msg = f"Error parsing payload values: {e}"
                     log(error_msg)
-                    send_message({"error": error_msg})
+                    response = {"error": error_msg}
+                    if request_id is not None:
+                        response["requestId"] = request_id
+                    send_message(response)
                     continue
                 log("Valid geolocation parameters received from payload.")
                 response = process_geolocation(lat, lon, accuracy, source, timestamp, nonce_value)
+                if request_id is not None:
+                    response["requestId"] = request_id
+                send_message(response)
+            elif message.get("command") == "check_tethered_phone":
+                present = is_tethered_phone_present()
+                response = {"tethered_phone_present": present}
+                if request_id is not None:
+                    response["requestId"] = request_id
                 send_message(response)
             else:
                 # Fallback: if not an attest command.
@@ -359,15 +469,29 @@ def main():
                     nonce_value = message.get("nonce", "")
                     log("Valid geolocation parameters received directly.")
                     response = process_geolocation(lat, lon, accuracy, source, timestamp, nonce_value)
+                    if request_id is not None:
+                        response["requestId"] = request_id
                     send_message(response)
                 else:
                     error_msg = "Missing geolocation parameters."
                     log(error_msg)
-                    send_message({"error": error_msg})
+                    response = {"error": error_msg}
+                    if request_id is not None:
+                        response["requestId"] = request_id
+                    send_message(response)
         except Exception as e:
             error_msg = f"Error in main loop: {str(e)}"
             log(error_msg)
-            send_message({"error": error_msg})
+            response = {"error": error_msg}
+            # Try to echo requestId if possible
+            try:
+                if 'message' in locals():
+                    request_id = message.get("requestId")
+                    if request_id is not None:
+                        response["requestId"] = request_id
+            except Exception:
+                pass
+            send_message(response)
             time.sleep(1)
 
 if __name__ == "__main__":

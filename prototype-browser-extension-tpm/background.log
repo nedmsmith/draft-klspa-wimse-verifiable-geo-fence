@@ -1,0 +1,62 @@
+[Background] Background script loaded. background.js:1:9
+[Background] Timestamp: 2025-06-10T21:44:38.217Z background.js:257:15
+[NONCE][DEBUG] getCurrentNonce() called. Request #1. Current LCG state: 358158 background.js:210:11
+[NONCE][DEBUG] Stack trace for getCurrentNonce() call #1:
+getCurrentNonce@moz-extension://35ee2c11-477d-4ec1-b9b7-db912ace538d/background.js:209:17
+@moz-extension://35ee2c11-477d-4ec1-b9b7-db912ace538d/background.js:260:24
+background.js:211:11
+[NONCE] [Client] Using initial seed nonce: 358158 background.js:215:13
+[Background] Nonce used: 358158 background.js:261:15
+[NONCE] [Client] LCG state after getCurrentNonce(): 358158 background.js:263:17
+[Background] Computed source: Cellular background.js:266:15
+[Background] Requesting TPM Attestation for lat:37.315215207334965, lon:-122.05227235599021, accuracy:114, source:Cellular, time:2025-06-10T21:44:38.217Z, nonce:358158 background.js:152:11
+[Background] Native messaging connection created. background.js:157:13
+[Background] Posted payload to native host: lat=37.315215207334965;lon=-122.05227235599021;accuracy=114;source=Cellular;time=2025-06-10T21:44:38.217Z;nonce=358158 background.js:189:13
+[Background] TPM Attestation received. background.js:174:17
+[Background] Attestation appended to header. background.js:271:17
+[Background] Injected X-Custom-Geolocation header: lat=37.315215207334965;lon=-122.05227235599021;accuracy=114;time=2025-06-10T21:44:38.217Z;nonce=358158;source=Cellular;sig=lat=37.315215,lon=-122.052272,accuracy=114.000000,source=Cellular,time=2025-06-10T21:44:38.217Z,nonce=358158|sig=X18m+19FDoxfg6hHfn8QMZ4k979bbF/4SDKt0KjKNpaaCZUYxUHZRnTcy9c8fP6pH+fsJVgWf34netaEJo2YjGpFg0/aIGGqlZTEOqAECnxPxZYQa5zNfPGb8jruYCZawiZ9EqXSxxUgIs4z/3GZxxTjkqfEjql51P6gee+6D4T6/Uvv4qBHFSyVPHrok+lAxo6vMmSd72UqQdWIpRFxJbgj3DJ+c6G1A/J1dFczivby7a0UXKLAwXuegIlG3ZAtO0G7ACoh1f0HTbTpX33FZ1bAg789KRqERQyXU40577GLHT9LlMkbL8KpjDW9QiVASeHRL8pZ0klJxYw4LD2qaQ== background.js:276:15
+[Background] onHeadersReceived fired for URL: https://localhost:8443/ statusCode: 200 background.js:73:13
+[Background] Using cached position: lat=37.315215207334965, lon=-122.05227235599021, accuracy=114 background.js:255:15
+[Background] Timestamp: 2025-06-10T21:44:42.743Z background.js:257:15
+[NONCE][DEBUG] getCurrentNonce() called. Request #2. Current LCG state: 358158 background.js:210:11
+[NONCE][DEBUG] Stack trace for getCurrentNonce() call #2:
+getCurrentNonce@moz-extension://35ee2c11-477d-4ec1-b9b7-db912ace538d/background.js:209:17
+@moz-extension://35ee2c11-477d-4ec1-b9b7-db912ace538d/background.js:260:24
+background.js:211:11
+[NONCE] [Client] LCG advanced from state: 358158 to state: 1332618543, nonce for request: 1332618543 background.js:220:13
+[Background] Nonce used: 1332618543 background.js:261:15
+[NONCE] [Client] LCG state after getCurrentNonce(): 1332618543 background.js:263:17
+[Background] Computed source: Cellular background.js:266:15
+[Background] Requesting TPM Attestation for lat:37.315215207334965, lon:-122.05227235599021, accuracy:114, source:Cellular, time:2025-06-10T21:44:42.743Z, nonce:1332618543 background.js:152:11
+[Background] Native messaging connection created. background.js:157:13
+[Background] Posted payload to native host: lat=37.315215207334965;lon=-122.05227235599021;accuracy=114;source=Cellular;time=2025-06-10T21:44:42.743Z;nonce=1332618543 background.js:189:13
+[Background] TPM Attestation received. background.js:174:17
+[Background] Attestation appended to header. background.js:271:17
+[Background] Injected X-Custom-Geolocation header: lat=37.315215207334965;lon=-122.05227235599021;accuracy=114;time=2025-06-10T21:44:42.743Z;nonce=1332618543;source=Cellular;sig=lat=37.315215,lon=-122.052272,accuracy=114.000000,source=Cellular,time=2025-06-10T21:44:42.743Z,nonce=1332618543|sig=YUBUDQXboaFYxkXoCPCC2kX3nVWJMa4xeuSBFODjl78PemU5ouucJOh7WCdZXkvfsS4xzIU8rk8QGL55W0akUajTxQFI8aCTqhE7bvSOCTfOnxhQXXdKc2ODLHjbPWPnxHf3byUosKvjvysU20uldNNjqPLFbZyEnOy8wBFmn2xNbVJEFFHXiUvSWD9t+f7uI641cdfF0HWV3FPnLJJtjdujQYz9UPBM8lJNbVto1RCtKtnn903S8NdbUAHhh8xhxIdE/iI7/pdRAzq7ITSp/oHzrz5Ft0YO87W7t1K2+rEH7isQQpx1m4dNED3B+tNlA3nrbK1Pbu2bu0KXdyD2BQ== background.js:276:15
+[Background] onHeadersReceived fired for URL: https://localhost:8443/ statusCode: 200 background.js:73:13
+[Background] Using cached position: lat=37.315215207334965, lon=-122.05227235599021, accuracy=114 background.js:255:15
+[Background] Timestamp: 2025-06-10T21:44:45.670Z background.js:257:15
+[NONCE][DEBUG] getCurrentNonce() called. Request #3. Current LCG state: 1332618543 background.js:210:11
+[NONCE][DEBUG] Stack trace for getCurrentNonce() call #3:
+getCurrentNonce@moz-extension://35ee2c11-477d-4ec1-b9b7-db912ace538d/background.js:209:17
+@moz-extension://35ee2c11-477d-4ec1-b9b7-db912ace538d/background.js:260:24
+background.js:211:11
+[NONCE] [Client] LCG advanced from state: 1332618543 to state: 311711488, nonce for request: 311711488 background.js:220:13
+[Background] Nonce used: 311711488 background.js:261:15
+[NONCE] [Client] LCG state after getCurrentNonce(): 311711488 background.js:263:17
+[Background] Computed source: Cellular background.js:266:15
+[Background] Requesting TPM Attestation for lat:37.315215207334965, lon:-122.05227235599021, accuracy:114, source:Cellular, time:2025-06-10T21:44:45.670Z, nonce:311711488 background.js:152:11
+[Background] Native messaging connection created. background.js:157:13
+[Background] Posted payload to native host: lat=37.315215207334965;lon=-122.05227235599021;accuracy=114;source=Cellular;time=2025-06-10T21:44:45.670Z;nonce=311711488 background.js:189:13
+[Background] TPM Attestation received. background.js:174:17
+[Background] Attestation appended to header. background.js:271:17
+[Background] Injected X-Custom-Geolocation header: lat=37.315215207334965;lon=-122.05227235599021;accuracy=114;time=2025-06-10T21:44:45.670Z;nonce=311711488;source=Cellular;sig=lat=37.315215,lon=-122.052272,accuracy=114.000000,source=Cellular,time=2025-06-10T21:44:45.670Z,nonce=311711488|sig=P26OX8gyDLGGfV9U6QLEtSJKVFwTNrcJn1yeRELYkpj9USmWVoV3AIJ12SVEesf4ndrsgdKG9XrPrXFpJkMyqxf8Dcz7MLFGgIGKxCwpKco5LVoFlk1Liw/0LxAyjEPwiHdeY51ZJhOfpiab/nFB8DNuxbN5IpB3kXjRqD90NiiSsUH9B82DRsQ6ZBJSHee9KDeRDYaRqwGHEZcEaJQKDsUr37l/u///Ev1mMEFhzhOdmy1ODlK9QEpWnTTBx3g7FZwrMRYc/TNSKJFyN+UkbM4oVGynvDf99xtv34XGBWjtZXPZE5r34JJjzLgpoED7/HYXf+eCe2b4C+M+RtqaZQ== background.js:276:15
+[Background] onHeadersReceived fired for URL: https://localhost:8443/ statusCode: 400 background.js:73:13
+[Background] Checking header: Content-Type application/json background.js:78:17
+[Background] Checking header: Content-Length 67 background.js:78:17
+[Background] Checking header: Server Werkzeug/3.1.3 Python/3.13.0, Werkzeug/3.1.3 Python/3.13.0 background.js:78:17
+[Background] Checking header: Date Tue, 10 Jun 2025 21:44:45 GMT, Tue, 10 Jun 2025 21:44:45 GMT background.js:78:17
+[Background] Checking header: X-Nonce-Error Nonce out-of-sync; please reinitialize nonce via /get_access_token_with_initial_nonce background.js:78:17
+[Background] Detected nonce out-of-sync error in response for URL: https://localhost:8443/ background.js:84:19
+[Background] Fetching initial nonce... background.js:38:11
+[Background] Position updated: lat=37.314843, lon=-122.052589, accuracy=212

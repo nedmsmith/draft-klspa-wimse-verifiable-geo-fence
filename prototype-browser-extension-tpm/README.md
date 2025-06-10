@@ -49,6 +49,8 @@ This is a prototype implementation of a system that:
 2. Register the native messaging host:
    ```
    REG ADD "HKCU\Software\Mozilla\NativeMessagingHosts\com.mycompany.geosign" /ve /t REG_SZ /d "<path>\com.mycompany.geosign.json" /f
+
+   Example: REG ADD "HKCU\Software\Mozilla\NativeMessagingHosts\com.mycompany.geosign" /ve /t REG_SZ /d "C:\Users\ramkr\draft-klspa-wimse-verifiable-geo-fence\prototype-browser-extension-tpm\com.mycompany.geosign.json" /f
    ```
 
 3. Install the browser extension:

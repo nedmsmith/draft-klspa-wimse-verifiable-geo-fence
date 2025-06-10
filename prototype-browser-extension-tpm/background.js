@@ -145,47 +145,51 @@ function waitForPosition(timeout = 10000, interval = 500) {
   });
 }
 
-//
-// Request TPM attestation from the native messaging host.
+// Persistent native messaging port
+let nativePort = browser.runtime.connectNative("com.mycompany.geosign");
+console.log("[Background] Persistent native messaging connection created.");
+
+// Request/response queue for TPM attestation
+let tpmRequestId = 0;
+const tpmPendingRequests = new Map();
+
+nativePort.onMessage.addListener((response) => {
+  console.log("[Background][NativePort] Received message from native host:", response);
+  if (response && response.requestId !== undefined && tpmPendingRequests.has(response.requestId)) {
+    const { resolve, reject, timeoutId } = tpmPendingRequests.get(response.requestId);
+    clearTimeout(timeoutId);
+    tpmPendingRequests.delete(response.requestId);
+    if (response.token) {
+      console.log("[Background][NativePort] Response contains token, resolving attestation.");
+      resolve(response); // Pass the full response object, not just token/certificate_chain
+    } else if (response.error) {
+      console.warn("[Background][NativePort] Response contains error:", response.error);
+      reject(response.error);
+    } else {
+      console.warn("[Background][NativePort] Unknown response from native host:", response);
+      reject("Unknown response from native host");
+    }
+  } else {
+    console.warn("[Background][NativePort] Received message with unknown or missing requestId:", response);
+  }
+});
+
 function getTPMAttestation(lat, lon, accuracy, source, timestamp, nonce) {
   console.log(
     `[Background] Requesting TPM Attestation for lat:${lat}, lon:${lon}, accuracy:${accuracy}, source:${source}, time:${timestamp}, nonce:${nonce}`
   );
   return new Promise((resolve, reject) => {
-    const nativePort = browser.runtime.connectNative("com.mycompany.geosign");
-    console.log("[Background] Native messaging connection created.");
-    let resolved = false;
+    const requestId = tpmRequestId++;
     const timeoutId = setTimeout(() => {
-      if (!resolved) {
-        resolved = true;
-        nativePort.onMessage.removeListener(responseListener);
-        console.error("[Background] Timeout waiting for TPM attestation.");
+      if (tpmPendingRequests.has(requestId)) {
+        tpmPendingRequests.delete(requestId);
         reject("Timeout waiting for TPM attestation");
       }
     }, 30000);
-    
-    function responseListener(response) {
-      if (resolved) return;
-      if (response && response.token) {
-        resolved = true;
-        clearTimeout(timeoutId);
-        nativePort.onMessage.removeListener(responseListener);
-        console.log("[Background] TPM Attestation received.");
-        // Return both token and certificate_chain if present
-        resolve({ token: response.token, certificate_chain: response.certificate_chain });
-      } else if (response && response.error) {
-        resolved = true;
-        clearTimeout(timeoutId);
-        nativePort.onMessage.removeListener(responseListener);
-        console.error("[Background] TPM error:", response.error);
-        reject(response.error);
-      }
-    }
-    nativePort.onMessage.addListener(responseListener);
-    // Use semicolons (;) instead of commas (,) in the payload string for attestation
+    tpmPendingRequests.set(requestId, { resolve, reject, timeoutId });
     const payloadString = `lat=${lat};lon=${lon};accuracy=${accuracy};source=${source};time=${timestamp};nonce=${nonce}`;
-    nativePort.postMessage({ command: "attest", payload: payloadString });
-    console.log("[Background] Posted payload to native host:", payloadString);
+    nativePort.postMessage({ command: "attest", payload: payloadString, requestId });
+    console.log("[Background][NativePort] Sent postMessage to native host:", { command: "attest", payload: payloadString, requestId });
   });
 }
 
@@ -266,7 +270,17 @@ browser.webRequest.onBeforeSendHeaders.addListener(
       let headerValue = `lat=${latitude};lon=${longitude};accuracy=${accuracy};time=${timestamp};nonce=${nonceToUse};source=${source}`;
       try {
         const attestation = await getTPMAttestation(latitude, longitude, accuracy, source, timestamp, nonceToUse);
+        console.log("[Background][DEBUG] Full attestation object before header append:", attestation);
         headerValue += `;sig=${attestation.token}`;
+        console.log("[Background][DEBUG] Before appending phone info: headerValue=", headerValue, "tethered_phone_name=", attestation.tethered_phone_name, "tethered_phone_mac=", attestation.tethered_phone_mac);
+        // Append tethered phone info if present
+        if (attestation.tethered_phone_name) {
+          headerValue += `;tethered_phone_name=${encodeURIComponent(attestation.tethered_phone_name)}`;
+        }
+        if (attestation.tethered_phone_mac) {
+          headerValue += `;tethered_phone_mac=${encodeURIComponent(attestation.tethered_phone_mac)}`;
+        }
+        console.log("[Background][DEBUG] After appending phone info: headerValue=", headerValue);
         console.log("[Background] Attestation appended to header.");
       } catch (attestError) {
         console.warn("[Background] TPM attestation error:", attestError);

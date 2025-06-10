@@ -10,6 +10,7 @@ from cryptography.hazmat.backends import default_backend
 from cryptography.hazmat.primitives import hashes, serialization
 from cryptography.hazmat.primitives.asymmetric import padding
 from cryptography.x509.base import load_pem_x509_certificate
+from urllib.parse import unquote
 
 # Ensure all logs are visible in the console
 logging.basicConfig(level=logging.DEBUG)
@@ -209,7 +210,22 @@ def index():
         source = header_dict.get("source", "N/A")
         tpm_token = header_dict.get("sig", None)
         cert_chain_b64 = header_dict.get("cert_chain", None)
-        # For dev/test, ignore cert_chain_b64 and always use hardcoded chain
+        tethered_phone_name = header_dict.get("tethered_phone_name", None)
+        tethered_phone_mac = header_dict.get("tethered_phone_mac", None)
+        # Decode percent-encoding for human-readable logs and API
+        if tethered_phone_name:
+            tethered_phone_name = unquote(tethered_phone_name)
+        if tethered_phone_mac:
+            tethered_phone_mac = unquote(tethered_phone_mac)
+            # Format MAC as colon-separated (e.g., 98:60:CA:4E:7E:BF)
+            mac = tethered_phone_mac.replace('-', ':').replace('.', ':').replace(' ', ':')
+            mac_hex = ''.join(c for c in mac if c.isalnum())
+            if len(mac_hex) == 12:
+                tethered_phone_mac = ':'.join([mac_hex[i:i+2] for i in range(0, 12, 2)])
+            else:
+                tethered_phone_mac = mac
+        if tethered_phone_name or tethered_phone_mac:
+            app.logger.info(f"Tethered phone info: name={tethered_phone_name}, mac={tethered_phone_mac}")
 
         app.logger.info(f"Header parsed: lat={lat}, lon={lon}, accuracy={accuracy}, "
                         f"time={time_value}, nonce={nonce_value}, source={source}")
@@ -295,6 +311,10 @@ def index():
         }
         if tpm_token:
             location_data["TPM_signature_Verified"] = True
+        if tethered_phone_name:
+            location_data["tethered_phone_name"] = tethered_phone_name
+        if tethered_phone_mac:
+            location_data["tethered_phone_mac"] = tethered_phone_mac
 
     except Exception as e:
         app.logger.error(f"Failed to parse geolocation: {e}")

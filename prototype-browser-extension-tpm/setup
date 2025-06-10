@@ -1,6 +1,0 @@
-PS C:\Users\ramkr> 
-
-REG ADD "HKCU\Software\Mozilla\NativeMessagingHosts\com.mycompany.geosign" /ve /t REG_SZ /d "C:\Users\ramkr\draft-klspa-wimse-verifiable-geo-fence\prototype-browser-extension-tpm\com.mycompany.geosign.json" /f
-
-The operation completed successfully.
-

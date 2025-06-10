@@ -8,6 +8,7 @@ from cryptography import x509
 from cryptography.hazmat.primitives import hashes, serialization
 from cryptography.hazmat.primitives.asymmetric import padding
 from cryptography.x509.base import load_pem_x509_certificate
+from urllib.parse import unquote
 
 app = Flask(__name__)
 # Ensure all logs are visible in the console
@@ -192,6 +193,8 @@ JOFai3j6lNdYkmC8cS7/hkEHYzWGlTpXrrJT1tqo6gE+/pFDdtKVs1KshWXmMsbK
 @app.route('/', defaults={'path': ''}, methods=['GET', 'POST', 'PUT', 'DELETE', 'PATCH', 'OPTIONS'])
 @app.route('/<path:path>', methods=['GET', 'POST', 'PUT', 'DELETE', 'PATCH', 'OPTIONS'])
 def proxy(path):
+    tethered_phone_name = None
+    tethered_phone_mac = None
     # Special-case: handle /get_access_token_with_initial_nonce requests without WAF header processing.
     if path.lower() == "get_access_token_with_initial_nonce":
         app.logger.info("Processing /get_access_token_with_initial_nonce request without WAF header modifications.")
@@ -200,6 +203,24 @@ def proxy(path):
         if original_geo_header:
             app.logger.info(f"Received X-Custom-Geolocation header: {original_geo_header}")
             parsed_fields = parse_geolocation_header(original_geo_header)
+            tethered_phone_name = parsed_fields.get("tethered_phone_name")
+            tethered_phone_mac = parsed_fields.get("tethered_phone_mac")
+            # Decode percent-encoding for human-readable logs and API
+            if tethered_phone_name:
+                tethered_phone_name = unquote(tethered_phone_name)
+            if tethered_phone_mac:
+                tethered_phone_mac = unquote(tethered_phone_mac)
+                # Format MAC as colon-separated (e.g., 98:60:CA:4E:7E:BF)
+                mac = tethered_phone_mac.replace('-', ':').replace('.', ':').replace(' ', ':')
+                # Remove all non-hex chars, then re-insert colons every 2 chars
+                mac_hex = ''.join(c for c in mac if c.isalnum())
+                if len(mac_hex) == 12:
+                    tethered_phone_mac = ':'.join([mac_hex[i:i+2] for i in range(0, 12, 2)])
+                else:
+                    # fallback to original if not 12 hex digits
+                    tethered_phone_mac = mac
+            if tethered_phone_name or tethered_phone_mac:
+                app.logger.info(f"Tethered phone info: name={tethered_phone_name}, mac={tethered_phone_mac}")
             # Nonce logic removed: just log the nonce if present
             received_nonce = parsed_fields.get("nonce", None)
             if received_nonce is not None:
@@ -271,7 +292,17 @@ def proxy(path):
     response = Response(upstream_response.content, status=upstream_response.status_code)
     for key, value in upstream_response.headers.items():
         response.headers[key] = value
-
+    # If the upstream response is JSON, add tethered phone info if present
+    try:
+        if upstream_response.headers.get('Content-Type', '').startswith('application/json'):
+            import json
+            resp_json = upstream_response.json()
+            if (tethered_phone_name or tethered_phone_mac) and isinstance(resp_json, dict):
+                resp_json["tethered_phone_name"] = tethered_phone_name
+                resp_json["tethered_phone_mac"] = tethered_phone_mac
+                response.set_data(json.dumps(resp_json))
+    except Exception as e:
+        app.logger.error(f"Error injecting tethered phone info into response: {e}")
     return response
 
 @app.route("/favicon.ico")
