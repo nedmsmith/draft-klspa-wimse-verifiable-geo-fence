@@ -6,6 +6,7 @@ import logging
 import subprocess
 import time
 import os
+import re
 # --- Key Hierarchy for Signing ---
 import base64
 from cryptography.hazmat.primitives.asymmetric import rsa, padding
@@ -17,7 +18,7 @@ import threading
 
 # Set up more detailed logging
 logging.basicConfig(
-    filename='win_app.log',
+    filename='win-app.log',
     level=logging.DEBUG,
     format='%(asctime)s - %(levelname)s: %(message)s'
 )
@@ -25,12 +26,9 @@ logging.basicConfig(
 # (We don’t really use cached_thumbprint since we filter by subject.)
 cached_thumbprint = None
 
-# Define a log file location that is writable.
-log_dir = os.environ.get("LOCALAPPDATA", os.getcwd())
-log_file = os.path.join(log_dir, "win_app.log")
-
-# Always use the script's directory for key/cert files
+# Always use the script's directory for key/cert files and logs
 SCRIPT_DIR = os.path.dirname(os.path.abspath(__file__))
+log_file = os.path.join(SCRIPT_DIR, "win-app.log")
 X_PRIV_KEY_PATH = os.path.join(SCRIPT_DIR, "x_private_key.pem")
 X_CERT_PATH = os.path.join(SCRIPT_DIR, "x_cert.pem")
 TPM_CERT_PATH = os.path.join(SCRIPT_DIR, "tpm_cert.pem")  # TPM certificate (public, PEM)
@@ -292,207 +290,152 @@ def get_certificate_chain_pem():
         return b""
     return x_cert.public_bytes(serialization.Encoding.PEM) + tpm_cert.public_bytes(serialization.Encoding.PEM)
 
-# Global cache for tethered phone liveness
+# --- Tethered Phone Liveness Detection (PowerShell-based) ---
+TETHERED_PHONE_LIVENESS_POLL_INTERVAL = 30  # seconds, change as needed
 _tethered_phone_liveness = {
     "present": False,
     "name": None,
-    "mac": None
+    "bluetooth_bd_addr": None,
+    "bluetooth_pan_ip": None
 }
 _tethered_phone_liveness_lock = threading.Lock()
 
-def tethered_phone_liveness_thread():
-    import json, subprocess, os, time
+TETHERED_PHONE_CHECK_SCRIPT = os.path.join(SCRIPT_DIR, "tethered_phone_check.ps1")
+TETHERED_PHONE_INFO_FILE = os.path.join(SCRIPT_DIR, "tethered_phone_info.json")
+
+
+def phone_liveness_worker():
     while True:
         try:
-            with open(os.path.join(SCRIPT_DIR, "tethered_phone_info.json"), "r") as f:
-                info = json.load(f)
-            phone_name = info.get("name", "Unknown Phone")
-            phone_mac_original = info.get("mac_address", "")
-            phone_mac = phone_mac_original.replace(":", "").upper()
+            # Run the PowerShell script
             result = subprocess.run([
-                'powershell',
-                '-Command',
-                'Get-PnpDevice -Class Bluetooth | Select-Object InstanceId'
-            ], capture_output=True, text=True)
-            phone_connected = False
-            for line in result.stdout.splitlines():
-                if phone_mac and phone_mac in line:
-                    phone_connected = True
-                    log(f"[Liveness] Found tethered phone: {phone_name} ({phone_mac_original})")
-                    break
+                "powershell.exe", "-NoProfile", "-ExecutionPolicy", "Bypass", "-File", TETHERED_PHONE_CHECK_SCRIPT,
+                "-InfoFile", TETHERED_PHONE_INFO_FILE
+            ], capture_output=True, text=True, timeout=30)
+            exit_code = result.returncode
+            # Load phone info from JSON for name/MAC
+            try:
+                with open(TETHERED_PHONE_INFO_FILE, "r", encoding="utf-8") as f:
+                    phone_info = json.load(f)
+                phone_name = phone_info.get("name")
+                phone_mac = phone_info.get("mac_address")
+            except Exception as e:
+                phone_name = None
+                phone_mac = None
+                log(f"[Liveness] Error loading phone info JSON: {e}")
+            # Update liveness cache based on exit code
             with _tethered_phone_liveness_lock:
-                _tethered_phone_liveness["present"] = phone_connected
-                _tethered_phone_liveness["name"] = phone_name if phone_connected else None
-                _tethered_phone_liveness["mac"] = phone_mac_original if phone_connected else None
-            if not phone_connected:
-                log("[Liveness] Tethered phone not physically connected via Bluetooth")
+                if exit_code == 0:
+                    _tethered_phone_liveness["present"] = True
+                    _tethered_phone_liveness["name"] = phone_name
+                    _tethered_phone_liveness["bluetooth_bd_addr"] = phone_mac
+                    # PAN IP not available from script, leave as None
+                    _tethered_phone_liveness["bluetooth_pan_ip"] = None
+                    log(f"[Liveness] Phone present: {phone_name} [{phone_mac}]")
+                else:
+                    _tethered_phone_liveness["present"] = False
+                    _tethered_phone_liveness["name"] = None
+                    _tethered_phone_liveness["bluetooth_bd_addr"] = None
+                    _tethered_phone_liveness["bluetooth_pan_ip"] = None
+                    log(f"[Liveness] Phone not present (exit code {exit_code})")
         except Exception as e:
-            log(f"[Liveness] Error checking tethered phone: {e}")
+            log(f"[Liveness] Exception in liveness worker: {e}")
             with _tethered_phone_liveness_lock:
                 _tethered_phone_liveness["present"] = False
                 _tethered_phone_liveness["name"] = None
-                _tethered_phone_liveness["mac"] = None
-        time.sleep(60)
+                _tethered_phone_liveness["bluetooth_bd_addr"] = None
+                _tethered_phone_liveness["bluetooth_pan_ip"] = None
+        # Wait before next check
+        time.sleep(TETHERED_PHONE_LIVENESS_POLL_INTERVAL)
 
-# Start the liveness thread at startup
-threading.Thread(target=tethered_phone_liveness_thread, daemon=True).start()
+# --- TOP-LEVEL DEBUG LOGGING FOR NATIVE MESSAGING HOST STARTUP/EXIT ---
+try:
+    log('[NATIVE HOST] win-app.py starting up (PID: %s)' % os.getpid())
 
-def is_tethered_phone_present():
-    with _tethered_phone_liveness_lock:
-        return _tethered_phone_liveness["present"]
-
-def process_geolocation(lat, lon, accuracy, source, timestamp, nonce):
-    """
-    Build a payload including time and nonce, sign it, and return the token.
-    If a Bluetooth tethered phone is found, add its details to the response.
-    """
-    log(f"Processing: lat={lat}, lon={lon}, accuracy={accuracy}, source={source}, time={timestamp}, nonce={nonce}")
-    # Format floats to 6 decimal places for consistency
-    lat_str = f"{float(lat):.6f}"
-    lon_str = f"{float(lon):.6f}"
-    accuracy_str = f"{float(accuracy):.6f}"
-    payload = f"lat={lat_str},lon={lon_str},accuracy={accuracy_str},source={source},time={timestamp},nonce={nonce}"
-    log(f"Constructed payload: {payload}")
-    log(f"Payload repr: {repr(payload)}")
-    with _tethered_phone_liveness_lock:
-        tethered_phone_name = _tethered_phone_liveness["name"]
-        tethered_phone_mac = _tethered_phone_liveness["mac"]
-        log(f"[Geo] Read liveness cache: present={_tethered_phone_liveness['present']}, name={tethered_phone_name}, mac={tethered_phone_mac}")
-    try:
-        signature = sign_with_x(payload.encode("utf-8"))
-        signature_b64 = base64.b64encode(signature).decode()
-        log(f"Signature (base64): {signature_b64}")
-        log(f"x_cert.pem (PEM):\n{x_cert.public_bytes(serialization.Encoding.PEM).decode()}")
-        cert_chain_b64 = base64.b64encode(get_certificate_chain_pem()).decode()
-        token = f"{payload}|sig={signature_b64}"
-        log(f"Constructed token: {token}")
-        response = {
-            "lat": lat,
-            "lon": lon,
-            "accuracy": accuracy,
-            "token": token,
-            "certificate_chain": cert_chain_b64
-        }
-        if tethered_phone_name and tethered_phone_mac:
-            response["tethered_phone_name"] = tethered_phone_name
-            response["tethered_phone_mac"] = tethered_phone_mac
-        return response
-    except Exception as e:
-        log(f"Signing with key x failed: {e}")
-        return {"error": f"Signing failed: {e}"}
-
-def is_tethered_phone_present():
-    import json, subprocess, os
-    try:
-        # Read phone details from tethered_phone_info.json at runtime
-        with open(os.path.join(SCRIPT_DIR, "tethered_phone_info.json"), "r") as f:
-            info = json.load(f)
-        phone_name = info.get("name", "Unknown Phone")
-        phone_mac_original = info.get("mac_address", "")
-        phone_mac = phone_mac_original.replace(":", "").upper()
-
-        # Use PowerShell to list paired/connected Bluetooth devices
-        result = subprocess.run([
-            'powershell',
-            '-Command',
-            'Get-PnpDevice -Class Bluetooth | Select-Object InstanceId'
-        ], capture_output=True, text=True)
-
-        phone_connected = False
-        for line in result.stdout.splitlines():
-            if phone_mac and phone_mac in line:
-                phone_connected = True
-                log(f"Found tethered phone: {phone_name} ({phone_mac_original})")
-                break
-        if not phone_connected:
-            log("Tethered phone not physically connected via Bluetooth")
-            return False
-        return phone_connected
-    except Exception as e:
-        log(f"Error checking tethered phone: {e}")
-        return False
-
-def main():
-    logging.debug("Native messaging host process started with PID: %s", os.getpid())
-    log("Native Messaging App started (long-lived).")
-    # Optionally cache certificate here.
-    while True:
+    # Place the main loop in a try/except/finally to log all exits
+    def main():
+        log('[NATIVE HOST] Entering main() loop')
+        # Start the phone liveness worker thread
+        threading.Thread(target=phone_liveness_worker, daemon=True).start()
+        # Initialize key hierarchy at startup
         try:
-            logging.debug("Waiting for input from browser extension...")
-            message = get_message()
-            request_id = message.get("requestId")
-            if message.get("command") == "attest":
-                payload_str = message.get("payload")
-                if not payload_str:
-                    error_msg = "Missing payload in message."
-                    log(error_msg)
-                    response = {"error": error_msg}
-                    if request_id is not None:
-                        response["requestId"] = request_id
-                    send_message(response)
-                    continue
-                parsed = parse_payload(payload_str)
-                try:
-                    lat = float(parsed.get("lat"))
-                    lon = float(parsed.get("lon"))
-                    accuracy = float(parsed.get("accuracy"))
-                    source = parsed.get("source", "unknown")
-                    timestamp = parsed.get("time", "")
-                    nonce_value = parsed.get("nonce", "")
-                except Exception as e:
-                    error_msg = f"Error parsing payload values: {e}"
-                    log(error_msg)
-                    response = {"error": error_msg}
-                    if request_id is not None:
-                        response["requestId"] = request_id
-                    send_message(response)
-                    continue
-                log("Valid geolocation parameters received from payload.")
-                response = process_geolocation(lat, lon, accuracy, source, timestamp, nonce_value)
-                if request_id is not None:
-                    response["requestId"] = request_id
-                send_message(response)
-            elif message.get("command") == "check_tethered_phone":
-                present = is_tethered_phone_present()
-                response = {"tethered_phone_present": present}
-                if request_id is not None:
-                    response["requestId"] = request_id
-                send_message(response)
-            else:
-                # Fallback: if not an attest command.
-                if "lat" in message and "lon" in message and "accuracy" in message:
-                    lat = message.get("lat")
-                    lon = message.get("lon")
-                    accuracy = message.get("accuracy")
-                    source = message.get("source", "unknown")
-                    timestamp = message.get("time", "")
-                    nonce_value = message.get("nonce", "")
-                    log("Valid geolocation parameters received directly.")
-                    response = process_geolocation(lat, lon, accuracy, source, timestamp, nonce_value)
-                    if request_id is not None:
-                        response["requestId"] = request_id
+            x_private_key, x_cert, tpm_cert = generate_x_key_and_cert()
+            # Check that x_private_key matches x_cert
+            if x_private_key and x_cert:
+                priv_pub = x_private_key.public_key().public_bytes(
+                    encoding=serialization.Encoding.PEM,
+                    format=serialization.PublicFormat.SubjectPublicKeyInfo
+                )
+                cert_pub = x_cert.public_key().public_bytes(
+                    encoding=serialization.Encoding.PEM,
+                    format=serialization.PublicFormat.SubjectPublicKeyInfo
+                )
+                if priv_pub != cert_pub:
+                    log("[ERROR] x_private_key.pem and x_cert.pem do NOT match! Delete both files and restart to regenerate.")
+                else:
+                    log("[INFO] x_private_key.pem and x_cert.pem match.")
+        except Exception as e:
+            log(f"Key hierarchy initialization failed: {e}")
+            x_private_key = x_cert = tpm_cert = None
+
+        # Main message loop
+        while True:
+            try:
+                message = get_message()
+                log(f"[NATIVE HOST] Received message: {message}")
+                request_id = message.get("requestId")
+                command = message.get("command")
+                if command == "attest":
+                    payload = message.get("payload", "")
+                    # Parse payload for lat/lon/accuracy/source/time/nonce
+                    payload_dict = parse_payload(payload)
+                    # Check phone liveness (read from cache)
+                    with _tethered_phone_liveness_lock:
+                        phone_present = _tethered_phone_liveness.get("present", False)
+                        phone_name = _tethered_phone_liveness.get("name")
+                        bluetooth_bd_addr = _tethered_phone_liveness.get("bluetooth_bd_addr")
+                        bluetooth_pan_ip = _tethered_phone_liveness.get("bluetooth_pan_ip")
+                    # TPM sign the payload (using x key)
+                    try:
+                        signature = base64.b64encode(sign_with_x(payload.encode("utf-8"))).decode("ascii")
+                        cert_chain_pem = get_certificate_chain_pem().decode("utf-8")
+                        cert_chain_b64 = base64.b64encode(get_certificate_chain_pem()).decode("ascii")
+                    except Exception as e:
+                        log(f"[NATIVE HOST] TPM signing error: {e}")
+                        send_message({"error": f"TPM signing error: {e}", "requestId": request_id})
+                        continue
+                    # Compose response with separate fields
+                    response = {
+                        "requestId": request_id,
+                        "payload": payload,
+                        "sig": signature,
+                        "cert_chain": cert_chain_b64,
+                        # For browser header compatibility
+                        "tethered_phone_name": phone_name if phone_present else None,
+                        "tethered_phone_mac": bluetooth_bd_addr if phone_present else None,
+                        "bluetooth_bd_addr": bluetooth_bd_addr if phone_present else None,
+                        "bluetooth_pan_ip": bluetooth_pan_ip if phone_present else None,
+                        "mobile_phone_identity": {
+                            "name": phone_name if phone_present else None,
+                            "bluetooth_bd_addr": bluetooth_bd_addr if phone_present else None
+                        },
+                        "mobile_phone_liveness_session": {
+                            "bluetooth_pan_ip": bluetooth_pan_ip if phone_present else None
+                        }
+                    }
                     send_message(response)
                 else:
-                    error_msg = "Missing geolocation parameters."
-                    log(error_msg)
-                    response = {"error": error_msg}
-                    if request_id is not None:
-                        response["requestId"] = request_id
-                    send_message(response)
-        except Exception as e:
-            error_msg = f"Error in main loop: {str(e)}"
-            log(error_msg)
-            response = {"error": error_msg}
-            # Try to echo requestId if possible
-            try:
-                if 'message' in locals():
-                    request_id = message.get("requestId")
-                    if request_id is not None:
-                        response["requestId"] = request_id
-            except Exception:
-                pass
-            send_message(response)
-            time.sleep(1)
+                    send_message({"error": f"Unknown command: {command}", "requestId": request_id})
+            except Exception as e:
+                log(f'[NATIVE HOST] Exception in main loop: {e}')
+                time.sleep(1)
 
-if __name__ == "__main__":
-    main()
+    if __name__ == '__main__':
+        try:
+            main()
+        except Exception as e:
+            log(f'[NATIVE HOST] Uncaught exception at top level: {e}')
+        finally:
+            log('[NATIVE HOST] win-app.py exiting (PID: %s)' % os.getpid())
+except Exception as e:
+    log(f'[NATIVE HOST] Exception during startup: {e}')

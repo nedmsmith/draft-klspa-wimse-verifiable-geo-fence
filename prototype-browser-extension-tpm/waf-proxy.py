@@ -12,7 +12,7 @@ from urllib.parse import unquote
 
 app = Flask(__name__)
 # Ensure all logs are visible in the console
-logging.basicConfig(level=logging.DEBUG)
+logging.basicConfig(level=logging.INFO)
 
 # Global variable for nonce checking.
 current_nonce = None
@@ -91,6 +91,24 @@ def parse_geolocation_header(geo_header):
     except Exception as e:
         app.logger.error(f"Error parsing geolocation header: {e}")
     return fields
+
+def parse_geolocation_header_multi(geo_header):
+    """
+    Parse the X-Custom-Geolocation header into a dictionary, supporting multiple fields with the same name.
+    Returns a dict mapping field names to values (or lists of values if repeated).
+    """
+    from collections import defaultdict
+    fields = defaultdict(list)
+    try:
+        parts = geo_header.split(";")
+        for part in parts:
+            if "=" in part:
+                k, v = part.split("=", 1)
+                fields[k.strip()].append(v.strip())
+    except Exception as e:
+        app.logger.error(f"Error parsing geolocation header (multi): {e}")
+    # flatten singletons
+    return {k: v[0] if len(v) == 1 else v for k, v in fields.items()}
 
 def verify_certificate_chain_and_signature(token, cert_chain_b64=None):
     # Hardcoded certificate chain for dev/test (use real newlines, not \n)
@@ -201,8 +219,15 @@ def proxy(path):
     else:
         original_geo_header = request.headers.get("X-Custom-Geolocation")
         if original_geo_header:
-            app.logger.info(f"Received X-Custom-Geolocation header: {original_geo_header}")
-            parsed_fields = parse_geolocation_header(original_geo_header)
+            # Log the received X-Custom-Geolocation header and all request headers at DEBUG level only
+            app.logger.debug(f"Received X-Custom-Geolocation header: {original_geo_header}")
+            app.logger.debug(f"[DEBUG] Full X-Custom-Geolocation header dump: {original_geo_header}")
+            app.logger.debug(f"[DEBUG] All request headers: {dict(request.headers)}")
+            parsed_fields = parse_geolocation_header_multi(original_geo_header)
+            # New attestation format detection
+            has_new = all(f in parsed_fields for f in ("payload", "sig", "cert_chain"))
+            has_legacy = "sig" in parsed_fields and "payload" not in parsed_fields
+            # Phone info fields
             tethered_phone_name = parsed_fields.get("tethered_phone_name")
             tethered_phone_mac = parsed_fields.get("tethered_phone_mac")
             # Decode percent-encoding for human-readable logs and API
@@ -210,23 +235,104 @@ def proxy(path):
                 tethered_phone_name = unquote(tethered_phone_name)
             if tethered_phone_mac:
                 tethered_phone_mac = unquote(tethered_phone_mac)
-                # Format MAC as colon-separated (e.g., 98:60:CA:4E:7E:BF)
                 mac = tethered_phone_mac.replace('-', ':').replace('.', ':').replace(' ', ':')
-                # Remove all non-hex chars, then re-insert colons every 2 chars
                 mac_hex = ''.join(c for c in mac if c.isalnum())
                 if len(mac_hex) == 12:
                     tethered_phone_mac = ':'.join([mac_hex[i:i+2] for i in range(0, 12, 2)])
                 else:
-                    # fallback to original if not 12 hex digits
                     tethered_phone_mac = mac
             if tethered_phone_name or tethered_phone_mac:
                 app.logger.info(f"Tethered phone info: name={tethered_phone_name}, mac={tethered_phone_mac}")
-            # Nonce logic removed: just log the nonce if present
-            received_nonce = parsed_fields.get("nonce", None)
-            if received_nonce is not None:
-                app.logger.info(f"Received nonce (not validated): {received_nonce}")
-            # Validate TPM signature if present.
-            if "sig" in parsed_fields:
+            # Remove nonce logging/validation entirely
+            # Attestation validation
+            if has_new:
+                payload = parsed_fields["payload"]
+                sig_b64 = parsed_fields["sig"]
+                cert_chain_b64 = parsed_fields["cert_chain"]
+                # Decode cert chain (base64 or PEM)
+                try:
+                    # Always decode from base64 (browser always sends base64)
+                    cert_chain_pem = base64.b64decode(cert_chain_b64)
+                    # Split PEMs
+                    certs = []
+                    for cert in cert_chain_pem.split(b'-----END CERTIFICATE-----'):
+                        if b'-----BEGIN CERTIFICATE-----' in cert:
+                            cert = cert + b'-----END CERTIFICATE-----\n'
+                            certs.append(x509.load_pem_x509_certificate(cert))
+                    if len(certs) != 2:
+                        app.logger.error(f'[SIGFAIL] Certificate chain must contain 2 certs (x and TPM), got {len(certs)}')
+                        valid = False
+                        reason = 'Certificate chain must contain 2 certs (x and TPM)'
+                    else:
+                        x_cert, tpm_cert = certs
+                        # Verify x_cert is signed by tpm_cert
+                        if x_cert.issuer != tpm_cert.subject:
+                            app.logger.error(f'[SIGFAIL] x_cert issuer does not match tpm_cert subject')
+                            valid = False
+                            reason = 'x_cert not issued by TPM cert'
+                        else:
+                            try:
+                                tpm_cert.public_key().verify(
+                                    x_cert.signature,
+                                    x_cert.tbs_certificate_bytes,
+                                    padding.PKCS1v15(),
+                                    x_cert.signature_hash_algorithm,
+                                )
+                                # Percent-decode and pad sig before base64-decode
+                                sig_b64_decoded = unquote(sig_b64)
+                                # Add base64 padding if needed
+                                missing_padding = len(sig_b64_decoded) % 4
+                                if missing_padding:
+                                    sig_b64_decoded += '=' * (4 - missing_padding)
+                                sig_bytes = base64.b64decode(sig_b64_decoded)
+                                # Verify signature on payload using x_cert
+                                # Always percent-decode the payload before parsing
+                                raw_payload = payload
+                                payload = unquote(payload)
+                                app.logger.debug(f"[PAYLOAD] Raw payload from header: {raw_payload}")
+                                app.logger.debug(f"[PAYLOAD] Decoded payload for parsing: {payload}")
+                                # Robust payload parsing for signature verification
+                                payload_fields = {}
+                                for part in payload.split(';'):
+                                    if '=' in part:
+                                        k, v = part.split('=', 1)
+                                        payload_fields[k.strip()] = v.strip()
+                                # Ensure all required fields are present
+                                required_keys = ["lat", "lon", "accuracy", "source", "time", "nonce"]
+                                if not all(k in payload_fields for k in required_keys):
+                                    app.logger.error(f"[SIGFAIL] Payload missing required fields: {payload_fields}")
+                                    valid = False
+                                    reason = f"Payload missing required fields: {payload_fields}"
+                                else:
+                                    # Format accuracy as integer if possible to match client
+                                    try:
+                                        accuracy_float = float(payload_fields["accuracy"])
+                                        accuracy_str = str(int(accuracy_float)) if accuracy_float == int(accuracy_float) else str(accuracy_float)
+                                    except Exception:
+                                        accuracy_str = payload_fields["accuracy"]
+                                    payload_str = f"lat={payload_fields['lat']};lon={payload_fields['lon']};accuracy={accuracy_str};source={payload_fields['source']};time={payload_fields['time']};nonce={payload_fields['nonce']}"
+                                    app.logger.debug(f"[PAYLOAD] Payload string used for verification: {payload_str}")
+                                    x_cert.public_key().verify(
+                                        sig_bytes,
+                                        payload_str.encode('utf-8'),
+                                        padding.PKCS1v15(),
+                                        hashes.SHA256()
+                                    )
+                                    valid = True
+                                    reason = 'OK'
+                            except Exception as e:
+                                app.logger.error(f'[SIGFAIL] Signature/cert validation error: {e}')
+                                valid = False
+                                reason = f'Signature/cert validation error: {e}'
+                except Exception as e:
+                    app.logger.error(f'[SIGFAIL] Error decoding/validating cert chain: {e}')
+                    valid = False
+                    reason = f'Error decoding/validating cert chain: {e}'
+                if not valid:
+                    app.logger.error(f"[SIGFAIL] Invalid signature/cert chain in X-Custom-Geolocation header: {reason}")
+                else:
+                    app.logger.info("Signature and certificate chain validated successfully (new format).")
+            elif has_legacy:
                 tpm_token = parsed_fields["sig"]
                 if "|sig=" in tpm_token:
                     try:
@@ -234,7 +340,7 @@ def proxy(path):
                         if not valid:
                             app.logger.error(f"[SIGFAIL] Invalid signature/cert chain in X-Custom-Geolocation header: {reason}")
                         else:
-                            app.logger.info("Signature and certificate chain validated successfully.")
+                            app.logger.info("Signature and certificate chain validated successfully (legacy format).")
                     except Exception as ex:
                         app.logger.error(f"Error verifying signature/cert chain from header: {ex}")
                 else:
@@ -250,12 +356,34 @@ def proxy(path):
     # Copy incoming headers.
     headers = dict(request.headers)
     headers.pop("Host", None)
-    
-    # For non-/get_access_token_with_initial_nonce requests, append a WAF processing marker.
+    # Forward attestation header in new format if present
     if "X-Custom-Geolocation" in headers and path.lower() != "get_access_token_with_initial_nonce":
-        original_value = headers["X-Custom-Geolocation"]
-        headers["X-Custom-Geolocation"] = original_value + ";waf=processed_by_proxy"
-        app.logger.info(f"Updated X-Custom-Geolocation header for forwarding: {headers['X-Custom-Geolocation']}")
+        # Rebuild header to forward only one set of attestation fields, and append WAF marker
+        parsed_fields = parse_geolocation_header_multi(headers["X-Custom-Geolocation"])
+        has_new = all(f in parsed_fields for f in ("payload", "sig", "cert_chain"))
+        has_legacy = "sig" in parsed_fields and "payload" not in parsed_fields
+        header_parts = []
+        for k in ["lat", "lon", "accuracy", "time", "nonce", "source", "tethered_phone_name", "tethered_phone_mac", "bluetooth_bd_addr", "bluetooth_pan_ip", "mobile_phone_identity", "mobile_phone_liveness_session"]:
+            if k in parsed_fields:
+                v = parsed_fields[k]
+                if isinstance(v, list):
+                    v = v[0]
+                header_parts.append(f"{k}={v}")
+        if has_new:
+            for k in ["payload", "sig", "cert_chain"]:
+                v = parsed_fields[k]
+                if isinstance(v, list):
+                    v = v[0]
+                header_parts.append(f"{k}={v}")
+        elif has_legacy:
+            v = parsed_fields["sig"]
+            if isinstance(v, list):
+                v = v[0]
+            header_parts.append(f"sig={v}")
+        header_parts.append("waf=processed_by_proxy")
+        headers["X-Custom-Geolocation"] = ";".join(header_parts)
+        # Log the updated header at DEBUG level only
+        app.logger.debug(f"Updated X-Custom-Geolocation header for forwarding: {headers['X-Custom-Geolocation']}")
 
     try:
         # Forward the request upstream.
@@ -281,6 +409,7 @@ def proxy(path):
             except Exception as ex:
                 app.logger.error(f"Error decoding JSON from /get_access_token_with_initial_nonce response: {ex}")
             if resp_json and "nonce" in resp_json:
+                global current_nonce
                 current_nonce = int(resp_json["nonce"])
                 app.logger.info(f"Updated nonce from /get_access_token_with_initial_nonce response: {current_nonce}")
             else:
@@ -292,14 +421,16 @@ def proxy(path):
     response = Response(upstream_response.content, status=upstream_response.status_code)
     for key, value in upstream_response.headers.items():
         response.headers[key] = value
-    # If the upstream response is JSON, add tethered phone info if present
+    # If the upstream response is JSON, add tethered phone info if present, but avoid duplicates
     try:
         if upstream_response.headers.get('Content-Type', '').startswith('application/json'):
             import json
             resp_json = upstream_response.json()
             if (tethered_phone_name or tethered_phone_mac) and isinstance(resp_json, dict):
-                resp_json["tethered_phone_name"] = tethered_phone_name
-                resp_json["tethered_phone_mac"] = tethered_phone_mac
+                if tethered_phone_name and "tethered_phone_name" not in resp_json:
+                    resp_json["tethered_phone_name"] = tethered_phone_name
+                if tethered_phone_mac and "tethered_phone_mac" not in resp_json:
+                    resp_json["tethered_phone_mac"] = tethered_phone_mac
                 response.set_data(json.dumps(resp_json))
     except Exception as e:
         app.logger.error(f"Error injecting tethered phone info into response: {e}")

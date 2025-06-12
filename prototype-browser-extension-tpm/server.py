@@ -5,6 +5,7 @@ import reverse_geocode
 import math
 import logging
 import random
+import traceback
 from cryptography import x509
 from cryptography.hazmat.backends import default_backend
 from cryptography.hazmat.primitives import hashes, serialization
@@ -13,7 +14,7 @@ from cryptography.x509.base import load_pem_x509_certificate
 from urllib.parse import unquote
 
 # Ensure all logs are visible in the console
-logging.basicConfig(level=logging.DEBUG)
+logging.basicConfig(level=logging.INFO)
 
 app = Flask(__name__)
 
@@ -179,7 +180,9 @@ def index():
     global nonce_lcg, nonce_seed
     geo_header = request.headers.get("X-Custom-Geolocation", "Not Provided")
     location_data = {}
-    app.logger.info(f"Received X-Custom-Geolocation header: {geo_header}")
+    app.logger.debug(f"Received X-Custom-Geolocation header: {geo_header}")
+    app.logger.debug(f"[DEBUG] Full X-Custom-Geolocation header dump: {geo_header}")
+    app.logger.debug(f"[DEBUG] All request headers: {dict(request.headers)}")
 
     if geo_header == "Not Provided":
         return jsonify({
@@ -262,7 +265,60 @@ def index():
 
         # Validate TPM signature and all other checks before advancing LCG
         verified = None
-        if tpm_token:
+        if tpm_token and cert_chain_b64:
+            # New format: sig and cert_chain are separate fields
+            try:
+                # Percent-decode cert_chain first
+                cert_chain_b64_decoded = unquote(cert_chain_b64)
+                # Add base64 padding if needed
+                missing_padding = len(cert_chain_b64_decoded) % 4
+                if missing_padding:
+                    cert_chain_b64_decoded += '=' * (4 - missing_padding)
+                # Now base64-decode
+                cert_chain_pem = base64.b64decode(cert_chain_b64_decoded)
+                certs = []
+                for cert in cert_chain_pem.split(b'-----END CERTIFICATE-----'):
+                    if b'-----BEGIN CERTIFICATE-----' in cert:
+                        cert = cert + b'-----END CERTIFICATE-----\n'
+                        certs.append(x509.load_pem_x509_certificate(cert, default_backend()))
+                if len(certs) != 2:
+                    app.logger.error(f'[SIGFAIL] Certificate chain must contain 2 certs (x and TPM), got {len(certs)}')
+                    return jsonify({"error": 'Certificate chain must contain 2 certs (x and TPM)'}), 400
+                x_cert, tpm_cert = certs
+                # Verify x_cert is signed by tpm_cert (issuer check and signature)
+                if x_cert.issuer != tpm_cert.subject:
+                    app.logger.error(f'[SIGFAIL] x_cert issuer does not match tpm_cert subject')
+                    return jsonify({"error": 'x_cert not issued by TPM cert'}), 400
+                tpm_cert.public_key().verify(
+                    x_cert.signature,
+                    x_cert.tbs_certificate_bytes,
+                    padding.PKCS1v15(),
+                    x_cert.signature_hash_algorithm,
+                )
+                # Verify signature on payload using x_cert
+                sig_b64_decoded = unquote(tpm_token)
+                missing_padding = len(sig_b64_decoded) % 4
+                if missing_padding:
+                    sig_b64_decoded += '=' * (4 - missing_padding)
+                signature = base64.b64decode(sig_b64_decoded)
+                # Format accuracy as integer if possible to match client
+                accuracy_str = str(int(accuracy)) if accuracy == int(accuracy) else str(accuracy)
+                payload_str = f"lat={lat};lon={lon};accuracy={accuracy_str};source={source};time={time_value};nonce={nonce_value}"
+                app.logger.debug(f"[PAYLOAD] Payload string used for verification: {payload_str}")
+                x_cert.public_key().verify(
+                    signature,
+                    payload_str.encode('utf-8'),
+                    padding.PKCS1v15(),
+                    hashes.SHA256()
+                )
+                app.logger.info("Certificate chain and signature verified successfully.")
+                verified = True
+            except Exception as e:
+                app.logger.error(f"[SIGFAIL] Error verifying new-format signature/cert chain: {e}")
+                app.logger.error(traceback.format_exc())
+                return jsonify({"error": f"Certificate chain and signature verification failed: {e}"}), 400
+        elif tpm_token:
+            # Legacy format (for backward compatibility)
             if "|sig=" in tpm_token:
                 att_payload, signature_b64 = tpm_token.split("|sig=", 1)
                 att_dict = {}
@@ -309,12 +365,10 @@ def index():
             "State": geo.get("state", "Unknown"),
             "Country": geo.get("country", "Unknown")
         }
+        # Only add tethered_phone_name and tethered_phone_mac if not already present in the response
+        # (Assume upstream proxy or client may already inject these fields)
         if tpm_token:
             location_data["TPM_signature_Verified"] = True
-        if tethered_phone_name:
-            location_data["tethered_phone_name"] = tethered_phone_name
-        if tethered_phone_mac:
-            location_data["tethered_phone_mac"] = tethered_phone_mac
 
     except Exception as e:
         app.logger.error(f"Failed to parse geolocation: {e}")
