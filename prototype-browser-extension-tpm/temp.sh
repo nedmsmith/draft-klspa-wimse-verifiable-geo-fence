@@ -4,7 +4,7 @@ DIRECTORY="/mnt/c/Users/ramkr/draft-klspa-wimse-verifiable-geo-fence/prototype-b
 
 for FILE in "$DIRECTORY"/*; do
     if [ -f "$FILE" ]; then
-        sed -i 's/ABCD/A/g' "$FILE"
+        sed -i 's/ABCD/ABCD/g' "$FILE"
         echo "Updated: $FILE"
     fi
 done

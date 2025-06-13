@@ -311,7 +311,7 @@ def phone_liveness_worker():
             result = subprocess.run([
                 "powershell.exe", "-NoProfile", "-ExecutionPolicy", "Bypass", "-File", TETHERED_PHONE_CHECK_SCRIPT,
                 "-InfoFile", TETHERED_PHONE_INFO_FILE
-            ], capture_output=True, text=True, timeout=30)
+            ], capture_output=True, text=True, timeout=40)
             exit_code = result.returncode
             # Load phone info from JSON for name/MAC
             try:
@@ -323,25 +323,61 @@ def phone_liveness_worker():
                 phone_name = None
                 phone_mac = None
                 log(f"[Liveness] Error loading phone info JSON: {e}")
-            # Update liveness cache based on exit code
+            # Interpret exit codes from the robust script
             with _tethered_phone_liveness_lock:
                 if exit_code == 0:
+                    # FULL 6-byte match (unique identity confirmed)
                     _tethered_phone_liveness["present"] = True
+                    _tethered_phone_liveness["match_type"] = "full"
                     _tethered_phone_liveness["name"] = phone_name
                     _tethered_phone_liveness["bluetooth_bd_addr"] = phone_mac
-                    # PAN IP not available from script, leave as None
                     _tethered_phone_liveness["bluetooth_pan_ip"] = None
-                    log(f"[Liveness] Phone present: {phone_name} [{phone_mac}]")
-                else:
+                    log(f"[Liveness] FULL match: Phone present: {phone_name} [{phone_mac}]")
+                elif exit_code == 10:
+                    # PARTIAL 3-byte prefix match
+                    _tethered_phone_liveness["present"] = True
+                    _tethered_phone_liveness["match_type"] = "partial"
+                    _tethered_phone_liveness["name"] = phone_name
+                    _tethered_phone_liveness["bluetooth_bd_addr"] = phone_mac
+                    _tethered_phone_liveness["bluetooth_pan_ip"] = None
+                    log(f"[Liveness] PARTIAL match: Phone present: {phone_name} [{phone_mac}]")
+                elif exit_code == 20:
+                    # NO-PHONE (Bluetooth not present)
                     _tethered_phone_liveness["present"] = False
+                    _tethered_phone_liveness["match_type"] = "no-phone"
                     _tethered_phone_liveness["name"] = None
                     _tethered_phone_liveness["bluetooth_bd_addr"] = None
                     _tethered_phone_liveness["bluetooth_pan_ip"] = None
-                    log(f"[Liveness] Phone not present (exit code {exit_code})")
+                    log(f"[Liveness] No phone detected (Bluetooth not present)")
+                elif exit_code == 1:
+                    # NO-PAN (no Bluetooth-PAN NIC Up)
+                    _tethered_phone_liveness["present"] = False
+                    _tethered_phone_liveness["match_type"] = "no-pan"
+                    _tethered_phone_liveness["name"] = None
+                    _tethered_phone_liveness["bluetooth_bd_addr"] = None
+                    _tethered_phone_liveness["bluetooth_pan_ip"] = None
+                    log(f"[Liveness] No Bluetooth PAN NIC Up")
+                elif exit_code == 2:
+                    # MISMATCH (unique identity mismatch)
+                    _tethered_phone_liveness["present"] = False
+                    _tethered_phone_liveness["match_type"] = "mismatch"
+                    _tethered_phone_liveness["name"] = None
+                    _tethered_phone_liveness["bluetooth_bd_addr"] = None
+                    _tethered_phone_liveness["bluetooth_pan_ip"] = None
+                    log(f"[Liveness] Unique identity mismatch")
+                else:
+                    # Unknown error
+                    _tethered_phone_liveness["present"] = False
+                    _tethered_phone_liveness["match_type"] = "error"
+                    _tethered_phone_liveness["name"] = None
+                    _tethered_phone_liveness["bluetooth_bd_addr"] = None
+                    _tethered_phone_liveness["bluetooth_pan_ip"] = None
+                    log(f"[Liveness] Unknown error or exit code: {exit_code}")
         except Exception as e:
             log(f"[Liveness] Exception in liveness worker: {e}")
             with _tethered_phone_liveness_lock:
                 _tethered_phone_liveness["present"] = False
+                _tethered_phone_liveness["match_type"] = "error"
                 _tethered_phone_liveness["name"] = None
                 _tethered_phone_liveness["bluetooth_bd_addr"] = None
                 _tethered_phone_liveness["bluetooth_pan_ip"] = None
@@ -415,6 +451,7 @@ try:
                         "tethered_phone_mac": bluetooth_bd_addr if phone_present else None,
                         "bluetooth_bd_addr": bluetooth_bd_addr if phone_present else None,
                         "bluetooth_pan_ip": bluetooth_pan_ip if phone_present else None,
+                        "tethered_phone_match_type": _tethered_phone_liveness.get("match_type"),
                         "mobile_phone_identity": {
                             "name": phone_name if phone_present else None,
                             "bluetooth_bd_addr": bluetooth_bd_addr if phone_present else None

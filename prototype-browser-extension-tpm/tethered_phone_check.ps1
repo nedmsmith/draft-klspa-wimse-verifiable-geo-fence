@@ -1,78 +1,104 @@
 <#
-EXIT CODES
- 0 = at least one Bluetooth PAN NIC is Up AND its peer BD_ADDR matches target
- 1 = no Bluetooth PAN NIC is Up
- 2 = PAN Up but peer BD_ADDR ≠ target
+  tethered_phone_check.ps1
+  Exit codes
+    0   SUCCESS-FULL
+   10   SUCCESS-PARTIAL
+   20   NO-PHONE
+    1   NO-PAN
+    2   MISMATCH
 #>
 
 param(
     [string]$InfoFile = "$PSScriptRoot\tethered_phone_info.json"
 )
 
-# ── STEP 0 ─ load the JSON ----------------------------------------------------
-Write-Host "STEP 0 - loading JSON"
-if (-not (Test-Path $InfoFile)) { Write-Error "JSON not found."; exit 2 }
+# ── STEP 0 – load phone identity ────────────────────────────────────────
+if (-not (Test-Path $InfoFile)) { Write-Error "JSON not found"; exit 2 }
+$json        = Get-Content $InfoFile -Raw | ConvertFrom-Json
+$PhoneName   = $json.name
+$IdentityMAC = $json.mac_address.ToUpper()
 
-$json       = Get-Content $InfoFile -Raw | ConvertFrom-Json
-$TargetMac  = ($json.mac_address).ToUpper()
-$TargetName = $json.name
+Write-Host "`nPhone (name)    : $PhoneName"
+Write-Host "Unique identity : Phone Bluetooth MAC $IdentityMAC"
 
-Write-Host "Target name : $TargetName"
-Write-Host "Target MAC  : $TargetMac"
-Write-Host ""
+# ── STEP 1 – phone discoverable? ────────────────────────────────────────
+$bd12 = ($IdentityMAC -replace ':','')
+$present = Get-PnpDevice -Class Bluetooth -PresentOnly |
+           Where-Object InstanceId -like "*_$bd12"
+if (-not $present) { Write-Host "Bluetooth scan  : NOT PRESENT"; exit 20 }
+Write-Host "Bluetooth scan  : PRESENT"
 
-# ── STEP 1 ─ find Bluetooth PAN NICs that are Up -----------------------------
-Write-Host "STEP 1 - scanning NICs that are Up and are Bluetooth PAN"
-$panUp = Get-NetAdapter |
-         Where-Object {
-             $_.Status -eq 'Up' -and
-             $_.InterfaceDescription -like '*Personal Area Network*'
-         }
-
-if (-not $panUp) {
-    Write-Host "No PAN NIC is Up."
-    exit 1
+# ── STEP 2 – find Up PAN NIC ────────────────────────────────────────────
+$pan = Get-NetAdapter | Where-Object {
+    $_.Status -eq 'Up' -and $_.InterfaceDescription -like '*Personal Area Network*'
 }
+if (-not $pan) { Write-Host "PAN status      : no Bluetooth-PAN NIC Up"; exit 1 }
 
-$panUp | Format-Table ifIndex, Name, PnPDeviceID
-Write-Host ""
+$nic = $pan[0]
+Write-Host "PAN status      : Up on '$($nic.Name)' (ifIndex=$($nic.ifIndex))"
 
-# ── STEP 2 ─ map each NIC to its ContainerId, then to BD_ADDR ---------------
-Write-Host "STEP 2 - mapping each NIC to its Bluetooth device"
-$owners = @()
+# ── helper – canonicalise MAC (reverse + clear flag bit) ────────────────
+function Canon ([string]$mac) {
+    $hex = $mac -replace '[-:]',''
+    $b   = $hex -split '(.{2})' | Where-Object { $_ }
+    [array]::Reverse($b)
+    $b[-1] = '{0:X2}' -f (([Convert]::ToInt32($b[-1],16)) -band 0xFD)
+    ($b -join ':').ToUpper()
+}
+$CanonIdentity = Canon $IdentityMAC
+$SuffixIdentity= ($CanonIdentity -split ':')[-3..-1] -join ':'
 
-foreach ($nic in $panUp) {
+# ── helper – kick-ping until ARP entry exists ───────────────────────────
+function Get-PhoneMac ([int]$idx, [string]$ip) {
 
-    # 2a. resolve the NIC itself to a PnP object to grab ContainerId
-    $nicDev = Get-PnpDevice -InstanceId $nic.PnPDeviceID -ErrorAction SilentlyContinue
-    if (-not $nicDev) { continue }
+    $local = (Get-NetIPAddress -InterfaceIndex $idx -AddressFamily IPv4 |
+              Select-Object -First 1 -ExpandProperty IPAddress)
 
-    $cid = $nicDev.ContainerId
-    Write-Host "NIC '$($nic.Name)' container : $cid"
-
-    # 2b. find Bluetooth device under the same container
-    $bt = Get-PnpDevice -PresentOnly -Class Bluetooth |
-          Where-Object { $_.ContainerId -eq $cid -and $_.InstanceId -match '_([0-9A-F]{12})$' } |
-          Select-Object -First 1
-
-    if ($bt) {
-        $raw = $matches[1]                       # 12-hex big-endian
-        $bd  = ($raw -split '(.{2})' | ? {$_}) -join ':' | ForEach-Object { $_.ToUpper() }
-        Write-Host "  -> Bluetooth device BD_ADDR : $bd"
-        $owners += $bd
-    } else {
-        Write-Host "  -> no Bluetooth device found in same container"
+    $grab = {
+        Get-NetNeighbor -InterfaceIndex $idx -IPAddress $ip -ErrorAction Ignore |
+        Where-Object State -in 'Reachable','Stale' |
+        Select-Object -First 1 -ExpandProperty LinkLayerAddress
     }
+
+    for ($i = 0; $i -lt 6; $i++) {
+        & ping.exe -n 1 -S $local -w 500 $ip | Out-Null
+        if (Get-Command Test-NetConnection -ErrorAction Ignore) {
+            Test-NetConnection -ComputerName $ip -Port 80 -WarningAction SilentlyContinue | Out-Null
+        }
+        Start-Sleep -Milliseconds 300
+        $mac = & $grab
+        if ($mac) { return $mac }
+    }
+    return $null
 }
 
-Write-Host ""
+# ── STEP 3 – evaluate PAN link ──────────────────────────────────────────
+$PhoneIP = Get-NetRoute -InterfaceIndex $nic.ifIndex -DestinationPrefix '0.0.0.0/0' |
+           Sort-Object RouteMetric | Select-Object -First 1 -ExpandProperty NextHop
 
-# ── STEP 3 ─ decide ----------------------------------------------------------
-if ($owners -contains $TargetMac) {
-    Write-Host "SUCCESS: PAN Up and linked to $TargetName [$TargetMac]"
+$rawMac = Get-PhoneMac $nic.ifIndex $PhoneIP
+if (-not $rawMac) { Write-Host "Phone MAC      : <not learned>"; exit 2 }
+
+$rawMacColon = $rawMac -replace '-', ':'             # << NEW: colon format
+$canonMac    = Canon $rawMac
+$suffixMac   = ($canonMac -split ':')[-3..-1] -join ':'
+
+Write-Host "Phone IP        : $PhoneIP"
+Write-Host "Phone MAC       : $rawMacColon"
+Write-Host "Canonical MAC   : $canonMac"
+
+# ── STEP 4 – decision ──────────────────────────────────────────────────
+if ($canonMac -eq $CanonIdentity) {
+    Write-Host "Match type      : FULL 6-byte match (unique identity confirmed)"
     exit 0
 }
 
-Write-Host "PAN Up but NOT linked to $TargetName [$TargetMac]"
+if ($suffixMac -eq $SuffixIdentity) {
+    Write-Host "Match type      : PARTIAL 3-byte prefix match"
+    Write-Host "Collision prob  : 1 / 16 777 216  (~0.000006 %)"
+    exit 10
+}
+
+Write-Host "Match type      : NONE (unique identity mismatch)"
 exit 2
 
