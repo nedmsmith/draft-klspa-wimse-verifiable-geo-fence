@@ -178,7 +178,8 @@ def get_access_token_with_initial_nonce():
 @app.route("/")
 def index():
     global nonce_lcg, nonce_seed
-    geo_header = request.headers.get("X-Custom-Geolocation", "Not Provided")
+    geo_header = request.headers.get("X-Custom-Geolocation", "")
+    app.logger.debug(f"[DEBUG] Full X-Custom-Geolocation header dump: {geo_header}")
     location_data = {}
     app.logger.debug(f"Received X-Custom-Geolocation header: {geo_header}")
     app.logger.debug(f"[DEBUG] Full X-Custom-Geolocation header dump: {geo_header}")
@@ -215,6 +216,7 @@ def index():
         cert_chain_b64 = header_dict.get("cert_chain", None)
         tethered_phone_name = header_dict.get("tethered_phone_name", None)
         tethered_phone_mac = header_dict.get("tethered_phone_mac", None)
+        tethered_phone_match_type = header_dict.get("tethered_phone_match_type", None)
         # Decode percent-encoding for human-readable logs and API
         if tethered_phone_name:
             tethered_phone_name = unquote(tethered_phone_name)
@@ -229,6 +231,11 @@ def index():
                 tethered_phone_mac = mac
         if tethered_phone_name or tethered_phone_mac:
             app.logger.info(f"Tethered phone info: name={tethered_phone_name}, mac={tethered_phone_mac}")
+        # Always log presence/absence of tethered_phone_match_type
+        if tethered_phone_match_type:
+            app.logger.info(f"Tethered phone match type: {tethered_phone_match_type}")
+        else:
+            app.logger.info("Tethered phone match type: not present in header")
 
         app.logger.info(f"Header parsed: lat={lat}, lon={lon}, accuracy={accuracy}, "
                         f"time={time_value}, nonce={nonce_value}, source={source}")
@@ -369,6 +376,35 @@ def index():
         # (Assume upstream proxy or client may already inject these fields)
         if tpm_token:
             location_data["TPM_signature_Verified"] = True
+        # Extract phone fields from mobile_phone_identity only (no legacy fallback)
+        import json
+        phone_identity = header_dict.get("mobile_phone_identity")
+        tethered_phone_name = None
+        tethered_phone_mac = None
+        tethered_phone_match_type = None
+        # Debug: log the raw mobile_phone_identity header
+        app.logger.info(f"Raw mobile_phone_identity header: {header_dict.get('mobile_phone_identity')}")
+        if phone_identity:
+            if isinstance(phone_identity, str):
+                try:
+                    phone_identity = json.loads(unquote(phone_identity))
+                except Exception as e:
+                    app.logger.error(f"Failed to decode/parse phone_identity: {e}")
+                    phone_identity = {}
+            app.logger.info(f"Parsed phone_identity: {phone_identity}")
+            tethered_phone_name = phone_identity.get("name")
+            tethered_phone_mac = phone_identity.get("tethered_phone_mac") or phone_identity.get("bluetooth_bd_addr")
+            tethered_phone_match_type = phone_identity.get("tethered_phone_match_type")
+
+        # Add phone liveness fields to response if present, and remove any accidental duplicates
+        for key, value in [
+            ("tethered_phone_name", tethered_phone_name),
+            ("tethered_phone_mac", tethered_phone_mac),
+            ("tethered_phone_match_type", tethered_phone_match_type)
+        ]:
+            if value is not None:
+                location_data[key] = value
+        app.logger.info(f"Final location_data for response: {location_data}")
 
     except Exception as e:
         app.logger.error(f"Failed to parse geolocation: {e}")

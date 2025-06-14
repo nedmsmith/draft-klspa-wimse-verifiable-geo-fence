@@ -446,15 +446,13 @@ try:
                         "payload": payload,
                         "sig": signature,
                         "cert_chain": cert_chain_b64,
-                        # For browser header compatibility
-                        "tethered_phone_name": phone_name if phone_present else None,
-                        "tethered_phone_mac": bluetooth_bd_addr if phone_present else None,
-                        "bluetooth_bd_addr": bluetooth_bd_addr if phone_present else None,
-                        "bluetooth_pan_ip": bluetooth_pan_ip if phone_present else None,
-                        "tethered_phone_match_type": _tethered_phone_liveness.get("match_type"),
+                        # For browser header compatibility (legacy fields removed, use only mobile_phone_identity)
                         "mobile_phone_identity": {
                             "name": phone_name if phone_present else None,
-                            "bluetooth_bd_addr": bluetooth_bd_addr if phone_present else None
+                            "bluetooth_bd_addr": bluetooth_bd_addr if phone_present else None,
+                            "tethered_phone_mac": bluetooth_bd_addr if phone_present else None,
+                            "tethered_phone_match_type": _tethered_phone_liveness.get("match_type"),
+                            "bluetooth_pan_ip": bluetooth_pan_ip if phone_present else None
                         },
                         "mobile_phone_liveness_session": {
                             "bluetooth_pan_ip": bluetooth_pan_ip if phone_present else None

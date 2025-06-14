@@ -227,9 +227,24 @@ def proxy(path):
             # New attestation format detection
             has_new = all(f in parsed_fields for f in ("payload", "sig", "cert_chain"))
             has_legacy = "sig" in parsed_fields and "payload" not in parsed_fields
-            # Phone info fields
-            tethered_phone_name = parsed_fields.get("tethered_phone_name")
-            tethered_phone_mac = parsed_fields.get("tethered_phone_mac")
+            # Extract phone fields from mobile_phone_identity if present
+            phone_identity = parsed_fields.get("mobile_phone_identity")
+            if phone_identity:
+                import json
+                if isinstance(phone_identity, str):
+                    try:
+                        phone_identity = json.loads(phone_identity)
+                    except Exception:
+                        phone_identity = {}
+                tethered_phone_name = phone_identity.get("name")
+                tethered_phone_mac = phone_identity.get("tethered_phone_mac") or phone_identity.get("bluetooth_bd_addr")
+                tethered_phone_match_type = phone_identity.get("tethered_phone_match_type")
+            else:
+                tethered_phone_name = parsed_fields.get("tethered_phone_name")
+                tethered_phone_mac = parsed_fields.get("tethered_phone_mac")
+                tethered_phone_match_type = parsed_fields.get("tethered_phone_match_type")
+            if tethered_phone_match_type:
+                app.logger.info(f"Tethered phone match type: {tethered_phone_match_type}")
             # Decode percent-encoding for human-readable logs and API
             if tethered_phone_name:
                 tethered_phone_name = unquote(tethered_phone_name)
@@ -363,7 +378,7 @@ def proxy(path):
         has_new = all(f in parsed_fields for f in ("payload", "sig", "cert_chain"))
         has_legacy = "sig" in parsed_fields and "payload" not in parsed_fields
         header_parts = []
-        for k in ["lat", "lon", "accuracy", "time", "nonce", "source", "tethered_phone_name", "tethered_phone_mac", "bluetooth_bd_addr", "bluetooth_pan_ip", "mobile_phone_identity", "mobile_phone_liveness_session"]:
+        for k in ["lat", "lon", "accuracy", "time", "nonce", "source", "tethered_phone_name", "tethered_phone_mac", "tethered_phone_match_type", "bluetooth_bd_addr", "bluetooth_pan_ip", "mobile_phone_identity", "mobile_phone_liveness_session"]:
             if k in parsed_fields:
                 v = parsed_fields[k]
                 if isinstance(v, list):

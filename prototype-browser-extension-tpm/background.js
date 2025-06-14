@@ -276,23 +276,29 @@ browser.webRequest.onBeforeSendHeaders.addListener(
         if (attestation.cert_chain) {
           headerValue += `;cert_chain=${encodeURIComponent(attestation.cert_chain)}`;
         }
-        // Append tethered phone info if present, but only once for each field
-        if (attestation.tethered_phone_name && !headerValue.includes('tethered_phone_name=')) {
-          headerValue += `;tethered_phone_name=${encodeURIComponent(attestation.tethered_phone_name)}`;
+        // Extract phone fields from mobile_phone_identity if present
+        const phoneIdentity = attestation.mobile_phone_identity || {};
+        if (phoneIdentity.name && !headerValue.includes('tethered_phone_name=')) {
+          headerValue += `;tethered_phone_name=${encodeURIComponent(phoneIdentity.name)}`;
         }
-        // Use both possible field names for MAC for compatibility, but only add once
-        if (!headerValue.includes('tethered_phone_mac=')) {
-          if (attestation.tethered_phone_mac) {
-            headerValue += `;tethered_phone_mac=${encodeURIComponent(attestation.tethered_phone_mac)}`;
-          } else if (attestation.bluetooth_bd_addr) {
-            headerValue += `;tethered_phone_mac=${encodeURIComponent(attestation.bluetooth_bd_addr)}`;
-          }
+        if (phoneIdentity.tethered_phone_mac && !headerValue.includes('tethered_phone_mac=')) {
+          headerValue += `;tethered_phone_mac=${encodeURIComponent(phoneIdentity.tethered_phone_mac)}`;
+        } else if (phoneIdentity.bluetooth_bd_addr && !headerValue.includes('tethered_phone_mac=')) {
+          headerValue += `;tethered_phone_mac=${encodeURIComponent(phoneIdentity.bluetooth_bd_addr)}`;
         }
-        if (attestation.bluetooth_pan_ip && !headerValue.includes('bluetooth_pan_ip=')) {
-          headerValue += `;bluetooth_pan_ip=${encodeURIComponent(attestation.bluetooth_pan_ip)}`;
+        if (phoneIdentity.tethered_phone_match_type && !headerValue.includes('tethered_phone_match_type=')) {
+          headerValue += `;tethered_phone_match_type=${encodeURIComponent(phoneIdentity.tethered_phone_match_type)}`;
+        }
+        // Always include mobile_phone_identity as a JSON string in the header
+        if (Object.keys(phoneIdentity).length > 0 && !headerValue.includes('mobile_phone_identity=')) {
+          headerValue += `;mobile_phone_identity=${encodeURIComponent(JSON.stringify(phoneIdentity))}`;
         }
         console.log("[Background][DEBUG] After appending phone info: headerValue=", headerValue);
         console.log("[Background] Attestation appended to header.");
+
+        // Extra debug: log attestation object and headerValue before sending
+        console.log("[Background][DEBUG][EXTRA] Attestation object:", JSON.stringify(attestation, null, 2));
+        console.log("[Background][DEBUG][EXTRA] Final headerValue before send:", headerValue);
       } catch (attestError) {
         console.warn("[Background] TPM attestation error:", attestError);
       }
