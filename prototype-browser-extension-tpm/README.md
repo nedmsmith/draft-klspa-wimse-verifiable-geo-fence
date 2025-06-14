@@ -1,66 +1,107 @@
-# TPM-Backed Geolocation Attestation Prototype
+# Verifiable Geo-Fence with TPM Attestation
 
-This directory implements a prototype for secure, verifiable geolocation attestation using TPM-backed certificates. It is designed to work with a browser extension that collects geolocation data and communicates with this backend.
+This project implements a verifiable geolocation system using TPM (Trusted Platform Module) attestation. It provides cryptographically verifiable proof of a device's location through a browser extension, native messaging host, and server architecture.
+
+## Project Overview
+
+This is a prototype implementation of a system that:
+1. Captures geolocation data in a browser extension
+2. Sends it to a native messaging host for TPM attestation
+3. Injects the signed attestation into HTTP headers
+4. Verifies and processes the attestation via a proxy and server
 
 ## Components
 
-- **server.py**  
-  Flask server that:
-  - Receives geolocation data and TPM-signed tokens via HTTP headers.
-  - Verifies the TPM signature using a certificate (`tpm_cert.pem`).
-  - Checks nonce freshness to prevent replay attacks.
-  - Converts coordinates to city/state/country using reverse geocoding.
-  - Provides an endpoint (`/init_nonce`) for nonce initialization.
+### Browser Extension
+- **[`background.js`](background.js )**: Background script that captures geolocation, sends it for attestation, and injects it into HTTP headers
+- **[`popup.js`](popup.js )**: Simple UI for configuring domains for header injection
+- **[`manifest.json`](manifest.json )**: Extension configuration
 
-- **win-app.py**  
-  Windows native messaging host that:
-  - Reads geolocation data from stdin (from the browser extension).
-  - Constructs a payload including latitude, longitude, accuracy, time, and nonce.
-  - Signs the payload using a TPM-backed certificate via PowerShell.
-  - Returns the signed token to the browser extension.
+### Native Messaging Host
+- **[`win-app.py`](win-app.py )**: Python script that receives location data, signs it using TPM-backed keys, and returns attestation tokens
+- **[`win-app.bat`](win-app.bat )**: Windows batch file to launch the native messaging host
+- **[`com.mycompany.geosign.json`](com.mycompany.geosign.json )**: Native messaging host manifest for browser integration
 
-- **win-app.bat**  
-  Batch file to launch `win-app.py` with the correct Python interpreter.
+### Server Components
+- **[`server.py`](server.py )**: Flask server that validates TPM attestations and processes geolocation data
+- **[`waf-proxy.py`](waf-proxy.py )**: Web Application Firewall (WAF) proxy that validates headers before forwarding requests
 
-- **test-win-app.py**  
-  Script to send a test geolocation message to the native messaging host for development/testing.
+### Cryptographic Components
+- **Key hierarchy**:
+  - TPM certificate: Root of trust (tpm_cert.pem)
+  - X certificate: Signed by TPM certificate for geolocation signing (x_cert.pem)
+- **Attestation flow**: Browser → Native Host → TPM signing → HTTP headers → Proxy validation → Server processing
 
-## Usage
+## Setup and Usage
 
-### 1. TPM Certificate
+### Prerequisites
+- A Windows system with TPM capability
+- Python 3.x
+- Firefox or Chrome browser
+- Required Python packages (see requirements.txt)
 
-Place your TPM-backed certificate in PEM format as `tpm_cert.pem` in this directory for the server to verify signatures.
+### Installation
+1. Install Python dependencies:
+   ```
+   pip install -r requirements.txt
+   ```
 
-### 2. Running the Server
+2. Register the native messaging host:
+   ```
+   REG ADD "HKCU\Software\Mozilla\NativeMessagingHosts\com.mycompany.geosign" /ve /t REG_SZ /d "<path>\com.mycompany.geosign.json" /f
 
-```sh
-python server.py
-```
-The server listens on port 8443 with TLS enabled (requires `cert.pem` and `key.pem`).
+   Example: REG ADD "HKCU\Software\Mozilla\NativeMessagingHosts\com.mycompany.geosign" /ve /t REG_SZ /d "C:\Users\ramkr\draft-klspa-wimse-verifiable-geo-fence\prototype-browser-extension-tpm\com.mycompany.geosign.json" /f
+   ```
 
-### 3. Running the Native Messaging Host
+3. Install the browser extension:
+   - Load the extension in developer mode
+   - Configure domains in the extension popup
 
-The browser extension should launch `win-app.py` (or use `win-app.bat`) as a native messaging host. It expects JSON messages with geolocation data and returns signed tokens.
+### Running the System
+1. Start the proxy server:
+   ```
+   python dpi-proxy.py
+   ```
 
-### 4. Testing
+2. Start the backend server:
+   ```
+   python server.py
+   ```
 
-You can use `test-win-app.py` to simulate sending geolocation data to the native messaging host.
+3. Visit a configured website through the proxy to test the system
 
-## Protocol
+## Technical Details
 
-- The browser extension collects geolocation data and sends it to the native messaging host.
-- The host signs the data (with time and nonce) using the TPM and returns a token.
-- The extension sends the token to the Flask server in the `X-Custom-Geolocation` HTTP header.
-- The server verifies the signature, checks the nonce, and responds with region info.
+### Security Features
+- TPM-backed attestation ensures hardware-level trust
+- Certificate chain validation verifies the signing hierarchy
+- Nonce-based replay protection prevents reuse of old attestations
+- Proxy validation adds an additional verification layer
 
-## Files
+### Protocol Flow
+1. Browser extension obtains location and timestamp
+2. Native host signs data with TPM-backed keys
+3. Signed attestation is added to HTTP headers
+4. Proxy validates signatures and adds WAF marker
+5. Server performs final validation and processes the verified location
 
-- [`server.py`](server.py)
-- [`win-app.py`](win-app.py)
-- [`win-app.bat`](win-app.bat)
-- [`test-win-app.py`](test-win-app.py)
+## Development and Testing
+- Use **[`test-win-app.py`](test-win-app.py )** to simulate the native messaging flow
+- Check **[`win_app.log`](win_app.log )** for native host logs
+- Monitor Flask server logs for validation status
+
+## Limitations
+This is a prototype implementation with several limitations:
+- Currently Windows-specific due to TPM integration approach
+- Requires browser permission for geolocation access
+- Self-signed certificates used for development
+
+## Future Work
+- Cross-platform TPM attestation support
+- Hardware-based geolocation verification (cellular, GPS)
+- Dynamic security policy enforcement based on verified location
+- Improved certificate management and revocation
 
 ---
 
-**Note:** This is a prototype and not production-ready. Use for research and experimentation only.
-
+*Note: This prototype demonstrates the concept of verifiable geolocation with TPM attestation and is not intended for production use without further security review and hardening.*

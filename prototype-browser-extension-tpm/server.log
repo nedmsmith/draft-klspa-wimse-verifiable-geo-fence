@@ -1,0 +1,47 @@
+
+PS C:\Users\ramkr\draft-klspa-wimse-verifiable-geo-fence\prototype-browser-extension-tpm> python .\server.py
+ * Serving Flask app 'server'
+ * Debug mode: off
+INFO:werkzeug:WARNING: This is a development server. Do not use it in a production deployment. Use a production WSGI server instead.
+ * Running on all addresses (0.0.0.0)
+ * Running on https://127.0.0.1:9443
+ * Running on https://10.0.0.24:9443
+INFO:werkzeug:Press CTRL+C to quit
+INFO:werkzeug:127.0.0.1 - - [10/Jun/2025 14:44:31] "GET /get_access_token_with_initial_nonce HTTP/1.1" 200 -
+INFO:server:
+----------------------------------------------------
+
+INFO:server:Received X-Custom-Geolocation header: lat=37.315215207334965;lon=-122.05227235599021;accuracy=114;time=2025-06-10T21:44:38.217Z;nonce=358158;source=Cellular;sig=lat=37.315215,lon=-122.052272,accuracy=114.000000,source=Cellular,time=2025-06-10T21:44:38.217Z,nonce=358158|sig=X18m+19FDoxfg6hHfn8QMZ4k979bbF/4SDKt0KjKNpaaCZUYxUHZRnTcy9c8fP6pH+fsJVgWf34netaEJo2YjGpFg0/aIGGqlZTEOqAECnxPxZYQa5zNfPGb8jruYCZawiZ9EqXSxxUgIs4z/3GZxxTjkqfEjql51P6gee+6D4T6/Uvv4qBHFSyVPHrok+lAxo6vMmSd72UqQdWIpRFxJbgj3DJ+c6G1A/J1dFczivby7a0UXKLAwXuegIlG3ZAtO0G7ACoh1f0HTbTpX33FZ1bAg789KRqERQyXU40577GLHT9LlMkbL8KpjDW9QiVASeHRL8pZ0klJxYw4LD2qaQ==;waf=processed_by_proxy
+INFO:server:WAF marker waf=processed_by_proxy is present.
+INFO:server:Header parsed: lat=37.315215207334965, lon=-122.05227235599021, accuracy=114.0, time=2025-06-10T21:44:38.217Z, nonce=358158, source=Cellular
+DEBUG:server:[NONCE] Server LCG state: 358158, expected nonce: 358158, received nonce: 358158
+INFO:server:Nonce match: 358158 is as expected.
+INFO:server:Nonce verification passed.
+DEBUG:server:[NONCE] Advancing server LCG from state 358158
+INFO:server:Certificate chain and signature verified successfully.
+DEBUG:server:[NONCE] Server LCG advanced to state: 1332618543
+INFO:werkzeug:127.0.0.1 - - [10/Jun/2025 14:44:38] "GET / HTTP/1.1" 200 -
+INFO:server:
+----------------------------------------------------
+
+INFO:server:Received X-Custom-Geolocation header: lat=37.315215207334965;lon=-122.05227235599021;accuracy=114;time=2025-06-10T21:44:42.743Z;nonce=1332618543;source=Cellular;sig=lat=37.315215,lon=-122.052272,accuracy=114.000000,source=Cellular,time=2025-06-10T21:44:42.743Z,nonce=1332618543|sig=YUBUDQXboaFYxkXoCPCC2kX3nVWJMa4xeuSBFODjl78PemU5ouucJOh7WCdZXkvfsS4xzIU8rk8QGL55W0akUajTxQFI8aCTqhE7bvSOCTfOnxhQXXdKc2ODLHjbPWPnxHf3byUosKvjvysU20uldNNjqPLFbZyEnOy8wBFmn2xNbVJEFFHXiUvSWD9t+f7uI641cdfF0HWV3FPnLJJtjdujQYz9UPBM8lJNbVto1RCtKtnn903S8NdbUAHhh8xhxIdE/iI7/pdRAzq7ITSp/oHzrz5Ft0YO87W7t1K2+rEH7isQQpx1m4dNED3B+tNlA3nrbK1Pbu2bu0KXdyD2BQ==;waf=processed_by_proxy
+INFO:server:WAF marker waf=processed_by_proxy is present.
+INFO:server:Header parsed: lat=37.315215207334965, lon=-122.05227235599021, accuracy=114.0, time=2025-06-10T21:44:42.743Z, nonce=1332618543, source=Cellular
+DEBUG:server:[NONCE] Server LCG state: 1332618543, expected nonce: 1332618543, received nonce: 1332618543
+INFO:server:Nonce match: 1332618543 is as expected.
+INFO:server:Nonce verification passed.
+DEBUG:server:[NONCE] Advancing server LCG from state 1332618543
+INFO:server:Certificate chain and signature verified successfully.
+DEBUG:server:[NONCE] Server LCG advanced to state: 311711548
+INFO:werkzeug:127.0.0.1 - - [10/Jun/2025 14:44:42] "GET / HTTP/1.1" 200 -
+INFO:server:
+----------------------------------------------------
+
+INFO:server:Received X-Custom-Geolocation header: lat=37.315215207334965;lon=-122.05227235599021;accuracy=114;time=2025-06-10T21:44:45.670Z;nonce=311711488;source=Cellular;sig=lat=37.315215,lon=-122.052272,accuracy=114.000000,source=Cellular,time=2025-06-10T21:44:45.670Z,nonce=311711488|sig=P26OX8gyDLGGfV9U6QLEtSJKVFwTNrcJn1yeRELYkpj9USmWVoV3AIJ12SVEesf4ndrsgdKG9XrPrXFpJkMyqxf8Dcz7MLFGgIGKxCwpKco5LVoFlk1Liw/0LxAyjEPwiHdeY51ZJhOfpiab/nFB8DNuxbN5IpB3kXjRqD90NiiSsUH9B82DRsQ6ZBJSHee9KDeRDYaRqwGHEZcEaJQKDsUr37l/u///Ev1mMEFhzhOdmy1ODlK9QEpWnTTBx3g7FZwrMRYc/TNSKJFyN+UkbM4oVGynvDf99xtv34XGBWjtZXPZE5r34JJjzLgpoED7/HYXf+eCe2b4C+M+RtqaZQ==;waf=processed_by_proxy
+INFO:server:WAF marker waf=processed_by_proxy is present.
+INFO:server:Header parsed: lat=37.315215207334965, lon=-122.05227235599021, accuracy=114.0, time=2025-06-10T21:44:45.670Z, nonce=311711488, source=Cellular
+DEBUG:server:[NONCE] Server LCG state: 311711548, expected nonce: 311711548, received nonce: 311711488
+ERROR:server:Nonce mismatch: expected 311711548, received 311711488
+INFO:werkzeug:127.0.0.1 - - [10/Jun/2025 14:44:45] "GET / HTTP/1.1" 400 -
+INFO:server:
+----------------------------------------------------

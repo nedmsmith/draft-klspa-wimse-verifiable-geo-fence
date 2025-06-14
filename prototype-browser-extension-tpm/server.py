@@ -5,22 +5,35 @@ import reverse_geocode
 import math
 import logging
 import random
+import traceback
 from cryptography import x509
 from cryptography.hazmat.backends import default_backend
 from cryptography.hazmat.primitives import hashes, serialization
 from cryptography.hazmat.primitives.asymmetric import padding
 from cryptography.x509.base import load_pem_x509_certificate
+from urllib.parse import unquote
 
 # Ensure all logs are visible in the console
-logging.basicConfig(level=logging.DEBUG)
+logging.basicConfig(level=logging.INFO)
 
 app = Flask(__name__)
 
 # ----- Global In-Memory Nonce Store -----
-# current_nonce is incremented only when a request is valid.
-current_nonce = random.randint(100000, 999999)
 
-# ----- Helper Functions and Configuration -----
+# LCG implementation for deterministic random nonce
+class LCG:
+    def __init__(self, seed):
+        self.m = 2147483648
+        self.a = 1103515245
+        self.c = 12345
+        self.state = seed
+    def next(self):
+        self.state = (self.a * self.state + self.c) % self.m
+        return self.state
+
+# Global LCG instance for nonce validation
+nonce_lcg = None
+nonce_seed = None
 
 def load_tpm_cert():
     """Load the TPM certificate from a PEM file."""
@@ -156,15 +169,21 @@ JOFai3j6lNdYkmC8cS7/hkEHYzWGlTpXrrJT1tqo6gE+/pFDdtKVs1KshWXmMsbK
 @app.route("/get_access_token_with_initial_nonce", methods=["GET"])
 def get_access_token_with_initial_nonce():
     """Endpoint for background.js to fetch the initial nonce value."""
-    global current_nonce
-    return jsonify({"nonce": current_nonce})
+    global nonce_lcg, nonce_seed
+    # Generate a random seed for the LCG
+    nonce_seed = random.randint(100000, 999999)
+    nonce_lcg = LCG(nonce_seed)
+    return jsonify({"nonce": nonce_seed})
 
 @app.route("/")
 def index():
-    global current_nonce
-    geo_header = request.headers.get("X-Custom-Geolocation", "Not Provided")
+    global nonce_lcg, nonce_seed
+    geo_header = request.headers.get("X-Custom-Geolocation", "")
+    app.logger.debug(f"[DEBUG] Full X-Custom-Geolocation header dump: {geo_header}")
     location_data = {}
-    app.logger.info(f"Received X-Custom-Geolocation header: {geo_header}")
+    app.logger.debug(f"Received X-Custom-Geolocation header: {geo_header}")
+    app.logger.debug(f"[DEBUG] Full X-Custom-Geolocation header dump: {geo_header}")
+    app.logger.debug(f"[DEBUG] All request headers: {dict(request.headers)}")
 
     if geo_header == "Not Provided":
         return jsonify({
@@ -195,38 +214,118 @@ def index():
         source = header_dict.get("source", "N/A")
         tpm_token = header_dict.get("sig", None)
         cert_chain_b64 = header_dict.get("cert_chain", None)
-        # For dev/test, ignore cert_chain_b64 and always use hardcoded chain
+        tethered_phone_name = header_dict.get("tethered_phone_name", None)
+        tethered_phone_mac = header_dict.get("tethered_phone_mac", None)
+        tethered_phone_match_type = header_dict.get("tethered_phone_match_type", None)
+        # Decode percent-encoding for human-readable logs and API
+        if tethered_phone_name:
+            tethered_phone_name = unquote(tethered_phone_name)
+        if tethered_phone_mac:
+            tethered_phone_mac = unquote(tethered_phone_mac)
+            # Format MAC as colon-separated (e.g., 98:60:CA:4E:7E:BF)
+            mac = tethered_phone_mac.replace('-', ':').replace('.', ':').replace(' ', ':')
+            mac_hex = ''.join(c for c in mac if c.isalnum())
+            if len(mac_hex) == 12:
+                tethered_phone_mac = ':'.join([mac_hex[i:i+2] for i in range(0, 12, 2)])
+            else:
+                tethered_phone_mac = mac
+        if tethered_phone_name or tethered_phone_mac:
+            app.logger.info(f"Tethered phone info: name={tethered_phone_name}, mac={tethered_phone_mac}")
+        # Always log presence/absence of tethered_phone_match_type
+        if tethered_phone_match_type:
+            app.logger.info(f"Tethered phone match type: {tethered_phone_match_type}")
+        else:
+            app.logger.info("Tethered phone match type: not present in header")
 
         app.logger.info(f"Header parsed: lat={lat}, lon={lon}, accuracy={accuracy}, "
                         f"time={time_value}, nonce={nonce_value}, source={source}")
 
-        # Validate nonce from the header.
+        # Validate nonce from the header using LCG
         try:
             received_nonce = int(nonce_value)
         except Exception as ex:
             app.logger.error(f"Invalid nonce received: {nonce_value}. Error: {ex}")
             return jsonify({"error": "Invalid nonce received"}), 400
 
-        # Check for nonce out-of-sync due to a server restart.
-        if current_nonce == 1 and received_nonce > 1:
-            app.logger.error("Server nonce is 1 and client nonce is greater than 1. Please reinitialize nonce via /get_access_token_with_initial_nonce.")
-            response = jsonify({"error": "Nonce out-of-sync due to server restart; client should reinitialize nonce via /get_access_token_with_initial_nonce"})
+        if nonce_lcg is None:
+            app.logger.error("LCG not initialized. Client should reinitialize nonce via /get_access_token_with_initial_nonce")
+            response = jsonify({"error": "LCG not initialized; client should reinitialize nonce via /get_access_token_with_initial_nonce"})
+            response.status_code = 400
+            response.headers["X-Nonce-Error"] = "LCG not initialized; please reinitialize nonce via /get_access_token_with_initial_nonce"
+            response.headers["Access-Control-Expose-Headers"] = "X-Nonce-Error"
+            return response
+
+        # Validate nonce from the header using LCG
+        expected_nonce = nonce_lcg.state
+        app.logger.debug(f"[NONCE] Server LCG state: {nonce_lcg.state}, expected nonce: {expected_nonce}, received nonce: {received_nonce}")
+        if received_nonce != expected_nonce:
+            app.logger.error(f"Nonce mismatch: expected {expected_nonce}, received {received_nonce}")
+            response = jsonify({"error": f"Nonce mismatch: expected {expected_nonce}, received {received_nonce}"})
             response.status_code = 400
             response.headers["X-Nonce-Error"] = "Nonce out-of-sync; please reinitialize nonce via /get_access_token_with_initial_nonce"
             response.headers["Access-Control-Expose-Headers"] = "X-Nonce-Error"
             return response
-
-        if received_nonce != current_nonce:
-            app.logger.error(f"Nonce mismatch: expected {current_nonce}, received {received_nonce}")
-            return jsonify({"error": f"Nonce mismatch: expected {current_nonce}, received {received_nonce}"}), 400
         else:
             app.logger.info(f"Nonce match: {received_nonce} is as expected.")
-            app.logger.info("Nonce verification passed.")  # Explicit log for successful nonce verification
-            # Valid request: increment nonce.
-            current_nonce += 1
+            app.logger.info("Nonce verification passed.")
+            app.logger.debug(f"[NONCE] Advancing server LCG from state {nonce_lcg.state}")
 
+        # Validate TPM signature and all other checks before advancing LCG
         verified = None
-        if tpm_token:
+        if tpm_token and cert_chain_b64:
+            # New format: sig and cert_chain are separate fields
+            try:
+                # Percent-decode cert_chain first
+                cert_chain_b64_decoded = unquote(cert_chain_b64)
+                # Add base64 padding if needed
+                missing_padding = len(cert_chain_b64_decoded) % 4
+                if missing_padding:
+                    cert_chain_b64_decoded += '=' * (4 - missing_padding)
+                # Now base64-decode
+                cert_chain_pem = base64.b64decode(cert_chain_b64_decoded)
+                certs = []
+                for cert in cert_chain_pem.split(b'-----END CERTIFICATE-----'):
+                    if b'-----BEGIN CERTIFICATE-----' in cert:
+                        cert = cert + b'-----END CERTIFICATE-----\n'
+                        certs.append(x509.load_pem_x509_certificate(cert, default_backend()))
+                if len(certs) != 2:
+                    app.logger.error(f'[SIGFAIL] Certificate chain must contain 2 certs (x and TPM), got {len(certs)}')
+                    return jsonify({"error": 'Certificate chain must contain 2 certs (x and TPM)'}), 400
+                x_cert, tpm_cert = certs
+                # Verify x_cert is signed by tpm_cert (issuer check and signature)
+                if x_cert.issuer != tpm_cert.subject:
+                    app.logger.error(f'[SIGFAIL] x_cert issuer does not match tpm_cert subject')
+                    return jsonify({"error": 'x_cert not issued by TPM cert'}), 400
+                tpm_cert.public_key().verify(
+                    x_cert.signature,
+                    x_cert.tbs_certificate_bytes,
+                    padding.PKCS1v15(),
+                    x_cert.signature_hash_algorithm,
+                )
+                # Verify signature on payload using x_cert
+                sig_b64_decoded = unquote(tpm_token)
+                missing_padding = len(sig_b64_decoded) % 4
+                if missing_padding:
+                    sig_b64_decoded += '=' * (4 - missing_padding)
+                signature = base64.b64decode(sig_b64_decoded)
+                # Format accuracy as integer if possible to match client
+                accuracy_str = str(int(accuracy)) if accuracy == int(accuracy) else str(accuracy)
+                payload_str = f"lat={lat};lon={lon};accuracy={accuracy_str};source={source};time={time_value};nonce={nonce_value}"
+                app.logger.debug(f"[PAYLOAD] Payload string used for verification: {payload_str}")
+                x_cert.public_key().verify(
+                    signature,
+                    payload_str.encode('utf-8'),
+                    padding.PKCS1v15(),
+                    hashes.SHA256()
+                )
+                app.logger.info("Certificate chain and signature verified successfully.")
+                verified = True
+            except Exception as e:
+                app.logger.error(f"[SIGFAIL] Error verifying new-format signature/cert chain: {e}")
+                app.logger.error(traceback.format_exc())
+                return jsonify({"error": f"Certificate chain and signature verification failed: {e}"}), 400
+        elif tpm_token:
+            # Legacy format (for backward compatibility)
             if "|sig=" in tpm_token:
                 att_payload, signature_b64 = tpm_token.split("|sig=", 1)
                 att_dict = {}
@@ -256,6 +355,10 @@ def index():
         else:
             app.logger.info("No TPM token provided in header.")
 
+        # Only now advance the LCG after all validation passes
+        nonce_lcg.next()
+        app.logger.debug(f"[NONCE] Server LCG advanced to state: {nonce_lcg.state}")
+
         coord = (lat, lon)
         geo = reverse_geocode.get(coord)
         location_data = {
@@ -269,8 +372,39 @@ def index():
             "State": geo.get("state", "Unknown"),
             "Country": geo.get("country", "Unknown")
         }
+        # Only add tethered_phone_name and tethered_phone_mac if not already present in the response
+        # (Assume upstream proxy or client may already inject these fields)
         if tpm_token:
             location_data["TPM_signature_Verified"] = True
+        # Extract phone fields from mobile_phone_identity only (no legacy fallback)
+        import json
+        phone_identity = header_dict.get("mobile_phone_identity")
+        tethered_phone_name = None
+        tethered_phone_mac = None
+        tethered_phone_match_type = None
+        # Debug: log the raw mobile_phone_identity header
+        app.logger.info(f"Raw mobile_phone_identity header: {header_dict.get('mobile_phone_identity')}")
+        if phone_identity:
+            if isinstance(phone_identity, str):
+                try:
+                    phone_identity = json.loads(unquote(phone_identity))
+                except Exception as e:
+                    app.logger.error(f"Failed to decode/parse phone_identity: {e}")
+                    phone_identity = {}
+            app.logger.info(f"Parsed phone_identity: {phone_identity}")
+            tethered_phone_name = phone_identity.get("name")
+            tethered_phone_mac = phone_identity.get("tethered_phone_mac") or phone_identity.get("bluetooth_bd_addr")
+            tethered_phone_match_type = phone_identity.get("tethered_phone_match_type")
+
+        # Add phone liveness fields to response if present, and remove any accidental duplicates
+        for key, value in [
+            ("tethered_phone_name", tethered_phone_name),
+            ("tethered_phone_mac", tethered_phone_mac),
+            ("tethered_phone_match_type", tethered_phone_match_type)
+        ]:
+            if value is not None:
+                location_data[key] = value
+        app.logger.info(f"Final location_data for response: {location_data}")
 
     except Exception as e:
         app.logger.error(f"Failed to parse geolocation: {e}")

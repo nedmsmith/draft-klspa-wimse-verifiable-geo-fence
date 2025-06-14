@@ -1,0 +1,39 @@
+INFO:werkzeug:WARNING: This is a development server. Do not use it in a production deployment. Use a production WSGI server instead.
+ * Running on all addresses (0.0.0.0)
+ * Running on https://127.0.0.1:8443
+ * Running on https://10.0.0.24:8443
+INFO:werkzeug:Press CTRL+C to quit
+INFO:waf-proxy:Processing /get_access_token_with_initial_nonce request without WAF header modifications.
+DEBUG:urllib3.connectionpool:Starting new HTTPS connection (1): 127.0.0.1:9443
+C:\Users\ramkr\AppData\Local\Programs\Python\Python313\Lib\site-packages\urllib3\connectionpool.py:1099: InsecureRequestWarning: Unverified HTTPS request is being made to host '127.0.0.1'. Adding certificate verification is strongly advised. See: https://urllib3.readthedocs.io/en/latest/advanced-usage.html#tls-warnings
+  warnings.warn(
+DEBUG:urllib3.connectionpool:https://127.0.0.1:9443 "GET /get_access_token_with_initial_nonce HTTP/11" 200 17
+INFO:waf-proxy:Updated nonce from /get_access_token_with_initial_nonce response: 451339
+INFO:werkzeug:127.0.0.1 - - [10/Jun/2025 14:06:08] "GET /get_access_token_with_initial_nonce HTTP/1.1" 200 -
+INFO:waf-proxy:
+----------------------------------------------------
+
+INFO:waf-proxy:Received X-Custom-Geolocation header: lat=37.314843;lon=-122.052589;accuracy=212;time=2025-06-10T21:06:17.782Z;nonce=27145704;source=Cellular;sig=lat=37.314843,lon=-122.052589,accuracy=212.000000,source=Cellular,time=2025-06-10T21:06:17.782Z,nonce=27145704|sig=HhAUWu9okvhzqF9+BWTL9WklCSDAXToBRDU3dCr9FOzwa5hs48YVUAQ34/ub6X8er2/wQJAEBRI9od5OreAmEJ9Q12fHJ3QvJ2/hWmnK+8fT447YPo+yKbqWEC3tjggTXNVVxoYHDezLwC5Oxim3ZlBoKuCqWD/3p+XY2KFZQ/zpcUthYkN9eXbVTnLw+2hK6pakfVKoCj7zCvzORiiqhi5zpVRwtpYhB+T8KPRhAzk76ESl87KhrvDmkpPhKMmHu3t3wXX0O//IAJteHCSmp7SKQ6mlU5x9nkfWGMlyhhUbzLyt8DM8fMpwMnWktpxnDEZmyzGKSUs8uY3E1XazQA==
+INFO:waf-proxy:Received nonce (not validated): 27145704
+INFO:waf-proxy:Signature and certificate chain validated successfully.
+INFO:waf-proxy:Updated X-Custom-Geolocation header for forwarding: lat=37.314843;lon=-122.052589;accuracy=212;time=2025-06-10T21:06:17.782Z;nonce=27145704;source=Cellular;sig=lat=37.314843,lon=-122.052589,accuracy=212.000000,source=Cellular,time=2025-06-10T21:06:17.782Z,nonce=27145704|sig=HhAUWu9okvhzqF9+BWTL9WklCSDAXToBRDU3dCr9FOzwa5hs48YVUAQ34/ub6X8er2/wQJAEBRI9od5OreAmEJ9Q12fHJ3QvJ2/hWmnK+8fT447YPo+yKbqWEC3tjggTXNVVxoYHDezLwC5Oxim3ZlBoKuCqWD/3p+XY2KFZQ/zpcUthYkN9eXbVTnLw+2hK6pakfVKoCj7zCvzORiiqhi5zpVRwtpYhB+T8KPRhAzk76ESl87KhrvDmkpPhKMmHu3t3wXX0O//IAJteHCSmp7SKQ6mlU5x9nkfWGMlyhhUbzLyt8DM8fMpwMnWktpxnDEZmyzGKSUs8uY3E1XazQA==;waf=processed_by_proxy
+DEBUG:urllib3.connectionpool:Starting new HTTPS connection (1): 127.0.0.1:9443
+C:\Users\ramkr\AppData\Local\Programs\Python\Python313\Lib\site-packages\urllib3\connectionpool.py:1099: InsecureRequestWarning: Unverified HTTPS request is being made to host '127.0.0.1'. Adding certificate verification is strongly advised. See: https://urllib3.readthedocs.io/en/latest/advanced-usage.html#tls-warnings
+  warnings.warn(
+DEBUG:urllib3.connectionpool:https://127.0.0.1:9443 "GET / HTTP/11" 200 338
+INFO:werkzeug:127.0.0.1 - - [10/Jun/2025 14:06:18] "GET / HTTP/1.1" 200 -
+INFO:waf-proxy:
+----------------------------------------------------
+
+INFO:waf-proxy:Received X-Custom-Geolocation header: lat=37.314843;lon=-122.052589;accuracy=212;time=2025-06-10T21:06:22.087Z;nonce=2117719040;source=Cellular;sig=lat=37.314843,lon=-122.052589,accuracy=212.000000,source=Cellular,time=2025-06-10T21:06:22.087Z,nonce=2117719040|sig=nVgz6/a7NHt88wpA6GvEIllwuSj+er9XTNbQbqKi3tKJx3ru4vILxW0Eow1SRakK3U0zJm3InawH4RLqw93Hg72Jsij+bZspXII9URHCAWmz+jquteR7PXbA05jZ4SGf928VfouDr/eCVhEwgW8l0J/sAA2nFMcO2mb4fJuzoy87yxAYi+XNdtM9sCbBtd6/qiDQ69HhbXrq+/aUPr49mfN+zSV8fLSBn2AZTYrA6uZ726C7j5+kn3yvjF478X6btigz94Eq8I5BoBoer7nG60KB0rv/98/T9OH6iLsIl8ELKvz8jZ93DnEVuot8J3UZHR5rH+gaYMuLxYvJ3iBxVw==
+INFO:waf-proxy:Received nonce (not validated): 2117719040
+INFO:waf-proxy:Signature and certificate chain validated successfully.
+INFO:waf-proxy:Updated X-Custom-Geolocation header for forwarding: lat=37.314843;lon=-122.052589;accuracy=212;time=2025-06-10T21:06:22.087Z;nonce=2117719040;source=Cellular;sig=lat=37.314843,lon=-122.052589,accuracy=212.000000,source=Cellular,time=2025-06-10T21:06:22.087Z,nonce=2117719040|sig=nVgz6/a7NHt88wpA6GvEIllwuSj+er9XTNbQbqKi3tKJx3ru4vILxW0Eow1SRakK3U0zJm3InawH4RLqw93Hg72Jsij+bZspXII9URHCAWmz+jquteR7PXbA05jZ4SGf928VfouDr/eCVhEwgW8l0J/sAA2nFMcO2mb4fJuzoy87yxAYi+XNdtM9sCbBtd6/qiDQ69HhbXrq+/aUPr49mfN+zSV8fLSBn2AZTYrA6uZ726C7j5+kn3yvjF478X6btigz94Eq8I5BoBoer7nG60KB0rv/98/T9OH6iLsIl8ELKvz8jZ93DnEVuot8J3UZHR5rH+gaYMuLxYvJ3iBxVw==;waf=processed_by_proxy
+DEBUG:urllib3.connectionpool:Starting new HTTPS connection (1): 127.0.0.1:9443
+C:\Users\ramkr\AppData\Local\Programs\Python\Python313\Lib\site-packages\urllib3\connectionpool.py:1099: InsecureRequestWarning: Unverified HTTPS request is being made to host '127.0.0.1'. Adding certificate verification is strongly advised. See: https://urllib3.readthedocs.io/en/latest/advanced-usage.html#tls-warnings
+  warnings.warn(
+DEBUG:urllib3.connectionpool:https://127.0.0.1:9443 "GET / HTTP/11" 400 69
+INFO:werkzeug:127.0.0.1 - - [10/Jun/2025 14:06:22] "GET / HTTP/1.1" 400 -
+INFO:waf-proxy:
+----------------------------------------------------
+
