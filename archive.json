@@ -1,6 +1,6 @@
 {
   "magic": "E!vIA5L86J2I",
-  "timestamp": "2025-06-12T01:12:16.709504+00:00",
+  "timestamp": "2025-06-15T01:20:34.113454+00:00",
   "repo": "nedmsmith/draft-klspa-wimse-verifiable-geo-fence",
   "labels": [
     {
@@ -1240,6 +1240,48 @@
           "body": "Approving, but with emphasis on getting the makefiles written to make it easier on reviewers.",
           "createdAt": "2025-06-09T22:40:52Z",
           "updatedAt": "2025-06-09T22:40:52Z",
+          "comments": []
+        }
+      ]
+    },
+    {
+      "number": 21,
+      "id": "PR_kwDOOmshaM6aH8Gp",
+      "title": "phone tethering working properly",
+      "url": "https://github.com/nedmsmith/draft-klspa-wimse-verifiable-geo-fence/pull/21",
+      "state": "MERGED",
+      "author": "ramkri123",
+      "authorAssociation": "COLLABORATOR",
+      "assignees": [],
+      "labels": [],
+      "body": "",
+      "createdAt": "2025-06-12T01:51:32Z",
+      "updatedAt": "2025-06-14T14:56:28Z",
+      "baseRepository": "nedmsmith/draft-klspa-wimse-verifiable-geo-fence",
+      "baseRefName": "main",
+      "baseRefOid": "05b2385a44b8c7d05c58d6f944e154fe0d4826dd",
+      "headRepository": "nedmsmith/draft-klspa-wimse-verifiable-geo-fence",
+      "headRefName": "ramki",
+      "headRefOid": "018eb59c99b40121b0e5194a1f30727557c6f8aa",
+      "closedAt": "2025-06-14T14:56:28Z",
+      "mergedAt": "2025-06-14T14:56:28Z",
+      "mergedBy": "ramkri123",
+      "mergeCommit": {
+        "oid": "f598ff14624b8454d244d7835594aa54f8311a0d"
+      },
+      "comments": [],
+      "reviews": [
+        {
+          "id": "PRR_kwDOOmshaM6ueVg0",
+          "commit": {
+            "abbreviatedOid": "018eb59"
+          },
+          "author": "gh23600063",
+          "authorAssociation": "COLLABORATOR",
+          "state": "APPROVED",
+          "body": "",
+          "createdAt": "2025-06-14T04:38:56Z",
+          "updatedAt": "2025-06-14T04:38:56Z",
           "comments": []
         }
       ]
