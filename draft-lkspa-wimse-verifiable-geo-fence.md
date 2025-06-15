@@ -196,24 +196,19 @@ Geographic boundary attestation helps satisfy data residency and data sovereignt
 
 # Approach Summary
 
-Host contains location devices like mobile sensor, GPS sensor, GNSS sensor, etc. Host is a compute node, including servers, routers, and end-user appliances like smartphones, tablets, or PCs.
-Host has a discrete TPM. Note on TPM: The EK certificate is a digital certificate signed by the TPM manufacturer's CA which verifies the identity and trustworthiness of the TPM's Endorsement Key (EK); TPM attestation key (AK) is cryptographically backed by TPM EK.
-For the initial version of the draft, host is bare metal Linux OS host and interactions are with TPM.
+This approach enables cryptographically verifiable geofencing by binding workload identity to both platform and geographic attributes using trusted hardware (e.g., TPM), attestation protocols, and geolocation services. The framework supports secure, policy-driven enforcement of data residency and location requirements for workloads in multi-system environments.
 
-Trusted hosts are the hosts which have trustworthy device composition (TPM EK, Mobile-SIM, GPS device ID, etc.), endorsed by manufacturer/owner, and use a trustworthy OS.
-A set of trusted hosts along with the device composition details and OS details are recorded in a shared data store (database or ledger) by the host owner.
+Key elements of the approach include:
+- **Trusted Hardware Roots:** Workload identity is anchored in hardware roots of trust such as TPMs, GPS/GNSS sensors, and mobile network modules, ensuring device integrity and authentic location data.
+- **Remote Attestation:** Workload Identity Agents collect measurements from the platform and location sensors, and use TPM-backed attestation to prove the integrity and residency of the workload to a remote Workload Identity Manager.
+- **Composite Location Claims:** The system combines multiple sources of location (e.g., GPS, mobile network, Wi-Fi) and device composition (e.g., SIM, TPM EK) to create a composite, quality-scored location claim, which is cryptographically signed and verifiable.
+- **Policy Enforcement:** Workload Identity Managers and downstream policy implementers use these verifiable claims to enforce geofencing and data residency policies, ensuring that workloads only run or access data within approved geographic or jurisdictional boundaries.
+- **Continuous Monitoring:** The framework supports periodic re-attestation and monitoring of device composition and location, detecting changes such as SIM swaps or sensor removal that could affect trust.
+- **Interoperability:** The approach is designed to integrate with existing workload identity frameworks (e.g., SPIFFE/SPIRE), enabling adoption in cloud, edge, and enterprise environments.
 
-Workload and agent run on a set of trusted hosts. Workload can be a server app, a mobile/PC app (including browser), or a network host (e.g., router).
-Proof of residency of workload on a trusted host is obtained using TPM. Workload asks its agent for proof, which in turn asks TPM for AK-attested proof.
-
-Agent sends attested geographic boundary (e.g., cloud region, city, country, etc.) and workload's parameters to Workload Identity Manager (WIM).
-
-* Example for agent used in this document: SPIFFE/SPIRE agent (spire) can be enhanced to add attested geographic boundary that will become part of identity granted (e.g., SVID).
-
-* Example for WIM used in this document: SPIFFE/SPIRE server
-
-* WIM gives signed Workload ID (WID) with geographic boundary as an additional field.
-This could be a certificate or a token.
+For example, in this document:
+- The **Workload Identity Manager** is represented by the SPIFFE/SPIRE server (spire).
+- The **Workload Identity Agent** is represented by the SPIFFE/SPIRE agent (spire).
 
 # SPIFFE/SPIRE Architecture Modifications
 
@@ -226,15 +221,15 @@ The server (SPIFFE/SPIRE server) is running in a cluster which is isolated from 
 
 # Control Plane - End-to-End Workflow
 
-The end-to-end workflow for the proposed framework consists of several key steps, including attestation for system bootstrap and agent initialization, agent geolocation and geofencing processing, workload attestation, and remote verification.
+The end-to-end workflow for the proposed framework consists of several key steps, including attestation for system bootstrap and workload identity agent initialization, workload identity agent geolocation and geofencing processing, workload attestation, and remote verification.
 
 [Figure -- End-to-end Workflow](https://github.com/nedmsmith/draft-klspa-wimse-verifiable-geo-fence/blob/main/pictures/end-to-end-flow.svg)
 
-## Attestation for System Bootstrap and Agent Initialization
+## Attestation for System Bootstrap and Workload Identity Agent Initialization
 
 ### Attestation of OS Integrity and Proof of Residency on Host
 
-As part of system boot/reboot process, boot loader-based measured system boot with remote SPIFFE/SPIRE server verification is used to ensure only approved OS is running on an approved hardware platform.
+As part of system boot/reboot process, boot loader-based measured system boot with remote workload identity manager verification is used to ensure only approved OS is running on an approved hardware platform.
 
 Measurement Collection: During the boot process, the boot loader collects measurements (hashes) of the boot components and configurations.
 The boot components are Firmware/BIOS/UEFI, bootloader, OS, drivers, location devices, and initial programs.
@@ -251,51 +246,51 @@ Transmission: The attestation report is then sent to an external verifier (serve
 
 Remote Verification: The remote server checks the integrity of the attestation report and validates the measurements against known good values from the set of trusted hosts in the shared data store. The shared data store can be split as follows for higher security - 1) Host TPM EKs (e.g., MDM) used by server and 2) Host TPM EKs + Geolocation sensor details (e.g., location sensor hardware database). The server also validates that the TPM EK certificate has not been revoked and is part of the approved list of TPM EK identifiers associated with the hardware platform. At this point, we can be sure that the hardware platform is approved for running workloads and is running an approved OS.
 
-### Start/Restart time attestation/remote verification of agent for integrity and proof of residency on Host
+### Start/Restart time attestation/remote verification of workload identity agent for integrity and proof of residency on Host
 
-As part of agent start process, Linux Integrity Measurement Architecture (Linux IMA) is used to ensure that only approved executable for agent is loaded.
+As part of workload identity agent start process, Linux Integrity Measurement Architecture (Linux IMA) is used to ensure that only approved executable for agent is loaded.
 
-Measurement collection: For the agent start case, the agent executable is measured by Linux IMA, for example through cloud init and stored in TPM PCR through tools e.g., Linux ima-evm-utils before it is loaded. For the agent restart case, it is not clear how the storage in TPM PCR will be accompished - TODO - ideally this should be natively handled in the IMA measurement process with an ability to retrigger on restart on refresh cycles.
+Measurement collection: For the workload identity agent start case, the agent executable is measured by Linux IMA, for example through cloud init and stored in TPM PCR through tools e.g., Linux ima-evm-utils before it is loaded. For the workload identity agent restart case, it is not clear how the storage in TPM PCR will be accompished - TODO - ideally this should be natively handled in the IMA measurement process with an ability to retrigger on restart on refresh cycles.
 
 Local Verification: Enforce local validation of a measurement against an approved value stored in an extended attribute of the file.
 
 TPM attestation and remote server verification:
 
-* Agent generates attestation key (AK) using TPM for proof of residency on H.
+* Workload Identity Agent generates attestation key (AK) using TPM for proof of residency on H.
 
-* Agent sends the AK attestation parameters (PCR quote, workload attestation public key, etc.) and EK certificate to the server.
+* Workload Identity Agent sends the AK attestation parameters (PCR quote, workload attestation public key, etc.) and EK certificate to the server.
 
 * Server inspects EK certificate. If CA path exists, and the EK certificate was signed by any chain in CA path, validation passes.
 
 * If validation passed, the server generates a credential activation challenge. The challenge's secret is encrypted using the EK public key.
 
-* Server sends challenge to agent.
+* Server sends challenge to workload identity agent.
 
-* Agent decrypts the challenge's secret.
+* Workload Identity Agent decrypts the challenge's secret.
 
-* Agent sends back decrypted secret.
+* Workload Identity Agent sends back decrypted secret.
 
 * Server verifies that the decrypted secret is the same it used to build the challenge.
 
-* Server creates a SPIFFE ID along with the SHA-256 sum of the TPM AK public key. Server stores agent SPIFFE ID mapping to TPM AK public key in a shared data store.
+* Server creates a SPIFFE ID along with the SHA-256 sum of the TPM AK public key. Server stores workload identity agent SPIFFE ID mapping to TPM AK public key in a shared data store.
 
 ## Host composition tracking
 
-Agent periodically (say every 1 minute) gathers host composition details (e.g. SIM card, location sensor) and sends to GL service. GL service can cross verify that the components of the host are still intact or if anything is plugged out. Plugging out components can decrease the quality of location. Host composition comprises TPM EK, GPS sensor hardware id, Mobile sensor hardware id, Mobile-SIM IMSI, etc. Refer to Host Composition Table for further details. Note that e-SIM does not have the plugging out problem like standard SIM but could be subject to e-SIM swap attack.
+Workload Identity Agent periodically (say every 1 minute) gathers host composition details (e.g. SIM card, location sensor) and sends to GL service. GL service can cross verify that the components of the host are still intact or if anything is plugged out. Plugging out components can decrease the quality of location. Host composition comprises TPM EK, GPS sensor hardware id, Mobile sensor hardware id, Mobile-SIM IMSI, etc. Refer to Host Composition Table for further details. Note that e-SIM does not have the plugging out problem like standard SIM but could be subject to e-SIM swap attack.
 
-## Agent Geolocation Workflow
+## Workload Identity Agent Geolocation Workflow
 
  Geolocation service (GL) runs outside of host -- besides the location from device location sources (e.g., GPS, GNSS), it will connect to mobile location service providers (e.g., Telefonica) using GSMA location API (gsma-loc). This described process below is run periodically (say every 1 minute) to check if the host's location has changed and get an attested location.
 
-### Option 1: Agent connects to Server and Geolocation Service (GL)
+### Option 1: Workload Identity Agent connects to Server and Geolocation Service (GL)
 
-### Option 2: Agent connects only to Server
+### Option 2: Workload Identity Agent connects only to Server
 
-* Agent gathers the location from host-local location sensors (e.g., GPS, GNSS) and/or location providers (e.g. Google, Apple). Location has a quality associated with it. For example, IP address-based location is of lower quality as compared to other sources. The location is signed by TPM AK along with a timestamp. Agent provides the signed location to Server using a nonce protocol to prevent replay attacks.
+* Workload Identity Agent gathers the location from host-local location sensors (e.g., GPS, GNSS) and/or location providers (e.g. Google, Apple). Location has a quality associated with it. For example, IP address-based location is of lower quality as compared to other sources. The location is signed by TPM AK along with a timestamp. Workload Identity Agent provides the signed location to Server using a nonce protocol to prevent replay attacks.
 
-* Server verifies the TPM AK of the signed location from the agent and provides it to GL.
+* Server verifies the TPM AK of the signed location from the workload identity agent and provides it to GL.
 
-* GL derives a combined location, including location quality, from various location sensors for a host with multiple location sensors -- this includes the gathered location from agent running on host. As an example, GPS is considered less trustworthy as compared to mobile.
+* GL derives a combined location, including location quality, from various location sensors for a host with multiple location sensors -- this includes the gathered location from workload identity agent running on host. As an example, GPS is considered less trustworthy as compared to mobile.
 
 * GL composite location comprises combined geolocation (which includes location quality), host composition (TPM EK, mobile-SIM, etc.), and time from a trusted source.
 
@@ -303,29 +298,29 @@ Agent periodically (say every 1 minute) gathers host composition details (e.g. S
 
 * GL signs the geographic boundary with a private key. The public key certificate of GL is in a public, trusted, transparent ledger such as a certificate transparency log. GL provides the signed geographic boundary to the Server.
 
-* Server adds the original nonce, current timestamp and Host TPM EK to the geographic boundary, and attests it using its private key generating a host geographic boundary token.The geographic boundary token is returned to the agent. The public key certificate of Server is in a public, trusted, transparent ledger such as a certificate transparency log and verifiable by the Agent.
+* Server adds the original nonce, current timestamp and Host TPM EK to the geographic boundary, and attests it using its private key generating a host geographic boundary token.The geographic boundary token is returned to the workload identity agent. The public key certificate of Server is in a public, trusted, transparent ledger such as a certificate transparency log and verifiable by the Workload Identity Agent.
 
-## Workload Pubic Key Attestation and Remote Verification - Key Steps - This is the current workflow used by agent with TPM plugin
+## Workload Pubic Key Attestation and Remote Verification - Key Steps - This is the current workflow used by workload identity agent with TPM plugin
 
-* Agent ensures that workload connects to it on a host-local socket (e.g., Unix-domain socket). Agent generates private/public key pair for workload. Agent signs the workload public key with its TPM AK. Agent sends the signed workload public key along with its SPIFFE ID. Note that the TPM AK is already verified by the server as part of the agent attestation process, establishing proof of residency of agent to host.
+* Workload Identity Agent ensures that workload connects to it on a host-local socket (e.g., Unix-domain socket). Workload Identity Agent generates private/public key pair for workload. Workload Identity Agent signs the workload public key with its TPM AK. Workload Identity Agent sends the signed workload public key along with its SPIFFE ID. Note that the TPM AK is already verified by the server as part of the workload identity agent attestation process, establishing proof of residency of workload identity agent to host.
 
-* Server gets the agent TPM AK public key from the SPIFFE ID by looking it up in the shared data store. Server verifies the workload public key signature using the TPM AK public key.
-Server then sends an encrypted challenge to the agent. The challenge's secret is encrypted using the workload public key.
+* Server gets the workload identity agent TPM AK public key from the SPIFFE ID by looking it up in the shared data store. Server verifies the workload public key signature using the TPM AK public key.
+Server then sends an encrypted challenge to the workload identity agent. The challenge's secret is encrypted using the workload public key.
 
-* Agent decrypts the challenge using its workload private key and sends the response back to the server.
+* Workload Identity Agent decrypts the challenge using its workload private key and sends the response back to the server.
 
-* Server verifies that the decrypted secret is the same it used to build the challenge. It then issues SPIFFE ID (workload id) for workload public key. The SPIFFE ID is signed by the server and contains the workload public key and TPM AK.
+* Server verifies that the decrypted secret is the same it used to build the challenge. It then issues workload id (e.g. SPIFFE ID) for workload public key. The workload is signed by the workload identity manager and contains the workload public key and TPM AK.
 
-* Workload gets the its private key and SVID from Agent.
+* Workload gets the its private key and workload ID from Workload Identity Agent.
 
-## Agent Local Public Key Attestation and and Remote Verification - Key Steps - This is a slightly modified workflow used by agent with TPM plugin
+## Workload Identity Agent Local Public Key Attestation and and Remote Verification - Key Steps - This is a slightly modified workflow used by workload identity agent with TPM plugin
 
-* Agent generates a local private/public key pair for itself. Agent signs its local public key with its TPM AK. Agent sends the signed local public key along with its SPIFFE ID. Note that the TPM AK is already verified by the server as part of the agent attestation process, establishing proof of residency of agent to host.
+* Workload Identity Agent generates a local private/public key pair for itself. Workload Identity Agent signs its local public key with its TPM AK. Workload Identity Agent sends the signed local public key along with its SPIFFE ID. Note that the TPM AK is already verified by the server as part of the workload identity agent attestation process, establishing proof of residency of workload identity agent to host.
 
-* Server gets the agent TPM AK public key from the SPIFFE ID by looking it up in the shared data store. Server verifies the local public key signature using the TPM AK public key.
-Server then sends an encrypted challenge to the agent. The challenge's secret is encrypted using the workload public key.
+* Server gets the workload identity agent TPM AK public key from the SPIFFE ID by looking it up in the shared data store. Server verifies the local public key signature using the TPM AK public key.
+Server then sends an encrypted challenge to the workload identity agent. The challenge's secret is encrypted using the workload public key.
 
-* Agent decrypts the challenge using its local private key and sends the response back to the server.
+* Workload Identity Agent decrypts the challenge using its local private key and sends the response back to the server.
 
 * Server verifies that the decrypted secret is the same it used to build the challenge. It then issues SPIFFE ID (workload id) for local public key. The SPIFFE ID is signed by the server and contains the local public key.
 
@@ -351,7 +346,7 @@ Workload ID (e.g. SPIFFE ID) and Host geographic boundary token, needs to be con
 
 ## Approaches
 
-* Enhance HTTP headers to convey Workload ID and Host geographic boundary token. This is in the initial focus given the popularity of HTTP. Benefits (1) This will cover Agent AI MCP protocol which uses HTTP 2.0. (2) Unlike TLS, HTTP headers are not terminated by proxies like API gateways, so the WID and Host geographic boundary token can be conveyed end-to-end.
+* Enhance HTTP headers to convey Workload ID and Host geographic boundary token. This is in the initial focus given the popularity of HTTP. Benefits (1) This will cover Workload Identity Agent AI MCP protocol which uses HTTP 2.0. (2) Unlike TLS, HTTP headers are not terminated by proxies like API gateways, so the WID and Host geographic boundary token can be conveyed end-to-end.
 
 * Enhance TLS to convey Workload ID and Host geographic boundary token.
 
@@ -361,7 +356,7 @@ Workload ID (e.g. SPIFFE ID) and Host geographic boundary token, needs to be con
 
 The following HTTP header fields are proposed to be used for conveying the Workload ID and Host geographic boundary token:
 
-* `X-Workload-ID`: Contains the Workload ID (e.g SPIFFE ID) issued by Workload Identity Manager (e.g. SPIFFE/SPIRE server).
+* `X-Workload-ID`: Contains the Workload ID (e.g SPIFFE ID) issued by Workload Identity Manager.
 
 * `X-Geo-ID`: Contains the Host geographic boundary token, which is a signed host geographic boundary issued by the GL service.
 
@@ -373,7 +368,7 @@ The following HTTP header fields are proposed to be used for conveying the Workl
 
 * Workload appends new header fields, e.g., `X-Geo-ID`, `X-Workload-ID` to the HTTP request.
 
-* Workload signs the HTTP request using its private key, which is obtained from the agent.
+* Workload signs the HTTP request using its private key, which is obtained from the workload identity agent.
 
 * Workload appends the `X-Workload-Signature` header field to the HTTP request, which contains the signature of the HTTP request.
 
@@ -397,7 +392,7 @@ The following HTTP header fields are proposed to be used for conveying the Workl
 | Trusted hardware devices (focus on geolocation) | Storage root of trust: <ul><li>TPM</li></ul> Location root of trust options: <ul><li>GPS sensor</li><li>GNSS sensor - signal authentication prevents spoofing [galileo]</li><li>Mobile sensor - modem, antenna, SIM - Mobile device location is obtained from mobile network operator and not from device</li></ul> | |
 | Boot loader | All the devices (version/firmware) in a platform are trusted and measured during each boot (boot loader enhancement). Any new device (e.g., mobile location sensor) which is hot-swapped in will be evaluated for inclusion only during next reboot. | |
 | Trusted OS | Trusted drivers for storage/location root of trust. Does not tamper with GPS location/GNSS location data. | |
-| Geolocation Agent SW - OS level service | Trusted application. Does not tamper with GPS location and GNSS location data. Signs GPS and GNSS location data (latitude/longitude/altitude) using TPM attestation key. | |
+| Geolocation Workload Identity Agent SW - OS level service | Trusted application. Does not tamper with GPS location and GNSS location data. Signs GPS and GNSS location data (latitude/longitude/altitude) using TPM attestation key. | |
 
 # Authorization Policy Implementers
 
@@ -441,9 +436,9 @@ This document has no IANA actions.
 
 # Appendix - Items to follow up
 
-## Restart time attestation/remote verification of agent for integrity and proof of residency on Host
+## Restart time attestation/remote verification of workload identity agent for integrity and proof of residency on Host
 
-For the agent restart case, it is not clear how the storage in TPM PCR will be accompished - TODO - ideally this should be natively handled in the IMA measurement process with an ability to retrigger on restart on refresh cycles.
+For the workload identity agent restart case, it is not clear how the storage in TPM PCR will be accompished - TODO - ideally this should be natively handled in the IMA measurement process with an ability to retrigger on restart on refresh cycles.
 
 # Acknowledgments
 {:numbered="false"}
