@@ -224,7 +224,7 @@ The server (SPIFFE/SPIRE server) is running in a cluster which is isolated from 
 
 [Figure -- Modified SPIFFE-SPIRE architecture with new geolocation plugin](https://github.com/nedmsmith/draft-klspa-wimse-verifiable-geo-fence/blob/main/pictures/spiffe-spire.svg)
 
-# End-to-End Workflow
+# Control Plane - End-to-End Workflow
 
 The end-to-end workflow for the proposed framework consists of several key steps, including attestation for system bootstrap and agent initialization, agent geolocation and geofencing processing, workload attestation, and remote verification.
 
@@ -249,15 +249,14 @@ This attestation includes data about the TPM's state and can be used to verify t
 
 Transmission: The attestation report is then sent to an external verifier (server), through a secure TLS connection.
 
-Remote Verification: The remote server checks the integrity of the attestation report and validates the measurements against known good values from the set of trusted hosts in the shared data store.
-The server also validates that the TPM EK certificate has not been revoked and is part of the approved list of TPM EK identifiers associated with the hardware platform.
-At this point, we can be sure that the hardware platform is approved for running workloads and is running an approved OS.
+Remote Verification: The remote server checks the integrity of the attestation report and validates the measurements against known good values from the set of trusted hosts in the shared data store. The shared data store can be split as follows for higher security - 1) Host TPM EKs (e.g., MDM) used by server and 2) Host TPM EKs + Geolocation sensor details (e.g., location sensor hardware database). The server also validates that the TPM EK certificate has not been revoked and is part of the approved list of TPM EK identifiers associated with the hardware platform. At this point, we can be sure that the hardware platform is approved for running workloads and is running an approved OS.
 
-### Start/restart time attestation/remote verification of agent for integrity and proof of residency on Host
+### Start/Restart time attestation/remote verification of agent for integrity and proof of residency on Host
 
-As part of agent start/restart process, Linux Integrity Measurement Architecture (Linux IMA) is used to ensure that only approved executable for agent is loaded.
+As part of agent start process, Linux Integrity Measurement Architecture (Linux IMA) is used to ensure that only approved executable for agent is loaded.
 
-Measurement collection: The agent executable is measured by Linux IMA before it is loaded.
+Measurement collection: For the agent start case, the agent executable is measured by Linux IMA, for example through cloud init and stored in TPM PCR through tools e.g., Linux ima-evm-utils before it is loaded. For the agent restart case, it is not clear how the storage in TPM PCR will be accompished - TODO - ideally this should be natively handled in the IMA measurement process with an ability to retrigger on restart on refresh cycles.
+
 Local Verification: Enforce local validation of a measurement against an approved value stored in an extended attribute of the file.
 
 TPM attestation and remote server verification:
@@ -278,74 +277,48 @@ TPM attestation and remote server verification:
 
 * Server verifies that the decrypted secret is the same it used to build the challenge.
 
-* Server creates a SPIFFE ID along with the SHA-256 sum of the TPM AK public key.
-Server stores agent SPIFFE ID mapping to TPM AK public key in a shared data store.
+* Server creates a SPIFFE ID along with the SHA-256 sum of the TPM AK public key. Server stores agent SPIFFE ID mapping to TPM AK public key in a shared data store.
 
-## Agent Geolocation and Geofencing Workflow
+## Host composition tracking
 
-- This is run periodically (say every 5 minutes) to ensure that the host is in the same location.
+Agent periodically (say every 1 minute) gathers host composition details (e.g. SIM card, location sensor) and sends to GL service. GL service can cross verify that the components of the host are still intact or if anything is plugged out. Plugging out components can decrease the quality of location. Host composition comprises TPM EK, GPS sensor hardware id, Mobile sensor hardware id, Mobile-SIM IMSI, etc. Refer to Host Composition Table for further details. Note that e-SIM does not have the plugging out problem like standard SIM but could be subject to e-SIM swap attack.
 
-### Step 1: Agent gets attested composite location using Geolocation Service (GL)
+## Agent Geolocation Workflow
 
-Geolocation service (GL) runs outside of host -- besides the location from device location sources (e.g., GPS, GNSS), it will connect to mobile location service providers (e.g., Telefonica) using GSMA location API (gsma-loc).
+ Geolocation service (GL) runs outside of host -- besides the location from device location sources (e.g., GPS, GNSS), it will connect to mobile location service providers (e.g., Telefonica) using GSMA location API (gsma-loc). This described process below is run periodically (say every 1 minute) to check if the host's location has changed and get an attested location.
 
-* Agent gathers the location from host-local location sensors (e.g., GPS, GNSS).
-Agent connects to GL using a secure connection mechanism like TLS. Agent provides the gathered location to GL over the secure connection.
+### Option 1: Agent connects to Server and Geolocation Service (GL)
 
-* Location has a quality associated with it. For example, IP address-based location is of lower quality as compared to other sources.
+### Option 2: Agent connects only to Server
 
-* GL ensures that the device composition of host (reference to Host Composition Table for further details) is intact (e.g., SIM card not plugged out of host) by periodically polling the state of host.
-Host is a member of the set of trusted hosts in the shared data store, which contains the host composition details.
-Note that e-SIM does not have the plugging out problem like standard SIM but could be subject to e-SIM swap attack.
-Host composition (HC) comprises TPM EK, Mobile-SIM, etc.
+* Agent gathers the location from host-local location sensors (e.g., GPS, GNSS) and/or location providers (e.g. Google, Apple). Location has a quality associated with it. For example, IP address-based location is of lower quality as compared to other sources. The location is signed by TPM AK along with a timestamp. Agent provides the signed location to Server using a nonce protocol to prevent replay attacks.
 
-* GL derives a combined location, including location quality, from various location sensors for a host with multiple location sensors -- this includes the gathered location from agent running on host.
-As an example, GPS is considered less trustworthy as compared to mobile.
+* Server verifies the TPM AK of the signed location from the agent and provides it to GL.
 
-* The composite location comprises combined geolocation (which includes location quality), host composition (TPM EK, mobile-SIM, etc.), and time from a trusted source.
-GL signs the composite location with a private key whose public key certificate is in a public, trusted, transparent ledger such as a certificate transparency log.
-Now we have an attested composite location.
+* GL derives a combined location, including location quality, from various location sensors for a host with multiple location sensors -- this includes the gathered location from agent running on host. As an example, GPS is considered less trustworthy as compared to mobile.
 
-* Agent is returned the attested composite location over the secure connection.
-Agent signs the attested composite location using TPM AK, establishing proof of residency of composite location to host. This is called attested, proof-of-residency-aware composite location (APL).
+* GL composite location comprises combined geolocation (which includes location quality), host composition (TPM EK, mobile-SIM, etc.), and time from a trusted source.
 
-### Step 2: Agent gets attested geographic boundary using Geofencing (GF) Service
+* GL converts the composite location to a geographic boundary comprising of city, state and country.
 
-* Geofence policies are of four flavors: (1) boolean membership of given boundary (rectangular, circular, state, etc.), (2) precise location, (3) precise bounding box/circle of location, (4) approximate location with no definition of boundary.
-The first one, boolean membership of given boundary, is the most common and will be assumed as the default.
-They are available in the form of pre-defined templates or can be configured on demand.
-Enterprises, who are the users of the hosts, choose the geofence policies to be enforced for various hosts.
-Note that the hosts must belong to the set of trusted hosts in a shared ledger.
-The geofence policies applied to the set of trusted hosts are recorded in a shared ledger.
+* GL signs the geographic boundary with a private key. The public key certificate of GL is in a public, trusted, transparent ledger such as a certificate transparency log. GL provides the signed geographic boundary to the Server.
 
-* Location agent on host supplies (APL) to geofence service (GF) over a secure connection.
-GF performs geofence policy enforcement by matching the location against configured geofence policies. GF signs the geofence policy match result, along with a trusted time (potentially leveraging RFC 3161), with a private key whose public key certificate is in a public, trusted, transparent ledger such as a certificate transparency log.
+* Server adds the original nonce, current timestamp and Host TPM EK to the geographic boundary, and attests it using its private key generating a host geographic boundary token.The geographic boundary token is returned to the agent. The public key certificate of Server is in a public, trusted, transparent ledger such as a certificate transparency log and verifiable by the Agent.
 
-* Geofence policy match result details (non-exhaustive): 1) Geofence policy which matched 2) Boolean - inside or outside geofence - applicable to boolean membership of given boundary policy type.
+## Workload Attestation and Remote Verification - Key Steps - This is the current workflow used by agent with TPM plugin
 
-* Agent is returned the attested geofence policy match result. Agent signs the attested geofence policy match result using TPM AK, establishing proof of residency of geofence policy match result to host. This is called attested, proof-of-residency-aware geofence policy match result (APGL).
+* Agent ensures that workload connects to it on a host-local socket (e.g., Unix-domain socket). Agent generates private/public key pair for workload. Agent signs the workload public key with its TPM AK. Agent sends the signed workload public key along with its SPIFFE ID. Note that the TPM AK is already verified by the server as part of the agent attestation process, establishing proof of residency of agent to host.
 
-## Workload (W) Attestation and Remote Verification - Key Steps
-
-* Agent ensures that workload connects to it on a host-local socket (e.g., Unix-domain socket).
-Agent generates private/public key pair for workload. Agent signs the workload public key with its TPM AK.
-Agent sends the signed workload public key along with its SPIFFE ID and last known APGL to the server.
-Note that the TPM AK is already verified by the server as part of the agent attestation process, establishing proof of residency of agent to host.
-
-* Server gets the agent TPM AK public key from the SPIFFE ID by looking it up in the shared data store.
-Server verifies the workload public key signature using the TPM AK public key.
-Server then sends an encrypted challenge to the agent.
-The challenge's secret is encrypted using the workload public key.
+* Server gets the agent TPM AK public key from the SPIFFE ID by looking it up in the shared data store. Server verifies the workload public key signature using the TPM AK public key.
+Server then sends an encrypted challenge to the agent. The challenge's secret is encrypted using the workload public key.
 
 * Agent decrypts the challenge using its workload private key and sends the response back to the server.
 
-* Server verifies that the decrypted secret is the same it used to build the challenge.
-It then issues SPIFFE ID for workload. The SPIFFE ID is signed by the server and contains the workload public key and the geographic boundary (e.g., cloud region, city, country, etc.) of the host.
-The geographic boundary is obtained from the last known APGL. The server also stores the workload SPIFFE ID mapping to workload public key in a shared data store.
+* Server verifies that the decrypted secret is the same it used to build the challenge. It then issues SPIFFE ID for workload. The SPIFFE ID is signed by the server and contains the workload public key.
 
-# Networking Protocol Changes
+# Data Plane - Networking Protocol Changes
 
-Workload ID (WID), with location field, in the form of a proof-of-residency certificate or token, needs to be conveyed to the peer during connection establishment. The connection is end-to-end across proxies like:
+Workload SPIFFE ID and Host geographic boundary token, needs to be conveyed to the peer during connection establishment. The connection is end-to-end across proxies like:
 
 ## Using TLS
 
@@ -365,13 +338,17 @@ Workload ID (WID), with location field, in the form of a proof-of-residency cert
 
 ## Approaches
 
-* Enhance applications (e.g., MCP protocol) to convey Workload ID (WID), with location field.
-
-* Enhance HTTP headers to convey Workload ID (WID), with location field.
+* Enhance HTTP headers to convey Workload ID (WID), with location field. This will cover Agent AI MCP protocol which uses HTTP 2.0. This is in the initial focus.
 
 * Enhance TLS to convey Workload ID (WID), with location field.
 
 * Enhance SSH/IPsec to convey Workload ID (WID), with location field.
+
+# Data Plane - HTTP header enhancement
+
+## Thick client (e.g. microsoft word on laptop host, analytics application on data center host) workload
+
+## Thin client (e.g. browser native traditional or single page application)
 
 # Host Composition Table
 
@@ -415,13 +392,19 @@ The proposed framework introduces several security considerations that must be a
 
 - **Time Source Integrity**: Trusted time sources are necessary to prevent replay attacks and ensure the freshness of attestation data.
 
-- **Data Store Security**: The shared data store containing trusted host compositions and geofence policies must be protected against unauthorized access and tampering, using encryption and access controls.
+- **Data Store Security**: The shared data store containing trusted host compositions must be protected against unauthorized access and tampering, using encryption and access controls. The shared data store can be split as follows for higher security - 1) Host EKs (e.g., MDM) used by server and 2) Host EKs + Geolocation sensor details (e.g., location sensor hardware datastore)
 
 By addressing these considerations, the framework aims to provide a secure and reliable foundation for verifiable geofencing in diverse deployment environments.
 
 # IANA Considerations
 
 This document has no IANA actions.
+
+# Appendix - Items to follow up
+
+## Restart time attestation/remote verification of agent for integrity and proof of residency on Host
+
+For the agent restart case, it is not clear how the storage in TPM PCR will be accompished - TODO - ideally this should be natively handled in the IMA measurement process with an ability to retrigger on restart on refresh cycles.
 
 # Acknowledgments
 {:numbered="false"}
