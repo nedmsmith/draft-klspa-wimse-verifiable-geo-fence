@@ -1249,7 +1249,10 @@ This document augments WIMSE architecture to include geolocation and host affini
                 </ul>
 </li>
               <li class="compact toc ulBare ulEmpty" id="section-toc.1-1.7.2.4">
-                <p id="section-toc.1-1.7.2.4.1"><a href="#section-7.4" class="auto internal xref">7.4</a>.  <a href="#name-workload-attestation-and-re" class="internal xref">Workload Attestation and Remote Verification - Key Steps - This is the current workflow used by agent with TPM plugin</a></p>
+                <p id="section-toc.1-1.7.2.4.1"><a href="#section-7.4" class="auto internal xref">7.4</a>.  <a href="#name-workload-pubic-key-attestat" class="internal xref">Workload Pubic Key Attestation and Remote Verification - Key Steps - This is the current workflow used by agent with TPM plugin</a></p>
+</li>
+              <li class="compact toc ulBare ulEmpty" id="section-toc.1-1.7.2.5">
+                <p id="section-toc.1-1.7.2.5.1"><a href="#section-7.5" class="auto internal xref">7.5</a>.  <a href="#name-agent-local-public-key-atte" class="internal xref">Agent Local Public Key Attestation and and Remote Verification - Key Steps - This is a slightly modified workflow used by agent with TPM plugin</a></p>
 </li>
             </ul>
 </li>
@@ -1271,10 +1274,10 @@ This document augments WIMSE architecture to include geolocation and host affini
             <p id="section-toc.1-1.9.1"><a href="#section-9" class="auto internal xref">9</a>.  <a href="#name-data-plane-http-header-enha" class="internal xref">Data Plane - HTTP header enhancement</a></p>
 <ul class="compact toc ulBare ulEmpty">
 <li class="compact toc ulBare ulEmpty" id="section-toc.1-1.9.2.1">
-                <p id="section-toc.1-1.9.2.1.1"><a href="#section-9.1" class="auto internal xref">9.1</a>.  <a href="#name-thick-client-eg-microsoft-w" class="internal xref">Thick client (e.g. microsoft word on laptop host, analytics application on data center host) workload</a></p>
+                <p id="section-toc.1-1.9.2.1.1"><a href="#section-9.1" class="auto internal xref">9.1</a>.  <a href="#name-thick-client-workload-lapto" class="internal xref">Thick client workload - Laptop/mobile host (e.g. microsoft teams client), Data center host (e.g. microsoft teams server)</a></p>
 </li>
               <li class="compact toc ulBare ulEmpty" id="section-toc.1-1.9.2.2">
-                <p id="section-toc.1-1.9.2.2.1"><a href="#section-9.2" class="auto internal xref">9.2</a>.  <a href="#name-thin-client-eg-browser-nati" class="internal xref">Thin client (e.g. browser native traditional or single page application)</a></p>
+                <p id="section-toc.1-1.9.2.2.1"><a href="#section-9.2" class="auto internal xref">9.2</a>.  <a href="#name-thin-client-workload-laptop" class="internal xref">Thin client workload - Laptop/mobile host (e.g. browser native traditional or single page application)</a></p>
 </li>
             </ul>
 </li>
@@ -1627,10 +1630,10 @@ This attestation includes data about the TPM's state and can be used to verify t
 </div>
 </section>
 </div>
-<div id="workload-attestation-and-remote-verification-key-steps-this-is-the-current-workflow-used-by-agent-with-tpm-plugin">
+<div id="workload-pubic-key-attestation-and-remote-verification-key-steps-this-is-the-current-workflow-used-by-agent-with-tpm-plugin">
 <section id="section-7.4">
-        <h3 id="name-workload-attestation-and-re">
-<a href="#section-7.4" class="section-number selfRef">7.4. </a><a href="#name-workload-attestation-and-re" class="section-name selfRef">Workload Attestation and Remote Verification - Key Steps - This is the current workflow used by agent with TPM plugin</a>
+        <h3 id="name-workload-pubic-key-attestat">
+<a href="#section-7.4" class="section-number selfRef">7.4. </a><a href="#name-workload-pubic-key-attestat" class="section-name selfRef">Workload Pubic Key Attestation and Remote Verification - Key Steps - This is the current workflow used by agent with TPM plugin</a>
         </h3>
 <ul class="normal">
 <li class="normal" id="section-7.4-1.1">
@@ -1644,7 +1647,32 @@ Server then sends an encrypted challenge to the agent. The challenge's secret is
             <p id="section-7.4-1.3.1">Agent decrypts the challenge using its workload private key and sends the response back to the server.<a href="#section-7.4-1.3.1" class="pilcrow">¶</a></p>
 </li>
           <li class="normal" id="section-7.4-1.4">
-            <p id="section-7.4-1.4.1">Server verifies that the decrypted secret is the same it used to build the challenge. It then issues SPIFFE ID for workload. The SPIFFE ID is signed by the server and contains the workload public key.<a href="#section-7.4-1.4.1" class="pilcrow">¶</a></p>
+            <p id="section-7.4-1.4.1">Server verifies that the decrypted secret is the same it used to build the challenge. It then issues SPIFFE ID (workload id) for workload public key. The SPIFFE ID is signed by the server and contains the workload public key and TPM AK.<a href="#section-7.4-1.4.1" class="pilcrow">¶</a></p>
+</li>
+          <li class="normal" id="section-7.4-1.5">
+            <p id="section-7.4-1.5.1">Workload gets the its private key and SVID from Agent.<a href="#section-7.4-1.5.1" class="pilcrow">¶</a></p>
+</li>
+        </ul>
+</section>
+</div>
+<div id="agent-local-public-key-attestation-and-and-remote-verification-key-steps-this-is-a-slightly-modified-workflow-used-by-agent-with-tpm-plugin">
+<section id="section-7.5">
+        <h3 id="name-agent-local-public-key-atte">
+<a href="#section-7.5" class="section-number selfRef">7.5. </a><a href="#name-agent-local-public-key-atte" class="section-name selfRef">Agent Local Public Key Attestation and and Remote Verification - Key Steps - This is a slightly modified workflow used by agent with TPM plugin</a>
+        </h3>
+<ul class="normal">
+<li class="normal" id="section-7.5-1.1">
+            <p id="section-7.5-1.1.1">Agent generates a local private/public key pair for itself. Agent signs its local public key with its TPM AK. Agent sends the signed local public key along with its SPIFFE ID. Note that the TPM AK is already verified by the server as part of the agent attestation process, establishing proof of residency of agent to host.<a href="#section-7.5-1.1.1" class="pilcrow">¶</a></p>
+</li>
+          <li class="normal" id="section-7.5-1.2">
+            <p id="section-7.5-1.2.1">Server gets the agent TPM AK public key from the SPIFFE ID by looking it up in the shared data store. Server verifies the local public key signature using the TPM AK public key.
+Server then sends an encrypted challenge to the agent. The challenge's secret is encrypted using the workload public key.<a href="#section-7.5-1.2.1" class="pilcrow">¶</a></p>
+</li>
+          <li class="normal" id="section-7.5-1.3">
+            <p id="section-7.5-1.3.1">Agent decrypts the challenge using its local private key and sends the response back to the server.<a href="#section-7.5-1.3.1" class="pilcrow">¶</a></p>
+</li>
+          <li class="normal" id="section-7.5-1.4">
+            <p id="section-7.5-1.4.1">Server verifies that the decrypted secret is the same it used to build the challenge. It then issues SPIFFE ID (workload id) for local public key. The SPIFFE ID is signed by the server and contains the local public key.<a href="#section-7.5-1.4.1" class="pilcrow">¶</a></p>
 </li>
         </ul>
 </section>
@@ -1656,7 +1684,7 @@ Server then sends an encrypted challenge to the agent. The challenge's secret is
       <h2 id="name-data-plane-networking-proto">
 <a href="#section-8" class="section-number selfRef">8. </a><a href="#name-data-plane-networking-proto" class="section-name selfRef">Data Plane - Networking Protocol Changes</a>
       </h2>
-<p id="section-8-1">Workload SPIFFE ID and Host geographic boundary token, needs to be conveyed to the peer during connection establishment. The connection is end-to-end across proxies like:<a href="#section-8-1" class="pilcrow">¶</a></p>
+<p id="section-8-1">Workload ID (e.g. SPIFFE ID) and Host geographic boundary token, needs to be conveyed to the peer during connection establishment. The connection is end-to-end across proxies like:<a href="#section-8-1" class="pilcrow">¶</a></p>
 <div id="using-tls">
 <section id="section-8.1">
         <h3 id="name-using-tls">
@@ -1700,13 +1728,13 @@ Server then sends an encrypted challenge to the agent. The challenge's secret is
         </h3>
 <ul class="normal">
 <li class="normal" id="section-8.3-1.1">
-            <p id="section-8.3-1.1.1">Enhance HTTP headers to convey Workload ID (WID), with location field. This will cover Agent AI MCP protocol which uses HTTP 2.0. This is in the initial focus.<a href="#section-8.3-1.1.1" class="pilcrow">¶</a></p>
+            <p id="section-8.3-1.1.1">Enhance HTTP headers to convey Workload ID and Host geographic boundary token. This is in the initial focus given the popularity of HTTP. Benefits (1) This will cover Agent AI MCP protocol which uses HTTP 2.0. (2) Unlike TLS, HTTP headers are not terminated by proxies like API gateways, so the WID and Host geographic boundary token can be conveyed end-to-end.<a href="#section-8.3-1.1.1" class="pilcrow">¶</a></p>
 </li>
           <li class="normal" id="section-8.3-1.2">
-            <p id="section-8.3-1.2.1">Enhance TLS to convey Workload ID (WID), with location field.<a href="#section-8.3-1.2.1" class="pilcrow">¶</a></p>
+            <p id="section-8.3-1.2.1">Enhance TLS to convey Workload ID and Host geographic boundary token.<a href="#section-8.3-1.2.1" class="pilcrow">¶</a></p>
 </li>
           <li class="normal" id="section-8.3-1.3">
-            <p id="section-8.3-1.3.1">Enhance SSH/IPsec to convey Workload ID (WID), with location field.<a href="#section-8.3-1.3.1" class="pilcrow">¶</a></p>
+            <p id="section-8.3-1.3.1">Enhance SSH/IPsec to convey Workload ID and Host geographic boundary token.<a href="#section-8.3-1.3.1" class="pilcrow">¶</a></p>
 </li>
         </ul>
 </section>
@@ -1718,17 +1746,61 @@ Server then sends an encrypted challenge to the agent. The challenge's secret is
       <h2 id="name-data-plane-http-header-enha">
 <a href="#section-9" class="section-number selfRef">9. </a><a href="#name-data-plane-http-header-enha" class="section-name selfRef">Data Plane - HTTP header enhancement</a>
       </h2>
-<div id="thick-client-eg-microsoft-word-on-laptop-host-analytics-application-on-data-center-host-workload">
+<p id="section-9-1">The following HTTP header fields are proposed to be used for conveying the Workload ID and Host geographic boundary token:<a href="#section-9-1" class="pilcrow">¶</a></p>
+<ul class="normal">
+<li class="normal" id="section-9-2.1">
+          <p id="section-9-2.1.1"><code>X-Workload-ID</code>: Contains the Workload ID (e.g SPIFFE ID) issued by Workload Identity Manager (e.g. SPIFFE/SPIRE server).<a href="#section-9-2.1.1" class="pilcrow">¶</a></p>
+</li>
+        <li class="normal" id="section-9-2.2">
+          <p id="section-9-2.2.1"><code>X-Geo-ID</code>: Contains the Host geographic boundary token, which is a signed host geographic boundary issued by the GL service.<a href="#section-9-2.2.1" class="pilcrow">¶</a></p>
+</li>
+        <li class="normal" id="section-9-2.3">
+          <p id="section-9-2.3.1"><code>X-Workload-Signature</code>: Contains the signature of the HTTP request, signed by the Workload's private key. This signature is used to verify the authenticity of the request and ensure that it has not been tampered with.<a href="#section-9-2.3.1" class="pilcrow">¶</a></p>
+</li>
+      </ul>
+<div id="thick-client-workload-laptopmobile-host-eg-microsoft-teams-client-data-center-host-eg-microsoft-teams-server">
 <section id="section-9.1">
-        <h3 id="name-thick-client-eg-microsoft-w">
-<a href="#section-9.1" class="section-number selfRef">9.1. </a><a href="#name-thick-client-eg-microsoft-w" class="section-name selfRef">Thick client (e.g. microsoft word on laptop host, analytics application on data center host) workload</a>
-      </h3>
+        <h3 id="name-thick-client-workload-lapto">
+<a href="#section-9.1" class="section-number selfRef">9.1. </a><a href="#name-thick-client-workload-lapto" class="section-name selfRef">Thick client workload - Laptop/mobile host (e.g. microsoft teams client), Data center host (e.g. microsoft teams server)</a>
+        </h3>
+<ul class="normal">
+<li class="normal" id="section-9.1-1.1">
+            <p id="section-9.1-1.1.1">Workload (e.g. microsoft teams client) gets Oauth bearer token for the cloud application (e.g. microsoft teams server) from the Authentication/Authorization server using the user credentials and client secret (e.g. workload ID)<a href="#section-9.1-1.1.1" class="pilcrow">¶</a></p>
+</li>
+          <li class="normal" id="section-9.1-1.2">
+            <p id="section-9.1-1.2.1">Workload appends new header fields, e.g., <code>X-Geo-ID</code>, <code>X-Workload-ID</code> to the HTTP request.<a href="#section-9.1-1.2.1" class="pilcrow">¶</a></p>
+</li>
+          <li class="normal" id="section-9.1-1.3">
+            <p id="section-9.1-1.3.1">Workload signs the HTTP request using its private key, which is obtained from the agent.<a href="#section-9.1-1.3.1" class="pilcrow">¶</a></p>
+</li>
+          <li class="normal" id="section-9.1-1.4">
+            <p id="section-9.1-1.4.1">Workload appends the <code>X-Workload-Signature</code> header field to the HTTP request, which contains the signature of the HTTP request.<a href="#section-9.1-1.4.1" class="pilcrow">¶</a></p>
+</li>
+          <li class="normal" id="section-9.1-1.5">
+            <p id="section-9.1-1.5.1">Workload sends the signed HTTP request to the server, which includes the new header fields.<a href="#section-9.1-1.5.1" class="pilcrow">¶</a></p>
+</li>
+          <li class="normal" id="section-9.1-1.6">
+            <p id="section-9.1-1.6.1">Intermediate proxies (e.g., API gateways, SASE firewalls) inspect the HTTP request headers and verify<a href="#section-9.1-1.6.1" class="pilcrow">¶</a></p>
+</li>
+          <li class="normal" id="section-9.1-1.7">
+            <p id="section-9.1-1.7.1"><code>X-Workload-ID</code> and <code>X-Geo-ID</code> fields by checking the signatures against the public keys of the Workload Identity Manager and GL service, respectively.<a href="#section-9.1-1.7.1" class="pilcrow">¶</a></p>
+</li>
+          <li class="normal" id="section-9.1-1.8">
+            <p id="section-9.1-1.8.1"><code>X-Workload-Signature</code> field by checking the signature against the Workload's public key obtained from X-Workload-ID.<a href="#section-9.1-1.8.1" class="pilcrow">¶</a></p>
+</li>
+          <li class="normal" id="section-9.1-1.9">
+            <p id="section-9.1-1.9.1">If the verification passes, the request is forwarded to the destination server. If the verification fails, the request is dropped, and an error response is generated.<a href="#section-9.1-1.9.1" class="pilcrow">¶</a></p>
+</li>
+          <li class="normal" id="section-9.1-1.10">
+            <p id="section-9.1-1.10.1">The server or Intermediate proxy processes the request and can enforce policies based on the Workload ID, Host geographic boundary token and URL.<a href="#section-9.1-1.10.1" class="pilcrow">¶</a></p>
+</li>
+        </ul>
 </section>
 </div>
-<div id="thin-client-eg-browser-native-traditional-or-single-page-application">
+<div id="thin-client-workload-laptopmobile-host-eg-browser-native-traditional-or-single-page-application">
 <section id="section-9.2">
-        <h3 id="name-thin-client-eg-browser-nati">
-<a href="#section-9.2" class="section-number selfRef">9.2. </a><a href="#name-thin-client-eg-browser-nati" class="section-name selfRef">Thin client (e.g. browser native traditional or single page application)</a>
+        <h3 id="name-thin-client-workload-laptop">
+<a href="#section-9.2" class="section-number selfRef">9.2. </a><a href="#name-thin-client-workload-laptop" class="section-name selfRef">Thin client workload - Laptop/mobile host (e.g. browser native traditional or single page application)</a>
       </h3>
 </section>
 </div>
@@ -1783,21 +1855,22 @@ Server then sends an encrypted challenge to the agent. The challenge's secret is
       <h2 id="name-authorization-policy-implem">
 <a href="#section-11" class="section-number selfRef">11. </a><a href="#name-authorization-policy-implem" class="section-name selfRef">Authorization Policy Implementers</a>
       </h2>
-<p id="section-11-1">Policy implementers use attested geographic boundary from W to make decisions.
-Example implementers:<a href="#section-11-1" class="pilcrow">¶</a></p>
+<p id="section-11-1">Policy implementers use attested geographic boundary from Workload to make decisions. Example implementers:<a href="#section-11-1" class="pilcrow">¶</a></p>
 <ul class="normal">
 <li class="normal" id="section-11-2.1">
-          <p id="section-11-2.1.1">SaaS application.<a href="#section-11-2.1.1" class="pilcrow">¶</a></p>
+          <p id="section-11-2.1.1">Web application firewall, e.g., Istio Ingress/Egress Gateway<a href="#section-11-2.1.1" class="pilcrow">¶</a></p>
 </li>
         <li class="normal" id="section-11-2.2">
-          <p id="section-11-2.2.1">K8s node agent.<a href="#section-11-2.2.1" class="pilcrow">¶</a></p>
+          <p id="section-11-2.2.1">SaaS application.<a href="#section-11-2.2.1" class="pilcrow">¶</a></p>
 </li>
         <li class="normal" id="section-11-2.3">
-          <p id="section-11-2.3.1">OS process scheduler.<a href="#section-11-2.3.1" class="pilcrow">¶</a></p>
+          <p id="section-11-2.3.1">K8s node agent.<a href="#section-11-2.3.1" class="pilcrow">¶</a></p>
+</li>
+        <li class="normal" id="section-11-2.4">
+          <p id="section-11-2.4.1">OS process scheduler.<a href="#section-11-2.4.1" class="pilcrow">¶</a></p>
 </li>
       </ul>
-<p id="section-11-3">If the policy implementer is at the SaaS application level, things are simpler.
-However, if it is pushed down to, say, K8s or OS process scheduler or JVM class loader/deserializer, then malware can be prevented (similar to a code-signed application).<a href="#section-11-3" class="pilcrow">¶</a></p>
+<p id="section-11-3">If the policy implementer is at the SaaS application level, things are simpler. However, if it is pushed down to, say, K8s or OS process scheduler or JVM class loader/deserializer, then malware can be prevented (similar to a code-signed application).<a href="#section-11-3" class="pilcrow">¶</a></p>
 </section>
 </div>
 <div id="security-considerations">
