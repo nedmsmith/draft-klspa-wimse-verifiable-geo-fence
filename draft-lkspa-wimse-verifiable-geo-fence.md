@@ -305,7 +305,7 @@ Agent periodically (say every 1 minute) gathers host composition details (e.g. S
 
 * Server adds the original nonce, current timestamp and Host TPM EK to the geographic boundary, and attests it using its private key generating a host geographic boundary token.The geographic boundary token is returned to the agent. The public key certificate of Server is in a public, trusted, transparent ledger such as a certificate transparency log and verifiable by the Agent.
 
-## Workload Attestation and Remote Verification - Key Steps - This is the current workflow used by agent with TPM plugin
+## Workload Pubic Key Attestation and Remote Verification - Key Steps - This is the current workflow used by agent with TPM plugin
 
 * Agent ensures that workload connects to it on a host-local socket (e.g., Unix-domain socket). Agent generates private/public key pair for workload. Agent signs the workload public key with its TPM AK. Agent sends the signed workload public key along with its SPIFFE ID. Note that the TPM AK is already verified by the server as part of the agent attestation process, establishing proof of residency of agent to host.
 
@@ -314,11 +314,24 @@ Server then sends an encrypted challenge to the agent. The challenge's secret is
 
 * Agent decrypts the challenge using its workload private key and sends the response back to the server.
 
-* Server verifies that the decrypted secret is the same it used to build the challenge. It then issues SPIFFE ID for workload. The SPIFFE ID is signed by the server and contains the workload public key.
+* Server verifies that the decrypted secret is the same it used to build the challenge. It then issues SPIFFE ID (workload id) for workload public key. The SPIFFE ID is signed by the server and contains the workload public key and TPM AK.
+
+* Workload gets the its private key and SVID from Agent.
+
+## Agent Local Public Key Attestation and and Remote Verification - Key Steps - This is a slightly modified workflow used by agent with TPM plugin
+
+* Agent generates a local private/public key pair for itself. Agent signs its local public key with its TPM AK. Agent sends the signed local public key along with its SPIFFE ID. Note that the TPM AK is already verified by the server as part of the agent attestation process, establishing proof of residency of agent to host.
+
+* Server gets the agent TPM AK public key from the SPIFFE ID by looking it up in the shared data store. Server verifies the local public key signature using the TPM AK public key.
+Server then sends an encrypted challenge to the agent. The challenge's secret is encrypted using the workload public key.
+
+* Agent decrypts the challenge using its local private key and sends the response back to the server.
+
+* Server verifies that the decrypted secret is the same it used to build the challenge. It then issues SPIFFE ID (workload id) for local public key. The SPIFFE ID is signed by the server and contains the local public key.
 
 # Data Plane - Networking Protocol Changes
 
-Workload SPIFFE ID and Host geographic boundary token, needs to be conveyed to the peer during connection establishment. The connection is end-to-end across proxies like:
+Workload ID (e.g. SPIFFE ID) and Host geographic boundary token, needs to be conveyed to the peer during connection establishment. The connection is end-to-end across proxies like:
 
 ## Using TLS
 
@@ -338,17 +351,43 @@ Workload SPIFFE ID and Host geographic boundary token, needs to be conveyed to t
 
 ## Approaches
 
-* Enhance HTTP headers to convey Workload ID (WID), with location field. This will cover Agent AI MCP protocol which uses HTTP 2.0. This is in the initial focus.
+* Enhance HTTP headers to convey Workload ID and Host geographic boundary token. This is in the initial focus given the popularity of HTTP. Benefits (1) This will cover Agent AI MCP protocol which uses HTTP 2.0. (2) Unlike TLS, HTTP headers are not terminated by proxies like API gateways, so the WID and Host geographic boundary token can be conveyed end-to-end.
 
-* Enhance TLS to convey Workload ID (WID), with location field.
+* Enhance TLS to convey Workload ID and Host geographic boundary token.
 
-* Enhance SSH/IPsec to convey Workload ID (WID), with location field.
+* Enhance SSH/IPsec to convey Workload ID and Host geographic boundary token.
 
 # Data Plane - HTTP header enhancement
 
-## Thick client (e.g. microsoft word on laptop host, analytics application on data center host) workload
+The following HTTP header fields are proposed to be used for conveying the Workload ID and Host geographic boundary token:
 
-## Thin client (e.g. browser native traditional or single page application)
+* `X-Workload-ID`: Contains the Workload ID (e.g SPIFFE ID) issued by Workload Identity Manager (e.g. SPIFFE/SPIRE server).
+
+* `X-Geo-ID`: Contains the Host geographic boundary token, which is a signed host geographic boundary issued by the GL service.
+
+* `X-Workload-Signature`: Contains the signature of the HTTP request, signed by the Workload's private key. This signature is used to verify the authenticity of the request and ensure that it has not been tampered with.
+
+## Thick client workload - Laptop/mobile host (e.g. microsoft teams client), Data center host (e.g. microsoft teams server)
+
+* Workload (e.g. microsoft teams client) gets Oauth bearer token for the cloud application (e.g. microsoft teams server) from the Authentication/Authorization server using the user credentials and client secret (e.g. workload ID)
+
+* Workload appends new header fields, e.g., `X-Geo-ID`, `X-Workload-ID` to the HTTP request.
+
+* Workload signs the HTTP request using its private key, which is obtained from the agent.
+
+* Workload appends the `X-Workload-Signature` header field to the HTTP request, which contains the signature of the HTTP request.
+
+* Workload sends the signed HTTP request to the server, which includes the new header fields.
+
+* Intermediate proxies (e.g., API gateways, SASE firewalls) inspect the HTTP request headers and verify
+- `X-Workload-ID` and `X-Geo-ID` fields by checking the signatures against the public keys of the Workload Identity Manager and GL service, respectively.
+- `X-Workload-Signature` field by checking the signature against the Workload's public key obtained from X-Workload-ID.
+
+* If the verification passes, the request is forwarded to the destination server. If the verification fails, the request is dropped, and an error response is generated.
+
+* The server or Intermediate proxy processes the request and can enforce policies based on the Workload ID, Host geographic boundary token and URL.
+
+## Thin client workload - Laptop/mobile host (e.g. browser native traditional or single page application)
 
 # Host Composition Table
 
@@ -362,8 +401,9 @@ Workload SPIFFE ID and Host geographic boundary token, needs to be conveyed to t
 
 # Authorization Policy Implementers
 
-Policy implementers use attested geographic boundary from W to make decisions.
-Example implementers:
+Policy implementers use attested geographic boundary from Workload to make decisions. Example implementers:
+
+* Web application firewall, e.g., Istio Ingress/Egress Gateway
 
 * SaaS application.
 
@@ -371,8 +411,7 @@ Example implementers:
 
 * OS process scheduler.
 
-If the policy implementer is at the SaaS application level, things are simpler.
-However, if it is pushed down to, say, K8s or OS process scheduler or JVM class loader/deserializer, then malware can be prevented (similar to a code-signed application).
+If the policy implementer is at the SaaS application level, things are simpler. However, if it is pushed down to, say, K8s or OS process scheduler or JVM class loader/deserializer, then malware can be prevented (similar to a code-signed application).
 
 # Security Considerations
 
