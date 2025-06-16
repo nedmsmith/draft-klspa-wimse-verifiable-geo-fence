@@ -102,34 +102,34 @@ Table of Contents
        7.1.2.  Start/Restart time attestation/remote verification of
                workload identity agent for integrity and proof of
                residency on Host
-     7.2.  Host composition tracking
-     7.3.  Workload Identity Agent Geolocation Workflow
-     7.4.  Workload Public Key Attestation and Remote Verification -
+   8.  Geolocation Manager and Host Composition change tracking
+     8.1.  Workload Identity Agent Geolocation Workflow
+     8.2.  Workload Public Key Attestation and Remote Verification -
            Key Steps - This is the current workflow used by workload
            identity agent with TPM plugin
-   8.  Data Plane - Networking Protocol Changes
-     8.1.  Using TLS
-     8.2.  Not Using TLS
-     8.3.  Approaches
-   9.  Data Plane - HTTP header enhancement
-     9.1.  Thick client workload - Laptop/mobile host (e.g. microsoft
-           teams laptop/desktop app), Data center host (e.g. microsoft
-           teams server)
-     9.2.  Thin client workload - Laptop/mobile host (e.g. microsoft
-           teams browser app), Data center host (e.g. microsoft teams
-           server)
-   10. Token Format
-   11. Host/Workload Geographic Boundary Token as SPIFFE JWT-SVID
-     11.1.  JWT-SVID Structure
-       11.1.1.  JWT-SVID Header Example
-       11.1.2.  JWT-SVID Payload Example
-       11.1.3.  Field Explanations
-     11.2.  Usage in HTTP Headers
-   12. Authorization Policy Implementers
-   13. Security Considerations
-   14. IANA Considerations
-   15. Appendix - Items to follow up
-     15.1.  Restart time attestation/remote verification of workload
+   9.  Data Plane - Networking Protocol Changes
+     9.1.  Using TLS
+     9.2.  Not Using TLS
+     9.3.  Approaches
+   10. Data Plane - HTTP header enhancement
+     10.1.  Thick client workload - Laptop/mobile host (e.g. microsoft
+            teams laptop/desktop app), Data center host (e.g. microsoft
+            teams server)
+     10.2.  Thin client workload - Laptop/mobile host (e.g. microsoft
+            teams browser app), Data center host (e.g. microsoft teams
+            server)
+   11. Token Format
+   12. Host/Workload Geographic Boundary Token as SPIFFE JWT-SVID
+     12.1.  JWT-SVID Structure
+       12.1.1.  JWT-SVID Header Example
+       12.1.2.  JWT-SVID Payload Example
+       12.1.3.  Field Explanations
+     12.2.  Usage in HTTP Headers
+   13. Authorization Policy Implementers
+   14. Security Considerations
+   15. IANA Considerations
+   16. Appendix - Items to follow up
+     16.1.  Restart time attestation/remote verification of workload
             identity agent for integrity and proof of residency on Host
    Acknowledgments
    References
@@ -470,27 +470,32 @@ Table of Contents
       Manager stores workload identity agent SPIFFE ID mapping to TPM AK
       public key in a shared data store.
 
-7.2.  Host composition tracking
-
-   Workload Identity Agent periodically (say every 30 seconds) gathers
-   host composition details (e.g. SIM card, location sensor) and sends
-   to Workload Identity Manager.  Geolocation Manager can cross verify
-   that the components of the host are still intact or if anything is
-   plugged out.  Plugging out components can decrease the quality of
-   location.  Host composition comprises TPM EK, GNSS sensor hardware
-   id, Mobile sensor hardware id, Mobile-SIM IMSI, etc.  Refer to Host
-   Composition Table for further details.  Note that e-SIM does not have
-   the plugging out problem like standard SIM but could be subject to
-   e-SIM swap attack.
-
-7.3.  Workload Identity Agent Geolocation Workflow
+8.  Geolocation Manager and Host Composition change tracking
 
    Geolocation Manager runs outside of host -- besides the location from
    device location sources (e.g., GNSS), it will connect to mobile
    location service providers (e.g., Telefonica) using GSMA location API
    (gsma-loc).  This described process below is run periodically (say
-   every 1 minute) to check if the host's location has changed and get
-   an attested location.
+   every 5 minutes) to check if the host composition has changed.
+
+   *  Workload Identity Agent periodically gathers host composition
+      details (e.g. SIM card, location sensor) and sends to Geolocation
+      Manager.
+
+   *  Geolocation Manager can cross verify that the components of the
+      host are still intact or if anything is plugged out.  Plugging out
+      components can decrease the quality of location.  Host composition
+      comprises TPM EK, GNSS sensor hardware id, Mobile sensor hardware
+      id, Mobile-SIM IMSI, etc.  Refer to Host Composition Table for
+      further details.  Note that e-SIM does not have the plugging out
+      problem like standard SIM but could be subject to e-SIM swap
+      attack.
+
+8.1.  Workload Identity Agent Geolocation Workflow
+
+   This described process below is run periodically (say every 1 minute)
+   to check if the host's location has changed and get an attested
+   location.
 
    *  Workload Identity Agent gathers the location from host-local
       location sensors (e.g., GNSS) and/or location providers (e.g.
@@ -528,9 +533,9 @@ Table of Contents
       boundary token using the following fields - (1) issue time, (2)
       expiry time, (3) monotonically increasing nonce for
       troubleshooting, (4) Host TPM EK, (5) geographic boundary from
-      geolocation manager, (6) workload identity agent ID - and attests
-      it using its private key generating a host/workload geographic
-      boundary token.
+      geolocation manager, (6) workload agent ID (7) workload IDs
+      (applicable to thick clients) - and attests it using its private
+      key generating a host/workload geographic boundary token.
 
    *  The geographic boundary token is returned to the workload identity
       agent.  The public key certificate of Workload Identity Manager is
@@ -554,7 +559,7 @@ Table of Contents
    location, which is more trustworthy than the device's own location
    sensors.
 
-7.4.  Workload Public Key Attestation and Remote Verification - Key
+8.2.  Workload Public Key Attestation and Remote Verification - Key
       Steps - This is the current workflow used by workload identity
       agent with TPM plugin
 
@@ -588,13 +593,13 @@ Table of Contents
    Workload gets the its private key and workload ID from Workload
    Identity Agent.
 
-8.  Data Plane - Networking Protocol Changes
+9.  Data Plane - Networking Protocol Changes
 
    Workload ID (e.g. SPIFFE ID) and host/workload geographic boundary
    token, needs to be conveyed to the peer during connection
    establishment.  The connection is end-to-end across proxies like:
 
-8.1.  Using TLS
+9.1.  Using TLS
 
    HTTP session termination (SASE firewall, API gateways, etc.) -
    terminate and re-establish TLS.
@@ -606,7 +611,7 @@ Table of Contents
 
    NFS - terminate and re-establish TLS; TCP/IP.
 
-8.2.  Not Using TLS
+9.2.  Not Using TLS
 
    SSH tunnel (jump hosts, etc.) - terminate and re-establish SSH; TCP/
    IP; Does not use TLS.
@@ -614,7 +619,7 @@ Table of Contents
    IPsec tunnel (router control plane, etc.) - terminates IPsec tunnel
    and forwards encapsulated traffic; IP; Does not use TLS.
 
-8.3.  Approaches
+9.3.  Approaches
 
    Enhance HTTP headers to convey Workload ID and host/workload
    geographic boundary token.  This is in the initial focus given the
@@ -630,7 +635,7 @@ Table of Contents
    Enhance SSH/IPsec to convey Workload ID and host/workload geographic
    boundary token.
 
-9.  Data Plane - HTTP header enhancement
+10.  Data Plane - HTTP header enhancement
 
    A new HTTP header field 'X-Workload-Geo-ID' is proposed for conveying
    the host/workload geographic boundary token.  The header fields are
@@ -638,9 +643,9 @@ Table of Contents
    information is trustworthy and can be validated by intermediate
    proxies and servers.
 
-9.1.  Thick client workload - Laptop/mobile host (e.g. microsoft teams
-      laptop/desktop app), Data center host (e.g. microsoft teams
-      server)
+10.1.  Thick client workload - Laptop/mobile host (e.g. microsoft teams
+       laptop/desktop app), Data center host (e.g. microsoft teams
+       server)
 
    The following steps describe the end-to-end workflow for a thick
    client workload (e.g., Microsoft Teams client) and a data center host
@@ -654,25 +659,15 @@ Table of Contents
       private-key-jwt/).  Private key JWT is alternative to shared
       client secret Oauth mechanism.
 
-   *  Workload signs the HTTP request using its private key, which is
-      obtained from the workload identity agent.  Workload also signs
-      the HTTP request using the workload identity agent private key,
-      which is part of the workload identity agent.
+   *  Workload contacts the workload agent to
 
-   *  Workload appends the X-Workload-Geo-ID header field to the HTTP
-      request, which contains
+   *  Append the X-Workload-Geo-ID header field to the HTTP request,
+      which contains (1) Current Host/workload geographic boundary
+      token. (2) current timestamp (3) monotonically increasing nonce
+      for troubleshooting.
 
-   *  host/workload geographic boundary token.
-
-   *  HTTP request signature1, where the request is signed by the
-      workload private key.
-
-   *  HTTP request signature2, where the request is signed by the
-      workload identity agent private key.
-
-   *  The X-Workload-Geo-ID header field is structured as follows: X-
-      Workload-Geo-ID: <host/workload geographic boundary token>
-      <workload ID> <HTTP request signature1> <HTTP request signature2>
+   *  Sign the modified HTTP request using the workload identity agent
+      private key.
 
    *  Intermediate proxies (e.g., API gateways, SASE firewalls) inspect
       the X-Workload-Geo-ID header field and perform the following
@@ -685,7 +680,7 @@ Table of Contents
    *  Verify that the workload agent ID in the host/workload geographic
       boundary token matches a allowed workload agent ID.
 
-   *  Verify that the HTTP request signature1 in the host/workload
+   *  Verify that the HTTP request signature in the host/workload
       geographic boundary token is valid by verifying it against the
       workload agent public key.
 
@@ -703,36 +698,30 @@ Table of Contents
    *  The server can verify the X-Workload-Geo-ID header field by
       performing the following additional checks
 
-   *  The server verifies that the HTTP request signature2 in the host/
-      workload geographic boundary token is valid by verifying it
-      against the configured workload public key.
+   *  The server verifies that host/workload geographic boundary token
+      has its workload ID.  It may be possible that the workload ID may
+      have been key rotated - as long as the previous workload ID
+      matches, it is acceptable.
 
-9.2.  Thin client workload - Laptop/mobile host (e.g. microsoft teams
-      browser app), Data center host (e.g. microsoft teams server)
+10.2.  Thin client workload - Laptop/mobile host (e.g. microsoft teams
+       browser app), Data center host (e.g. microsoft teams server)
 
    *  The key differences as compared to the thick client workload are:
 
    *  The browser extension, on behalf of the thin client, connects to
       the workload identity agent running on the host (e.g., laptop/
-      mobile) to obtain the host/workload geographic boundary token
+      mobile) to sign the HTTP request with the workload identity agent
+      private key.
 
-   *  The browser extension connects to the workload identity agent
-      running on the host (e.g., laptop/mobile) to sign the HTTP request
-      using the agent local private key, which is part of the workload
-      identity agent.
+   *  The server does not need to verify the workload ID in the host/
+      workload geographic boundary token, as the workload ID is not
+      present in the token.  The server or intermediate proxy can still
+      enforce policies based on the host TPM EK, workload agent ID,
+      geographic boundary, and destination URL.
 
-   *  The browser extension appends the X-Workload-Geo-ID header field
-      to the HTTP request, which contains the host/workload geographic
-      boundary token, agent local ID (e.g., SPIFFE ID) of the workload
-      identity agent, and HTTP request signature1.
+11.  Token Format
 
-   *  Unlike thick clients, there is no HTTP request signature2 in the
-      X-Workload-Geo-ID header field and the server does not have a
-      configured workload public key.
-
-10.  Token Format
-
-11.  Host/Workload Geographic Boundary Token as SPIFFE JWT-SVID
+12.  Host/Workload Geographic Boundary Token as SPIFFE JWT-SVID
 
    The host/workload geographic boundary token is issued as a SPIFFE
    JWT-SVID, following the SPIFFE JWT-SVID standard [spiffe-jwt-svid].
@@ -743,7 +732,7 @@ Table of Contents
    conveyed as a compact string (e.g., in the X-Workload-Geo-ID HTTP
    header).
 
-11.1.  JWT-SVID Structure
+12.1.  JWT-SVID Structure
 
    A SPIFFE JWT-SVID consists of three parts: - *Header*: Specifies the
    signing algorithm, token type, and optionally a key ID. - *Payload*:
@@ -752,11 +741,11 @@ Table of Contents
    Cryptographic signature over the header and payload, created using
    the issuer's private key.
 
-11.1.1.  JWT-SVID Header Example
+12.1.1.  JWT-SVID Header Example
 
    json { "alg": "RS256", "typ": "JWT", "kid": "key-id-1234" }
 
-11.1.2.  JWT-SVID Payload Example
+12.1.2.  JWT-SVID Payload Example
 
    json { "sub": "spiffe://example.org/host/123e4567-e89b-
    12d3-a456-426614174000", "aud": ["https://service.example.com"],
@@ -767,7 +756,7 @@ Table of Contents
 
    *Signature:* SflKxwRJSMeKKF2QT4fwpMeJf36POk6yJV_adQssw5c
 
-11.1.3.  Field Explanations
+12.1.3.  Field Explanations
 
    *Standard SPIFFE JWT-SVID Claims:* - sub: The SPIFFE ID of the host
    or workload this token represents. - aud: Audience(s) for which this
@@ -780,7 +769,7 @@ Table of Contents
    state, country). - host_hardware_details: Object with hardware root
    of trust details (e.g., TPM EK public key).
 
-11.2.  Usage in HTTP Headers
+12.2.  Usage in HTTP Headers
 
    The SPIFFE JWT-SVID-based geographic boundary token is conveyed as a
    compact string in the X-Workload-Geo-ID HTTP header:
@@ -790,7 +779,7 @@ Table of Contents
    Intermediaries and recipients MUST validate the JWT-SVID signature
    and claims according to the SPIFFE JWT-SVID standard.
 
-12.  Authorization Policy Implementers
+13.  Authorization Policy Implementers
 
    Policy implementers use attested geographic boundary from Workload to
    make decisions.  Example implementers:
@@ -808,7 +797,7 @@ Table of Contents
    process scheduler or JVM class loader/deserializer, then malware can
    be prevented (similar to a code-signed application).
 
-13.  Security Considerations
+14.  Security Considerations
 
    The proposed framework introduces several security considerations
    that must be addressed to ensure the integrity and trustworthiness of
@@ -861,13 +850,13 @@ Table of Contents
    secure and reliable foundation for verifiable geofencing in diverse
    deployment environments.
 
-14.  IANA Considerations
+15.  IANA Considerations
 
    This document has no IANA actions.
 
-15.  Appendix - Items to follow up
+16.  Appendix - Items to follow up
 
-15.1.  Restart time attestation/remote verification of workload identity
+16.1.  Restart time attestation/remote verification of workload identity
        agent for integrity and proof of residency on Host
 
    For the workload identity agent restart case, it is not clear how the
