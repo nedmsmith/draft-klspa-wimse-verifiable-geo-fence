@@ -395,9 +395,10 @@ X-Workload-Geo-ID: <host/workload geographic boundary token> <workload ID> <HTTP
 ## Thin client workload - Laptop/mobile host (e.g. microsoft teams browser app), Data center host (e.g. microsoft teams server)
 
 * The key differences as compared to the thick client workload are:
-- The browser extension connects to the workload identity agent running on the host (e.g., laptop/mobile) to obtain the host/workload geographic boundary token
+- The browser extension, on behalf of the thin client, connects to the workload identity agent running on the host (e.g., laptop/mobile) to obtain the host/workload geographic boundary token
 - The browser extension connects to the workload identity agent running on the host (e.g., laptop/mobile) to sign the HTTP request using the agent local private key, which is part of the workload identity agent.
-- The browser extension appends the X-Workload-Geo-ID header field to the HTTP request, which contains the host/workload geographic boundary token, agent local ID (e.g., SPIFFE ID) of the workload identity agent, and HTTP request signature.
+- The browser extension appends the X-Workload-Geo-ID header field to the HTTP request, which contains the host/workload geographic boundary token, agent local ID (e.g., SPIFFE ID) of the workload identity agent, and HTTP request signature1.
+- Unlike thick clients, there is no HTTP request signature2 in the X-Workload-Geo-ID header field and the server does not have a configured workload public key.
 
 # Token Format
 
