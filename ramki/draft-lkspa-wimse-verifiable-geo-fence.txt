@@ -124,7 +124,6 @@ Table of Contents
        12.1.1.  JWT-SVID Header Example
        12.1.2.  JWT-SVID Payload Example
        12.1.3.  Field Explanations
-     12.2.  Usage in HTTP Headers
    13. Authorization Policy Implementers
    14. Security Considerations
    15. IANA Considerations
@@ -336,8 +335,8 @@ Table of Contents
    SPIRE), enabling adoption in cloud, edge, and enterprise
    environments.
 
-   For example, in this document: - The *Workload Identity Manager* is
-   represented by the SPIFFE/SPIRE server (spire). - The *Workload
+   For example, in this document: * The *Workload Identity Manager* is
+   represented by the SPIFFE/SPIRE server (spire).  * The *Workload
    Identity Agent* is represented by the SPIFFE/SPIRE agent (spire).
 
 6.  SPIFFE/SPIRE Architecture Modifications
@@ -661,63 +660,63 @@ Table of Contents
 
    *  Workload contacts the workload agent to
 
-   *  Append the X-Workload-Geo-ID header field to the HTTP request,
-      which contains (1) Current Host/workload geographic boundary
-      token. (2) current timestamp (3) monotonically increasing nonce
-      for troubleshooting.
+      -  Append the X-Workload-Geo-ID header field to the HTTP request,
+         which contains (1) Current Host/workload geographic boundary
+         token. (2) current timestamp (3) monotonically increasing nonce
+         for troubleshooting.
 
-   *  Sign the modified HTTP request using the workload identity agent
-      private key.
+      -  Sign the modified HTTP request using the workload identity
+         agent private key.
 
    *  Intermediate proxies (e.g., API gateways, SASE firewalls) inspect
       the X-Workload-Geo-ID header field and perform the following
       checks:
 
-   *  Verify that the host/workload geographic boundary token in the
-      header is valid by verifying the signature against the workload
-      identity manager public key and that the token has not expired.
+      -  Verify that the host/workload geographic boundary token in the
+         header is valid by verifying the signature against the workload
+         identity manager public key and that the token has not expired.
 
-   *  Verify that the workload agent ID in the host/workload geographic
-      boundary token matches a allowed workload agent ID.
+      -  Verify that the workload agent ID in the host/workload
+         geographic boundary token matches a allowed workload agent ID.
 
-   *  Verify that the HTTP request signature in the host/workload
-      geographic boundary token is valid by verifying it against the
-      workload agent public key.
+      -  Verify that the HTTP request signature in the host/workload
+         geographic boundary token is valid by verifying it against the
+         workload agent public key.
 
-   *  If the verification passes, the request is forwarded to the
-      destination server.  If the verification fails, the request is
-      dropped, and an error response is generated.
+      -  If the verification passes, the request is forwarded to the
+         destination server.  If the verification fails, the request is
+         dropped, and an error response is generated.
 
    *  The server or Intermediate proxy can enforce policies based on the
       following fields in the host/workload geographic boundary token in
       X-Workload-Geo-ID header
 
-   *  Host TPM EK, Workload Agent ID, geographic boundary and
-      destination URL.
+      -  Host TPM EK, Workload Agent ID, geographic boundary and
+         destination URL.
 
    *  The server can verify the X-Workload-Geo-ID header field by
       performing the following additional checks
 
-   *  The server verifies that host/workload geographic boundary token
-      has its workload ID.  It may be possible that the workload ID may
-      have been key rotated - as long as the previous workload ID
-      matches, it is acceptable.
+      -  The server verifies that host/workload geographic boundary
+         token has its workload ID.  It may be possible that the
+         workload ID may have been key rotated - as long as the previous
+         workload ID matches, it is acceptable.
 
 10.2.  Thin client workload - Laptop/mobile host (e.g. microsoft teams
        browser app), Data center host (e.g. microsoft teams server)
 
    *  The key differences as compared to the thick client workload are:
 
-   *  The browser extension, on behalf of the thin client, connects to
-      the workload identity agent running on the host (e.g., laptop/
-      mobile) to sign the HTTP request with the workload identity agent
-      private key.
+      -  The browser extension, on behalf of the thin client, connects
+         to the workload identity agent running on the host (e.g.,
+         laptop/mobile) to sign the HTTP request with the workload
+         identity agent private key.
 
-   *  The server does not need to verify the workload ID in the host/
-      workload geographic boundary token, as the workload ID is not
-      present in the token.  The server or intermediate proxy can still
-      enforce policies based on the host TPM EK, workload agent ID,
-      geographic boundary, and destination URL.
+      -  The server does not need to verify the workload ID in the host/
+         workload geographic boundary token, as the workload ID is not
+         present in the token.  The server or intermediate proxy can
+         still enforce policies based on the host TPM EK, workload agent
+         ID, geographic boundary, and destination URL.
 
 11.  Token Format
 
@@ -768,16 +767,6 @@ Table of Contents
    host_geographic_boundary: The host's geographic boundary (city,
    state, country). - host_hardware_details: Object with hardware root
    of trust details (e.g., TPM EK public key).
-
-12.2.  Usage in HTTP Headers
-
-   The SPIFFE JWT-SVID-based geographic boundary token is conveyed as a
-   compact string in the X-Workload-Geo-ID HTTP header:
-
-   X-Workload-Geo-ID: <JWT-SVID>
-
-   Intermediaries and recipients MUST validate the JWT-SVID signature
-   and claims according to the SPIFFE JWT-SVID standard.
 
 13.  Authorization Policy Implementers
 
