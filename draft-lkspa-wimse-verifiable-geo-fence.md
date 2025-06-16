@@ -293,14 +293,17 @@ TPM attestation and remote Workload Identity Manager verification:
 
 * Workload Identity Manager creates a SPIFFE ID along with the SHA-256 sum of the TPM AK public key appended with the SHA-256 sum of the workload identity agent public key. Workload Identity Manager stores workload identity agent SPIFFE ID mapping to TPM AK public key in a shared data store.
 
-## Host composition tracking
+# Geolocation Manager and Host Composition change tracking
 
-Workload Identity Agent periodically (say every 30 seconds) gathers host composition details (e.g. SIM card, location sensor) and sends to
-Workload Identity Manager. Geolocation Manager can cross verify that the components of the host are still intact or if anything is plugged out. Plugging out components can decrease the quality of location. Host composition comprises TPM EK, GNSS sensor hardware id, Mobile sensor hardware id, Mobile-SIM IMSI, etc. Refer to Host Composition Table for further details. Note that e-SIM does not have the plugging out problem like standard SIM but could be subject to e-SIM swap attack.
+Geolocation Manager runs outside of host -- besides the location from device location sources (e.g., GNSS), it will connect to mobile location service providers (e.g., Telefonica) using GSMA location API (gsma-loc). This described process below is run periodically (say every 5 minutes) to check if the host composition has changed.
+
+* Workload Identity Agent periodically gathers host composition details (e.g. SIM card, location sensor) and sends to
+Geolocation Manager.
+
+* Geolocation Manager can cross verify that the components of the host are still intact or if anything is plugged out. Plugging out components can decrease the quality of location. Host composition comprises TPM EK, GNSS sensor hardware id, Mobile sensor hardware id, Mobile-SIM IMSI, etc. Refer to Host Composition Table for further details. Note that e-SIM does not have the plugging out problem like standard SIM but could be subject to e-SIM swap attack.
 
 ## Workload Identity Agent Geolocation Workflow
-
-Geolocation Manager runs outside of host -- besides the location from device location sources (e.g., GNSS), it will connect to mobile location service providers (e.g., Telefonica) using GSMA location API (gsma-loc). This described process below is run periodically (say every 1 minute) to check if the host's location has changed and get an attested location.
+This described process below is run periodically (say every 1 minute) to check if the host's location has changed and get an attested location.
 
 * Workload Identity Agent gathers the location from host-local location sensors (e.g., GNSS) and/or location providers (e.g. Google, Apple). Location has a quality associated with it. For example, IP address-based location is of lower quality as compared to other sources. The location is signed by TPM AK along with a timestamp. Workload Identity Agent provides the signed location to Workload Identity Manager using a nonce protocol to prevent replay attacks.
 
@@ -314,7 +317,7 @@ Geolocation Manager runs outside of host -- besides the location from device loc
 
 * Geolocation Manager signs the geographic boundary with a private key. The public key certificate of Geolocation Manager is in a public, trusted, transparent ledger such as a certificate transparency log. Geolocation Manager provides the signed geographic boundary to the Workload Identity Manager.
 
-* Workload Identity Manager generates a host/workload geographic boundary token using the following fields - (1) issue time, (2) expiry time, (3) monotonically increasing nonce for troubleshooting, (4) Host TPM EK, (5) geographic boundary from geolocation manager, (6) workload identity agent ID - and attests it using its private key generating a host/workload geographic boundary token.
+* Workload Identity Manager generates a host/workload geographic boundary token using the following fields - (1) issue time, (2) expiry time, (3) monotonically increasing nonce for troubleshooting, (4) Host TPM EK, (5) geographic boundary from geolocation manager, (6) workload agent ID (7) workload IDs (applicable to thick clients) - and attests it using its private key generating a host/workload geographic boundary token.
 
 * The geographic boundary token is returned to the workload identity agent. The public key certificate of Workload Identity Manager is in a public, trusted, transparent ledger such as a certificate transparency log and verifiable by the Workload Identity Agent.
 
@@ -368,37 +371,27 @@ The following steps describe the end-to-end workflow for a thick client workload
 
 * Workload (e.g. microsoft teams client) gets Oauth bearer token for the cloud application (e.g. microsoft teams server) from the Authentication/Authorization server using the user credentials and workload credential using private key JWT (https://oauth.net/private-key-jwt/). Private key JWT is alternative to shared client secret Oauth mechanism.
 
-* Workload signs the HTTP request using its private key, which is obtained from the workload identity agent. Workload also signs the HTTP request using the workload identity agent private key, which is part of the workload identity agent.
-
-* Workload appends the X-Workload-Geo-ID header field to the HTTP request, which contains
-- host/workload geographic boundary token.
-- HTTP request signature1, where the request is signed by the workload private key.
-- HTTP request signature2, where the request is signed by the workload identity agent private key.
-
-* The X-Workload-Geo-ID header field is structured as follows:
-```
-X-Workload-Geo-ID: <host/workload geographic boundary token> <workload ID> <HTTP request signature1> <HTTP request signature2>
-```
+* Workload contacts the workload agent to
+- Append the X-Workload-Geo-ID header field to the HTTP request, which contains (1) Current Host/workload geographic boundary token. (2) current timestamp (3) monotonically increasing nonce for troubleshooting.
+- Sign the modified HTTP request using the workload identity agent private key.
 
 * Intermediate proxies (e.g., API gateways, SASE firewalls) inspect the X-Workload-Geo-ID header field and perform the following checks:
 - Verify that the host/workload geographic boundary token in the header is valid by verifying the signature against the workload identity manager public key and that the token has not expired.
 - Verify that the workload agent ID in the host/workload geographic boundary token matches a allowed workload agent ID.
-- Verify that the HTTP request signature1 in the host/workload geographic boundary token is valid by verifying it against the workload agent public key.
+- Verify that the HTTP request signature in the host/workload geographic boundary token is valid by verifying it against the workload agent public key.
 - If the verification passes, the request is forwarded to the destination server. If the verification fails, the request is dropped, and an error response is generated.
 
 * The server or Intermediate proxy can enforce policies based on the following fields in the host/workload geographic boundary token in X-Workload-Geo-ID header
 - Host TPM EK, Workload Agent ID, geographic boundary and destination URL.
 
 * The server can verify the X-Workload-Geo-ID header field by performing the following additional checks
-- The server verifies that the HTTP request signature2 in the host/workload geographic boundary token is valid by verifying it against the configured workload public key.
+- The server verifies that host/workload geographic boundary token has its workload ID. It may be possible that the workload ID may have been key rotated - as long as the previous workload ID matches, it is acceptable.
 
 ## Thin client workload - Laptop/mobile host (e.g. microsoft teams browser app), Data center host (e.g. microsoft teams server)
 
 * The key differences as compared to the thick client workload are:
-- The browser extension, on behalf of the thin client, connects to the workload identity agent running on the host (e.g., laptop/mobile) to obtain the host/workload geographic boundary token
-- The browser extension connects to the workload identity agent running on the host (e.g., laptop/mobile) to sign the HTTP request using the agent local private key, which is part of the workload identity agent.
-- The browser extension appends the X-Workload-Geo-ID header field to the HTTP request, which contains the host/workload geographic boundary token, agent local ID (e.g., SPIFFE ID) of the workload identity agent, and HTTP request signature1.
-- Unlike thick clients, there is no HTTP request signature2 in the X-Workload-Geo-ID header field and the server does not have a configured workload public key.
+- The browser extension, on behalf of the thin client, connects to the workload identity agent running on the host (e.g., laptop/mobile) to sign the HTTP request with the workload identity agent private key.
+- The server does not need to verify the workload ID in the host/workload geographic boundary token, as the workload ID is not present in the token. The server or intermediate proxy can still enforce policies based on the host TPM EK, workload agent ID, geographic boundary, and destination URL.
 
 # Token Format
 
