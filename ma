@@ -1,0 +1,2 @@
+make fix-lint
+make
