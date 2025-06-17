@@ -1,6 +1,6 @@
 {
   "magic": "E!vIA5L86J2I",
-  "timestamp": "2025-06-15T01:20:34.113454+00:00",
+  "timestamp": "2025-06-17T01:13:24.622012+00:00",
   "repo": "nedmsmith/draft-klspa-wimse-verifiable-geo-fence",
   "labels": [
     {
@@ -1173,7 +1173,7 @@
       "labels": [],
       "body": "",
       "createdAt": "2025-06-09T05:03:45Z",
-      "updatedAt": "2025-06-09T22:48:32Z",
+      "updatedAt": "2025-06-15T03:08:55Z",
       "baseRepository": "nedmsmith/draft-klspa-wimse-verifiable-geo-fence",
       "baseRefName": "main",
       "baseRefOid": "c56b651bc09bdc0441fc8b8d8729457afa6c4637",
@@ -1282,6 +1282,48 @@
           "body": "",
           "createdAt": "2025-06-14T04:38:56Z",
           "updatedAt": "2025-06-14T04:38:56Z",
+          "comments": []
+        }
+      ]
+    },
+    {
+      "number": 22,
+      "id": "PR_kwDOOmshaM6ao2vD",
+      "title": "workflow enhancements",
+      "url": "https://github.com/nedmsmith/draft-klspa-wimse-verifiable-geo-fence/pull/22",
+      "state": "MERGED",
+      "author": "ramkri123",
+      "authorAssociation": "COLLABORATOR",
+      "assignees": [],
+      "labels": [],
+      "body": "",
+      "createdAt": "2025-06-16T04:32:37Z",
+      "updatedAt": "2025-06-16T15:48:08Z",
+      "baseRepository": "nedmsmith/draft-klspa-wimse-verifiable-geo-fence",
+      "baseRefName": "main",
+      "baseRefOid": "f598ff14624b8454d244d7835594aa54f8311a0d",
+      "headRepository": "nedmsmith/draft-klspa-wimse-verifiable-geo-fence",
+      "headRefName": "ramki",
+      "headRefOid": "c625922096d87677dccb94503b338336bbc5cc07",
+      "closedAt": "2025-06-16T15:48:07Z",
+      "mergedAt": "2025-06-16T15:48:07Z",
+      "mergedBy": "ramkri123",
+      "mergeCommit": {
+        "oid": "69ec03216192b89456d91d9f9c394fbc74e26c5f"
+      },
+      "comments": [],
+      "reviews": [
+        {
+          "id": "PRR_kwDOOmshaM6uzJzU",
+          "commit": {
+            "abbreviatedOid": "c625922"
+          },
+          "author": "nedmsmith",
+          "authorAssociation": "OWNER",
+          "state": "APPROVED",
+          "body": "LGTM",
+          "createdAt": "2025-06-16T15:42:13Z",
+          "updatedAt": "2025-06-16T15:42:13Z",
           "comments": []
         }
       ]
