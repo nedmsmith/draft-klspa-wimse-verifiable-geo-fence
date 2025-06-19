@@ -13,13 +13,13 @@
 <meta content="
        Financial services, healthcare, and government entities have data residency requirements that aim to protect sensitive data by specifying its location. Data location can be both geographic and host-centric. Geolocation affinity means workloads are cryptographically bound to a geographic boundary. Host affinity means workloads are cryptographically bound to a specific execution environment. WIMSE architecture can be improved to show how location can be cryptographically bound to WIMSE identities. This document augments WIMSE architecture to include geolocation and host affinity use cases and workflows. 
     " name="description">
-<meta content="xml2rfc 3.28.1" name="generator">
+<meta content="xml2rfc 3.29.0" name="generator">
 <meta content="geofence" name="keyword">
 <meta content="location affinity" name="keyword">
 <meta content="host affinity" name="keyword">
 <meta content="draft-lkspa-wimse-verifiable-geo-fence-latest" name="ietf.draft">
 <!-- Generator version information:
-  xml2rfc 3.28.1
+  xml2rfc 3.29.0
     Python 3.12.11
     ConfigArgParse 1.7
     google-i18n-address 3.1.1
@@ -1054,7 +1054,7 @@ svg :is([fill="white"], [fill^="#fff"]) {
 </tr></thead>
 <tfoot><tr>
 <td class="left">Krishnan, et al.</td>
-<td class="center">Expires 19 December 2025</td>
+<td class="center">Expires 21 December 2025</td>
 <td class="right">[Page]</td>
 </tr></tfoot>
 </table>
@@ -1067,12 +1067,12 @@ svg :is([fill="white"], [fill^="#fff"]) {
 <dd class="internet-draft">draft-lkspa-wimse-verifiable-geo-fence-latest</dd>
 <dt class="label-published">Published:</dt>
 <dd class="published">
-<time datetime="2025-06-17" class="published">17 June 2025</time>
+<time datetime="2025-06-19" class="published">19 June 2025</time>
     </dd>
 <dt class="label-intended-status">Intended Status:</dt>
 <dd class="intended-status">Informational</dd>
 <dt class="label-expires">Expires:</dt>
-<dd class="expires"><time datetime="2025-12-19">19 December 2025</time></dd>
+<dd class="expires"><time datetime="2025-12-21">21 December 2025</time></dd>
 <dt class="label-authors">Authors:</dt>
 <dd class="authors">
 <div class="author">
@@ -1138,7 +1138,7 @@ svg :is([fill="white"], [fill^="#fff"]) {
         time. It is inappropriate to use Internet-Drafts as reference
         material or to cite them other than as "work in progress."<a href="#section-boilerplate.1-3" class="pilcrow">¶</a></p>
 <p id="section-boilerplate.1-4">
-        This Internet-Draft will expire on 19 December 2025.<a href="#section-boilerplate.1-4" class="pilcrow">¶</a></p>
+        This Internet-Draft will expire on 21 December 2025.<a href="#section-boilerplate.1-4" class="pilcrow">¶</a></p>
 </section>
 </div>
 <div id="copyright">
@@ -1220,103 +1220,80 @@ svg :is([fill="white"], [fill^="#fff"]) {
                     <p id="section-toc.1-1.7.2.1.2.1.1"><a href="#section-7.1.1" class="auto internal xref">7.1.1</a>.  <a href="#name-attestation-of-os-integrity" class="internal xref">Attestation of OS Integrity and Proof of Residency on Host</a></p>
 </li>
                   <li class="compact toc ulBare ulEmpty" id="section-toc.1-1.7.2.1.2.2">
-                    <p id="section-toc.1-1.7.2.1.2.2.1"><a href="#section-7.1.2" class="auto internal xref">7.1.2</a>.  <a href="#name-start-restart-time-attestat" class="internal xref">Start/Restart time attestation/remote verification of workload identity agent for integrity and proof of residency on Host</a></p>
+                    <p id="section-toc.1-1.7.2.1.2.2.1"><a href="#section-7.1.2" class="auto internal xref">7.1.2</a>.  <a href="#name-start-restart-time-attestat" class="internal xref">Start/Restart time attestation/remote verification of workload identity agent for integrity and proof of residency on Host - Linux IMA and Workload Identity Agent public/private key attestation are newly added</a></p>
 </li>
                 </ul>
+</li>
+              <li class="compact toc ulBare ulEmpty" id="section-toc.1-1.7.2.2">
+                <p id="section-toc.1-1.7.2.2.1"><a href="#section-7.2" class="auto internal xref">7.2</a>.  <a href="#name-workload-public-key-attesta" class="internal xref">Workload Public Key Attestation and Remote Verification - Key Steps - This is slightly modified from the current TPM plugin flow - Workload Identity Agent public/private key attestation instead of TPM AK attestation is the change</a></p>
+</li>
+              <li class="compact toc ulBare ulEmpty" id="section-toc.1-1.7.2.3">
+                <p id="section-toc.1-1.7.2.3.1"><a href="#section-7.3" class="auto internal xref">7.3</a>.  <a href="#name-geolocation-manager-and-hos" class="internal xref">Geolocation Manager and Host Composition change tracking</a></p>
+</li>
+              <li class="compact toc ulBare ulEmpty" id="section-toc.1-1.7.2.4">
+                <p id="section-toc.1-1.7.2.4.1"><a href="#section-7.4" class="auto internal xref">7.4</a>.  <a href="#name-workload-identity-agent-geo" class="internal xref">Workload Identity Agent Geolocation Gathering Workflow</a></p>
 </li>
             </ul>
 </li>
           <li class="compact toc ulBare ulEmpty" id="section-toc.1-1.8">
-            <p id="section-toc.1-1.8.1"><a href="#section-8" class="auto internal xref">8</a>.  <a href="#name-geolocation-manager-and-hos" class="internal xref">Geolocation Manager and Host Composition change tracking</a></p>
-<ul class="compact toc ulBare ulEmpty">
-<li class="compact toc ulBare ulEmpty" id="section-toc.1-1.8.2.1">
-                <p id="section-toc.1-1.8.2.1.1"><a href="#section-8.1" class="auto internal xref">8.1</a>.  <a href="#name-workload-identity-agent-geo" class="internal xref">Workload Identity Agent Geolocation Workflow</a></p>
-</li>
-              <li class="compact toc ulBare ulEmpty" id="section-toc.1-1.8.2.2">
-                <p id="section-toc.1-1.8.2.2.1"><a href="#section-8.2" class="auto internal xref">8.2</a>.  <a href="#name-workload-public-key-attesta" class="internal xref">Workload Public Key Attestation and Remote Verification - Key Steps - This is the current workflow used by workload identity agent with TPM plugin</a></p>
-</li>
-            </ul>
+            <p id="section-toc.1-1.8.1"><a href="#section-8" class="auto internal xref">8</a>.  <a href="#name-data-plane-http-networking-" class="internal xref">Data Plane - HTTP Networking Protocol</a></p>
 </li>
           <li class="compact toc ulBare ulEmpty" id="section-toc.1-1.9">
-            <p id="section-toc.1-1.9.1"><a href="#section-9" class="auto internal xref">9</a>.  <a href="#name-data-plane-networking-proto" class="internal xref">Data Plane - Networking Protocol Changes</a></p>
-<ul class="compact toc ulBare ulEmpty">
-<li class="compact toc ulBare ulEmpty" id="section-toc.1-1.9.2.1">
-                <p id="section-toc.1-1.9.2.1.1"><a href="#section-9.1" class="auto internal xref">9.1</a>.  <a href="#name-using-tls" class="internal xref">Using TLS</a></p>
-</li>
-              <li class="compact toc ulBare ulEmpty" id="section-toc.1-1.9.2.2">
-                <p id="section-toc.1-1.9.2.2.1"><a href="#section-9.2" class="auto internal xref">9.2</a>.  <a href="#name-not-using-tls" class="internal xref">Not Using TLS</a></p>
-</li>
-              <li class="compact toc ulBare ulEmpty" id="section-toc.1-1.9.2.3">
-                <p id="section-toc.1-1.9.2.3.1"><a href="#section-9.3" class="auto internal xref">9.3</a>.  <a href="#name-approaches" class="internal xref">Approaches</a></p>
-</li>
-            </ul>
+            <p id="section-toc.1-1.9.1"><a href="#section-9" class="auto internal xref">9</a>.  <a href="#name-solution-mapping-back-to-pr" class="internal xref">Solution mapping back to Problem Statements</a></p>
 </li>
           <li class="compact toc ulBare ulEmpty" id="section-toc.1-1.10">
-            <p id="section-toc.1-1.10.1"><a href="#section-10" class="auto internal xref">10</a>. <a href="#name-data-plane-http-header-enha" class="internal xref">Data Plane - HTTP header enhancement</a></p>
+            <p id="section-toc.1-1.10.1"><a href="#section-10" class="auto internal xref">10</a>. <a href="#name-data-plane-other-non-http-n" class="internal xref">Data Plane - Other (non HTTP) Networking Protocols</a></p>
 <ul class="compact toc ulBare ulEmpty">
 <li class="compact toc ulBare ulEmpty" id="section-toc.1-1.10.2.1">
-                <p id="section-toc.1-1.10.2.1.1"><a href="#section-10.1" class="auto internal xref">10.1</a>.  <a href="#name-thick-client-workload-lapto" class="internal xref">Thick client workload - Laptop/mobile host (e.g. microsoft teams laptop/desktop app), Data center host (e.g. microsoft teams server)</a></p>
+                <p id="section-toc.1-1.10.2.1.1"><a href="#section-10.1" class="auto internal xref">10.1</a>.  <a href="#name-using-tls" class="internal xref">Using TLS</a></p>
 </li>
               <li class="compact toc ulBare ulEmpty" id="section-toc.1-1.10.2.2">
-                <p id="section-toc.1-1.10.2.2.1"><a href="#section-10.2" class="auto internal xref">10.2</a>.  <a href="#name-thin-client-workload-laptop" class="internal xref">Thin client workload - Laptop/mobile host (e.g. microsoft teams browser app), Data center host (e.g. microsoft teams server)</a></p>
+                <p id="section-toc.1-1.10.2.2.1"><a href="#section-10.2" class="auto internal xref">10.2</a>.  <a href="#name-not-using-tls" class="internal xref">Not Using TLS</a></p>
 </li>
             </ul>
 </li>
           <li class="compact toc ulBare ulEmpty" id="section-toc.1-1.11">
-            <p id="section-toc.1-1.11.1"><a href="#section-11" class="auto internal xref">11</a>. <a href="#name-token-format" class="internal xref">Token Format</a></p>
-<ul class="compact toc ulBare ulEmpty">
-<li class="compact toc ulBare ulEmpty" id="section-toc.1-1.11.2.1">
-                <p id="section-toc.1-1.11.2.1.1"><a href="#section-11.1" class="auto internal xref">11.1</a>.  <a href="#name-host-workload-geographic-bo" class="internal xref">Host/Workload Geographic Boundary Token Structure</a></p>
-<ul class="compact toc ulBare ulEmpty">
-<li class="compact toc ulBare ulEmpty" id="section-toc.1-1.11.2.1.2.1">
-                    <p id="section-toc.1-1.11.2.1.2.1.1"><a href="#section-11.1.1" class="auto internal xref">11.1.1</a>.  <a href="#name-jwt-svid-structure" class="internal xref">JWT-SVID Structure</a></p>
-</li>
-                </ul>
-</li>
-              <li class="compact toc ulBare ulEmpty" id="section-toc.1-1.11.2.2">
-                <p id="section-toc.1-1.11.2.2.1"><a href="#section-11.2" class="auto internal xref">11.2</a>.  <a href="#name-x-workload-geo-id-structure" class="internal xref">X-Workload-Geo-ID Structure</a></p>
-</li>
-            </ul>
+            <p id="section-toc.1-1.11.1"><a href="#section-11" class="auto internal xref">11</a>. <a href="#name-scalability-considerations" class="internal xref">Scalability Considerations</a></p>
 </li>
           <li class="compact toc ulBare ulEmpty" id="section-toc.1-1.12">
-            <p id="section-toc.1-1.12.1"><a href="#section-12" class="auto internal xref">12</a>. <a href="#name-scalability-considerations" class="internal xref">Scalability Considerations</a></p>
+            <p id="section-toc.1-1.12.1"><a href="#section-12" class="auto internal xref">12</a>. <a href="#name-authorization-policy-implem" class="internal xref">Authorization Policy Implementers</a></p>
 </li>
           <li class="compact toc ulBare ulEmpty" id="section-toc.1-1.13">
-            <p id="section-toc.1-1.13.1"><a href="#section-13" class="auto internal xref">13</a>. <a href="#name-authorization-policy-implem" class="internal xref">Authorization Policy Implementers</a></p>
+            <p id="section-toc.1-1.13.1"><a href="#section-13" class="auto internal xref">13</a>. <a href="#name-security-considerations" class="internal xref">Security Considerations</a></p>
 </li>
           <li class="compact toc ulBare ulEmpty" id="section-toc.1-1.14">
-            <p id="section-toc.1-1.14.1"><a href="#section-14" class="auto internal xref">14</a>. <a href="#name-security-considerations" class="internal xref">Security Considerations</a></p>
+            <p id="section-toc.1-1.14.1"><a href="#section-14" class="auto internal xref">14</a>. <a href="#name-iana-considerations" class="internal xref">IANA Considerations</a></p>
 </li>
           <li class="compact toc ulBare ulEmpty" id="section-toc.1-1.15">
-            <p id="section-toc.1-1.15.1"><a href="#section-15" class="auto internal xref">15</a>. <a href="#name-iana-considerations" class="internal xref">IANA Considerations</a></p>
+            <p id="section-toc.1-1.15.1"><a href="#section-15" class="auto internal xref">15</a>. <a href="#name-appendix-items-to-follow-up" class="internal xref">Appendix - Items to follow up</a></p>
+<ul class="compact toc ulBare ulEmpty">
+<li class="compact toc ulBare ulEmpty" id="section-toc.1-1.15.2.1">
+                <p id="section-toc.1-1.15.2.1.1"><a href="#section-15.1" class="auto internal xref">15.1</a>.  <a href="#name-todo-1-restart-time-attesta" class="internal xref">TODO 1: Restart time attestation/remote verification of workload identity agent for integrity and proof of residency on Host</a></p>
+</li>
+              <li class="compact toc ulBare ulEmpty" id="section-toc.1-1.15.2.2">
+                <p id="section-toc.1-1.15.2.2.1"><a href="#section-15.2" class="auto internal xref">15.2</a>.  <a href="#name-todo-2-location-privacy-opt" class="internal xref">TODO 2: Location privacy options</a></p>
+</li>
+            </ul>
 </li>
           <li class="compact toc ulBare ulEmpty" id="section-toc.1-1.16">
-            <p id="section-toc.1-1.16.1"><a href="#section-16" class="auto internal xref">16</a>. <a href="#name-appendix-items-to-follow-up" class="internal xref">Appendix - Items to follow up</a></p>
-<ul class="compact toc ulBare ulEmpty">
-<li class="compact toc ulBare ulEmpty" id="section-toc.1-1.16.2.1">
-                <p id="section-toc.1-1.16.2.1.1"><a href="#section-16.1" class="auto internal xref">16.1</a>.  <a href="#name-restart-time-attestation-re" class="internal xref">Restart time attestation/remote verification of workload identity agent for integrity and proof of residency on Host</a></p>
-</li>
-            </ul>
+            <p id="section-toc.1-1.16.1"><a href="#section-16" class="auto internal xref"></a><a href="#name-acknowledgments" class="internal xref">Acknowledgments</a></p>
 </li>
           <li class="compact toc ulBare ulEmpty" id="section-toc.1-1.17">
-            <p id="section-toc.1-1.17.1"><a href="#section-17" class="auto internal xref"></a><a href="#name-acknowledgments" class="internal xref">Acknowledgments</a></p>
-</li>
-          <li class="compact toc ulBare ulEmpty" id="section-toc.1-1.18">
-            <p id="section-toc.1-1.18.1"><a href="#section-18" class="auto internal xref"></a><a href="#name-references" class="internal xref">References</a></p>
+            <p id="section-toc.1-1.17.1"><a href="#section-17" class="auto internal xref"></a><a href="#name-references" class="internal xref">References</a></p>
 <ul class="compact toc ulBare ulEmpty">
-<li class="compact toc ulBare ulEmpty" id="section-toc.1-1.18.2.1">
-                <p id="section-toc.1-1.18.2.1.1"><a href="#section-18.1" class="auto internal xref"></a><a href="#name-normative-references" class="internal xref">Normative References</a></p>
+<li class="compact toc ulBare ulEmpty" id="section-toc.1-1.17.2.1">
+                <p id="section-toc.1-1.17.2.1.1"><a href="#section-17.1" class="auto internal xref"></a><a href="#name-normative-references" class="internal xref">Normative References</a></p>
 </li>
-              <li class="compact toc ulBare ulEmpty" id="section-toc.1-1.18.2.2">
-                <p id="section-toc.1-1.18.2.2.1"><a href="#section-18.2" class="auto internal xref"></a><a href="#name-informative-references" class="internal xref">Informative References</a></p>
+              <li class="compact toc ulBare ulEmpty" id="section-toc.1-1.17.2.2">
+                <p id="section-toc.1-1.17.2.2.1"><a href="#section-17.2" class="auto internal xref"></a><a href="#name-informative-references" class="internal xref">Informative References</a></p>
 </li>
             </ul>
 </li>
-          <li class="compact toc ulBare ulEmpty" id="section-toc.1-1.19">
-            <p id="section-toc.1-1.19.1"><a href="#appendix-A" class="auto internal xref"></a><a href="#name-contributors" class="internal xref">Contributors</a></p>
+          <li class="compact toc ulBare ulEmpty" id="section-toc.1-1.18">
+            <p id="section-toc.1-1.18.1"><a href="#appendix-A" class="auto internal xref"></a><a href="#name-contributors" class="internal xref">Contributors</a></p>
 </li>
-          <li class="compact toc ulBare ulEmpty" id="section-toc.1-1.20">
-            <p id="section-toc.1-1.20.1"><a href="#appendix-B" class="auto internal xref"></a><a href="#name-authors-addresses" class="internal xref">Authors' Addresses</a></p>
+          <li class="compact toc ulBare ulEmpty" id="section-toc.1-1.19">
+            <p id="section-toc.1-1.19.1"><a href="#appendix-B" class="auto internal xref"></a><a href="#name-authors-addresses" class="internal xref">Authors' Addresses</a></p>
 </li>
         </ul>
 </nav>
@@ -1523,482 +1500,442 @@ This attestation includes data about the TPM's state and can be used to verify t
 <p id="section-7.1.1-6"><strong>Remote Verification</strong>: The remote Workload Identity Manager checks the integrity of the attestation report and validates the measurements against known good values from the set of trusted hosts in the shared data store. The shared data store can be split as follows for higher security - (1) Host TPM EKs (e.g., MDM) used by Workload Identity Manager and (2) Host TPM EKs + Geolocation sensor details (e.g., location sensor hardware database). The Workload Identity Manager also validates that the TPM EK certificate has not been revoked and is part of the approved list of TPM EK identifiers associated with the hardware platform. At this point, we can be sure that the hardware platform is approved for running workloads and is running an approved OS.<a href="#section-7.1.1-6" class="pilcrow">¶</a></p>
 </section>
 </div>
-<div id="startrestart-time-attestationremote-verification-of-workload-identity-agent-for-integrity-and-proof-of-residency-on-host">
+<div id="startrestart-time-attestationremote-verification-of-workload-identity-agent-for-integrity-and-proof-of-residency-on-host-linux-ima-and-workload-identity-agent-publicprivate-key-attestation-are-newly-added">
 <section id="section-7.1.2">
           <h4 id="name-start-restart-time-attestat">
-<a href="#section-7.1.2" class="section-number selfRef">7.1.2. </a><a href="#name-start-restart-time-attestat" class="section-name selfRef">Start/Restart time attestation/remote verification of workload identity agent for integrity and proof of residency on Host</a>
+<a href="#section-7.1.2" class="section-number selfRef">7.1.2. </a><a href="#name-start-restart-time-attestat" class="section-name selfRef">Start/Restart time attestation/remote verification of workload identity agent for integrity and proof of residency on Host - Linux IMA and Workload Identity Agent public/private key attestation are newly added</a>
           </h4>
-<p id="section-7.1.2-1">As part of workload identity agent start process, Linux Integrity Measurement Architecture (Linux IMA) is used to ensure that only approved executable for agent is loaded.<a href="#section-7.1.2-1" class="pilcrow">¶</a></p>
-<p id="section-7.1.2-2"><strong>Measurement collection</strong>: For the workload identity agent start case, the agent executable is measured by Linux IMA, for example through cloud init and stored in TPM PCR through tools e.g., Linux ima-evm-utils before it is loaded. For the workload identity agent restart case, it is not clear how the storage in TPM PCR will be accompished - TODO - ideally this should be natively handled in the IMA measurement process with an ability to retrigger on restart on refresh cycles.<a href="#section-7.1.2-2" class="pilcrow">¶</a></p>
+<p id="section-7.1.2-1">The workload identity agent is a process with elevated privileges with access to TPM and location sensor hardware.<a href="#section-7.1.2-1" class="pilcrow">¶</a></p>
+<p id="section-7.1.2-2"><strong>Measurement collection</strong>: For the workload identity agent start case, the agent executable is measured by Linux IMA, for example through cloud init and stored in TPM PCR through tools e.g., Linux ima-evm-utils before it is loaded. For the workload identity agent restart case, it is not clear how the storage in TPM PCR will be accompished - ideally this should be natively handled in the IMA measurement process with an ability to retrigger on restart on refresh cycles (see TODO 1).<a href="#section-7.1.2-2" class="pilcrow">¶</a></p>
 <p id="section-7.1.2-3"><strong>Local Verification</strong>: Enforce local validation of a measurement against an approved value stored in an extended attribute of the file.<a href="#section-7.1.2-3" class="pilcrow">¶</a></p>
 <p id="section-7.1.2-4"><strong>TPM attestation and remote Workload Identity Manager verification</strong>:<a href="#section-7.1.2-4" class="pilcrow">¶</a></p>
+<p id="section-7.1.2-5">Step 1:
+  * Workload Identity Agent generates a attestation key (AK) using TPM for proof of residency on H.<a href="#section-7.1.2-5" class="pilcrow">¶</a></p>
 <ul class="normal">
-<li class="normal" id="section-7.1.2-5.1">
-              <p id="section-7.1.2-5.1.1">Workload Identity Agent generates a private/public key pair and attestation key (AK) using TPM for proof of residency on H.<a href="#section-7.1.2-5.1.1" class="pilcrow">¶</a></p>
+<li class="normal" id="section-7.1.2-6.1">
+              <p id="section-7.1.2-6.1.1">Workload Identity Agent sends the AK attestation parameters (PCR quote, attestation public key, etc.) and EK certificate to the Workload Identity Manager.<a href="#section-7.1.2-6.1.1" class="pilcrow">¶</a></p>
 </li>
-            <li class="normal" id="section-7.1.2-5.2">
-              <p id="section-7.1.2-5.2.1">Workload Identity Agent sends the public key and AK attestation parameters (PCR quote, workload attestation public key, etc.) and EK certificate to the Workload Identity Manager.<a href="#section-7.1.2-5.2.1" class="pilcrow">¶</a></p>
+            <li class="normal" id="section-7.1.2-6.2">
+              <p id="section-7.1.2-6.2.1">Workload Identity Manager inspects EK certificate. If CA path exists, and the EK certificate was signed by any chain in CA path, validation passes.<a href="#section-7.1.2-6.2.1" class="pilcrow">¶</a></p>
 </li>
-            <li class="normal" id="section-7.1.2-5.3">
-              <p id="section-7.1.2-5.3.1">Workload Identity Manager inspects EK certificate. If CA path exists, and the EK certificate was signed by any chain in CA path, validation passes.<a href="#section-7.1.2-5.3.1" class="pilcrow">¶</a></p>
+            <li class="normal" id="section-7.1.2-6.3">
+              <p id="section-7.1.2-6.3.1">If validation passed, the Workload Identity Manager generates a credential activation challenge. The challenge's secret is encrypted using the EK public key and separately using the workload identity agent public key.<a href="#section-7.1.2-6.3.1" class="pilcrow">¶</a></p>
 </li>
-            <li class="normal" id="section-7.1.2-5.4">
-              <p id="section-7.1.2-5.4.1">If validation passed, the Workload Identity Manager generates a credential activation challenge. The challenge's secret is encrypted using the EK public key and separately using the workload identity agent public key.<a href="#section-7.1.2-5.4.1" class="pilcrow">¶</a></p>
+            <li class="normal" id="section-7.1.2-6.4">
+              <p id="section-7.1.2-6.4.1">Workload Identity Manager sends challenge to workload identity agent.<a href="#section-7.1.2-6.4.1" class="pilcrow">¶</a></p>
 </li>
-            <li class="normal" id="section-7.1.2-5.5">
-              <p id="section-7.1.2-5.5.1">Workload Identity Manager sends challenge to workload identity agent.<a href="#section-7.1.2-5.5.1" class="pilcrow">¶</a></p>
+            <li class="normal" id="section-7.1.2-6.5">
+              <p id="section-7.1.2-6.5.1">Workload Identity Agent decrypts the challenge's secret.<a href="#section-7.1.2-6.5.1" class="pilcrow">¶</a></p>
 </li>
-            <li class="normal" id="section-7.1.2-5.6">
-              <p id="section-7.1.2-5.6.1">Workload Identity Agent decrypts the challenge's secret.<a href="#section-7.1.2-5.6.1" class="pilcrow">¶</a></p>
+            <li class="normal" id="section-7.1.2-6.6">
+              <p id="section-7.1.2-6.6.1">Workload Identity Agent sends back decrypted secret.<a href="#section-7.1.2-6.6.1" class="pilcrow">¶</a></p>
 </li>
-            <li class="normal" id="section-7.1.2-5.7">
-              <p id="section-7.1.2-5.7.1">Workload Identity Agent sends back decrypted secret.<a href="#section-7.1.2-5.7.1" class="pilcrow">¶</a></p>
+            <li class="normal" id="section-7.1.2-6.7">
+              <p id="section-7.1.2-6.7.1">Workload Identity Manager verifies that the decrypted secret is the same it used to build the challenge.<a href="#section-7.1.2-6.7.1" class="pilcrow">¶</a></p>
 </li>
-            <li class="normal" id="section-7.1.2-5.8">
-              <p id="section-7.1.2-5.8.1">Workload Identity Manager verifies that the decrypted secret is the same it used to build the challenge.<a href="#section-7.1.2-5.8.1" class="pilcrow">¶</a></p>
+            <li class="normal" id="section-7.1.2-6.8">
+              <p id="section-7.1.2-6.8.1">Workload Identity Manager creates a workload identity agent ID (SPIFFE ID) with the TPM AK public key and TPM EK attestation proof of TPM AK.<a href="#section-7.1.2-6.8.1" class="pilcrow">¶</a></p>
 </li>
-            <li class="normal" id="section-7.1.2-5.9">
-              <p id="section-7.1.2-5.9.1">Workload Identity Manager creates a SPIFFE ID along with the SHA-256 sum of the TPM AK public key appended with the SHA-256 sum of the workload identity agent public key. Workload Identity Manager stores workload identity agent SPIFFE ID mapping to TPM AK public key in a shared data store.<a href="#section-7.1.2-5.9.1" class="pilcrow">¶</a></p>
+          </ul>
+<p id="section-7.1.2-7">Step 2:
+  * Workload Identity Agent generates a private/public key pair.<a href="#section-7.1.2-7" class="pilcrow">¶</a></p>
+<ul class="normal">
+<li class="normal" id="section-7.1.2-8.1">
+              <p id="section-7.1.2-8.1.1">Workload Identity Agent sends the public key signed by TPM AK, to the Workload Identity Manager.<a href="#section-7.1.2-8.1.1" class="pilcrow">¶</a></p>
+</li>
+            <li class="normal" id="section-7.1.2-8.2">
+              <p id="section-7.1.2-8.2.1">Workload Identity Manager ensures the TPM AK is associated with a valid workload identity agent ID.<a href="#section-7.1.2-8.2.1" class="pilcrow">¶</a></p>
+</li>
+            <li class="normal" id="section-7.1.2-8.3">
+              <p id="section-7.1.2-8.3.1">If validation passed, the Workload Identity Manager generates a credential activation challenge. The challenge's secret is encrypted using the workload identity agent public key.<a href="#section-7.1.2-8.3.1" class="pilcrow">¶</a></p>
+</li>
+            <li class="normal" id="section-7.1.2-8.4">
+              <p id="section-7.1.2-8.4.1">Workload Identity Manager sends challenge to workload identity agent.<a href="#section-7.1.2-8.4.1" class="pilcrow">¶</a></p>
+</li>
+            <li class="normal" id="section-7.1.2-8.5">
+              <p id="section-7.1.2-8.5.1">Workload Identity Agent decrypts the challenge's secret.<a href="#section-7.1.2-8.5.1" class="pilcrow">¶</a></p>
+</li>
+            <li class="normal" id="section-7.1.2-8.6">
+              <p id="section-7.1.2-8.6.1">Workload Identity Agent sends back decrypted secret.<a href="#section-7.1.2-8.6.1" class="pilcrow">¶</a></p>
+</li>
+            <li class="normal" id="section-7.1.2-8.7">
+              <p id="section-7.1.2-8.7.1">Workload Identity Manager verifies that the decrypted secret is the same it used to build the challenge.<a href="#section-7.1.2-8.7.1" class="pilcrow">¶</a></p>
+</li>
+            <li class="normal" id="section-7.1.2-8.8">
+              <p id="section-7.1.2-8.8.1">Workload Identity Manager modifies the current workload identity agent ID (SPIFFE ID) to include the workload identity agent public key and TPM AK signature of workload identity agent public key.<a href="#section-7.1.2-8.8.1" class="pilcrow">¶</a></p>
 </li>
           </ul>
 </section>
 </div>
 </section>
 </div>
+<div id="workload-public-key-attestation-and-remote-verification-key-steps-this-is-slightly-modified-from-the-current-tpm-plugin-flow-workload-identity-agent-publicprivate-key-attestation-instead-of-tpm-ak-attestation-is-the-change">
+<section id="section-7.2">
+        <h3 id="name-workload-public-key-attesta">
+<a href="#section-7.2" class="section-number selfRef">7.2. </a><a href="#name-workload-public-key-attesta" class="section-name selfRef">Workload Public Key Attestation and Remote Verification - Key Steps - This is slightly modified from the current TPM plugin flow - Workload Identity Agent public/private key attestation instead of TPM AK attestation is the change</a>
+        </h3>
+<ul class="normal">
+<li class="normal" id="section-7.2-1.1">
+            <p id="section-7.2-1.1.1">Workload Identity Agent ensures that workload connects to it on a host-local socket (e.g., Unix-domain socket). Workload Identity Agent generates private/public key pair for workload. Workload Identity Agent signs the workload public key with its private key. Workload Identity Agent sends the signed workload public key along with its workload identity agent ID (SPIFFE ID) to workload identity manager. Note that the workload identity agent ID is already verified by the Workload Identity Manager as part of the workload identity agent attestation process, establishing proof of residency of workload identity agent to host.<a href="#section-7.2-1.1.1" class="pilcrow">¶</a></p>
+</li>
+          <li class="normal" id="section-7.2-1.2">
+            <p id="section-7.2-1.2.1">Workload Identity Manager verifies that the workload identity agent ID is present in the shared data store. Workload Identity Manager verifies the workload public key signature using the workload identity agent public key. Workload Identity Manager then sends an encrypted challenge to the workload identity agent. The challenge's secret is encrypted using the workload public key.<a href="#section-7.2-1.2.1" class="pilcrow">¶</a></p>
+</li>
+          <li class="normal" id="section-7.2-1.3">
+            <p id="section-7.2-1.3.1">Workload Identity Agent decrypts the challenge using its workload private key and sends the response back to the Workload Identity Manager.<a href="#section-7.2-1.3.1" class="pilcrow">¶</a></p>
+</li>
+          <li class="normal" id="section-7.2-1.4">
+            <p id="section-7.2-1.4.1">Workload Identity Manager verifies that the decrypted secret is the same it used to build the challenge. It then issues workload id (e.g. SPIFFE ID) for workload public key. The workload is signed by the workload identity manager and contains the workload public key and workload identity agent ID.<a href="#section-7.2-1.4.1" class="pilcrow">¶</a></p>
+</li>
+          <li class="normal" id="section-7.2-1.5">
+            <p id="section-7.2-1.5.1">Workload gets its private key and workload ID from Workload Identity Agent.<a href="#section-7.2-1.5.1" class="pilcrow">¶</a></p>
+</li>
+        </ul>
 </section>
 </div>
 <div id="geolocation-manager-and-host-composition-change-tracking">
-<section id="section-8">
-      <h2 id="name-geolocation-manager-and-hos">
-<a href="#section-8" class="section-number selfRef">8. </a><a href="#name-geolocation-manager-and-hos" class="section-name selfRef">Geolocation Manager and Host Composition change tracking</a>
-      </h2>
-<p id="section-8-1">Geolocation Manager runs outside of host -- besides the location from device location sources (e.g., GNSS), it will connect to mobile location service providers (e.g., Telefonica) using GSMA location API (gsma-loc). This described process below is run periodically (say every 5 minutes) to check if the host composition has changed.<a href="#section-8-1" class="pilcrow">¶</a></p>
-<ul class="normal">
-<li class="normal" id="section-8-2.1">
-          <p id="section-8-2.1.1">Workload Identity Agent periodically gathers host composition details (e.g. SIM card, location sensor) and sends to
-Geolocation Manager.<a href="#section-8-2.1.1" class="pilcrow">¶</a></p>
-</li>
-        <li class="normal" id="section-8-2.2">
-          <p id="section-8-2.2.1">Geolocation Manager can cross verify that the components of the host are still intact or if anything is plugged out. Plugging out components can decrease the quality of location. Host composition comprises TPM EK, GNSS sensor hardware id, Mobile sensor hardware id, Mobile-SIM IMSI, etc. Refer to Host Composition Table for further details. Note that e-SIM does not have the plugging out problem like standard SIM but could be subject to e-SIM swap attack.<a href="#section-8-2.2.1" class="pilcrow">¶</a></p>
-</li>
-      </ul>
-<div id="workload-identity-agent-geolocation-workflow">
-<section id="section-8.1">
-        <h3 id="name-workload-identity-agent-geo">
-<a href="#section-8.1" class="section-number selfRef">8.1. </a><a href="#name-workload-identity-agent-geo" class="section-name selfRef">Workload Identity Agent Geolocation Workflow</a>
+<section id="section-7.3">
+        <h3 id="name-geolocation-manager-and-hos">
+<a href="#section-7.3" class="section-number selfRef">7.3. </a><a href="#name-geolocation-manager-and-hos" class="section-name selfRef">Geolocation Manager and Host Composition change tracking</a>
         </h3>
-<p id="section-8.1-1">This described process below is run periodically (say every .5 minutes or 30 seconds for frequently mobile hosts such as smartphones; say every 5 minutes for less frequently mobile hosts such as laptops; say every 50 minutes for stationary hosts) to check if the host's location has changed and get an attested location.<a href="#section-8.1-1" class="pilcrow">¶</a></p>
+<p id="section-7.3-1">Geolocation Manager runs outside of host -- besides the location from device location sources (e.g., GNSS), it will connect to mobile location service providers (e.g., Telefonica) using GSMA location API (gsma-loc). This described process below is run periodically (say every 5 minutes) to check if the host hardware composition has changed. Host hardware composition comprises TPM EK, GNSS sensor hardware id, Mobile sensor hardware id (IMEI), Mobile-SIM IMSI. Note that this workflow is feasible only in enterprise environments where the host hardware is owned and managed by the enterprise.<a href="#section-7.3-1" class="pilcrow">¶</a></p>
 <ul class="normal">
-<li class="normal" id="section-8.1-2.1">
-            <p id="section-8.1-2.1.1">Workload Identity Agent gathers the location from host-local location sensors (e.g., GNSS) and/or location providers (e.g. Google, Apple). Location has a quality associated with it. For example, IP address-based location is of lower quality as compared to other sources. The location is signed by TPM AK along with a timestamp. Workload Identity Agent provides the signed location to Workload Identity Manager using a nonce protocol to prevent replay attacks.<a href="#section-8.1-2.1.1" class="pilcrow">¶</a></p>
+<li class="normal" id="section-7.3-2.1">
+            <p id="section-7.3-2.1.1">Workload Identity Agent periodically gathers host composition details (e.g. Mobile sensor hardware id (IMEI), Mobile-SIM IMSI) and sends to Geolocation Manager.<a href="#section-7.3-2.1.1" class="pilcrow">¶</a></p>
 </li>
-          <li class="normal" id="section-8.1-2.2">
-            <p id="section-8.1-2.2.1">Workload Identity Manager verifies the TPM AK of the signed location from the workload identity agent and provides it to Geolocation Manager.<a href="#section-8.1-2.2.1" class="pilcrow">¶</a></p>
-</li>
-          <li class="normal" id="section-8.1-2.3">
-            <p id="section-8.1-2.3.1">Geolocation Manager derives a combined location, including location quality, from various location sensors for a host with multiple location sensors -- this includes the gathered location from workload identity agent running on host. As an example, GNSS is considered less trustworthy as compared to mobile.<a href="#section-8.1-2.3.1" class="pilcrow">¶</a></p>
-</li>
-          <li class="normal" id="section-8.1-2.4">
-            <p id="section-8.1-2.4.1">Geolocation Manager composite location comprises combined geolocation (which includes location quality), host composition (TPM EK, mobile-SIM, etc.), and time from a trusted source.<a href="#section-8.1-2.4.1" class="pilcrow">¶</a></p>
-</li>
-          <li class="normal" id="section-8.1-2.5">
-            <p id="section-8.1-2.5.1">Geolocation Manager converts the composite location to a geographic boundary comprising of city, state and country.<a href="#section-8.1-2.5.1" class="pilcrow">¶</a></p>
-</li>
-          <li class="normal" id="section-8.1-2.6">
-            <p id="section-8.1-2.6.1">Geolocation Manager signs the geographic boundary with a private key. The public key certificate of Geolocation Manager is in a public, trusted, transparent ledger such as a certificate transparency log. Geolocation Manager provides the signed geographic boundary to the Workload Identity Manager.<a href="#section-8.1-2.6.1" class="pilcrow">¶</a></p>
-</li>
-          <li class="normal" id="section-8.1-2.7">
-            <p id="section-8.1-2.7.1">Workload Identity Manager generates a host/workload geographic boundary token using the following fields - (1) issue time, (2) expiry time, (3) monotonically increasing nonce for troubleshooting, (4) Host TPM EK, (5) geographic boundary from geolocation manager, (6) workload agent ID (7) workload IDs (applicable to thick clients) - and attests it using its private key generating a host/workload geographic boundary token.<a href="#section-8.1-2.7.1" class="pilcrow">¶</a></p>
-</li>
-          <li class="normal" id="section-8.1-2.8">
-            <p id="section-8.1-2.8.1">The geographic boundary token is returned to the workload identity agent. The public key certificate of Workload Identity Manager is in a public, trusted, transparent ledger such as a certificate transparency log and verifiable by the Workload Identity Agent.<a href="#section-8.1-2.8.1" class="pilcrow">¶</a></p>
+          <li class="normal" id="section-7.3-2.2">
+            <p id="section-7.3-2.2.1">Geolocation Manager can cross verify that the components of the host are still intact or if anything is plugged out. Plugging out components can decrease the quality of location. Host hardware composition comprises TPM EK, GNSS sensor hardware id, Mobile sensor hardware id (IMEI), Mobile-SIM IMSI. Note that e-SIM does not have the plugging out problem like standard SIM but could be subject to e-SIM swap attack.<a href="#section-7.3-2.2.1" class="pilcrow">¶</a></p>
 </li>
         </ul>
-<p id="section-8.1-3"><strong>Privacy centric design option</strong>: Workload Identity Agent converts the gelocation to a geographic boundary comprising of city, state and country, before sending it to the workload identity manager. This way, the workload identity manager does not have access to the exact location of the host. The geographic boundary token is still signed by the Geolocation Manager and Workload Identity Manager.<a href="#section-8.1-3" class="pilcrow">¶</a></p>
-<p id="section-8.1-4"><strong>Mobile network trust design option</strong>: The mobile network operator can provide the location of the host to the Geolocation Manager, which can then derive the geographic boundary. This is useful for mobile devices that may not have GNSS sensors or when GNSS is not available (e.g., indoors) or when GNSS (e.g. GPS) location is subject to spoofing. The mobile network operator can provide the location of the host based on the mobile network's knowledge of the device's location, which is more trustworthy than the device's own location sensors.<a href="#section-8.1-4" class="pilcrow">¶</a></p>
 </section>
 </div>
-<div id="workload-public-key-attestation-and-remote-verification-key-steps-this-is-the-current-workflow-used-by-workload-identity-agent-with-tpm-plugin">
-<section id="section-8.2">
-        <h3 id="name-workload-public-key-attesta">
-<a href="#section-8.2" class="section-number selfRef">8.2. </a><a href="#name-workload-public-key-attesta" class="section-name selfRef">Workload Public Key Attestation and Remote Verification - Key Steps - This is the current workflow used by workload identity agent with TPM plugin</a>
+<div id="workload-identity-agent-geolocation-gathering-workflow">
+<section id="section-7.4">
+        <h3 id="name-workload-identity-agent-geo">
+<a href="#section-7.4" class="section-number selfRef">7.4. </a><a href="#name-workload-identity-agent-geo" class="section-name selfRef">Workload Identity Agent Geolocation Gathering Workflow</a>
         </h3>
-<p id="section-8.2-1">Workload Identity Agent ensures that workload connects to it on a host-local socket (e.g., Unix-domain socket). Workload Identity Agent generates private/public key pair for workload. Workload Identity Agent signs the workload public key with its TPM AK. Workload Identity Agent sends the signed workload public key along with its SPIFFE ID. Note that the TPM AK is already verified by the Workload Identity Manager as part of the workload identity agent attestation process, establishing proof of residency of workload identity agent to host.<a href="#section-8.2-1" class="pilcrow">¶</a></p>
-<p id="section-8.2-2">Workload Identity Manager gets the workload identity agent TPM AK public key from the SPIFFE ID by looking it up in the shared data store. Workload Identity Manager verifies the workload public key signature using the TPM AK public key. Workload Identity Manager then sends an encrypted challenge to the workload identity agent. The challenge's secret is encrypted using the workload public key.<a href="#section-8.2-2" class="pilcrow">¶</a></p>
-<p id="section-8.2-3">Workload Identity Agent decrypts the challenge using its workload private key and sends the response back to the Workload Identity Manager.<a href="#section-8.2-3" class="pilcrow">¶</a></p>
-<p id="section-8.2-4">Workload Identity Manager verifies that the decrypted secret is the same it used to build the challenge. It then issues workload id (e.g. SPIFFE ID) for workload public key. The workload is signed by the workload identity manager and contains the workload public key and TPM AK.<a href="#section-8.2-4" class="pilcrow">¶</a></p>
-<p id="section-8.2-5">Workload gets the its private key and workload ID from Workload Identity Agent.<a href="#section-8.2-5" class="pilcrow">¶</a></p>
+<p id="section-7.4-1">This described process below is run periodically (say every .5 minutes or 30 seconds for frequently mobile hosts such as smartphones; say every 5 minutes for less frequently mobile hosts such as laptops; say every 50 minutes for stationary hosts) to check if the host's location has changed and get an attested location.<a href="#section-7.4-1" class="pilcrow">¶</a></p>
+<ul class="normal">
+<li class="normal" id="section-7.4-2.1">
+            <p id="section-7.4-2.1.1">Workload Identity Agent gathers the location (1) directly from host-local location sensors (e.g., GNSS) which provide a hardware attested location and/or (2) using existing Operating System (OS) APIs which gathers a composite location from location providers (e.g. Google, Apple). Location has a quality associated with it. For example, IP address based or Wi-Fi based location is of lower quality as compared to other sources. If the location is gathered only using existing OS APIs, it may be done in the workload (thick client) or browser extension (thin client).<a href="#section-7.4-2.1.1" class="pilcrow">¶</a></p>
+</li>
+          <li class="normal" id="section-7.4-2.2">
+            <p id="section-7.4-2.2.1">For each of the registered workload IDs (or website URL), based on the configured location policy (precise, approximated within a fixed radius, geographic region based indicating city/state/country - TODO 2), the location is converted appropriately to a workload id specific location. For thin clients (browser clients), the workload id is website URL. This ensures that the privacy of the workload is preserved, while still allowing for geolocation enforcement.<a href="#section-7.4-2.2.1" class="pilcrow">¶</a></p>
+</li>
+          <li class="normal" id="section-7.4-2.3">
+            <p id="section-7.4-2.3.1">All the above details are captured in the host/workload geographic boundary information which contains the following fields:<a href="#section-7.4-2.3.1" class="pilcrow">¶</a></p>
+<ul class="normal">
+<li class="normal" id="section-7.4-2.3.2.1">
+                <p id="section-7.4-2.3.2.1.1">Workload ID specific location details for each client workload where each entry contains:<a href="#section-7.4-2.3.2.1.1" class="pilcrow">¶</a></p>
+<ul class="normal">
+<li class="normal" id="section-7.4-2.3.2.1.2.1">
+                    <p id="section-7.4-2.3.2.1.2.1.1">client workload ID - relevant for thick clients (e.g. Microsoft Teams client)<a href="#section-7.4-2.3.2.1.2.1.1" class="pilcrow">¶</a></p>
+</li>
+                  <li class="normal" id="section-7.4-2.3.2.1.2.2">
+                    <p id="section-7.4-2.3.2.1.2.2.1">server workload ID (or website URL) - relevant for all clients (thick or thin)<a href="#section-7.4-2.3.2.1.2.2.1" class="pilcrow">¶</a></p>
+</li>
+                  <li class="normal" id="section-7.4-2.3.2.1.2.3">
+                    <p id="section-7.4-2.3.2.1.2.3.1">client location type (e.g. precise, approximated, geographic region based)<a href="#section-7.4-2.3.2.1.2.3.1" class="pilcrow">¶</a></p>
+</li>
+                  <li class="normal" id="section-7.4-2.3.2.1.2.4">
+                    <p id="section-7.4-2.3.2.1.2.4.1">client location (e.g. latitude/longitude, city/state/country)<a href="#section-7.4-2.3.2.1.2.4.1" class="pilcrow">¶</a></p>
+</li>
+                  <li class="normal" id="section-7.4-2.3.2.1.2.5">
+                    <p id="section-7.4-2.3.2.1.2.5.1">client location quality (e.g. GNSS, mobile network, Wi-Fi, IP address)<a href="#section-7.4-2.3.2.1.2.5.1" class="pilcrow">¶</a></p>
+</li>
+                </ul>
+</li>
+              <li class="normal" id="section-7.4-2.3.2.2">
+                <p id="section-7.4-2.3.2.2.1">Time of collection (timestamp)<a href="#section-7.4-2.3.2.2.1" class="pilcrow">¶</a></p>
+</li>
+            </ul>
+</li>
+          <li class="normal" id="section-7.4-2.4">
+            <p id="section-7.4-2.4.1">It is important to note that the host/workload geographic boundary information is kept in the workload identity agent memory and is not stored on disk. The information is refreshed periodically to ensure that the location is up-to-date. This information is used only by workloads in the host and never leaves the host.<a href="#section-7.4-2.4.1" class="pilcrow">¶</a></p>
+</li>
+        </ul>
 </section>
 </div>
 </section>
 </div>
-<div id="data-plane-networking-protocol-changes">
-<section id="section-9">
-      <h2 id="name-data-plane-networking-proto">
-<a href="#section-9" class="section-number selfRef">9. </a><a href="#name-data-plane-networking-proto" class="section-name selfRef">Data Plane - Networking Protocol Changes</a>
+<div id="data-plane-http-networking-protocol">
+<section id="section-8">
+      <h2 id="name-data-plane-http-networking-">
+<a href="#section-8" class="section-number selfRef">8. </a><a href="#name-data-plane-http-networking-" class="section-name selfRef">Data Plane - HTTP Networking Protocol</a>
       </h2>
-<p id="section-9-1">Workload ID (e.g. SPIFFE ID) and host/workload geographic boundary token, needs to be conveyed to the peer during connection establishment. The connection is end-to-end across proxies like:<a href="#section-9-1" class="pilcrow">¶</a></p>
+<p id="section-8-1">A new HTTP header field 'X-Workload-Geo-ID' is proposed for conveying the host/workload geographic boundary information. A new HTTP header field 'X-Request-Signature' is proposed for conveying the signature of the HTTP request. The signature is generated by the workload identity agent using the workload identity agent private key. The following steps describe the end-to-end workflow for HTTP requests between client workloads (e.g. microsoft teams thick client app, microsoft teams thin client browser app) and server workloads (e.g. microsoft teams server), including intermediate proxies (e.g., API gateways, SASE firewalls):<a href="#section-8-1" class="pilcrow">¶</a></p>
+<ul class="normal">
+<li class="normal" id="section-8-2.1">
+          <p id="section-8-2.1.1">Client workload gets Oauth bearer token for the server workload from the Authentication/Authorization server.<a href="#section-8-2.1.1" class="pilcrow">¶</a></p>
+</li>
+        <li class="normal" id="section-8-2.2">
+          <p id="section-8-2.2.1">Client workload (browser extension for thin client) contacts the workload identity agent to get the latest host/workload geographic boundary information relevant to it. The client workload (browser extension for thin client) constructs a X-Workload-Geo-ID extension header containing the following fields:<a href="#section-8-2.2.1" class="pilcrow">¶</a></p>
+<ul class="normal">
+<li class="normal" id="section-8-2.2.2.1">
+              <p id="section-8-2.2.2.1.1">The latest host/workload geographic boundary information relevant to the requesting client workload ID.<a href="#section-8-2.2.2.1.1" class="pilcrow">¶</a></p>
+</li>
+            <li class="normal" id="section-8-2.2.2.2">
+              <p id="section-8-2.2.2.2.1">The current timestamp.<a href="#section-8-2.2.2.2.1" class="pilcrow">¶</a></p>
+</li>
+            <li class="normal" id="section-8-2.2.2.3">
+              <p id="section-8-2.2.2.3.1">A monotonically increasing nonce (for replay protection and troubleshooting).<a href="#section-8-2.2.2.3.1" class="pilcrow">¶</a></p>
+</li>
+          </ul>
+</li>
+        <li class="normal" id="section-8-2.3">
+          <p id="section-8-2.3.1">Client workload then appends the X-Workload-Geo-ID header field to the HTTP request.<a href="#section-8-2.3.1" class="pilcrow">¶</a></p>
+</li>
+        <li class="normal" id="section-8-2.4">
+          <p id="section-8-2.4.1">Client workload passes the hash of the HTTP request to the Workload Identity Agent for signature. The Workload Identity Agent signs the HTTP Request using the workload identity agent private key and returns the signature of the HTTP request to the workload.<a href="#section-8-2.4.1" class="pilcrow">¶</a></p>
+<ul class="normal">
+<li class="normal" id="section-8-2.4.2.1">
+              <p id="section-8-2.4.2.1.1">The resulting signature is included in a separate header, such as <code>X-Request-Signature</code>.<a href="#section-8-2.4.2.1.1" class="pilcrow">¶</a></p>
+</li>
+            <li class="normal" id="section-8-2.4.2.2">
+              <p id="section-8-2.4.2.2.1">The workload identity agent ID is also included in the <code>X-Request-Signature</code> header.<a href="#section-8-2.4.2.2.1" class="pilcrow">¶</a></p>
+</li>
+          </ul>
+</li>
+        <li class="normal" id="section-8-2.5">
+          <p id="section-8-2.5.1">Intermediate proxies (e.g., API gateways, SASE firewalls) inspect the X-Workload-Geo-ID and X-Request-Signature header fields and perform the following checks:<a href="#section-8-2.5.1" class="pilcrow">¶</a></p>
+<ul class="normal">
+<li class="normal" id="section-8-2.5.2.1">
+              <p id="section-8-2.5.2.1.1">Verify that the workload identity agent ID in the X-Request-Signature header matches a configured workload identity agent ID.<a href="#section-8-2.5.2.1.1" class="pilcrow">¶</a></p>
+</li>
+            <li class="normal" id="section-8-2.5.2.2">
+              <p id="section-8-2.5.2.2.1">Verify that the HTTP request signature in the X-Request-Signature header is valid by verifying it against the workload identity agent public key in the X-Request-Signature header.<a href="#section-8-2.5.2.2.1" class="pilcrow">¶</a></p>
+</li>
+            <li class="normal" id="section-8-2.5.2.3">
+              <p id="section-8-2.5.2.3.1">Verify that the timestamp in the X-Workload-Geo-ID header is within an acceptable range (e.g., 5 minutes).<a href="#section-8-2.5.2.3.1" class="pilcrow">¶</a></p>
+</li>
+            <li class="normal" id="section-8-2.5.2.4">
+              <p id="section-8-2.5.2.4.1">Verify that the nonce in the X-Workload-Geo-ID header is unique and predominantly increasing to prevent replay attacks.<a href="#section-8-2.5.2.4.1" class="pilcrow">¶</a></p>
+</li>
+          </ul>
+</li>
+        <li class="normal" id="section-8-2.6">
+          <p id="section-8-2.6.1">Note that these HTTP extension header checks can be performed by the server as well, but it is more efficient to do them at the intermediate proxy level and aligns well how Zero Trust Network Access (ZTNA) agents behave. If the verification passes, the request is forwarded to the destination server. If the verification fails, the request is dropped, and an error response is generated.<a href="#section-8-2.6.1" class="pilcrow">¶</a></p>
+</li>
+        <li class="normal" id="section-8-2.7">
+          <p id="section-8-2.7.1">Intermediate proxies (e.g., API gateways, SASE firewalls) or server workloads can enforce policies based on:<a href="#section-8-2.7.1" class="pilcrow">¶</a></p>
+<ul class="normal">
+<li class="normal" id="section-8-2.7.2.1">
+              <p id="section-8-2.7.2.1.1">workload identity agent ID (running on the same host as the client workload),<a href="#section-8-2.7.2.1.1" class="pilcrow">¶</a></p>
+</li>
+            <li class="normal" id="section-8-2.7.2.2">
+              <p id="section-8-2.7.2.2.1">server workload id (or website URL),<a href="#section-8-2.7.2.2.1" class="pilcrow">¶</a></p>
+</li>
+            <li class="normal" id="section-8-2.7.2.3">
+              <p id="section-8-2.7.2.3.1">client workload location,<a href="#section-8-2.7.2.3.1" class="pilcrow">¶</a></p>
+</li>
+            <li class="normal" id="section-8-2.7.2.4">
+              <p id="section-8-2.7.2.4.1">client workload location type (e.g. precise, approximated, geographic region based),<a href="#section-8-2.7.2.4.1" class="pilcrow">¶</a></p>
+</li>
+            <li class="normal" id="section-8-2.7.2.5">
+              <p id="section-8-2.7.2.5.1">client workload location quality (e.g. GNSS, mobile network, Wi-Fi, IP address).<a href="#section-8-2.7.2.5.1" class="pilcrow">¶</a></p>
+</li>
+          </ul>
+</li>
+        <li class="normal" id="section-8-2.8">
+          <p id="section-8-2.8.1">For thick clients, server workload verifies that the client workload ID in the X-Workload-Geo-ID header matches the expected client workload ID. The server can enforce policies based on the following fields in the host/workload geographic boundary information in X-Workload-Geo-ID header:<a href="#section-8-2.8.1" class="pilcrow">¶</a></p>
+<ul class="normal">
+<li class="normal" id="section-8-2.8.2.1">
+              <p id="section-8-2.8.2.1.1">client workload id,<a href="#section-8-2.8.2.1.1" class="pilcrow">¶</a></p>
+</li>
+            <li class="normal" id="section-8-2.8.2.2">
+              <p id="section-8-2.8.2.2.1">workload identity agent ID (running on the same host as the client workload),<a href="#section-8-2.8.2.2.1" class="pilcrow">¶</a></p>
+</li>
+            <li class="normal" id="section-8-2.8.2.3">
+              <p id="section-8-2.8.2.3.1">server workload id (or website URL),<a href="#section-8-2.8.2.3.1" class="pilcrow">¶</a></p>
+</li>
+            <li class="normal" id="section-8-2.8.2.4">
+              <p id="section-8-2.8.2.4.1">client workload location,<a href="#section-8-2.8.2.4.1" class="pilcrow">¶</a></p>
+</li>
+            <li class="normal" id="section-8-2.8.2.5">
+              <p id="section-8-2.8.2.5.1">client workload location type (e.g. precise, approximated, geographic region based),<a href="#section-8-2.8.2.5.1" class="pilcrow">¶</a></p>
+</li>
+            <li class="normal" id="section-8-2.8.2.6">
+              <p id="section-8-2.8.2.6.1">client workload location quality (e.g. GNSS, mobile network, Wi-Fi, IP address).<a href="#section-8-2.8.2.6.1" class="pilcrow">¶</a></p>
+</li>
+          </ul>
+</li>
+      </ul>
+</section>
+</div>
+<div id="solution-mapping-back-to-problem-statements">
+<section id="section-9">
+      <h2 id="name-solution-mapping-back-to-pr">
+<a href="#section-9" class="section-number selfRef">9. </a><a href="#name-solution-mapping-back-to-pr" class="section-name selfRef">Solution mapping back to Problem Statements</a>
+      </h2>
+<ul class="normal">
+<li class="normal" id="section-9-1.1">
+          <p id="section-9-1.1.1"><strong>Bearer Tokens</strong>, <strong>PoP Token</strong>, <strong>PoP via Mutual TLS</strong>, <strong>Host TPMs for Signature</strong> challenges are addressed<a href="#section-9-1.1.1" class="pilcrow">¶</a></p>
+<ul class="normal">
+<li class="normal" id="section-9-1.1.2.1">
+              <p id="section-9-1.1.2.1.1">by the use of workload identity agent public/private key attestation, which provides a cryptographically verifiable proof of residency on host and workload identity. The workload identity agent generates a public/private key pair for each workload and signs the workload public key with its private key. The workload identity manager verifies the signature using the workload identity agent public key, ensuring that the workload is running on a trusted host.<a href="#section-9-1.1.2.1.1" class="pilcrow">¶</a></p>
+</li>
+            <li class="normal" id="section-9-1.1.2.2">
+              <p id="section-9-1.1.2.2.1">by signing HTTP requests with the workload identity agent private key, which provides a scalable and cryptographically verifiable proof of residency on host and workload identity. The signature is verified by the intermediate proxies (e.g., API gateways, SASE firewalls) or server workloads using the workload identity agent public key.<a href="#section-9-1.1.2.2.1" class="pilcrow">¶</a></p>
+</li>
+          </ul>
+</li>
+        <li class="normal" id="section-9-1.2">
+          <p id="section-9-1.2.1"><strong>IP Address-Based Location</strong> and <strong>Wi-Fi-Based Location</strong> challenges are addressed<a href="#section-9-1.2.1" class="pilcrow">¶</a></p>
+<ul class="normal">
+<li class="normal" id="section-9-1.2.2.1">
+              <p id="section-9-1.2.2.1.1">by the use of a combination of host-local location sensors (e.g., GNSS) and mobile network location services, with direct hardware-based attestation, which provide a more reliable and cryptographically verifiable location than IP address or Wi-Fi-based methods.<a href="#section-9-1.2.2.1.1" class="pilcrow">¶</a></p>
+</li>
+          </ul>
+</li>
+      </ul>
+</section>
+</div>
+<div id="data-plane-other-non-http-networking-protocols">
+<section id="section-10">
+      <h2 id="name-data-plane-other-non-http-n">
+<a href="#section-10" class="section-number selfRef">10. </a><a href="#name-data-plane-other-non-http-n" class="section-name selfRef">Data Plane - Other (non HTTP) Networking Protocols</a>
+      </h2>
 <div id="using-tls">
-<section id="section-9.1">
+<section id="section-10.1">
         <h3 id="name-using-tls">
-<a href="#section-9.1" class="section-number selfRef">9.1. </a><a href="#name-using-tls" class="section-name selfRef">Using TLS</a>
+<a href="#section-10.1" class="section-number selfRef">10.1. </a><a href="#name-using-tls" class="section-name selfRef">Using TLS</a>
         </h3>
-<p id="section-9.1-1">HTTP session termination (SASE firewall, API gateways, etc.) - terminate and re-establish TLS.<a href="#section-9.1-1" class="pilcrow">¶</a></p>
-<p id="section-9.1-2">RDP latest version - terminate and re-establish TLS; TCP/IP.<a href="#section-9.1-2" class="pilcrow">¶</a></p>
-<p id="section-9.1-3">SCTP session termination (Mobile network SASE firewall, etc.) - terminate and re-establish TLS; SCTP/IP; Does not use TCP or UDP.<a href="#section-9.1-3" class="pilcrow">¶</a></p>
-<p id="section-9.1-4">NFS - terminate and re-establish TLS; TCP/IP.<a href="#section-9.1-4" class="pilcrow">¶</a></p>
+<p id="section-10.1-1">RDP - terminate and re-establish TLS; TCP/IP.<a href="#section-10.1-1" class="pilcrow">¶</a></p>
+<p id="section-10.1-2">SCTP - terminate and re-establish TLS; SCTP is directly over IP; Does not use TCP or UDP.<a href="#section-10.1-2" class="pilcrow">¶</a></p>
+<p id="section-10.1-3">NFS - terminate and re-establish TLS; TCP/IP.<a href="#section-10.1-3" class="pilcrow">¶</a></p>
 </section>
 </div>
 <div id="not-using-tls">
-<section id="section-9.2">
-        <h3 id="name-not-using-tls">
-<a href="#section-9.2" class="section-number selfRef">9.2. </a><a href="#name-not-using-tls" class="section-name selfRef">Not Using TLS</a>
-        </h3>
-<p id="section-9.2-1">SSH tunnel (jump hosts, etc.) - terminate and re-establish SSH; TCP/IP; Does not use TLS.<a href="#section-9.2-1" class="pilcrow">¶</a></p>
-<p id="section-9.2-2">IPsec tunnel (router control plane, etc.) - terminates IPsec tunnel and forwards encapsulated traffic; IP; Does not use TLS.<a href="#section-9.2-2" class="pilcrow">¶</a></p>
-</section>
-</div>
-<div id="approaches">
-<section id="section-9.3">
-        <h3 id="name-approaches">
-<a href="#section-9.3" class="section-number selfRef">9.3. </a><a href="#name-approaches" class="section-name selfRef">Approaches</a>
-        </h3>
-<p id="section-9.3-1">Enhance HTTP headers to convey Workload ID and host/workload geographic boundary token. This is in the initial focus given the popularity of HTTP. Benefits (1) This will cover Workload Identity Agent AI MCP protocol which uses HTTP 2.0. (2) Unlike TLS, HTTP headers are not terminated by proxies like API gateways, so the WID and host/workload geographic boundary token can be conveyed end-to-end.<a href="#section-9.3-1" class="pilcrow">¶</a></p>
-<p id="section-9.3-2">Enhance TLS to convey Workload ID and host/workload geographic boundary token.<a href="#section-9.3-2" class="pilcrow">¶</a></p>
-<p id="section-9.3-3">Enhance SSH/IPsec to convey Workload ID and host/workload geographic boundary token.<a href="#section-9.3-3" class="pilcrow">¶</a></p>
-</section>
-</div>
-</section>
-</div>
-<div id="data-plane-http-header-enhancement">
-<section id="section-10">
-      <h2 id="name-data-plane-http-header-enha">
-<a href="#section-10" class="section-number selfRef">10. </a><a href="#name-data-plane-http-header-enha" class="section-name selfRef">Data Plane - HTTP header enhancement</a>
-      </h2>
-<p id="section-10-1">A new HTTP header field 'X-Workload-Geo-ID' is proposed for conveying the host/workload geographic boundary token. The header fields are designed to be cryptographically verifiable, ensuring that the information is trustworthy and can be validated by intermediate proxies and servers.<a href="#section-10-1" class="pilcrow">¶</a></p>
-<div id="thick-client-workload-laptopmobile-host-eg-microsoft-teams-laptopdesktop-app-data-center-host-eg-microsoft-teams-server">
-<section id="section-10.1">
-        <h3 id="name-thick-client-workload-lapto">
-<a href="#section-10.1" class="section-number selfRef">10.1. </a><a href="#name-thick-client-workload-lapto" class="section-name selfRef">Thick client workload - Laptop/mobile host (e.g. microsoft teams laptop/desktop app), Data center host (e.g. microsoft teams server)</a>
-        </h3>
-<p id="section-10.1-1">The following steps describe the end-to-end workflow for a thick client workload (e.g., Microsoft Teams client) and a data center host (e.g., Microsoft Teams server) using the proposed HTTP header enhancements:<a href="#section-10.1-1" class="pilcrow">¶</a></p>
-<ul class="normal">
-<li class="normal" id="section-10.1-2.1">
-            <p id="section-10.1-2.1.1">Workload (e.g. microsoft teams client) gets Oauth bearer token for the cloud application (e.g. microsoft teams server) from the Authentication/Authorization server using the user credentials and workload credential using private key JWT (https://oauth.net/private-key-jwt/). Private key JWT is alternative to shared client secret Oauth mechanism.<a href="#section-10.1-2.1.1" class="pilcrow">¶</a></p>
-</li>
-          <li class="normal" id="section-10.1-2.2">
-            <p id="section-10.1-2.2.1">Workload contacts the workload agent to<a href="#section-10.1-2.2.1" class="pilcrow">¶</a></p>
-<ul class="normal">
-<li class="normal" id="section-10.1-2.2.2.1">
-                <p id="section-10.1-2.2.2.1.1">Append the X-Workload-Geo-ID Header:<a href="#section-10.1-2.2.2.1.1" class="pilcrow">¶</a></p>
-</li>
-              <li class="normal" id="section-10.1-2.2.2.2">
-                <p id="section-10.1-2.2.2.2.1">The <code>X-Workload-Geo-ID</code> header field is added to the HTTP request.<a href="#section-10.1-2.2.2.2.1" class="pilcrow">¶</a></p>
-</li>
-              <li class="normal" id="section-10.1-2.2.2.3">
-                <p id="section-10.1-2.2.2.3.1">The header value is a JWT containing:<a href="#section-10.1-2.2.2.3.1" class="pilcrow">¶</a></p>
-<ol start="1" type="1" class="normal type-1" id="section-10.1-2.2.2.3.2">
-<li id="section-10.1-2.2.2.3.2.1">
-                    <p id="section-10.1-2.2.2.3.2.1.1">The current host/workload geographic boundary token.<a href="#section-10.1-2.2.2.3.2.1.1" class="pilcrow">¶</a></p>
-</li>
-                  <li id="section-10.1-2.2.2.3.2.2">
-                    <p id="section-10.1-2.2.2.3.2.2.1">The current timestamp.<a href="#section-10.1-2.2.2.3.2.2.1" class="pilcrow">¶</a></p>
-</li>
-                  <li id="section-10.1-2.2.2.3.2.3">
-                    <p id="section-10.1-2.2.2.3.2.3.1">A monotonically increasing nonce (for replay protection and troubleshooting).<a href="#section-10.1-2.2.2.3.2.3.1" class="pilcrow">¶</a></p>
-</li>
-                </ol>
-</li>
-              <li class="normal" id="section-10.1-2.2.2.4">
-                <p id="section-10.1-2.2.2.4.1">Sign the HTTP Request:<a href="#section-10.1-2.2.2.4.1" class="pilcrow">¶</a></p>
-</li>
-              <li class="normal" id="section-10.1-2.2.2.5">
-                <p id="section-10.1-2.2.2.5.1">After appending the <code>X-Workload-Geo-ID</code> header, the entire HTTP request (including headers and body) is signed using the workload identity agent’s private key.<a href="#section-10.1-2.2.2.5.1" class="pilcrow">¶</a></p>
-</li>
-              <li class="normal" id="section-10.1-2.2.2.6">
-                <p id="section-10.1-2.2.2.6.1">The resulting signature is included in a separate header, such as <code>X-Request-Signature</code>.<a href="#section-10.1-2.2.2.6.1" class="pilcrow">¶</a></p>
-</li>
-              <li class="normal" id="section-10.1-2.2.2.7">
-                <p id="section-10.1-2.2.2.7.1">The workload identity agent’s public key is included as part of the JWT in the <code>X-Workload-Geo-ID</code> header.<a href="#section-10.1-2.2.2.7.1" class="pilcrow">¶</a></p>
-</li>
-              <li class="normal" id="section-10.1-2.2.2.8">
-                <p id="section-10.1-2.2.2.8.1">Recipients can verify both the JWT and the overall request signature using the corresponding public key.<a href="#section-10.1-2.2.2.8.1" class="pilcrow">¶</a></p>
-</li>
-            </ul>
-</li>
-          <li class="normal" id="section-10.1-2.3">
-            <p id="section-10.1-2.3.1">Intermediate proxies (e.g., API gateways, SASE firewalls) inspect the X-Workload-Geo-ID header field and perform the following checks. Note that these checks can be performed by the server as well, but it is more efficient to do them at the intermediate proxy level.<a href="#section-10.1-2.3.1" class="pilcrow">¶</a></p>
-<ul class="normal">
-<li class="normal" id="section-10.1-2.3.2.1">
-                <p id="section-10.1-2.3.2.1.1">Verify that the host/workload geographic boundary token in the header is valid by verifying the signature against the workload identity manager public key and that the token has not expired.<a href="#section-10.1-2.3.2.1.1" class="pilcrow">¶</a></p>
-</li>
-              <li class="normal" id="section-10.1-2.3.2.2">
-                <p id="section-10.1-2.3.2.2.1">Verify that the workload agent ID in the host/workload geographic boundary token matches a configured workload agent ID.<a href="#section-10.1-2.3.2.2.1" class="pilcrow">¶</a></p>
-</li>
-              <li class="normal" id="section-10.1-2.3.2.3">
-                <p id="section-10.1-2.3.2.3.1">Verify that the HTTP request signature in the host/workload geographic boundary token is valid by verifying it against the workload agent public key.<a href="#section-10.1-2.3.2.3.1" class="pilcrow">¶</a></p>
-</li>
-              <li class="normal" id="section-10.1-2.3.2.4">
-                <p id="section-10.1-2.3.2.4.1">If the verification passes, the request is forwarded to the destination server. If the verification fails, the request is dropped, and an error response is generated.<a href="#section-10.1-2.3.2.4.1" class="pilcrow">¶</a></p>
-</li>
-            </ul>
-</li>
-          <li class="normal" id="section-10.1-2.4">
-            <p id="section-10.1-2.4.1">The server or Intermediate proxy can enforce policies based on the following fields in the host/workload geographic boundary token in X-Workload-Geo-ID header<a href="#section-10.1-2.4.1" class="pilcrow">¶</a></p>
-<ul class="normal">
-<li class="normal" id="section-10.1-2.4.2.1">
-                <p id="section-10.1-2.4.2.1.1">Host TPM EK, Workload Agent ID, geographic boundary and destination URL.<a href="#section-10.1-2.4.2.1.1" class="pilcrow">¶</a></p>
-</li>
-            </ul>
-</li>
-          <li class="normal" id="section-10.1-2.5">
-            <p id="section-10.1-2.5.1">The server can verify the X-Workload-Geo-ID header field by performing the following additional checks<a href="#section-10.1-2.5.1" class="pilcrow">¶</a></p>
-<ul class="normal">
-<li class="normal" id="section-10.1-2.5.2.1">
-                <p id="section-10.1-2.5.2.1.1">The server verifies that host/workload geographic boundary token has the configured peer workload ID for a given Oauth bearer token/peer workload agent ID. It may be possible that the peer workload ID may have been key rotated - as long as the previous peer workload ID matches, it is acceptable.<a href="#section-10.1-2.5.2.1.1" class="pilcrow">¶</a></p>
-</li>
-            </ul>
-</li>
-        </ul>
-</section>
-</div>
-<div id="thin-client-workload-laptopmobile-host-eg-microsoft-teams-browser-app-data-center-host-eg-microsoft-teams-server">
 <section id="section-10.2">
-        <h3 id="name-thin-client-workload-laptop">
-<a href="#section-10.2" class="section-number selfRef">10.2. </a><a href="#name-thin-client-workload-laptop" class="section-name selfRef">Thin client workload - Laptop/mobile host (e.g. microsoft teams browser app), Data center host (e.g. microsoft teams server)</a>
+        <h3 id="name-not-using-tls">
+<a href="#section-10.2" class="section-number selfRef">10.2. </a><a href="#name-not-using-tls" class="section-name selfRef">Not Using TLS</a>
         </h3>
-<ul class="normal">
-<li class="normal" id="section-10.2-1.1">
-            <p id="section-10.2-1.1.1">The key differences as compared to the thick client workload are:<a href="#section-10.2-1.1.1" class="pilcrow">¶</a></p>
-<ul class="normal">
-<li class="normal" id="section-10.2-1.1.2.1">
-                <p id="section-10.2-1.1.2.1.1">The browser extension, on behalf of the thin client, connects to the workload identity agent running on the host (e.g., laptop/mobile) to sign the HTTP request with the workload identity agent private key.<a href="#section-10.2-1.1.2.1.1" class="pilcrow">¶</a></p>
-</li>
-              <li class="normal" id="section-10.2-1.1.2.2">
-                <p id="section-10.2-1.1.2.2.1">The server does not need to verify the workload ID in the host/workload geographic boundary token, as the workload ID is not present in the token. The server or intermediate proxy can still enforce policies based on the host TPM EK, workload agent ID, geographic boundary, and destination URL.<a href="#section-10.2-1.1.2.2.1" class="pilcrow">¶</a></p>
-</li>
-            </ul>
-</li>
-        </ul>
-<p id="section-10.2-2">Describe X-Workload-Geo-ID in a standard JWT format.<a href="#section-10.2-2" class="pilcrow">¶</a></p>
-</section>
-</div>
-</section>
-</div>
-<div id="token-format">
-<section id="section-11">
-      <h2 id="name-token-format">
-<a href="#section-11" class="section-number selfRef">11. </a><a href="#name-token-format" class="section-name selfRef">Token Format</a>
-      </h2>
-<div id="hostworkload-geographic-boundary-token-structure">
-<section id="section-11.1">
-        <h3 id="name-host-workload-geographic-bo">
-<a href="#section-11.1" class="section-number selfRef">11.1. </a><a href="#name-host-workload-geographic-bo" class="section-name selfRef">Host/Workload Geographic Boundary Token Structure</a>
-        </h3>
-<p id="section-11.1-1">The host/workload geographic boundary token is issued as a SPIFFE JWT-SVID, following the SPIFFE JWT-SVID standard <span>[<a href="#spiffe-jwt-svid" class="cite xref">spiffe-jwt-svid</a>]</span>. This enables cryptographically verifiable claims about a host's geographic boundary, workloads running on the host, and hardware roots of trust, using a format interoperable with SPIFFE-based systems. The JWT is signed by the Workload Identity Manager and is conveyed as a compact string (e.g., in the <code>X-Workload-Geo-ID</code> HTTP header).<a href="#section-11.1-1" class="pilcrow">¶</a></p>
-<div id="jwt-svid-structure">
-<section id="section-11.1.1">
-          <h4 id="name-jwt-svid-structure">
-<a href="#section-11.1.1" class="section-number selfRef">11.1.1. </a><a href="#name-jwt-svid-structure" class="section-name selfRef">JWT-SVID Structure</a>
-          </h4>
-<p id="section-11.1.1-1">A SPIFFE JWT-SVID consists of three parts:
-- <strong>Header</strong>: Specifies the signing algorithm, token type, and optionally a key ID.
-- <strong>Payload</strong>: Contains the claims, including standard SPIFFE JWT-SVID claims and custom claims for geographic boundary attestation.
-- <strong>Signature</strong>: Cryptographic signature over the header and payload, created using the issuer's private key.<a href="#section-11.1.1-1" class="pilcrow">¶</a></p>
-<div id="jwt-svid-header-example">
-<section id="section-11.1.1.1">
-            <h5 id="name-jwt-svid-header-example">
-<a href="#section-11.1.1.1" class="section-number selfRef">11.1.1.1. </a><a href="#name-jwt-svid-header-example" class="section-name selfRef">JWT-SVID Header Example</a>
-            </h5>
-<p id="section-11.1.1.1-1"><code>json
-{
-  "alg": "RS256",
-  "typ": "JWT",
-  "kid": "key-id-1234"
-}
-</code><a href="#section-11.1.1.1-1" class="pilcrow">¶</a></p>
-</section>
-</div>
-<div id="jwt-svid-payload-example">
-<section id="section-11.1.1.2">
-            <h5 id="name-jwt-svid-payload-example">
-<a href="#section-11.1.1.2" class="section-number selfRef">11.1.1.2. </a><a href="#name-jwt-svid-payload-example" class="section-name selfRef">JWT-SVID Payload Example</a>
-            </h5>
-<p id="section-11.1.1.2-1"><code>json
-{
-  "sub": "spiffe://example.org/host/123e4567-e89b-12d3-a456-426614174000",
-  "aud": ["https://service.example.com"],
-  "iat": 1718473200,
-  "exp": 1718476800,
-  "jti": "jwt-unique-id-5678",
-  "nonce": 1234567890,
-  "host_geographic_boundary": "San Jose, California, USA",
-  "host_hardware_details": {
-    "host_tpm_endorsement_public_key": "MIIBIjANBgkqh..."
-  }
-}
-</code><a href="#section-11.1.1.2-1" class="pilcrow">¶</a></p>
-<p id="section-11.1.1.2-2"><strong>Signature:</strong>
-              <code>
-SflKxwRJSMeKKF2QT4fwpMeJf36POk6yJV_adQssw5c
-</code><a href="#section-11.1.1.2-2" class="pilcrow">¶</a></p>
-</section>
-</div>
-<div id="field-explanations">
-<section id="section-11.1.1.3">
-            <h5 id="name-field-explanations">
-<a href="#section-11.1.1.3" class="section-number selfRef">11.1.1.3. </a><a href="#name-field-explanations" class="section-name selfRef">Field Explanations</a>
-            </h5>
-<p id="section-11.1.1.3-1"><strong>Standard SPIFFE JWT-SVID Claims:</strong>
-- <code>sub</code>: The SPIFFE ID of the host or workload this token represents.
-- <code>aud</code>: Audience(s) for which this token is intended.
-- <code>iat</code>: Issued at time (UNIX timestamp).
-- <code>exp</code>: Expiration time (UNIX timestamp).
-- <code>jti</code>: JWT ID (unique identifier).<a href="#section-11.1.1.3-1" class="pilcrow">¶</a></p>
-<p id="section-11.1.1.3-2"><strong>Custom Claims for Geographic Boundary:</strong>
-- <code>nonce</code>: Unique, random unsigned long integer for replay protection.
-- <code>host_geographic_boundary</code>: The host's geographic boundary (city, state, country).
-- <code>host_hardware_details</code>: Object with hardware root of trust details (e.g., TPM EK public key).<a href="#section-11.1.1.3-2" class="pilcrow">¶</a></p>
-</section>
-</div>
-</section>
-</div>
-</section>
-</div>
-<div id="x-workload-geo-id-structure">
-<section id="section-11.2">
-        <h3 id="name-x-workload-geo-id-structure">
-<a href="#section-11.2" class="section-number selfRef">11.2. </a><a href="#name-x-workload-geo-id-structure" class="section-name selfRef">X-Workload-Geo-ID Structure</a>
-        </h3>
-<p id="section-11.2-1">The <code>X-Workload-Geo-ID</code> follows JWT format and <span class="bcp14">MUST</span> contain the following claims:
-- <code>geoBoundaryToken</code>: The current host/workload geographic boundary token (string, required).
-- <code>timestamp</code>: The current UNIX epoch timestamp (string, required).
-- <code>nonce</code>: A monotonically increasing nonce for replay protection and troubleshooting (string or integer, required).<a href="#section-11.2-1" class="pilcrow">¶</a></p>
-<p id="section-11.2-2">Example payload:
-<code>json
-{
-  "geoBoundaryToken": "eyJhbGciOiJFUzI1NiIsInR5cCI6IkpXVCJ9...",
-  "timestamp": "1720000000",
-  "nonce": "1234567890"
-}
-</code><a href="#section-11.2-2" class="pilcrow">¶</a></p>
-<p id="section-11.2-3">The JWT is signed using the workload identity agent’s private key, and its authenticity is verified by recipients using the corresponding public key.<a href="#section-11.2-3" class="pilcrow">¶</a></p>
+<p id="section-10.2-1">SSH tunnel (jump hosts, etc.) - terminate and re-establish SSH; TCP/IP; Does not use TLS.<a href="#section-10.2-1" class="pilcrow">¶</a></p>
+<p id="section-10.2-2">IPsec tunnel (router control plane, etc.) - terminates IPsec tunnel and forwards encapsulated traffic; IP; Does not use TLS.<a href="#section-10.2-2" class="pilcrow">¶</a></p>
 </section>
 </div>
 </section>
 </div>
 <div id="scalability-considerations">
-<section id="section-12">
+<section id="section-11">
       <h2 id="name-scalability-considerations">
-<a href="#section-12" class="section-number selfRef">12. </a><a href="#name-scalability-considerations" class="section-name selfRef">Scalability Considerations</a>
+<a href="#section-11" class="section-number selfRef">11. </a><a href="#name-scalability-considerations" class="section-name selfRef">Scalability Considerations</a>
       </h2>
-<p id="section-12-1">Having a geolocation sensor on every host is not scalable from a deployment and management perspective
+<p id="section-11-1">Having a geolocation sensor on every host is not scalable from a deployment and management perspective
 and can be cost prohibitive.
 In the case of end user hosts, the geolocation sensor can be on a mobile host (e.g., smartphone with Mobile network capabilities and optionally GNSS capabilities) which can be leveraged by a laptop/desktop host which is proximal to the mobile host. The mobile host serves as the location anchor host.
-In the case of data center hosts, the geolocation sensor can be on a host with Mobile network and/or GNSS capabilities which can be leveraged by other data center hosts. This host serves as the location anchor host.<a href="#section-12-1" class="pilcrow">¶</a></p>
-<p id="section-12-2">End user location anchor host - goal is to provide a easy to use wireless solution that can be used by end users without requiring them to install a geolocation sensor on their laptop/desktop host.
+In the case of data center hosts, the geolocation sensor can be on a host with Mobile network and/or GNSS capabilities which can be leveraged by other data center hosts. This host serves as the location anchor host.<a href="#section-11-1" class="pilcrow">¶</a></p>
+<p id="section-11-2">End user location anchor host - goal is to provide a easy to use wireless solution that can be used by end users without requiring them to install a geolocation sensor on their laptop/desktop host.
 * Option 1: Use Bluetooth Low Energy (BLE) 6.0 (https://www.bluetooth.com/core-specification-6-feature-overview/), which can provide centimeter-level accuracy between the mobile host and laptop/desktop host.
-* Option 2: Use Ultra-Wideband (UWB) technology, which can provide centimeter-level accuracy between the mobile host and laptop/desktop host.<a href="#section-12-2" class="pilcrow">¶</a></p>
-<p id="section-12-3">Data center location anchor host - goal is to provide a easy to use solution that can be used by data center operators without requiring them to install a geolocation sensor on every data center host.
-* Use a software-based cryptographically signed round-trip-time (RTT) measurement between the location anchor host and other data center hosts. One possible implementation to add a host proximity plugin to the SPIFFE/SPIRE agent, which can measure RTT between the location anchor host and other data center hosts. The RTT measurement can be used to determine the proximity of the other data center hosts to the location anchor host. The tradeoff is that software-based RTT measurement may not provide sub-microsecond accuracy due to inherent software jitter, but it can still provide a reasonable approximation of the proximity of the other data center hosts to the location anchor host.<a href="#section-12-3" class="pilcrow">¶</a></p>
+* Option 2: Use Ultra-Wideband (UWB) technology, which can provide centimeter-level accuracy between the mobile host and laptop/desktop host.<a href="#section-11-2" class="pilcrow">¶</a></p>
+<p id="section-11-3">Data center location anchor host - goal is to provide a easy to use solution that can be used by data center operators without requiring them to install a geolocation sensor on every data center host.
+* Use a software-based cryptographically signed round-trip-time (RTT) measurement between the location anchor host and other data center hosts. One possible implementation to add a host proximity plugin to the SPIFFE/SPIRE agent, which can measure RTT between the location anchor host and other data center hosts. The RTT measurement can be used to determine the proximity of the other data center hosts to the location anchor host. The tradeoff is that software-based RTT measurement may not provide sub-microsecond accuracy due to inherent software jitter, but it can still provide a reasonable approximation of the proximity of the other data center hosts to the location anchor host.<a href="#section-11-3" class="pilcrow">¶</a></p>
 </section>
 </div>
 <div id="authorization-policy-implementers">
-<section id="section-13">
+<section id="section-12">
       <h2 id="name-authorization-policy-implem">
-<a href="#section-13" class="section-number selfRef">13. </a><a href="#name-authorization-policy-implem" class="section-name selfRef">Authorization Policy Implementers</a>
+<a href="#section-12" class="section-number selfRef">12. </a><a href="#name-authorization-policy-implem" class="section-name selfRef">Authorization Policy Implementers</a>
       </h2>
-<p id="section-13-1">Policy implementers use attested geographic boundary from Workload to make decisions. Example implementers:<a href="#section-13-1" class="pilcrow">¶</a></p>
+<p id="section-12-1">Policy implementers use attested geographic boundary from Workload to make decisions. Example implementers:<a href="#section-12-1" class="pilcrow">¶</a></p>
 <ul class="normal">
-<li class="normal" id="section-13-2.1">
-          <p id="section-13-2.1.1">Web application firewall, e.g., Istio Ingress/Egress Gateway<a href="#section-13-2.1.1" class="pilcrow">¶</a></p>
+<li class="normal" id="section-12-2.1">
+          <p id="section-12-2.1.1">Web application firewall, e.g., Istio Ingress/Egress Gateway<a href="#section-12-2.1.1" class="pilcrow">¶</a></p>
 </li>
-        <li class="normal" id="section-13-2.2">
-          <p id="section-13-2.2.1">SaaS application.<a href="#section-13-2.2.1" class="pilcrow">¶</a></p>
+        <li class="normal" id="section-12-2.2">
+          <p id="section-12-2.2.1">SaaS application.<a href="#section-12-2.2.1" class="pilcrow">¶</a></p>
 </li>
-        <li class="normal" id="section-13-2.3">
-          <p id="section-13-2.3.1">K8s node agent.<a href="#section-13-2.3.1" class="pilcrow">¶</a></p>
+        <li class="normal" id="section-12-2.3">
+          <p id="section-12-2.3.1">K8s node agent.<a href="#section-12-2.3.1" class="pilcrow">¶</a></p>
 </li>
-        <li class="normal" id="section-13-2.4">
-          <p id="section-13-2.4.1">OS process scheduler.<a href="#section-13-2.4.1" class="pilcrow">¶</a></p>
+        <li class="normal" id="section-12-2.4">
+          <p id="section-12-2.4.1">OS process scheduler.<a href="#section-12-2.4.1" class="pilcrow">¶</a></p>
 </li>
       </ul>
-<p id="section-13-3">If the policy implementer is at the SaaS application level, things are simpler. However, if it is pushed down to, say, K8s or OS process scheduler or JVM class loader/deserializer, then malware can be prevented (similar to a code-signed application).<a href="#section-13-3" class="pilcrow">¶</a></p>
+<p id="section-12-3">If the policy implementer is at the SaaS application level, things are simpler. However, if it is pushed down to, say, K8s or OS process scheduler or JVM class loader/deserializer, then malware can be prevented (similar to a code-signed application).<a href="#section-12-3" class="pilcrow">¶</a></p>
 </section>
 </div>
 <div id="security-considerations">
-<section id="section-14">
+<section id="section-13">
       <h2 id="name-security-considerations">
-<a href="#section-14" class="section-number selfRef">14. </a><a href="#name-security-considerations" class="section-name selfRef">Security Considerations</a>
+<a href="#section-13" class="section-number selfRef">13. </a><a href="#name-security-considerations" class="section-name selfRef">Security Considerations</a>
       </h2>
-<p id="section-14-1">The proposed framework introduces several security considerations that must be addressed to ensure the integrity and trustworthiness of geofencing:<a href="#section-14-1" class="pilcrow">¶</a></p>
+<p id="section-13-1">The proposed framework introduces several security considerations that must be addressed to ensure the integrity and trustworthiness of geofencing:<a href="#section-13-1" class="pilcrow">¶</a></p>
 <ul class="normal">
-<li class="normal" id="section-14-2.1">
-          <p id="section-14-2.1.1"><strong>TPM and Hardware Trust</strong>: The security of the solution depends on the integrity of the TPM and other hardware roots of trust. Physical attacks, firmware vulnerabilities, or supply chain compromises could undermine attestation. Regular updates, secure provisioning, and monitoring are required.<a href="#section-14-2.1.1" class="pilcrow">¶</a></p>
+<li class="normal" id="section-13-2.1">
+          <p id="section-13-2.1.1"><strong>TPM and Hardware Trust</strong>: The security of the solution depends on the integrity of the TPM and other hardware roots of trust. Physical attacks, firmware vulnerabilities, or supply chain compromises could undermine attestation. Regular updates, secure provisioning, and monitoring are required.<a href="#section-13-2.1.1" class="pilcrow">¶</a></p>
 </li>
-        <li class="normal" id="section-14-2.2">
-          <p id="section-14-2.2.1"><strong>Geolocation Spoofing</strong>: Location sensors (e.g., GPS) are susceptible to spoofing or replay attacks. Use of cryptographically authenticated signals (e.g., Galileo GNSS, mobile network) and cross-verification with multiple sources can mitigate this risk.<a href="#section-14-2.2.1" class="pilcrow">¶</a></p>
+        <li class="normal" id="section-13-2.2">
+          <p id="section-13-2.2.1"><strong>Geolocation Spoofing</strong>: Location sensors (e.g., GPS) are susceptible to spoofing or replay attacks. Use of cryptographically authenticated signals (e.g., Galileo GNSS, mobile network) and cross-verification with multiple sources can mitigate this risk.<a href="#section-13-2.2.1" class="pilcrow">¶</a></p>
 </li>
-        <li class="normal" id="section-14-2.3">
-          <p id="section-14-2.3.1"><strong>SIM and e-SIM Attacks</strong>: Physical SIM removal or e-SIM swap attacks can break the binding between device and location. Continuous monitoring of device composition and periodic re-attestation are recommended.<a href="#section-14-2.3.1" class="pilcrow">¶</a></p>
+        <li class="normal" id="section-13-2.3">
+          <p id="section-13-2.3.1"><strong>SIM and e-SIM Attacks</strong>: Physical SIM removal or e-SIM swap attacks can break the binding between device and location. Continuous monitoring of device composition and periodic re-attestation are recommended.<a href="#section-13-2.3.1" class="pilcrow">¶</a></p>
 </li>
-        <li class="normal" id="section-14-2.4">
-          <p id="section-14-2.4.1"><strong>Software Integrity</strong>: The geolocation agent and supporting software must be protected against tampering. Use of Linux IMA, secure boot, and measured launch environments helps ensure only approved software is executed.<a href="#section-14-2.4.1" class="pilcrow">¶</a></p>
+        <li class="normal" id="section-13-2.4">
+          <p id="section-13-2.4.1"><strong>Software Integrity</strong>: The geolocation agent and supporting software must be protected against tampering. Use of Linux IMA, secure boot, and measured launch environments helps ensure only approved software is executed.<a href="#section-13-2.4.1" class="pilcrow">¶</a></p>
 </li>
-        <li class="normal" id="section-14-2.5">
-          <p id="section-14-2.5.1"><strong>Communication Security</strong>: All attestation and geolocation data must be transmitted over secure, authenticated channels (e.g., TLS) to prevent interception or manipulation.<a href="#section-14-2.5.1" class="pilcrow">¶</a></p>
+        <li class="normal" id="section-13-2.5">
+          <p id="section-13-2.5.1"><strong>Communication Security</strong>: All attestation and geolocation data must be transmitted over secure, authenticated channels (e.g., TLS) to prevent interception or manipulation.<a href="#section-13-2.5.1" class="pilcrow">¶</a></p>
 </li>
-        <li class="normal" id="section-14-2.6">
-          <p id="section-14-2.6.1"><strong>Policy Enforcement</strong>: The enforcement of geofence policies must be robust against attempts by malicious workloads or agents to bypass controls. Policy decisions should be based on verifiable, signed attestation evidence.<a href="#section-14-2.6.1" class="pilcrow">¶</a></p>
+        <li class="normal" id="section-13-2.6">
+          <p id="section-13-2.6.1"><strong>Policy Enforcement</strong>: The enforcement of geofence policies must be robust against attempts by malicious workloads or agents to bypass controls. Policy decisions should be based on verifiable, signed attestation evidence.<a href="#section-13-2.6.1" class="pilcrow">¶</a></p>
 </li>
-        <li class="normal" id="section-14-2.7">
-          <p id="section-14-2.7.1"><strong>Time Source Integrity</strong>: Trusted time sources are necessary to prevent replay attacks and ensure the freshness of attestation data.<a href="#section-14-2.7.1" class="pilcrow">¶</a></p>
+        <li class="normal" id="section-13-2.7">
+          <p id="section-13-2.7.1"><strong>Time Source Integrity</strong>: Trusted time sources are necessary to prevent replay attacks and ensure the freshness of attestation data.<a href="#section-13-2.7.1" class="pilcrow">¶</a></p>
 </li>
-        <li class="normal" id="section-14-2.8">
-          <p id="section-14-2.8.1"><strong>Data Store Security</strong>: The shared data store containing trusted host compositions must be protected against unauthorized access and tampering, using encryption and access controls. The shared data store can be split as follows for higher security - 1) Host EKs (e.g., MDM) used by Workload Identity Manager and 2) Host EKs + Geolocation sensor details (e.g., location sensor hardware datastore)<a href="#section-14-2.8.1" class="pilcrow">¶</a></p>
+        <li class="normal" id="section-13-2.8">
+          <p id="section-13-2.8.1"><strong>Data Store Security</strong>: The shared data store containing trusted host compositions must be protected against unauthorized access and tampering, using encryption and access controls. The shared data store can be split as follows for higher security - 1) Host EKs (e.g., MDM) used by Workload Identity Manager and 2) Host EKs + Geolocation sensor details (e.g., location sensor hardware datastore)<a href="#section-13-2.8.1" class="pilcrow">¶</a></p>
 </li>
       </ul>
-<p id="section-14-3">By addressing these considerations, the framework aims to provide a secure and reliable foundation for verifiable geofencing in diverse deployment environments.<a href="#section-14-3" class="pilcrow">¶</a></p>
+<p id="section-13-3">By addressing these considerations, the framework aims to provide a secure and reliable foundation for verifiable geofencing in diverse deployment environments.<a href="#section-13-3" class="pilcrow">¶</a></p>
 </section>
 </div>
 <div id="iana-considerations">
-<section id="section-15">
+<section id="section-14">
       <h2 id="name-iana-considerations">
-<a href="#section-15" class="section-number selfRef">15. </a><a href="#name-iana-considerations" class="section-name selfRef">IANA Considerations</a>
+<a href="#section-14" class="section-number selfRef">14. </a><a href="#name-iana-considerations" class="section-name selfRef">IANA Considerations</a>
       </h2>
-<p id="section-15-1">This document has no IANA actions.<a href="#section-15-1" class="pilcrow">¶</a></p>
+<p id="section-14-1">This document has no IANA actions.<a href="#section-14-1" class="pilcrow">¶</a></p>
 </section>
 </div>
 <div id="appendix-items-to-follow-up">
-<section id="section-16">
+<section id="section-15">
       <h2 id="name-appendix-items-to-follow-up">
-<a href="#section-16" class="section-number selfRef">16. </a><a href="#name-appendix-items-to-follow-up" class="section-name selfRef">Appendix - Items to follow up</a>
+<a href="#section-15" class="section-number selfRef">15. </a><a href="#name-appendix-items-to-follow-up" class="section-name selfRef">Appendix - Items to follow up</a>
       </h2>
-<div id="restart-time-attestationremote-verification-of-workload-identity-agent-for-integrity-and-proof-of-residency-on-host">
-<section id="section-16.1">
-        <h3 id="name-restart-time-attestation-re">
-<a href="#section-16.1" class="section-number selfRef">16.1. </a><a href="#name-restart-time-attestation-re" class="section-name selfRef">Restart time attestation/remote verification of workload identity agent for integrity and proof of residency on Host</a>
+<div id="todo-1-restart-time-attestationremote-verification-of-workload-identity-agent-for-integrity-and-proof-of-residency-on-host">
+<section id="section-15.1">
+        <h3 id="name-todo-1-restart-time-attesta">
+<a href="#section-15.1" class="section-number selfRef">15.1. </a><a href="#name-todo-1-restart-time-attesta" class="section-name selfRef">TODO 1: Restart time attestation/remote verification of workload identity agent for integrity and proof of residency on Host</a>
         </h3>
-<p id="section-16.1-1">For the workload identity agent restart case, it is not clear how the storage in TPM PCR will be accompished - TODO - ideally this should be natively handled in the IMA measurement process with an ability to retrigger on restart on refresh cycles.<a href="#section-16.1-1" class="pilcrow">¶</a></p>
+<p id="section-15.1-1">For the workload identity agent restart case, it is not clear how the storage in TPM PCR will be accompished - ideally this should be natively handled in the IMA measurement process with an ability to retrigger on restart on refresh cycles.<a href="#section-15.1-1" class="pilcrow">¶</a></p>
+</section>
+</div>
+<div id="todo-2-location-privacy-options">
+<section id="section-15.2">
+        <h3 id="name-todo-2-location-privacy-opt">
+<a href="#section-15.2" class="section-number selfRef">15.2. </a><a href="#name-todo-2-location-privacy-opt" class="section-name selfRef">TODO 2: Location privacy options</a>
+        </h3>
+<p id="section-15.2-1">The current approach includes some location privacy options for the geolocation in the host/workload geographic boundary information. This may need to be expanded further in the future.<a href="#section-15.2-1" class="pilcrow">¶</a></p>
 </section>
 </div>
 </section>
 </div>
 <div id="acknowledgments">
-<section id="section-17">
+<section id="section-16">
       <h2 id="name-acknowledgments">
 <a href="#name-acknowledgments" class="section-name selfRef">Acknowledgments</a>
       </h2>
-<p id="section-17-1">The authors thank the members of the WIMSE working group and the broader trusted computing and workload identity communities for their feedback and contributions. Special thanks to the Trusted Computing Group (TCG), the SPIFFE/SPIRE open-source community, and industry partners for foundational work and ongoing collaboration.<a href="#section-17-1" class="pilcrow">¶</a></p>
+<p id="section-16-1">The authors thank the members of the WIMSE working group and the broader trusted computing and workload identity communities for their feedback and contributions. Special thanks to the Trusted Computing Group (TCG), the SPIFFE/SPIRE open-source community, and industry partners for foundational work and ongoing collaboration.<a href="#section-16-1" class="pilcrow">¶</a></p>
 </section>
 </div>
 <div id="sec-combined-references">
-<section id="section-18">
+<section id="section-17">
       <h2 id="name-references">
 <a href="#name-references" class="section-name selfRef">References</a>
       </h2>
 <div id="sec-normative-references">
-<section id="section-18.1">
+<section id="section-17.1">
         <h3 id="name-normative-references">
 <a href="#name-normative-references" class="section-name selfRef">Normative References</a>
         </h3>
@@ -2015,7 +1952,7 @@ In the case of data center hosts, the geolocation sensor can be on a host with M
 </section>
 </div>
 <div id="sec-informative-references">
-<section id="section-18.2">
+<section id="section-17.2">
         <h3 id="name-informative-references">
 <a href="#name-informative-references" class="section-name selfRef">Informative References</a>
         </h3>
