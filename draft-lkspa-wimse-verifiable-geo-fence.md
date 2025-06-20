@@ -213,6 +213,8 @@ Geographic boundary attestation helps satisfy data residency and data sovereignt
 
 * **Wi-Fi-Based Location:** For user laptop endpoints with agents (e.g., ZTNA), traditional geographic enforcement relies on trusting the Wi-Fi access point’s location. However, Wi-Fi access points are mobile and can be moved, undermining this trust.
 
+* **Trust in Transit:** HTTP requests can be intercepted and modified by intermediate proxies (e.g., API gateways, SASE firewalls). If the request is not cryptographically signed, it is vulnerable to tampering.
+
 # Approach Summary
 
 This approach enables cryptographically verifiable geofencing by binding workload identity to both platform and geographic attributes using trusted hardware (e.g., TPM), attestation protocols, and geolocation services. The framework supports secure, policy-driven enforcement of data residency and location requirements for workloads in multi-system environments.
@@ -396,26 +398,34 @@ A new HTTP header field 'X-Workload-Geo-ID' is proposed for conveying the host/w
 
 # Solution mapping back to Problem Statements
 
-* **Bearer Tokens**, **PoP Token**, **PoP via Mutual TLS**, **Host TPMs for Signature** challenges are addressed
-  * by the use of Workload Identity Agent public/private key attestation, which provides a cryptographically verifiable proof of residency on host and workload identity. The Workload Identity Agent generates a public/private key pair for each workload and signs the workload public key with its private key. The Workload Identity Manager verifies the signature using the Workload Identity Agent Public Key, ensuring that the workload is running on a trusted host.
-  * by signing HTTP requests with the Workload Identity Agent Private Key, which provides a scalable and cryptographically verifiable proof of residency on host and workload identity. The signature is verified by the intermediate proxies (e.g., API gateways, SASE firewalls) or server workloads using the Workload Identity Agent Public Key.
+* **Host TPMs for Signature** challenges are addressed
+  * Workload Identity Agent private key, which is used for signing, is signed by the Host TPM AK providing a cryptographically verifiable proof of residency of Workload Identity Agent on the host. The Workload Identity Agent generates a public/private key pair for each workload which connects through a host local socket and signs the workload public key with its private key. The Workload Identity Manager verifies the signature using the Workload Identity Agent Public Key, providing a cryptographically verifiable proof of residency of workload on the host.
+
+* **Bearer Tokens**, **PoP Token**, **PoP via Mutual TLS** challenges are addressed
+  * HTTP request signature with the Workload Identity Agent Private Key, which provides a scalable and cryptographically verifiable proof of residency on host and workload identity. The signature is verified by the intermediate proxies (e.g., API gateways, SASE firewalls) or server workloads using the Workload Identity Agent Public Key.
 
 * **IP Address-Based Location** and **Wi-Fi-Based Location** challenges are addressed
-  * by the use of a combination of host-local location sensors (e.g., GNSS) and mobile network location services, with direct hardware-based attestation, which provide a more reliable and cryptographically verifiable location than IP address or Wi-Fi-based methods.
+  * Combination of host-local location sensors (e.g., GNSS) with direct hardware-based attestation and mobile network location services provides a more reliable and cryptographically verifiable location than IP address, Wi-Fi-based methods or existing Host OS location services.
 
-# Data Plane - Other (non HTTP) Networking Protocols
+* **Trust in Transit** challenges are addressed
+  * The HTTP request signature with the Workload Identity Agent Private Key provides a cryptographically verifiable proof of residency on host and workload identity, which is verified by the intermediate proxies (e.g., API gateways, SASE firewalls) using the Workload Identity Agent Public Key. This ensures that the request is not tampered with in transit.
+
+# Data Plane - Examining other (non HTTP) Networking Protocols
 
 ## Using TLS
-RDP - terminate and re-establish TLS; TCP/IP.
-
-SCTP - terminate and re-establish TLS; SCTP is directly over IP; Does not use TCP or UDP.
-
-NFS - terminate and re-establish TLS; TCP/IP.
+* RDP - terminate and re-establish TLS; TCP/IP.
+* SCTP - terminate and re-establish TLS; SCTP is directly over IP; Does not use TCP or UDP.
+* NFS - terminate and re-establish TLS; TCP/IP.
 
 ## Not Using TLS
-SSH tunnel (jump hosts, etc.) - terminate and re-establish SSH; TCP/IP; Does not use TLS.
+* SSH (jump hosts, etc.) - terminate and re-establish SSH; TCP/IP; Does not use TLS.
+* IPsec tunnel (router control plane, etc.) - terminates IPsec tunnel and forwards encapsulated traffic; IP; Does not use TLS.
 
-IPsec tunnel (router control plane, etc.) - terminates IPsec tunnel and forwards encapsulated traffic; IP; Does not use TLS.
+# Data Plane - IPSEC Tunnel Networking Protocol
+
+While it not easy to modify IPSEC networking protcol, an approach would be for the IPSEC controller to check where the IPSEC tunnel is being established from a specific host and whether the host is within a specific geographic boundary. The IPSEC controller can use the Workload Identity Agent to get the host/workload geographic boundary information and verify that the host is within the allowed geographic boundary. If the host is not within the allowed geographic boundary, the IPSEC controller can reject the IPSEC tunnel establishment request.
+
+Since IPSEC tunnel can encapsulate any IP traffic, it provides proof of residency and geolocation on the host for all the traffic that is tunneled through it (e.g. RDP, SCTP, NFS, SSH).
 
 # Scalability Considerations
 
