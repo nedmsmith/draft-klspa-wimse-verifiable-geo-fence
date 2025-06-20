@@ -271,7 +271,7 @@ This attestation includes data about the TPM's state and can be used to verify t
 
 The Workload Identity Agent is a process with elevated privileges with access to TPM and location sensor hardware.
 
-**Measurement Collection**: For the Workload Identity Agent start case, the Agent executable is measured by Linux IMA, for example through cloud init and stored in TPM PCR through tools e.g., Linux ima-evm-utils before it is loaded. For the Workload Identity Agent restart case, it is not clear how the storage in TPM PCR will be accompished - ideally this should be natively handled in the IMA measurement process with an ability to retrigger on restart on refresh cycles (see TODO 1).
+**Measurement Collection**: For the Workload Identity Agent start case, the Agent executable is measured by Linux IMA, for example through cloud init and stored in TPM PCR through tools e.g., Linux ima-evm-utils before it is loaded. For the Workload Identity Agent restart case, it is not clear how the storage in TPM PCR will be accomplished - ideally this should be natively handled in the IMA measurement process with an ability to retrigger on restart or refresh cycles (OPEN ISSUES 1).
 
 **Local Verification**: Enforce local validation of a measurement against an approved value stored in an extended attribute of the file.
 
@@ -343,9 +343,9 @@ This described process below is run periodically (say every .5 minutes or 30 sec
 
 * Workload Identity Agent gathers the location (1) directly from host-local location sensors (e.g., GNSS) which provide a hardware attested location and/or (2) using existing Operating System (OS) APIs which gathers a composite location from location providers (e.g. Google, Apple). Location has a quality associated with it. For example, IP address based or Wi-Fi based location is of lower quality as compared to other sources.
 
-* For each of the registered workload IDs (or website URL), based on the configured location policy (precise, approximated within a fixed radius, geographic region based indicating city/state/country - TODO 2), the location is converted appropriately to a workload id specific location. For thin clients (browser clients), the workload id is website URL. This ensures that the privacy of the workload is preserved, while still allowing for geolocation enforcement.
+* For each of the registered workload IDs (or website URL), based on the configured location policy (precise, approximated within a fixed radius, geographic region based indicating city/state/country - OPEN ISSUES 2), the location is converted appropriately to a workload id specific location. For thin clients (browser clients), the workload id is website URL. This ensures that the privacy of the workload is preserved, while still allowing for geolocation enforcement.
 
-* All the above details are captured in the host/workload geographic boundary information which contains the following fields:
+* All the above details are captured in the Geolocation Information Cache which contains the following fields:
   * Workload ID specific location details for each client workload where each entry contains:
     * client workload ID - relevant for thick clients (e.g. Microsoft Teams client)
     * server workload ID (or website URL) - relevant for all clients (thick or thin)
@@ -354,18 +354,18 @@ This described process below is run periodically (say every .5 minutes or 30 sec
     * client location quality (e.g. GNSS, mobile network, Wi-Fi, IP address)
   * Time of collection (timestamp)
 
-* It is important to note that the host/workload geographic boundary information is kept in the Workload Identity Agent memory and is not stored on disk. The information is refreshed periodically to ensure that the location is up-to-date. This information is used only by workloads in the host and never leaves the host.
+* It is important to note that the Geolocation Information Cache is kept in the Workload Identity Agent memory and is not stored on disk. The information is refreshed periodically to ensure that the location is up-to-date. This information is used only by workloads in the host and never leaves the host.
 
-* If the location is gathered only using existing OS APIs, it may be done in the workload (thick client) or browser extension (thin client). The host/workload geographic boundary information is stored in thick client memory (relevant only to specific client) or browser extension memory (relevant to all thin clients and indexed using user in OAuth bearer token/server website URL).
+* If the location is gathered only using existing OS APIs, it may be done in the workload (thick client) or browser extension (thin client). The Geolocation Information Cache is stored in thick client memory (relevant only to specific client) or browser extension memory (relevant to all thin clients and indexed using user in OAuth bearer token/server website URL).
 
 # Data Plane - HTTP Networking Protocol
 
-A new HTTP header field 'X-Workload-Geo-ID' is proposed for conveying the host/workload geographic boundary information. A new HTTP header field 'X-Request-Signature' is proposed for conveying the signature of the HTTP request. The signature is generated by the Workload Identity Agent using the Workload Identity Agent Private Key. The following steps describe the end-to-end workflow for HTTP requests between client workloads (e.g. Microsoft Teams thick client app, Microsoft Teams thin client browser app) and server workloads (e.g. Microsoft Teams server), including intermediate proxies (e.g., API gateways, SASE firewalls):
+A new HTTP header field 'X-Workload-Geo-ID' is proposed for conveying the Geolocation Information Cache. A new HTTP header field 'X-Request-Signature' is proposed for conveying the signature of the HTTP request. The signature is generated by the Workload Identity Agent using the Workload Identity Agent Private Key. The following steps describe the end-to-end workflow for HTTP requests between client workloads (e.g. Microsoft Teams thick client app, Microsoft Teams thin client browser app) and server workloads (e.g. Microsoft Teams server), including intermediate proxies (e.g., API gateways, SASE firewalls):
 
 * Client workload gets OAuth bearer token for the server workload from the Authentication/Authorization server.
 
-* Client workload (browser extension for thin client) contacts the Workload Identity Agent to get the latest host/workload geographic boundary information relevant to it. If the location is gathered only using existing OS APIs, it may be done in the workload (thick client) or browser extension (thin client). The client workload (browser extension for thin client) constructs a X-Workload-Geo-ID extension header containing the following fields:
-  * The latest host/workload geographic boundary information relevant to the client workload ID (thick clients) or user in OAuth bearer token/server website URL (thin clients).
+* Client workload (browser extension for thin client) contacts the Workload Identity Agent to get the latest Geolocation Information Cache relevant to it. If the location is gathered only using existing OS APIs, it may be done in the workload (thick client) or browser extension (thin client). The client workload (browser extension for thin client) constructs a X-Workload-Geo-ID extension header containing the following fields:
+  * The latest Geolocation Information Cache relevant to the client workload ID (thick clients) or user in OAuth bearer token/server website URL (thin clients).
   * The current timestamp.
   * A unique nonce which is monotonically increasing (for replay protection and troubleshooting).
 
@@ -423,9 +423,9 @@ A new HTTP header field 'X-Workload-Geo-ID' is proposed for conveying the host/w
 
 # Data Plane - IPSEC Tunnel Networking Protocol
 
-While it not easy to modify IPSEC networking protcol, an approach would be for the IPSEC controller to check where the IPSEC tunnel is being established from a specific host and whether the host is within a specific geographic boundary. The IPSEC controller can use the Workload Identity Agent to get the host/workload geographic boundary information and verify that the host is within the allowed geographic boundary. If the host is not within the allowed geographic boundary, the IPSEC controller can reject the IPSEC tunnel establishment request.
-
-Since IPSEC tunnel can encapsulate any IP traffic, it provides proof of residency and geolocation on the host for all the traffic that is tunneled through it (e.g. RDP, SCTP, NFS, SSH).
+While it is not easy to modify IPSEC networking protocol, an approach would be for the IPSEC controller to check where the IPSEC tunnel is being established from a specific host and whether the host is within a specific geographic boundary. The IPSEC controller can use the Workload Identity Agent to get the Geolocation Information Cache and verify that the host is within the allowed geographic boundary. If the host is not within the allowed geographic boundary, the IPSEC controller can reject the IPSEC tunnel establishment request.
+* Benefit: Since IPSEC tunnel can encapsulate any IP traffic, it provides proof of residency and geolocation on the host for all the traffic that is tunneled through it (e.g. RDP, SCTP, NFS, SSH).
+* Challenge: Location information granularity is at the host level and not at the individual workload level which may be a challenge for some use cases.
 
 # Scalability Considerations
 
@@ -437,10 +437,10 @@ In the case of data center hosts, the geolocation sensor can be on a host with M
 End user location anchor host - goal is to provide a easy to use wireless solution that can be used by end users without requiring them to install a geolocation sensor on their laptop/desktop host.
 * The smartphone can be used as a location anchor host for the laptop/desktop host. The smartphone connects to the laptop/desktop host using Bluetooth Low Energy (BLE) or Ultra-Wideband (UWB) technology and continuously measures the following:
   * signal strength of the laptop/desktop host
-  * round trip time (RTT) between the smartphone and laptop/desktop host
+  * round-trip time (RTT) between the smartphone and laptop/desktop host
 
 Data center location anchor host - goal is to provide a easy to use solution that can be used by data center operators without requiring them to install a geolocation sensor on every data center host.
-* Use a software-based cryptographically signed round-trip-time (RTT) measurement between the location anchor host and other data center hosts. One possible implementation to add a host proximity plugin to the SPIFFE/SPIRE agent, which can measure RTT between the location anchor host and other data center hosts. The RTT measurement can be used to determine the proximity of the other data center hosts to the location anchor host. The tradeoff is that software-based RTT measurement may not provide sub-microsecond accuracy due to inherent software jitter, but it can still provide a reasonable approximation of the proximity of the other data center hosts to the location anchor host.
+* Use a software-based cryptographically signed round-trip-time (RTT) measurement between the location anchor host and other data center hosts. One possible implementation is to add a host proximity plugin to the SPIFFE/SPIRE agent, which can measure RTT between the location anchor host and other data center hosts. The RTT measurement can be used to determine the proximity of the other data center hosts to the location anchor host. The tradeoff is that software-based RTT measurement may not provide sub-microsecond accuracy due to inherent software jitter, but it can still provide a reasonable approximation of the proximity of the other data center hosts to the location anchor host.
 
 # Authorization Policy Implementers
 
@@ -480,18 +480,15 @@ This document has no IANA actions.
 
 # Appendix - Items to follow up
 
-## TODO 1: Restart time attestation/remote verification of workload identity agent for integrity and proof of residency on Host
+## OPEN ISSUES 1: Restart time attestation/remote verification of workload identity agent for integrity and proof of residency on Host
 
 For the workload identity agent restart case, it is not clear how the storage in TPM PCR will be accompished - ideally this should be natively handled in the IMA measurement process with an ability to retrigger on restart on refresh cycles.
 
-## TODO 2: Location privacy options
+## OPEN ISSUES 2: Location privacy options
 
-The current approach includes some location privacy options for the geolocation in the host/workload geographic boundary information. This may need to be expanded further in the future.
+The current approach includes some location privacy options for the geolocation in the Geolocation Information Cache. This may need to be expanded further in the future.
 
 # Acknowledgments
-{:numbered="false"}
-
-The authors thank the members of the WIMSE working group and the broader trusted computing and workload identity communities for their feedback and contributions. Special thanks to the Trusted Computing Group (TCG), the SPIFFE/SPIRE open-source community, and industry partners for foundational work and ongoing collaboration.
 
 
 
