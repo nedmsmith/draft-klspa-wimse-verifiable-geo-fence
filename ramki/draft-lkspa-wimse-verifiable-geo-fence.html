@@ -1271,24 +1271,24 @@ svg :is([fill="white"], [fill^="#fff"]) {
             <p id="section-toc.1-1.16.1"><a href="#section-16" class="auto internal xref">16</a>. <a href="#name-appendix-items-to-follow-up" class="internal xref">Appendix - Items to follow up</a></p>
 <ul class="compact toc ulBare ulEmpty">
 <li class="compact toc ulBare ulEmpty" id="section-toc.1-1.16.2.1">
-                <p id="section-toc.1-1.16.2.1.1"><a href="#section-16.1" class="auto internal xref">16.1</a>.  <a href="#name-todo-1-restart-time-attesta" class="internal xref">TODO 1: Restart time attestation/remote verification of workload identity agent for integrity and proof of residency on Host</a></p>
+                <p id="section-toc.1-1.16.2.1.1"><a href="#section-16.1" class="auto internal xref">16.1</a>.  <a href="#name-open-issues-1-restart-time-" class="internal xref">OPEN ISSUES 1: Restart time attestation/remote verification of workload identity agent for integrity and proof of residency on Host</a></p>
 </li>
               <li class="compact toc ulBare ulEmpty" id="section-toc.1-1.16.2.2">
-                <p id="section-toc.1-1.16.2.2.1"><a href="#section-16.2" class="auto internal xref">16.2</a>.  <a href="#name-todo-2-location-privacy-opt" class="internal xref">TODO 2: Location privacy options</a></p>
+                <p id="section-toc.1-1.16.2.2.1"><a href="#section-16.2" class="auto internal xref">16.2</a>.  <a href="#name-open-issues-2-location-priv" class="internal xref">OPEN ISSUES 2: Location privacy options</a></p>
 </li>
             </ul>
 </li>
           <li class="compact toc ulBare ulEmpty" id="section-toc.1-1.17">
-            <p id="section-toc.1-1.17.1"><a href="#section-17" class="auto internal xref"></a><a href="#name-acknowledgments" class="internal xref">Acknowledgments</a></p>
+            <p id="section-toc.1-1.17.1"><a href="#section-17" class="auto internal xref">17</a>. <a href="#name-acknowledgments" class="internal xref">Acknowledgments</a></p>
 </li>
           <li class="compact toc ulBare ulEmpty" id="section-toc.1-1.18">
-            <p id="section-toc.1-1.18.1"><a href="#section-18" class="auto internal xref"></a><a href="#name-references" class="internal xref">References</a></p>
+            <p id="section-toc.1-1.18.1"><a href="#section-18" class="auto internal xref">18</a>. <a href="#name-references" class="internal xref">References</a></p>
 <ul class="compact toc ulBare ulEmpty">
 <li class="compact toc ulBare ulEmpty" id="section-toc.1-1.18.2.1">
-                <p id="section-toc.1-1.18.2.1.1"><a href="#section-18.1" class="auto internal xref"></a><a href="#name-normative-references" class="internal xref">Normative References</a></p>
+                <p id="section-toc.1-1.18.2.1.1"><a href="#section-18.1" class="auto internal xref">18.1</a>.  <a href="#name-normative-references" class="internal xref">Normative References</a></p>
 </li>
               <li class="compact toc ulBare ulEmpty" id="section-toc.1-1.18.2.2">
-                <p id="section-toc.1-1.18.2.2.1"><a href="#section-18.2" class="auto internal xref"></a><a href="#name-informative-references" class="internal xref">Informative References</a></p>
+                <p id="section-toc.1-1.18.2.2.1"><a href="#section-18.2" class="auto internal xref">18.2</a>.  <a href="#name-informative-references" class="internal xref">Informative References</a></p>
 </li>
             </ul>
 </li>
@@ -1512,7 +1512,7 @@ This attestation includes data about the TPM's state and can be used to verify t
 <a href="#section-7.1.2" class="section-number selfRef">7.1.2. </a><a href="#name-start-restart-time-attestat" class="section-name selfRef">Start/Restart time attestation/remote verification of Workload Identity Agent for integrity and proof of residency on Host - Linux IMA and Workload Identity Agent public/private key attestation are newly added</a>
           </h4>
 <p id="section-7.1.2-1">The Workload Identity Agent is a process with elevated privileges with access to TPM and location sensor hardware.<a href="#section-7.1.2-1" class="pilcrow">¶</a></p>
-<p id="section-7.1.2-2"><strong>Measurement Collection</strong>: For the Workload Identity Agent start case, the Agent executable is measured by Linux IMA, for example through cloud init and stored in TPM PCR through tools e.g., Linux ima-evm-utils before it is loaded. For the Workload Identity Agent restart case, it is not clear how the storage in TPM PCR will be accompished - ideally this should be natively handled in the IMA measurement process with an ability to retrigger on restart on refresh cycles (see TODO 1).<a href="#section-7.1.2-2" class="pilcrow">¶</a></p>
+<p id="section-7.1.2-2"><strong>Measurement Collection</strong>: For the Workload Identity Agent start case, the Agent executable is measured by Linux IMA, for example through cloud init and stored in TPM PCR through tools e.g., Linux ima-evm-utils before it is loaded. For the Workload Identity Agent restart case, it is not clear how the storage in TPM PCR will be accomplished - ideally this should be natively handled in the IMA measurement process with an ability to retrigger on restart or refresh cycles (OPEN ISSUES 1).<a href="#section-7.1.2-2" class="pilcrow">¶</a></p>
 <p id="section-7.1.2-3"><strong>Local Verification</strong>: Enforce local validation of a measurement against an approved value stored in an extended attribute of the file.<a href="#section-7.1.2-3" class="pilcrow">¶</a></p>
 <p id="section-7.1.2-4"><strong>TPM attestation and remote Workload Identity Manager verification</strong>:<a href="#section-7.1.2-4" class="pilcrow">¶</a></p>
 <p id="section-7.1.2-5">Step 1:
@@ -1629,10 +1629,10 @@ This attestation includes data about the TPM's state and can be used to verify t
             <p id="section-7.4-2.1.1">Workload Identity Agent gathers the location (1) directly from host-local location sensors (e.g., GNSS) which provide a hardware attested location and/or (2) using existing Operating System (OS) APIs which gathers a composite location from location providers (e.g. Google, Apple). Location has a quality associated with it. For example, IP address based or Wi-Fi based location is of lower quality as compared to other sources.<a href="#section-7.4-2.1.1" class="pilcrow">¶</a></p>
 </li>
           <li class="normal" id="section-7.4-2.2">
-            <p id="section-7.4-2.2.1">For each of the registered workload IDs (or website URL), based on the configured location policy (precise, approximated within a fixed radius, geographic region based indicating city/state/country - TODO 2), the location is converted appropriately to a workload id specific location. For thin clients (browser clients), the workload id is website URL. This ensures that the privacy of the workload is preserved, while still allowing for geolocation enforcement.<a href="#section-7.4-2.2.1" class="pilcrow">¶</a></p>
+            <p id="section-7.4-2.2.1">For each of the registered workload IDs (or website URL), based on the configured location policy (precise, approximated within a fixed radius, geographic region based indicating city/state/country - OPEN ISSUES 2), the location is converted appropriately to a workload id specific location. For thin clients (browser clients), the workload id is website URL. This ensures that the privacy of the workload is preserved, while still allowing for geolocation enforcement.<a href="#section-7.4-2.2.1" class="pilcrow">¶</a></p>
 </li>
           <li class="normal" id="section-7.4-2.3">
-            <p id="section-7.4-2.3.1">All the above details are captured in the host/workload geographic boundary information which contains the following fields:<a href="#section-7.4-2.3.1" class="pilcrow">¶</a></p>
+            <p id="section-7.4-2.3.1">All the above details are captured in the Geolocation Information Cache which contains the following fields:<a href="#section-7.4-2.3.1" class="pilcrow">¶</a></p>
 <ul class="normal">
 <li class="normal" id="section-7.4-2.3.2.1">
                 <p id="section-7.4-2.3.2.1.1">Workload ID specific location details for each client workload where each entry contains:<a href="#section-7.4-2.3.2.1.1" class="pilcrow">¶</a></p>
@@ -1660,10 +1660,10 @@ This attestation includes data about the TPM's state and can be used to verify t
             </ul>
 </li>
           <li class="normal" id="section-7.4-2.4">
-            <p id="section-7.4-2.4.1">It is important to note that the host/workload geographic boundary information is kept in the Workload Identity Agent memory and is not stored on disk. The information is refreshed periodically to ensure that the location is up-to-date. This information is used only by workloads in the host and never leaves the host.<a href="#section-7.4-2.4.1" class="pilcrow">¶</a></p>
+            <p id="section-7.4-2.4.1">It is important to note that the Geolocation Information Cache is kept in the Workload Identity Agent memory and is not stored on disk. The information is refreshed periodically to ensure that the location is up-to-date. This information is used only by workloads in the host and never leaves the host.<a href="#section-7.4-2.4.1" class="pilcrow">¶</a></p>
 </li>
           <li class="normal" id="section-7.4-2.5">
-            <p id="section-7.4-2.5.1">If the location is gathered only using existing OS APIs, it may be done in the workload (thick client) or browser extension (thin client). The host/workload geographic boundary information is stored in thick client memory (relevant only to specific client) or browser extension memory (relevant to all thin clients and indexed using user in OAuth bearer token/server website URL).<a href="#section-7.4-2.5.1" class="pilcrow">¶</a></p>
+            <p id="section-7.4-2.5.1">If the location is gathered only using existing OS APIs, it may be done in the workload (thick client) or browser extension (thin client). The Geolocation Information Cache is stored in thick client memory (relevant only to specific client) or browser extension memory (relevant to all thin clients and indexed using user in OAuth bearer token/server website URL).<a href="#section-7.4-2.5.1" class="pilcrow">¶</a></p>
 </li>
         </ul>
 </section>
@@ -1675,16 +1675,16 @@ This attestation includes data about the TPM's state and can be used to verify t
       <h2 id="name-data-plane-http-networking-">
 <a href="#section-8" class="section-number selfRef">8. </a><a href="#name-data-plane-http-networking-" class="section-name selfRef">Data Plane - HTTP Networking Protocol</a>
       </h2>
-<p id="section-8-1">A new HTTP header field 'X-Workload-Geo-ID' is proposed for conveying the host/workload geographic boundary information. A new HTTP header field 'X-Request-Signature' is proposed for conveying the signature of the HTTP request. The signature is generated by the Workload Identity Agent using the Workload Identity Agent Private Key. The following steps describe the end-to-end workflow for HTTP requests between client workloads (e.g. Microsoft Teams thick client app, Microsoft Teams thin client browser app) and server workloads (e.g. Microsoft Teams server), including intermediate proxies (e.g., API gateways, SASE firewalls):<a href="#section-8-1" class="pilcrow">¶</a></p>
+<p id="section-8-1">A new HTTP header field 'X-Workload-Geo-ID' is proposed for conveying the Geolocation Information Cache. A new HTTP header field 'X-Request-Signature' is proposed for conveying the signature of the HTTP request. The signature is generated by the Workload Identity Agent using the Workload Identity Agent Private Key. The following steps describe the end-to-end workflow for HTTP requests between client workloads (e.g. Microsoft Teams thick client app, Microsoft Teams thin client browser app) and server workloads (e.g. Microsoft Teams server), including intermediate proxies (e.g., API gateways, SASE firewalls):<a href="#section-8-1" class="pilcrow">¶</a></p>
 <ul class="normal">
 <li class="normal" id="section-8-2.1">
           <p id="section-8-2.1.1">Client workload gets OAuth bearer token for the server workload from the Authentication/Authorization server.<a href="#section-8-2.1.1" class="pilcrow">¶</a></p>
 </li>
         <li class="normal" id="section-8-2.2">
-          <p id="section-8-2.2.1">Client workload (browser extension for thin client) contacts the Workload Identity Agent to get the latest host/workload geographic boundary information relevant to it. If the location is gathered only using existing OS APIs, it may be done in the workload (thick client) or browser extension (thin client). The client workload (browser extension for thin client) constructs a X-Workload-Geo-ID extension header containing the following fields:<a href="#section-8-2.2.1" class="pilcrow">¶</a></p>
+          <p id="section-8-2.2.1">Client workload (browser extension for thin client) contacts the Workload Identity Agent to get the latest Geolocation Information Cache relevant to it. If the location is gathered only using existing OS APIs, it may be done in the workload (thick client) or browser extension (thin client). The client workload (browser extension for thin client) constructs a X-Workload-Geo-ID extension header containing the following fields:<a href="#section-8-2.2.1" class="pilcrow">¶</a></p>
 <ul class="normal">
 <li class="normal" id="section-8-2.2.2.1">
-              <p id="section-8-2.2.2.1.1">The latest host/workload geographic boundary information relevant to the client workload ID (thick clients) or user in OAuth bearer token/server website URL (thin clients).<a href="#section-8-2.2.2.1.1" class="pilcrow">¶</a></p>
+              <p id="section-8-2.2.2.1.1">The latest Geolocation Information Cache relevant to the client workload ID (thick clients) or user in OAuth bearer token/server website URL (thin clients).<a href="#section-8-2.2.2.1.1" class="pilcrow">¶</a></p>
 </li>
             <li class="normal" id="section-8-2.2.2.2">
               <p id="section-8-2.2.2.2.1">The current timestamp.<a href="#section-8-2.2.2.2.1" class="pilcrow">¶</a></p>
@@ -1849,8 +1849,9 @@ This attestation includes data about the TPM's state and can be used to verify t
       <h2 id="name-data-plane-ipsec-tunnel-net">
 <a href="#section-11" class="section-number selfRef">11. </a><a href="#name-data-plane-ipsec-tunnel-net" class="section-name selfRef">Data Plane - IPSEC Tunnel Networking Protocol</a>
       </h2>
-<p id="section-11-1">While it not easy to modify IPSEC networking protcol, an approach would be for the IPSEC controller to check where the IPSEC tunnel is being established from a specific host and whether the host is within a specific geographic boundary. The IPSEC controller can use the Workload Identity Agent to get the host/workload geographic boundary information and verify that the host is within the allowed geographic boundary. If the host is not within the allowed geographic boundary, the IPSEC controller can reject the IPSEC tunnel establishment request.<a href="#section-11-1" class="pilcrow">¶</a></p>
-<p id="section-11-2">Since IPSEC tunnel can encapsulate any IP traffic, it provides proof of residency and geolocation on the host for all the traffic that is tunneled through it (e.g. RDP, SCTP, NFS, SSH).<a href="#section-11-2" class="pilcrow">¶</a></p>
+<p id="section-11-1">While it is not easy to modify IPSEC networking protocol, an approach would be for the IPSEC controller to check where the IPSEC tunnel is being established from a specific host and whether the host is within a specific geographic boundary. The IPSEC controller can use the Workload Identity Agent to get the Geolocation Information Cache and verify that the host is within the allowed geographic boundary. If the host is not within the allowed geographic boundary, the IPSEC controller can reject the IPSEC tunnel establishment request.
+* Benefit: Since IPSEC tunnel can encapsulate any IP traffic, it provides proof of residency and geolocation on the host for all the traffic that is tunneled through it (e.g. RDP, SCTP, NFS, SSH).
+* Challenge: Location information granularity is at the host level and not at the individual workload level which may be a challenge for some use cases.<a href="#section-11-1" class="pilcrow">¶</a></p>
 </section>
 </div>
 <div id="scalability-considerations">
@@ -1865,9 +1866,9 @@ In the case of data center hosts, the geolocation sensor can be on a host with M
 <p id="section-12-2">End user location anchor host - goal is to provide a easy to use wireless solution that can be used by end users without requiring them to install a geolocation sensor on their laptop/desktop host.
 * The smartphone can be used as a location anchor host for the laptop/desktop host. The smartphone connects to the laptop/desktop host using Bluetooth Low Energy (BLE) or Ultra-Wideband (UWB) technology and continuously measures the following:
   * signal strength of the laptop/desktop host
-  * round trip time (RTT) between the smartphone and laptop/desktop host<a href="#section-12-2" class="pilcrow">¶</a></p>
+  * round-trip time (RTT) between the smartphone and laptop/desktop host<a href="#section-12-2" class="pilcrow">¶</a></p>
 <p id="section-12-3">Data center location anchor host - goal is to provide a easy to use solution that can be used by data center operators without requiring them to install a geolocation sensor on every data center host.
-* Use a software-based cryptographically signed round-trip-time (RTT) measurement between the location anchor host and other data center hosts. One possible implementation to add a host proximity plugin to the SPIFFE/SPIRE agent, which can measure RTT between the location anchor host and other data center hosts. The RTT measurement can be used to determine the proximity of the other data center hosts to the location anchor host. The tradeoff is that software-based RTT measurement may not provide sub-microsecond accuracy due to inherent software jitter, but it can still provide a reasonable approximation of the proximity of the other data center hosts to the location anchor host.<a href="#section-12-3" class="pilcrow">¶</a></p>
+* Use a software-based cryptographically signed round-trip-time (RTT) measurement between the location anchor host and other data center hosts. One possible implementation is to add a host proximity plugin to the SPIFFE/SPIRE agent, which can measure RTT between the location anchor host and other data center hosts. The RTT measurement can be used to determine the proximity of the other data center hosts to the location anchor host. The tradeoff is that software-based RTT measurement may not provide sub-microsecond accuracy due to inherent software jitter, but it can still provide a reasonable approximation of the proximity of the other data center hosts to the location anchor host.<a href="#section-12-3" class="pilcrow">¶</a></p>
 </section>
 </div>
 <div id="authorization-policy-implementers">
@@ -1931,20 +1932,20 @@ In the case of data center hosts, the geolocation sensor can be on a host with M
       <h2 id="name-appendix-items-to-follow-up">
 <a href="#section-16" class="section-number selfRef">16. </a><a href="#name-appendix-items-to-follow-up" class="section-name selfRef">Appendix - Items to follow up</a>
       </h2>
-<div id="todo-1-restart-time-attestationremote-verification-of-workload-identity-agent-for-integrity-and-proof-of-residency-on-host">
+<div id="open-issues-1-restart-time-attestationremote-verification-of-workload-identity-agent-for-integrity-and-proof-of-residency-on-host">
 <section id="section-16.1">
-        <h3 id="name-todo-1-restart-time-attesta">
-<a href="#section-16.1" class="section-number selfRef">16.1. </a><a href="#name-todo-1-restart-time-attesta" class="section-name selfRef">TODO 1: Restart time attestation/remote verification of workload identity agent for integrity and proof of residency on Host</a>
+        <h3 id="name-open-issues-1-restart-time-">
+<a href="#section-16.1" class="section-number selfRef">16.1. </a><a href="#name-open-issues-1-restart-time-" class="section-name selfRef">OPEN ISSUES 1: Restart time attestation/remote verification of workload identity agent for integrity and proof of residency on Host</a>
         </h3>
 <p id="section-16.1-1">For the workload identity agent restart case, it is not clear how the storage in TPM PCR will be accompished - ideally this should be natively handled in the IMA measurement process with an ability to retrigger on restart on refresh cycles.<a href="#section-16.1-1" class="pilcrow">¶</a></p>
 </section>
 </div>
-<div id="todo-2-location-privacy-options">
+<div id="open-issues-2-location-privacy-options">
 <section id="section-16.2">
-        <h3 id="name-todo-2-location-privacy-opt">
-<a href="#section-16.2" class="section-number selfRef">16.2. </a><a href="#name-todo-2-location-privacy-opt" class="section-name selfRef">TODO 2: Location privacy options</a>
+        <h3 id="name-open-issues-2-location-priv">
+<a href="#section-16.2" class="section-number selfRef">16.2. </a><a href="#name-open-issues-2-location-priv" class="section-name selfRef">OPEN ISSUES 2: Location privacy options</a>
         </h3>
-<p id="section-16.2-1">The current approach includes some location privacy options for the geolocation in the host/workload geographic boundary information. This may need to be expanded further in the future.<a href="#section-16.2-1" class="pilcrow">¶</a></p>
+<p id="section-16.2-1">The current approach includes some location privacy options for the geolocation in the Geolocation Information Cache. This may need to be expanded further in the future.<a href="#section-16.2-1" class="pilcrow">¶</a></p>
 </section>
 </div>
 </section>
@@ -1952,20 +1953,19 @@ In the case of data center hosts, the geolocation sensor can be on a host with M
 <div id="acknowledgments">
 <section id="section-17">
       <h2 id="name-acknowledgments">
-<a href="#name-acknowledgments" class="section-name selfRef">Acknowledgments</a>
-      </h2>
-<p id="section-17-1">The authors thank the members of the WIMSE working group and the broader trusted computing and workload identity communities for their feedback and contributions. Special thanks to the Trusted Computing Group (TCG), the SPIFFE/SPIRE open-source community, and industry partners for foundational work and ongoing collaboration.<a href="#section-17-1" class="pilcrow">¶</a></p>
+<a href="#section-17" class="section-number selfRef">17. </a><a href="#name-acknowledgments" class="section-name selfRef">Acknowledgments</a>
+    </h2>
 </section>
 </div>
 <div id="sec-combined-references">
 <section id="section-18">
       <h2 id="name-references">
-<a href="#name-references" class="section-name selfRef">References</a>
+<a href="#section-18" class="section-number selfRef">18. </a><a href="#name-references" class="section-name selfRef">References</a>
       </h2>
 <div id="sec-normative-references">
 <section id="section-18.1">
         <h3 id="name-normative-references">
-<a href="#name-normative-references" class="section-name selfRef">Normative References</a>
+<a href="#section-18.1" class="section-number selfRef">18.1. </a><a href="#name-normative-references" class="section-name selfRef">Normative References</a>
         </h3>
 <dl class="references">
 <dt id="RFC2119">[RFC2119]</dt>
@@ -1982,7 +1982,7 @@ In the case of data center hosts, the geolocation sensor can be on a host with M
 <div id="sec-informative-references">
 <section id="section-18.2">
         <h3 id="name-informative-references">
-<a href="#name-informative-references" class="section-name selfRef">Informative References</a>
+<a href="#section-18.2" class="section-number selfRef">18.2. </a><a href="#name-informative-references" class="section-name selfRef">Informative References</a>
         </h3>
 <dl class="references">
 <dt id="doj-cisa">[doj-cisa]</dt>
