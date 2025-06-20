@@ -4,14 +4,14 @@
 <meta charset="utf-8">
 <meta content="Common,Latin" name="scripts">
 <meta content="initial-scale=1.0" name="viewport">
-<title>Trustworthy and Verifiable Geofencing for Workloads</title>
+<title>Trustworthy and Verifiable Geofencing for Workloads: Solving the Bearer Token Problem</title>
 <meta content="Ramki Krishnan" name="author">
 <meta content="Ned Smith" name="author">
 <meta content="Diego R. Lopez" name="author">
 <meta content="A Prasad" name="author">
 <meta content="Srinivasa Addepalli" name="author">
 <meta content="
-       Financial services, healthcare, and government entities have data residency requirements that aim to protect sensitive data by specifying its location. Data location can be both geographic and host-centric. Geolocation affinity means workloads are cryptographically bound to a geographic boundary. Host affinity means workloads are cryptographically bound to a specific execution environment. WIMSE architecture can be improved to show how location can be cryptographically bound to WIMSE identities. This document augments WIMSE architecture to include geolocation and host affinity use cases and workflows. 
+       Modern cloud and distributed environments face significant risks from stolen bearer tokens, which can be used by attackers from unauthorized locations or hosts. This document presents a framework for trustworthy and verifiable geofencing for workloads that directly addresses the bearer token problem. By cryptographically binding workload identity to both geographic and host attributes, and by supplementing bearer tokens with verifiable, location- and host-bound claims, the framework enables secure enforcement of data residency, geolocation affinity, and host affinity requirements. The approach leverages trusted hardware, attestation protocols, and geolocation services to ensure that only authorized workloads in approved locations and environments can access sensitive data or services, even in the presence of stolen bearer tokens. 
     " name="description">
 <meta content="xml2rfc 3.29.0" name="generator">
 <meta content="geofence" name="keyword">
@@ -1098,10 +1098,10 @@ svg :is([fill="white"], [fill^="#fff"]) {
 </dd>
 </dl>
 </div>
-<h1 id="title">Trustworthy and Verifiable Geofencing for Workloads</h1>
+<h1 id="title">Trustworthy and Verifiable Geofencing for Workloads: Solving the Bearer Token Problem</h1>
 <section id="section-abstract">
       <h2 id="abstract"><a href="#abstract" class="selfRef">Abstract</a></h2>
-<p id="section-abstract-1">Financial services, healthcare, and government entities have data residency requirements that aim to protect sensitive data by specifying its location. Data location can be both geographic and host-centric. Geolocation affinity means workloads are cryptographically bound to a geographic boundary. Host affinity means workloads are cryptographically bound to a specific execution environment. WIMSE architecture can be improved to show how location can be cryptographically bound to WIMSE identities. This document augments WIMSE architecture to include geolocation and host affinity use cases and workflows.<a href="#section-abstract-1" class="pilcrow">¶</a></p>
+<p id="section-abstract-1">Modern cloud and distributed environments face significant risks from stolen bearer tokens, which can be used by attackers from unauthorized locations or hosts. This document presents a framework for trustworthy and verifiable geofencing for workloads that directly addresses the bearer token problem. By cryptographically binding workload identity to both geographic and host attributes, and by supplementing bearer tokens with verifiable, location- and host-bound claims, the framework enables secure enforcement of data residency, geolocation affinity, and host affinity requirements. The approach leverages trusted hardware, attestation protocols, and geolocation services to ensure that only authorized workloads in approved locations and environments can access sensitive data or services, even in the presence of stolen bearer tokens.<a href="#section-abstract-1" class="pilcrow">¶</a></p>
 </section>
 <section class="note rfcEditorRemove" id="section-note.1">
       <h2 id="name-about-this-document">
@@ -1307,15 +1307,14 @@ svg :is([fill="white"], [fill^="#fff"]) {
       <h2 id="name-introduction">
 <a href="#section-1" class="section-number selfRef">1. </a><a href="#name-introduction" class="section-name selfRef">Introduction</a>
       </h2>
-<p id="section-1-1">This document describes a framework for trustworthy and verifiable geofencing of workloads.
-It details use cases, architectural flows, and protocol enhancements that leverage trusted hardware (e.g., TPM), attestation protocols, and geolocation services.
-The goal is to enable interoperable, cryptographically verifiable claims about workload residency and location, supporting compliance, security, and operational requirements in multi-system environments.<a href="#section-1-1" class="pilcrow">¶</a></p>
-<p id="section-1-2">As organizations increasingly adopt cloud and distributed computing, the need to enforce data residency, geolocation affinity, and host affinity has become critical for regulatory compliance and risk management.
-Traditional approaches to geographic and host enforcement rely on trust in infrastructure providers or network-based controls, which are insufficient in adversarial or multi-tenant environments.<a href="#section-1-2" class="pilcrow">¶</a></p>
-<p id="section-1-3">Recent advances in trusted computing, remote attestation, and workload identity standards enable a new class of solutions where the geographic location and host integrity of workloads can be cryptographically attested and verified.
-By binding workload identity to both platform and domain attributes, such as TPM-backed device identity and verifiable geographic boundaries, organizations can enforce fine-grained policies to define where and how sensitive workloads are executed.<a href="#section-1-3" class="pilcrow">¶</a></p>
-<p id="section-1-4">Data residency requirements are described in more detail in <span>[<a href="#tcg-geo-loc" class="cite xref">tcg-geo-loc</a>]</span>.<a href="#section-1-4" class="pilcrow">¶</a></p>
-<p id="section-1-5">An example of platform identity binding (i.e., host affinity) is described in <span>[<a href="#tcg-tpm" class="cite xref">tcg-tpm</a>]</span>.<a href="#section-1-5" class="pilcrow">¶</a></p>
+<p id="section-1-1">Bearer tokens are widely used for authentication in cloud and enterprise environments, but their theft and misuse pose a critical security challenge—attackers can replay stolen tokens from unauthorized hosts or locations, bypassing traditional controls. This document describes a framework for trustworthy and verifiable geofencing of workloads that solves the bearer token problem by cryptographically binding workload identity to both platform and geographic attributes. The solution supplements bearer tokens with signed, verifiable claims about workload residency and location, conveyed in each request, enabling enforcement of data residency, geolocation affinity, and host affinity policies even in adversarial or multi-tenant environments.<a href="#section-1-1" class="pilcrow">¶</a></p>
+<p id="section-1-2">The framework details use cases, architectural flows, and protocol enhancements that leverage trusted hardware (e.g., TPM), attestation protocols, and geolocation services. By providing interoperable, cryptographically verifiable claims about workload residency and location, the approach supports compliance, security, and operational requirements, and ensures that only authorized workloads in approved environments can access sensitive resources, regardless of bearer token compromise.<a href="#section-1-2" class="pilcrow">¶</a></p>
+<p id="section-1-3">As organizations increasingly adopt cloud and distributed computing, the need to enforce data residency, geolocation affinity, and host affinity has become critical for regulatory compliance and risk management.
+Traditional approaches to geographic and host enforcement rely on trust in infrastructure providers or network-based controls, which are insufficient in adversarial or multi-tenant environments.<a href="#section-1-3" class="pilcrow">¶</a></p>
+<p id="section-1-4">Recent advances in trusted computing, remote attestation, and workload identity standards enable a new class of solutions where the geographic location and host integrity of workloads can be cryptographically attested and verified.
+By binding workload identity to both platform and domain attributes, such as TPM-backed device identity and verifiable geographic boundaries, organizations can enforce fine-grained policies to define where and how sensitive workloads are executed.<a href="#section-1-4" class="pilcrow">¶</a></p>
+<p id="section-1-5">Data residency requirements are described in more detail in <span>[<a href="#tcg-geo-loc" class="cite xref">tcg-geo-loc</a>]</span>.<a href="#section-1-5" class="pilcrow">¶</a></p>
+<p id="section-1-6">An example of platform identity binding (i.e., host affinity) is described in <span>[<a href="#tcg-tpm" class="cite xref">tcg-tpm</a>]</span>.<a href="#section-1-6" class="pilcrow">¶</a></p>
 </section>
 </div>
 <div id="conventions-and-definitions">
