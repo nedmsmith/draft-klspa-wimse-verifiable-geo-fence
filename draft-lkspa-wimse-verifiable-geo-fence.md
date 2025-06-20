@@ -1,5 +1,5 @@
 ---
-title: "Trustworthy and Verifiable Geofencing for Workloads"
+title: "Trustworthy and Verifiable Geofencing for Workloads: Solving the Bearer Token Problem"
 abbrev: "GeoW"
 category: info
 
@@ -130,15 +130,15 @@ entity:
   SELF: "RFCthis"
 --- abstract
 
-Financial services, healthcare, and government entities have data residency requirements that aim to protect sensitive data by specifying its location. Data location can be both geographic and host-centric. Geolocation affinity means workloads are cryptographically bound to a geographic boundary. Host affinity means workloads are cryptographically bound to a specific execution environment. WIMSE architecture can be improved to show how location can be cryptographically bound to WIMSE identities. This document augments WIMSE architecture to include geolocation and host affinity use cases and workflows.
+Modern cloud and distributed environments face significant risks from stolen bearer tokens, which can be used by attackers from unauthorized locations or hosts. This document presents a framework for trustworthy and verifiable geofencing for workloads that directly addresses the bearer token problem. By cryptographically binding workload identity to both geographic and host attributes, and by supplementing bearer tokens with verifiable, location- and host-bound claims, the framework enables secure enforcement of data residency, geolocation affinity, and host affinity requirements. The approach leverages trusted hardware, attestation protocols, and geolocation services to ensure that only authorized workloads in approved locations and environments can access sensitive data or services, even in the presence of stolen bearer tokens.
 
 --- middle
 
 # Introduction
 
-This document describes a framework for trustworthy and verifiable geofencing of workloads.
-It details use cases, architectural flows, and protocol enhancements that leverage trusted hardware (e.g., TPM), attestation protocols, and geolocation services.
-The goal is to enable interoperable, cryptographically verifiable claims about workload residency and location, supporting compliance, security, and operational requirements in multi-system environments.
+Bearer tokens are widely used for authentication in cloud and enterprise environments, but their theft and misuse pose a critical security challenge—attackers can replay stolen tokens from unauthorized hosts or locations, bypassing traditional controls. This document describes a framework for trustworthy and verifiable geofencing of workloads that solves the bearer token problem by cryptographically binding workload identity to both platform and geographic attributes. The solution supplements bearer tokens with signed, verifiable claims about workload residency and location, conveyed in each request, enabling enforcement of data residency, geolocation affinity, and host affinity policies even in adversarial or multi-tenant environments.
+
+The framework details use cases, architectural flows, and protocol enhancements that leverage trusted hardware (e.g., TPM), attestation protocols, and geolocation services. By providing interoperable, cryptographically verifiable claims about workload residency and location, the approach supports compliance, security, and operational requirements, and ensures that only authorized workloads in approved environments can access sensitive resources, regardless of bearer token compromise.
 
 As organizations increasingly adopt cloud and distributed computing, the need to enforce data residency, geolocation affinity, and host affinity has become critical for regulatory compliance and risk management.
 Traditional approaches to geographic and host enforcement rely on trust in infrastructure providers or network-based controls, which are insufficient in adversarial or multi-tenant environments.
