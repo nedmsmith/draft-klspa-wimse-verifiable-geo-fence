@@ -5,34 +5,34 @@
 Workload Identity in Multi System Environments               R. Krishnan
 Internet-Draft                                                  N. Smith
 Intended status: Informational                                     Intel
-Expires: 22 December 2025                                       D. Lopez
+Expires: 23 December 2025                                       D. Lopez
                                                               Telefonica
                                                                A. Prasad
                                                                   Oracle
                                                             S. Addepalli
                                                                   Aryaka
-                                                            20 June 2025
+                                                            21 June 2025
 
 
-Trustworthy and Verifiable Geofencing for Workloads: Solving the Bearer
-                             Token Problem
+    Modernizing Workload Security: Verifiable Geofencing, Proof-of-
+          Possession, and Protocol-Aware Residency Enforcement
              draft-lkspa-wimse-verifiable-geo-fence-latest
 
 Abstract
 
    Modern cloud and distributed environments face significant risks from
-   stolen bearer tokens, which can be used by attackers from
-   unauthorized locations or hosts.  This document presents a framework
-   for trustworthy and verifiable geofencing for workloads that directly
-   addresses the bearer token problem.  By cryptographically binding
-   workload identity to both geographic and host attributes, and by
-   supplementing bearer tokens with verifiable, location- and host-bound
-   claims, the framework enables secure enforcement of data residency,
-   geolocation affinity, and host affinity requirements.  The approach
-   leverages trusted hardware, attestation protocols, and geolocation
-   services to ensure that only authorized workloads in approved
-   locations and environments can access sensitive data or services,
-   even in the presence of stolen bearer tokens.
+   stolen bearer tokens, protocol replay, and trust gaps in transit.
+   This document presents a framework for modernizing workload security
+   through cryptographically verifiable geofencing, proof-of-possession,
+   and protocol-aware residency enforcement.  By binding workload
+   identity to both geographic and host attributes, and supplementing
+   bearer tokens with verifiable, location- and host-bound claims, the
+   framework addresses the challenges of bearer token theft, proof-of-
+   possession, IPSEC, and trust-in-transit.  Leveraging trusted
+   hardware, attestation protocols, and geolocation services, this
+   approach ensures that only authorized workloads in approved locations
+   and environments can access sensitive data or services, even in the
+   presence of advanced threats.
 
 About This Document
 
@@ -67,7 +67,7 @@ Status of This Memo
    time.  It is inappropriate to use Internet-Drafts as reference
    material or to cite them other than as "work in progress."
 
-   This Internet-Draft will expire on 22 December 2025.
+   This Internet-Draft will expire on 23 December 2025.
 
 Copyright Notice
 
@@ -99,65 +99,57 @@ Table of Contents
    5.  Approach Summary
    6.  SPIFFE/SPIRE Architecture Modifications
    7.  Control Plane - End-to-End Workflow
-     7.1.  Attestation for System Bootstrap and Workload Identity
-           Agent Initialization
-       7.1.1.  Attestation of OS Integrity and Proof of Residency on
-               Host
-       7.1.2.  Start/Restart time attestation/remote verification of
-               Workload Identity Agent for integrity and proof of
-               residency on Host - Linux IMA and Workload Identity Agent
-               public/private key attestation are newly added
-     7.2.  Workload Public Key Attestation and Remote Verification -
-           Key Steps - This is slightly modified from the current TPM
-           plugin flow - Workload Identity Agent public/private key
-           attestation instead of TPM AK attestation is the change
-     7.3.  Geolocation Manager and Host Composition change tracking
-     7.4.  Workload Identity Agent Geolocation Gathering Workflow
+     7.1.  Attestation of OS Integrity and Proof of Residency on Host
+     7.2.  Start/Restart time attestation/remote verification of
+           Workload Identity Agent for integrity and proof of residency
+           on Host
+     7.3.  Workload Public Key Attestation and Remote Verification
+     7.4.  Geolocation Manager and Host Composition Change Tracking
+     7.5.  Workload Identity Agent Geolocation Gathering Workflow
    8.  Data Plane - HTTP Networking Protocol
-   9.  Solution mapping back to Problem Statements
-   10. Data Plane - Examining other (non HTTP) Networking Protocols
-     10.1.  Using TLS
-     10.2.  Not Using TLS
-   11. Data Plane - IPSEC Tunnel Networking Protocol
-   12. Scalability Considerations
-   13. Authorization Policy Implementers
-   14. Security Considerations
-   15. IANA Considerations
-   16. Appendix - Items to follow up
-     16.1.  OPEN ISSUES 1: Restart time attestation/remote
+   9.  Data Plane - IPSEC Tunnel Networking Protocol
+   10. Solution mapping back to Problem Statements
+   11. Scalability Considerations
+   12. Authorization Policy Implementers
+   13. Security Considerations
+   14. IANA Considerations
+   15. Appendix - Items to follow up
+     15.1.  OPEN ISSUES 1: Restart time attestation/remote
             verification of workload identity agent for integrity and
             proof of residency on Host
-     16.2.  OPEN ISSUES 2: Location privacy options
-   17. Acknowledgments
-   18. References
-     18.1.  Normative References
-     18.2.  Informative References
+     15.2.  OPEN ISSUES 2: Location privacy options
+   16. Acknowledgments
+   17. References
+     17.1.  Normative References
+     17.2.  Informative References
    Contributors
    Authors' Addresses
 
 1.  Introduction
 
-   Bearer tokens are widely used for authentication in cloud and
-   enterprise environments, but their theft and misuse pose a critical
-   security challenge—attackers can replay stolen tokens from
-   unauthorized hosts or locations, bypassing traditional controls.
-   This document describes a framework for trustworthy and verifiable
-   geofencing of workloads that solves the bearer token problem by
-   cryptographically binding workload identity to both platform and
-   geographic attributes.  The solution supplements bearer tokens with
-   signed, verifiable claims about workload residency and location,
-   conveyed in each request, enabling enforcement of data residency,
-   geolocation affinity, and host affinity policies even in adversarial
-   or multi-tenant environments.
+   Modern workload security faces new challenges from stolen bearer
+   tokens, protocol replay, and the lack of trust in transit.  Attackers
+   can exploit bearer tokens from unauthorized hosts or locations,
+   bypassing traditional controls.  This document introduces a framework
+   for modernizing workload security by enabling cryptographically
+   verifiable geofencing, proof-of-possession, and protocol-aware
+   residency enforcement.  The solution cryptographically binds workload
+   identity to both platform and geographic attributes, supplementing
+   bearer tokens with signed, verifiable claims about workload residency
+   and location.  This enables enforcement of data residency,
+   geolocation affinity, and host affinity policies, even in adversarial
+   or multi-tenant environments, and directly addresses the limitations
+   of bearer tokens, proof-of-possession, IPSEC (Internet Protocol
+   Security), and trust-in-transit.
 
    The framework details use cases, architectural flows, and protocol
-   enhancements that leverage trusted hardware (e.g., TPM), attestation
-   protocols, and geolocation services.  By providing interoperable,
-   cryptographically verifiable claims about workload residency and
-   location, the approach supports compliance, security, and operational
-   requirements, and ensures that only authorized workloads in approved
-   environments can access sensitive resources, regardless of bearer
-   token compromise.
+   enhancements that leverage trusted hardware (e.g., TPM (Trusted
+   Platform Module)), attestation protocols, and geolocation services.
+   By providing interoperable, cryptographically verifiable claims about
+   workload residency and location, the approach supports compliance,
+   security, and operational requirements, ensuring that only authorized
+   workloads in approved environments can access sensitive resources,
+   regardless of bearer token compromise or protocol-level attacks.
 
    As organizations increasingly adopt cloud and distributed computing,
    the need to enforce data residency, geolocation affinity, and host
@@ -189,6 +181,22 @@ Table of Contents
    "OPTIONAL" in this document are to be interpreted as described in
    BCP 14 [RFC2119] [RFC8174] when, and only when, they appear in all
    capitals, as shown here.
+
+   *Acronyms used in this document:*
+
+   *  *TPM*: Trusted Platform Module
+
+   *  *GNSS*: Global Navigation Satellite System
+
+   *  *IMEI*: International Mobile Equipment Identity
+
+   *  *IMSI*: International Mobile Subscriber Identity
+
+   *  *PCR*: Platform Configuration Register
+
+   *  *MDM*: Mobile Device Management
+
+   *  *IPSEC*: Internet Protocol Security
 
 3.  Use Cases
 
@@ -320,6 +328,10 @@ Table of Contents
       the request is not cryptographically signed, it is vulnerable to
       tampering.
 
+   *  *IPSEC Tunnel Networking Protocol:* IPSEC tunnels can encapsulate
+      any IP traffic, but they do not provide cryptographic proof of
+      residency or geolocation for the client host.
+
 5.  Approach Summary
 
    This approach enables cryptographically verifiable geofencing by
@@ -386,10 +398,7 @@ Table of Contents
    klspa-wimse-verifiable-geo-fence/blob/main/pictures/end-to-end-
    flow.svg)
 
-7.1.  Attestation for System Bootstrap and Workload Identity Agent
-      Initialization
-
-7.1.1.  Attestation of OS Integrity and Proof of Residency on Host
+7.1.  Attestation of OS Integrity and Proof of Residency on Host
 
    As part of system boot/reboot process, boot loader-based measured
    system boot with remote Workload Identity Manager verification is
@@ -433,13 +442,14 @@ Table of Contents
    that the hardware platform is approved for running workloads and is
    running an approved OS.
 
-7.1.2.  Start/Restart time attestation/remote verification of Workload
-        Identity Agent for integrity and proof of residency on Host -
-        Linux IMA and Workload Identity Agent public/private key
-        attestation are newly added
+7.2.  Start/Restart time attestation/remote verification of Workload
+      Identity Agent for integrity and proof of residency on Host
 
    The Workload Identity Agent is a process with elevated privileges
-   with access to TPM and location sensor hardware.
+   with access to TPM and location sensor hardware.  Linux IMA and
+   Workload Identity Agent public/private key attestation are the
+   changes compared to the original SPIFFE/SPIRE architecture with the
+   TPM plugin.
 
    *Measurement Collection*: For the Workload Identity Agent start case,
    the Agent executable is measured by Linux IMA, for example through
@@ -456,174 +466,161 @@ Table of Contents
 
    *TPM attestation and remote Workload Identity Manager verification*:
 
-   Step 1: * Workload Identity Agent generates a TPM Attestation Key
-   (AK) for proof of residency on Host.
+   Step 1: 1.  The Workload Identity Agent generates a TPM Attestation
+   Key (AK) for proof of residency on the host.  2.  The Workload
+   Identity Agent sends the AK attestation parameters (PCR quote,
+   attestation public key, etc.) and TPM EK certificate to the Workload
+   Identity Manager.  3.  The Workload Identity Manager inspects the TPM
+   EK certificate.  If a CA path exists and the TPM EK certificate was
+   signed by any chain in the CA path, validation passes.  4.  If
+   validation passes, the Workload Identity Manager generates a
+   credential activation challenge.  The challenge consists of a secret
+   value encrypted using the TPM EK public key.  5.  The Workload
+   Identity Manager sends the challenge to the Workload Identity Agent.
+   6.  The Workload Identity Agent uses the TPM AK private key (stored
+   in the TPM) to decrypt the challenge's secret.  7.  The Workload
+   Identity Agent sends back the decrypted secret to the Workload
+   Identity Manager.  8.  The Workload Identity Manager verifies that
+   the decrypted secret matches the original secret used to build the
+   challenge.  9.  The Workload Identity Manager issues a Workload
+   Identity Agent AK ID using the TPM AK public key and TPM EK
+   certificate.
 
-   *  Workload Identity Agent sends the AK attestation parameters (PCR
-      quote, attestation public key, etc.) and TPM EK certificate to the
-      Workload Identity Manager.
+   Step 2: 1.  The Workload Identity Agent generates a private/public
+   key pair.  2.  The Workload Identity Agent uses the TPM AK private
+   key, stored in the TPM, to sign the public key.  3.  The Workload
+   Identity Agent sends the public key, signed by the TPM AK, to the
+   Workload Identity Manager.  4.  The Workload Identity Manager ensures
+   the TPM AK is associated with a Workload Identity Agent AK ID.  5.
+   If validation passes, the Workload Identity Manager generates a
+   credential activation challenge.  The challenge's secret is encrypted
+   using the Workload Identity Agent public key.  6.  The Workload
+   Identity Manager sends the challenge to the Workload Identity Agent.
+   7.  The Workload Identity Agent decrypts the challenge's secret using
+   its private key.  8.  The Workload Identity Agent sends back the
+   decrypted secret.  9.  The Workload Identity Manager verifies that
+   the decrypted secret matches the original secret used to build the
+   challenge.  10.  The Workload Identity Manager issues the Workload
+   Identity Agent ID using the Workload Identity Agent public key, the
+   TPM AK signature of the Workload Identity Agent public key, and the
+   Workload Identity Agent AK ID.
 
-   *  Workload Identity Manager inspects TPM EK certificate.  If CA path
-      exists, and the TPM EK certificate was signed by any chain in CA
-      path, validation passes.
+7.3.  Workload Public Key Attestation and Remote Verification
 
-   *  If validation passed, the Workload Identity Manager generates a
-      credential activation challenge.  The challenge's secret is
-      encrypted using the TPM EK public key.
+   Workload Identity Agent public/private key attestation, instead of
+   TPM AK attestation, is the change compared to the original SPIFFE/
+   SPIRE architecture with the TPM plugin.
 
-   *  Workload Identity Manager sends challenge to Workload Identity
-      Agent.
+   1.   The Workload Identity Agent ensures that the workload connects
+        to it on a host-local socket (e.g., Unix-domain socket).
 
-   *  Workload Identity Agent connects to the TPM to decrypt the
-      challenge's secret using the TPM AK private key stored in the TPM.
+   2.   The Workload Identity Agent generates a private/public key pair
+        for the workload.
 
-   *  Workload Identity Agent sends back decrypted secret.
+   3.   The Workload Identity Agent signs the workload public key with
+        its private key.
 
-   *  Workload Identity Manager verifies that the decrypted secret is
-      the same it used to build the challenge.
+   4.   The Workload Identity Agent sends the signed workload public
+        key, along with its Workload Identity Agent ID, to the Workload
+        Identity Manager.  (Note: The Workload Identity Agent ID is
+        already verified by the Workload Identity Manager as part of the
+        Workload Identity Agent attestation process, establishing proof
+        of residency of the Workload Identity Agent to the host.)
 
-   *  Workload Identity Manager issues a Workload Identity Agent AK ID
-      using the TPM AK public key and TPM EK certificate.
+   5.   The Workload Identity Manager verifies that the Workload
+        Identity Agent ID's TPM EK is present in the Host TPM EK shared
+        data store.
 
-   Step 2: * Workload Identity Agent generates a private/public key
-   pair.
+   6.   The Workload Identity Manager verifies the workload public key
+        signature using the Workload Identity Agent's public key.
 
-   *  Workload Identity Agent connects to the TPM to sign the public key
-      with the TPM AK private key.
+   7.   The Workload Identity Manager sends an encrypted challenge to
+        the Workload Identity Agent.  The challenge's secret is
+        encrypted using the workload's public key.
 
-   *  Workload Identity Agent sends the public key signed by TPM AK, to
-      the Workload Identity Manager.
+   8.   The Workload Identity Agent decrypts the challenge using the
+        workload's private key and sends the response back to the
+        Workload Identity Manager.
 
-   *  Workload Identity Manager ensures the TPM AK is associated with a
-      temporary Workload Identity Agent ID.
+   9.   The Workload Identity Manager verifies that the decrypted secret
+        matches the original secret used to build the challenge.
 
-   *  If validation passed, the Workload Identity Manager generates a
-      credential activation challenge.  The challenge's secret is
-      encrypted using the Workload Identity Agent public key.
+   10.  The Workload Identity Manager issues a workload ID (e.g., SPIFFE
+        ID) for the workload's public key.  The workload ID is signed by
+        the Workload Identity Manager and contains the workload's public
+        key and the Workload Identity Agent ID.
 
-   *  Workload Identity Manager sends challenge to Workload Identity
-      Agent.
+   11.  The workload receives its private key and workload ID from the
+        Workload Identity Agent.
 
-   *  Workload Identity Agent decrypts the challenge's secret.
+7.4.  Geolocation Manager and Host Composition Change Tracking
 
-   *  Workload Identity Agent sends back decrypted secret.
+   The Geolocation Manager runs outside of the host.  In addition to
+   obtaining location from device location sources (e.g., GNSS), it
+   connects to mobile location service providers (e.g., Telefonica)
+   using the GSMA Location API ([gsma-loc]).  The process described
+   below is run periodically (e.g., every 5 minutes) to check if the
+   host hardware composition has changed.  Host hardware composition
+   comprises TPM EK, GNSS sensor hardware ID, mobile sensor hardware ID
+   (IMEI), and mobile-SIM IMSI.  Note that this workflow is feasible
+   only in enterprise environments where the host hardware is owned and
+   managed by the enterprise.
 
-   *  Workload Identity Manager verifies that the decrypted secret is
-      the same it used to build the challenge.
+   1.  The Workload Identity Agent periodically gathers host composition
+       details (e.g., mobile sensor hardware ID (IMEI), mobile-SIM IMSI)
+       and sends them to the Geolocation Manager.
 
-   *  Workload Identity Manager issues the Workload Identity Agent ID
-      using the Workload Identity Agent public key, TPM AK signature of
-      Workload Identity Agent public key and Workload Identity Agent AK
-      ID.
+   2.  The Geolocation Manager cross-verifies that the components of the
+       host are still intact or detects if anything has been removed.
+       (Plugging out components can decrease the quality of location.
+       Host hardware composition comprises TPM EK, GNSS sensor hardware
+       ID, mobile sensor hardware ID (IMEI), and mobile-SIM IMSI.  Note
+       that e-SIM does not have the plugging out problem like standard
+       SIM but could be subject to e-SIM swap attack.)
 
-7.2.  Workload Public Key Attestation and Remote Verification - Key
-      Steps - This is slightly modified from the current TPM plugin flow
-      - Workload Identity Agent public/private key attestation instead
-      of TPM AK attestation is the change
+7.5.  Workload Identity Agent Geolocation Gathering Workflow
 
-   *  Workload Identity Agent ensures that workload connects to it on a
-      host-local socket (e.g., Unix-domain socket).  Workload Identity
-      Agent generates private/public key pair for the workload.
-      Workload Identity Agent signs the workload public key with its
-      private key.  Workload Identity Agent sends the signed workload
-      public key along with its Workload Identity Agent ID to Workload
-      Identity Manager.  Note that the Workload Identity Agent ID is
-      already verified by the Workload Identity Manager as part of the
-      Workload Identity Agent attestation process, establishing proof of
-      residency of Workload Identity Agent to host.
+   The process described below is run periodically (e.g., every 30
+   seconds for frequently mobile hosts such as smartphones; every 5
+   minutes for less frequently mobile hosts such as laptops; every 50
+   minutes for stationary hosts) to check if the host's location has
+   changed and to obtain an attested location.
 
-   *  Workload Identity Manager verifies that the Workload Identity
-      Agent ID TPM EK is present in the Host TPM EK shared data store.
-      Workload Identity Manager verifies the workload public key
-      signature using the Workload Identity Agent public key.  Workload
-      Identity Manager then sends an encrypted challenge to the Workload
-      Identity Agent.  The challenge's secret is encrypted using the
-      workload public key.
+   1.  The Workload Identity Agent gathers the location (a) directly
+       from host-local location sensors (e.g., GNSS), which provide a
+       hardware-attested location, and/or (b) using existing Operating
+       System (OS) APIs, which gather a composite location from location
+       providers (e.g., Google, Apple).  Location has a quality
+       associated with it.  For example, IP address-based or Wi-Fi-based
+       location is of lower quality compared to other sources.
 
-   *  Workload Identity Agent decrypts the challenge using the generated
-      workload private key and sends the response back to the Workload
-      Identity Manager.
+   2.  For each of the registered workload IDs (or website URL), based
+       on the configured location policy (precise, approximated within a
+       fixed radius, geographic region-based indicating city/state/
+       country - see OPEN ISSUES 2), the location is converted
+       appropriately to a workload ID-specific location.  For thin
+       clients (browser clients), the workload ID is the website URL.
+       This ensures that the privacy of the workload is preserved, while
+       still allowing for geolocation enforcement.
 
-   *  Workload Identity Manager verifies that the decrypted secret is
-      the same it used to build the challenge.  It then issues workload
-      id (e.g. SPIFFE ID) for workload public key.  The workload is
-      signed by the Workload Identity Manager and contains the workload
-      public key and Workload Identity Agent ID.
+   3.  All the above details are captured in the Geolocation Information
+       Cache which contains the following fields: * Workload ID specific
+       location details for each client workload where each entry
+       contains:
 
-   *  Workload gets its private key and workload ID from Workload
-      Identity Agent.
+       *  client workload ID - relevant for thick clients (e.g.
+          Microsoft Teams client)
 
-7.3.  Geolocation Manager and Host Composition change tracking
+       *  server workload ID (or website URL) - relevant for all clients
+          (thick or thin)
 
-   Geolocation Manager runs outside of host -- besides the location from
-   device location sources (e.g., GNSS), it will connect to mobile
-   location service providers (e.g., Telefonica) using GSMA location API
-   (gsma-loc).  This described process below is run periodically (say
-   every 5 minutes) to check if the host hardware composition has
-   changed.  Host hardware composition comprises TPM EK, GNSS sensor
-   hardware id, Mobile sensor hardware id (IMEI), Mobile-SIM IMSI.  Note
-   that this workflow is feasible only in enterprise environments where
-   the host hardware is owned and managed by the enterprise.
+       *  client location type (e.g. precise, approximated, geographic
+          region based)
 
-   *  Workload Identity Agent periodically gathers host composition
-      details (e.g. Mobile sensor hardware id (IMEI), Mobile-SIM IMSI)
-      and sends to Geolocation Manager.
+       *  client location (e.g. latitude/longitude, city/state/country)
 
-   *  Geolocation Manager can cross verify that the components of the
-      host are still intact or if anything is plugged out.  Plugging out
-      components can decrease the quality of location.  Host hardware
-      composition comprises TPM EK, GNSS sensor hardware id, Mobile
-      sensor hardware id (IMEI), Mobile-SIM IMSI.  Note that e-SIM does
-      not have the plugging out problem like standard SIM but could be
-      subject to e-SIM swap attack.
-
-7.4.  Workload Identity Agent Geolocation Gathering Workflow
-
-   This described process below is run periodically (say every .5
-   minutes or 30 seconds for frequently mobile hosts such as
-   smartphones; say every 5 minutes for less frequently mobile hosts
-   such as laptops; say every 50 minutes for stationary hosts) to check
-   if the host's location has changed and get an attested location.
-
-   *  Workload Identity Agent gathers the location (1) directly from
-      host-local location sensors (e.g., GNSS) which provide a hardware
-      attested location and/or (2) using existing Operating System (OS)
-      APIs which gathers a composite location from location providers
-      (e.g. Google, Apple).  Location has a quality associated with it.
-      For example, IP address based or Wi-Fi based location is of lower
-      quality as compared to other sources.
-
-   *  For each of the registered workload IDs (or website URL), based on
-      the configured location policy (precise, approximated within a
-      fixed radius, geographic region based indicating city/state/
-      country - OPEN ISSUES 2), the location is converted appropriately
-      to a workload id specific location.  For thin clients (browser
-      clients), the workload id is website URL.  This ensures that the
-      privacy of the workload is preserved, while still allowing for
-      geolocation enforcement.
-
-   *  All the above details are captured in the Geolocation Information
-      Cache which contains the following fields:
-
-      -  Workload ID specific location details for each client workload
-         where each entry contains:
-
-         o  client workload ID - relevant for thick clients (e.g.
-            Microsoft Teams client)
-
-         o  server workload ID (or website URL) - relevant for all
-            clients (thick or thin)
-
-         o  client location type (e.g. precise, approximated, geographic
-            region based)
-
-         o  client location (e.g. latitude/longitude, city/state/
-            country)
-
-         o  client location quality (e.g. GNSS, mobile network, Wi-Fi,
-            IP address)
-
-      -  Time of collection (timestamp)
+       *  client location quality (e.g. GNSS, mobile network, Wi-Fi, IP
+          address) * Time of collection (timestamp)
 
    *  It is important to note that the Geolocation Information Cache is
       kept in the Workload Identity Agent memory and is not stored on
@@ -639,6 +636,12 @@ Table of Contents
       user in OAuth bearer token/server website URL).
 
 8.  Data Plane - HTTP Networking Protocol
+
+   Besides native HTTP protocols, this will also cover * browser-based
+   Secure Shell (ssh) terminal (common for cloud access by customers)
+   which tunnels ssh traffic over HTTP/TLS. * browser-based Remote
+   Desktop Protocol (RDP) terminal (common for cloud access by
+   customers) which tunnels RDP traffic over HTTP/TLS.
 
    A new HTTP header field 'X-Workload-Geo-ID' is proposed for conveying
    the Geolocation Information Cache.  A new HTTP header field 'X-
@@ -757,7 +760,54 @@ Table of Contents
       workload ID in the X-Workload-Geo-ID header matches the expected
       client workload ID.
 
-9.  Solution mapping back to Problem Statements
+9.  Data Plane - IPSEC Tunnel Networking Protocol
+
+   In the IPSEC key exchange protocol (IKE), the following changes are
+   proposed: * Proof of residency * In the IPSEC client, in the Elliptic
+   Curve Diffie-Hellman Ephemeral key exchange (ECDHE) phase, the
+   Workload Identity Agent Public Key is used as the ephemeral public
+   key. * Geolocation information * The IPSEC client includes the
+   Geolocation Information in the Workload Identity Agent Geolocation
+   Information Cache in the IPSEC IKEv2 notification payload.
+
+   IPSEC server policy enforcement can be done in the following way: *
+   Proof of residency * In the IPSEC server, from the IPSEC IKEv2
+   notification payload, the Workload Identity Agent Public Key is
+   extracted.  The Workload Identity Agent Public Key is checked against
+   the configured list of allowed Workload Identity Agent IDs (IPSEC
+   client certificates).  The signature of the IPSEC client is then
+   verified using the Workload Identity Agent Public Key. This provides
+   a cryptographically verifiable proof of residency of the IPSEC client
+   on the required host. * Geolocation information * In the IPSEC
+   server, from the IPSEC IKEv2 notification payload, the Geolocation
+   Information is extracted.  * IPSEC server can use the host TPM EK
+   certificate in the Workload Identity Agent ID to retrieve the mobile
+   geolocation sensor IMEI/IMSI from the Host TPM EK + Geolocation
+   sensor detail shared data store.  Using the IMEI/IMSI, they can
+   retrieve the location of the host from the mobile network operator's
+   location service.  This is useful for mobile devices that may not
+   have GNSS sensors or when GNSS is not available (e.g., indoors) or
+   when GPS/GNSS location is subject to spoofing.  As compared to IP
+   address, Wi-Fi and GPS/GNSS geolocation methods, mobile network
+   location services provide a more reliable and cryptographically
+   verifiable location.  Based on the mobile geolocation and existing
+   geolocation in the IPSEC IKEv2 notification payload, a more accurate
+   composite Geolocation Information can be constructed. * The IPSEC
+   server can use the composite Geolocation Information to verify that
+   the host is within the allowed geographic boundary.  In case the
+   mobile network location service is not use, the composite Geolocation
+   Information is the same as the original Geolocation Information.
+
+   Benefit: * Since IPSEC tunnel can encapsulate any IP traffic, it
+   provides proof of residency and geolocation on the IPSEC client host
+   for all the traffic that is tunneled through it (e.g., RDP, SCTP,
+   NFS, SSH).
+
+   Challenge: * Location information granularity is at the IPSEC client
+   host level and not at the individual workload level, which may be a
+   challenge for some use cases.
+
+10.  Solution mapping back to Problem Statements
 
    *  *Host TPMs for Signature* challenges are addressed
 
@@ -800,43 +850,16 @@ Table of Contents
          using the Workload Identity Agent Public Key. This ensures that
          the request is not tampered with in transit.
 
-10.  Data Plane - Examining other (non HTTP) Networking Protocols
+   *  *IPSEC Tunnel Networking Protocol* challenges are addressed
 
-10.1.  Using TLS
+      -  The IPSEC client uses the Workload Identity Agent Public Key as
+         the ephemeral public key in the ECDHE phase of the IPSEC IKEv2
+         key exchange protocol, providing a cryptographically verifiable
+         proof of residency on host.  The Geolocation Information is
+         included in the IPSEC IKEv2 notification payload, which is
+         verified by the IPSEC server.
 
-   *  RDP - terminate and re-establish TLS; TCP/IP.
-
-   *  SCTP - terminate and re-establish TLS; SCTP is directly over IP;
-      Does not use TCP or UDP.
-
-   *  NFS - terminate and re-establish TLS; TCP/IP.
-
-10.2.  Not Using TLS
-
-   *  SSH (jump hosts, etc.) - terminate and re-establish SSH; TCP/IP;
-      Does not use TLS.
-
-   *  IPsec tunnel (router control plane, etc.) - terminates IPsec
-      tunnel and forwards encapsulated traffic; IP; Does not use TLS.
-
-11.  Data Plane - IPSEC Tunnel Networking Protocol
-
-   While it is not easy to modify IPSEC networking protocol, an approach
-   would be for the IPSEC controller to check where the IPSEC tunnel is
-   being established from a specific host and whether the host is within
-   a specific geographic boundary.  The IPSEC controller can use the
-   Workload Identity Agent to get the Geolocation Information Cache and
-   verify that the host is within the allowed geographic boundary.  If
-   the host is not within the allowed geographic boundary, the IPSEC
-   controller can reject the IPSEC tunnel establishment request. *
-   Benefit: Since IPSEC tunnel can encapsulate any IP traffic, it
-   provides proof of residency and geolocation on the host for all the
-   traffic that is tunneled through it (e.g. RDP, SCTP, NFS, SSH). *
-   Challenge: Location information granularity is at the host level and
-   not at the individual workload level which may be a challenge for
-   some use cases.
-
-12.  Scalability Considerations
+11.  Scalability Considerations
 
    Having a geolocation sensor on every host is not scalable from a
    deployment and management perspective and can be cost prohibitive.
@@ -849,7 +872,7 @@ Table of Contents
    and/or GNSS capabilities which can be leveraged by other data center
    hosts.  This host serves as the location anchor host.
 
-   End user location anchor host - goal is to provide a easy to use
+   End user location anchor host - goal is to provide an easy to use
    wireless solution that can be used by end users without requiring
    them to install a geolocation sensor on their laptop/desktop host. *
    The smartphone can be used as a location anchor host for the laptop/
@@ -859,7 +882,7 @@ Table of Contents
    laptop/desktop host * round-trip time (RTT) between the smartphone
    and laptop/desktop host
 
-   Data center location anchor host - goal is to provide a easy to use
+   Data center location anchor host - goal is to provide an easy to use
    solution that can be used by data center operators without requiring
    them to install a geolocation sensor on every data center host. * Use
    a software-based cryptographically signed round-trip-time (RTT)
@@ -870,11 +893,14 @@ Table of Contents
    used to determine the proximity of the other data center hosts to the
    location anchor host.  The tradeoff is that software-based RTT
    measurement may not provide sub-microsecond accuracy due to inherent
-   software jitter, but it can still provide a reasonable approximation
-   of the proximity of the other data center hosts to the location
-   anchor host.
+   software jitter.  However, it can still provide a reasonable
+   approximation of the proximity of the other data center hosts to the
+   location anchor host. * Workloads can migrate to any of these
+   proximal hosts while still meeting the geofencing requirements.  The
+   location anchor host can be used to provide a cryptographically
+   verifiable proof of residency on the host.
 
-13.  Authorization Policy Implementers
+12.  Authorization Policy Implementers
 
    Policy implementers use attested geographic boundary from Workload to
    make decisions.  Example implementers: * Intermediate proxies (e.g.,
@@ -886,7 +912,7 @@ Table of Contents
    process scheduler or JVM class loader/deserializer, then malware can
    be prevented (similar to a code-signed application).
 
-14.  Security Considerations
+13.  Security Considerations
 
    The proposed framework introduces several security considerations
    that must be addressed to ensure the integrity and trustworthiness of
@@ -936,32 +962,32 @@ Table of Contents
    secure and reliable foundation for verifiable geofencing in diverse
    deployment environments.
 
-15.  IANA Considerations
+14.  IANA Considerations
 
    This document has no IANA actions.
 
-16.  Appendix - Items to follow up
+15.  Appendix - Items to follow up
 
-16.1.  OPEN ISSUES 1: Restart time attestation/remote verification of
+15.1.  OPEN ISSUES 1: Restart time attestation/remote verification of
        workload identity agent for integrity and proof of residency on
        Host
 
    For the workload identity agent restart case, it is not clear how the
-   storage in TPM PCR will be accompished - ideally this should be
+   storage in TPM PCR will be accomplished - ideally this should be
    natively handled in the IMA measurement process with an ability to
-   retrigger on restart on refresh cycles.
+   retrigger on restart or refresh cycles.
 
-16.2.  OPEN ISSUES 2: Location privacy options
+15.2.  OPEN ISSUES 2: Location privacy options
 
    The current approach includes some location privacy options for the
    geolocation in the Geolocation Information Cache.  This may need to
    be expanded further in the future.
 
-17.  Acknowledgments
+16.  Acknowledgments
 
-18.  References
+17.  References
 
-18.1.  Normative References
+17.1.  Normative References
 
    [RFC2119]  Bradner, S., "Key words for use in RFCs to Indicate
               Requirement Levels", BCP 14, RFC 2119,
@@ -972,7 +998,7 @@ Table of Contents
               2119 Key Words", BCP 14, RFC 8174, DOI 10.17487/RFC8174,
               May 2017, <https://www.rfc-editor.org/rfc/rfc8174>.
 
-18.2.  Informative References
+17.2.  Informative References
 
    [doj-cisa] DOJ and CISA, "DOJ and CISA Issue New National Security
               Program to Regulate Foreign Access to Sensitive Data",
