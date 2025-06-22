@@ -606,16 +606,25 @@ Table of Contents
    3.  All the above details are captured in the Geolocation Information
        Cache which contains the following fields:
 
-   4.  Time of collection (timestamp)
+       1.  Time of collection (timestamp)
 
-   5.  Workload ID specific location details for each client workload
-       where each entry contains: 1. client workload ID - relevant for
-       thick clients (e.g. Microsoft Teams client) 2. server workload ID
-       (or website URL) - relevant for all clients (thick or thin) 3.
-       client location type (e.g. precise, approximated, geographic
-       region based) 4. client location (e.g. latitude/longitude,
-       city/state/country) 5. client location quality (e.g. GNSS, mobile
-       network, Wi-Fi, IP address)
+       2.  Workload ID specific location details for each client
+           workload where each entry contains:
+
+           1.  client workload ID - relevant for thick clients (e.g.
+               Microsoft Teams client)
+
+           2.  server workload ID (or website URL) - relevant for all
+               clients (thick or thin)
+
+           3.  client location type (e.g. precise, approximated,
+               geographic region based)
+
+           4.  client location (e.g. latitude/longitude, city/state/
+               country)
+
+           5.  client location quality (e.g. GNSS, mobile network, Wi-
+               Fi, IP address)
 
    It is important to note that the Geolocation Information Cache is
    kept in the Workload Identity Agent memory and is not stored on disk.
