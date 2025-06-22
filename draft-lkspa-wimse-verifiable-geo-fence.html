@@ -1614,36 +1614,36 @@ This attestation includes data about the TPM's state and can be used to verify t
             <p id="section-7.5-2.2.1">For each of the registered workload IDs (or website URL), based on the configured location policy (precise, approximated within a fixed radius, geographic region-based indicating city/state/country - see OPEN ISSUES 2), the location is converted appropriately to a workload ID-specific location. For thin clients (browser clients), the workload ID is the website URL. This ensures that the privacy of the workload is preserved, while still allowing for geolocation enforcement.<a href="#section-7.5-2.2.1" class="pilcrow">¶</a></p>
 </li>
           <li id="section-7.5-2.3">
-            <p id="section-7.5-2.3.1">All the above details are captured in the Geolocation Information Cache which contains the following fields:
-  * Workload ID specific location details for each client workload where each entry contains:<a href="#section-7.5-2.3.1" class="pilcrow">¶</a></p>
-<ul class="normal">
-<li class="normal" id="section-7.5-2.3.2.1">
-                <p id="section-7.5-2.3.2.1.1">client workload ID - relevant for thick clients (e.g. Microsoft Teams client)<a href="#section-7.5-2.3.2.1.1" class="pilcrow">¶</a></p>
+            <p id="section-7.5-2.3.1">All the above details are captured in the Geolocation Information Cache which contains the following fields:<a href="#section-7.5-2.3.1" class="pilcrow">¶</a></p>
+<ol start="1" type="1" class="normal type-1" id="section-7.5-2.3.2">
+<li id="section-7.5-2.3.2.1">
+                <p id="section-7.5-2.3.2.1.1">Time of collection (timestamp)<a href="#section-7.5-2.3.2.1.1" class="pilcrow">¶</a></p>
 </li>
-              <li class="normal" id="section-7.5-2.3.2.2">
-                <p id="section-7.5-2.3.2.2.1">server workload ID (or website URL) - relevant for all clients (thick or thin)<a href="#section-7.5-2.3.2.2.1" class="pilcrow">¶</a></p>
+              <li id="section-7.5-2.3.2.2">
+                <p id="section-7.5-2.3.2.2.1">Workload ID specific location details for each client workload where each entry contains:<a href="#section-7.5-2.3.2.2.1" class="pilcrow">¶</a></p>
+<ol start="1" type="1" class="normal type-1" id="section-7.5-2.3.2.2.2">
+<li id="section-7.5-2.3.2.2.2.1">
+                    <p id="section-7.5-2.3.2.2.2.1.1">client workload ID - relevant for thick clients (e.g. Microsoft Teams client)<a href="#section-7.5-2.3.2.2.2.1.1" class="pilcrow">¶</a></p>
 </li>
-              <li class="normal" id="section-7.5-2.3.2.3">
-                <p id="section-7.5-2.3.2.3.1">client location type (e.g. precise, approximated, geographic region based)<a href="#section-7.5-2.3.2.3.1" class="pilcrow">¶</a></p>
+                  <li id="section-7.5-2.3.2.2.2.2">
+                    <p id="section-7.5-2.3.2.2.2.2.1">server workload ID (or website URL) - relevant for all clients (thick or thin)<a href="#section-7.5-2.3.2.2.2.2.1" class="pilcrow">¶</a></p>
 </li>
-              <li class="normal" id="section-7.5-2.3.2.4">
-                <p id="section-7.5-2.3.2.4.1">client location (e.g. latitude/longitude, city/state/country)<a href="#section-7.5-2.3.2.4.1" class="pilcrow">¶</a></p>
+                  <li id="section-7.5-2.3.2.2.2.3">
+                    <p id="section-7.5-2.3.2.2.2.3.1">client location type (e.g. precise, approximated, geographic region based)<a href="#section-7.5-2.3.2.2.2.3.1" class="pilcrow">¶</a></p>
 </li>
-              <li class="normal" id="section-7.5-2.3.2.5">
-                <p id="section-7.5-2.3.2.5.1">client location quality (e.g. GNSS, mobile network, Wi-Fi, IP address)
-      * Time of collection (timestamp)<a href="#section-7.5-2.3.2.5.1" class="pilcrow">¶</a></p>
+                  <li id="section-7.5-2.3.2.2.2.4">
+                    <p id="section-7.5-2.3.2.2.2.4.1">client location (e.g. latitude/longitude, city/state/country)<a href="#section-7.5-2.3.2.2.2.4.1" class="pilcrow">¶</a></p>
 </li>
-            </ul>
+                  <li id="section-7.5-2.3.2.2.2.5">
+                    <p id="section-7.5-2.3.2.2.2.5.1">client location quality (e.g. GNSS, mobile network, Wi-Fi, IP address)<a href="#section-7.5-2.3.2.2.2.5.1" class="pilcrow">¶</a></p>
+</li>
+                </ol>
+</li>
+            </ol>
 </li>
         </ol>
-<ul class="normal">
-<li class="normal" id="section-7.5-3.1">
-            <p id="section-7.5-3.1.1">It is important to note that the Geolocation Information Cache is kept in the Workload Identity Agent memory and is not stored on disk. The information is refreshed periodically to ensure that the location is up-to-date. This information is used only by workloads in the host and never leaves the host.<a href="#section-7.5-3.1.1" class="pilcrow">¶</a></p>
-</li>
-          <li class="normal" id="section-7.5-3.2">
-            <p id="section-7.5-3.2.1">If the location is gathered only using existing OS APIs, it may be done in the workload (thick client) or browser extension (thin client). The Geolocation Information Cache is stored in thick client memory (relevant only to specific client) or browser extension memory (relevant to all thin clients and indexed using user in OAuth bearer token/server website URL).<a href="#section-7.5-3.2.1" class="pilcrow">¶</a></p>
-</li>
-        </ul>
+<p id="section-7.5-3">It is important to note that the Geolocation Information Cache is kept in the Workload Identity Agent memory and is not stored on disk. The information is refreshed periodically to ensure that the location is up-to-date. This information is used only by workloads in the host and never leaves the host.<a href="#section-7.5-3" class="pilcrow">¶</a></p>
+<p id="section-7.5-4">If the location is gathered only using existing OS APIs, it may be done in the workload (thick client) or browser extension (thin client). The Geolocation Information Cache is stored in thick client memory (relevant only to specific client) or browser extension memory (relevant to all thin clients and indexed using user in OAuth bearer token/server website URL).<a href="#section-7.5-4" class="pilcrow">¶</a></p>
 </section>
 </div>
 </section>
