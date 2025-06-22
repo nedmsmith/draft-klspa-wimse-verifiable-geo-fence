@@ -1614,26 +1614,18 @@ This attestation includes data about the TPM's state and can be used to verify t
             <p id="section-7.5-2.2.1">For each of the registered workload IDs (or website URL), based on the configured location policy (precise, approximated within a fixed radius, geographic region-based indicating city/state/country - see OPEN ISSUES 2), the location is converted appropriately to a workload ID-specific location. For thin clients (browser clients), the workload ID is the website URL. This ensures that the privacy of the workload is preserved, while still allowing for geolocation enforcement.<a href="#section-7.5-2.2.1" class="pilcrow">¶</a></p>
 </li>
           <li id="section-7.5-2.3">
-            <p id="section-7.5-2.3.1">All the above details are captured in the Geolocation Information Cache which contains the following fields:
-  * Workload ID specific location details for each client workload where each entry contains:<a href="#section-7.5-2.3.1" class="pilcrow">¶</a></p>
-<ul class="normal">
-<li class="normal" id="section-7.5-2.3.2.1">
-                <p id="section-7.5-2.3.2.1.1">client workload ID - relevant for thick clients (e.g. Microsoft Teams client)<a href="#section-7.5-2.3.2.1.1" class="pilcrow">¶</a></p>
+            <p id="section-7.5-2.3.1">All the above details are captured in the Geolocation Information Cache which contains the following fields:<a href="#section-7.5-2.3.1" class="pilcrow">¶</a></p>
 </li>
-              <li class="normal" id="section-7.5-2.3.2.2">
-                <p id="section-7.5-2.3.2.2.1">server workload ID (or website URL) - relevant for all clients (thick or thin)<a href="#section-7.5-2.3.2.2.1" class="pilcrow">¶</a></p>
+          <li id="section-7.5-2.4">
+            <p id="section-7.5-2.4.1">Workload ID specific location details for each client workload where each entry contains:
+    1. client workload ID - relevant for thick clients (e.g. Microsoft Teams client)
+    2. server workload ID (or website URL) - relevant for all clients (thick or thin)
+    3. client location type (e.g. precise, approximated, geographic region based)
+    4. client location (e.g. latitude/longitude, city/state/country)
+    5. client location quality (e.g. GNSS, mobile network, Wi-Fi, IP address)<a href="#section-7.5-2.4.1" class="pilcrow">¶</a></p>
 </li>
-              <li class="normal" id="section-7.5-2.3.2.3">
-                <p id="section-7.5-2.3.2.3.1">client location type (e.g. precise, approximated, geographic region based)<a href="#section-7.5-2.3.2.3.1" class="pilcrow">¶</a></p>
-</li>
-              <li class="normal" id="section-7.5-2.3.2.4">
-                <p id="section-7.5-2.3.2.4.1">client location (e.g. latitude/longitude, city/state/country)<a href="#section-7.5-2.3.2.4.1" class="pilcrow">¶</a></p>
-</li>
-              <li class="normal" id="section-7.5-2.3.2.5">
-                <p id="section-7.5-2.3.2.5.1">client location quality (e.g. GNSS, mobile network, Wi-Fi, IP address)
-      * Time of collection (timestamp)<a href="#section-7.5-2.3.2.5.1" class="pilcrow">¶</a></p>
-</li>
-            </ul>
+          <li id="section-7.5-2.5">
+            <p id="section-7.5-2.5.1">Time of collection (timestamp)<a href="#section-7.5-2.5.1" class="pilcrow">¶</a></p>
 </li>
         </ol>
 <ul class="normal">
