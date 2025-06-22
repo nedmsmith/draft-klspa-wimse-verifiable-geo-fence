@@ -338,13 +338,13 @@ The process described below is run periodically (e.g., every 30 seconds for freq
 1. The Workload Identity Agent gathers the location (a) directly from host-local location sensors (e.g., GNSS), which provide a hardware-attested location, and/or (b) using existing Operating System (OS) APIs, which gather a composite location from location providers (e.g., Google, Apple). Location has a quality associated with it. For example, IP address-based or Wi-Fi-based location is of lower quality compared to other sources.
 2. For each of the registered workload IDs (or website URL), based on the configured location policy (precise, approximated within a fixed radius, geographic region-based indicating city/state/country - see OPEN ISSUES 2), the location is converted appropriately to a workload ID-specific location. For thin clients (browser clients), the workload ID is the website URL. This ensures that the privacy of the workload is preserved, while still allowing for geolocation enforcement.
 3. All the above details are captured in the Geolocation Information Cache which contains the following fields:
-  1. Time of collection (timestamp)
-  2. Workload ID specific location details for each client workload where each entry contains:
-    1. client workload ID - relevant for thick clients (e.g. Microsoft Teams client)
-    2. server workload ID (or website URL) - relevant for all clients (thick or thin)
-    3. client location type (e.g. precise, approximated, geographic region based)
-    4. client location (e.g. latitude/longitude, city/state/country)
-    5. client location quality (e.g. GNSS, mobile network, Wi-Fi, IP address)
+   1. Time of collection (timestamp)
+   2. Workload ID specific location details for each client workload where each entry contains:
+      1. client workload ID - relevant for thick clients (e.g. Microsoft Teams client)
+      2. server workload ID (or website URL) - relevant for all clients (thick or thin)
+      3. client location type (e.g. precise, approximated, geographic region based)
+      4. client location (e.g. latitude/longitude, city/state/country)
+      5. client location quality (e.g. GNSS, mobile network, Wi-Fi, IP address)
 
 It is important to note that the Geolocation Information Cache is kept in the Workload Identity Agent memory and is not stored on disk. The information is refreshed periodically to ensure that the location is up-to-date. This information is used only by workloads in the host and never leaves the host.
 
