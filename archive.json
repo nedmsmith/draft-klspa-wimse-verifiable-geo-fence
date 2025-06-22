@@ -1,6 +1,6 @@
 {
   "magic": "E!vIA5L86J2I",
-  "timestamp": "2025-06-19T01:13:14.784983+00:00",
+  "timestamp": "2025-06-22T01:19:39.614927+00:00",
   "repo": "nedmsmith/draft-klspa-wimse-verifiable-geo-fence",
   "labels": [
     {
@@ -49,7 +49,24 @@
       "color": "ffffff"
     }
   ],
-  "issues": [],
+  "issues": [
+    {
+      "number": 26,
+      "id": "I_kwDOOmshaM68oVXs",
+      "title": "Geofencing is a special case of a larger issue",
+      "url": "https://github.com/nedmsmith/draft-klspa-wimse-verifiable-geo-fence/issues/26",
+      "state": "OPEN",
+      "author": "TheBankster",
+      "authorAssociation": "NONE",
+      "assignees": [],
+      "labels": [],
+      "body": "Data sovereignty is very important and this draft raises an important issue in Enterprise IT controls that needs to be addressed.\n\nThat said, geofencing of a workload is but a special case of being able to attest a host on which the workload is running to obtain claims about this host. Those claims might include statements about the device being fully patched per the owner\u2019s policy, or be running a particular version of some software of interest.\n\nWhat I believe we need to figure out is how to do that as an architectural building block, and then a geofencing claim would fall out of that more general architecture.\n\nAlso, perhaps I have missed this, but workload live migration between hosts is an important consideration to tackle as well, as geofencing claims can be very easily invalidated if the workload migrates between jurisdictions.",
+      "createdAt": "2025-06-21T02:51:26Z",
+      "updatedAt": "2025-06-21T02:51:26Z",
+      "closedAt": null,
+      "comments": []
+    }
+  ],
   "pulls": [
     {
       "number": 1,
@@ -1327,6 +1344,116 @@
           "comments": []
         }
       ]
+    },
+    {
+      "number": 23,
+      "id": "PR_kwDOOmshaM6bLTNy",
+      "title": "further cleanup",
+      "url": "https://github.com/nedmsmith/draft-klspa-wimse-verifiable-geo-fence/pull/23",
+      "state": "MERGED",
+      "author": "ramkri123",
+      "authorAssociation": "COLLABORATOR",
+      "assignees": [],
+      "labels": [],
+      "body": "",
+      "createdAt": "2025-06-19T03:15:13Z",
+      "updatedAt": "2025-06-19T18:04:43Z",
+      "baseRepository": "nedmsmith/draft-klspa-wimse-verifiable-geo-fence",
+      "baseRefName": "main",
+      "baseRefOid": "69ec03216192b89456d91d9f9c394fbc74e26c5f",
+      "headRepository": "nedmsmith/draft-klspa-wimse-verifiable-geo-fence",
+      "headRefName": "ramki",
+      "headRefOid": "b6635d7b0bb070666db8e9481c2dc9861c1e9c15",
+      "closedAt": "2025-06-19T18:04:43Z",
+      "mergedAt": "2025-06-19T18:04:43Z",
+      "mergedBy": "gh23600063",
+      "mergeCommit": {
+        "oid": "941c852979748215b6da93c4446e947544049afe"
+      },
+      "comments": [],
+      "reviews": [
+        {
+          "id": "PRR_kwDOOmshaM6vdjF7",
+          "commit": {
+            "abbreviatedOid": "b6635d7"
+          },
+          "author": "gh23600063",
+          "authorAssociation": "COLLABORATOR",
+          "state": "APPROVED",
+          "body": "",
+          "createdAt": "2025-06-19T18:04:23Z",
+          "updatedAt": "2025-06-19T18:04:23Z",
+          "comments": []
+        }
+      ]
+    },
+    {
+      "number": 24,
+      "id": "PR_kwDOOmshaM6bVK11",
+      "title": "further cleanup",
+      "url": "https://github.com/nedmsmith/draft-klspa-wimse-verifiable-geo-fence/pull/24",
+      "state": "MERGED",
+      "author": "ramkri123",
+      "authorAssociation": "COLLABORATOR",
+      "assignees": [],
+      "labels": [],
+      "body": "",
+      "createdAt": "2025-06-20T01:53:18Z",
+      "updatedAt": "2025-06-20T05:28:07Z",
+      "baseRepository": "nedmsmith/draft-klspa-wimse-verifiable-geo-fence",
+      "baseRefName": "main",
+      "baseRefOid": "941c852979748215b6da93c4446e947544049afe",
+      "headRepository": "nedmsmith/draft-klspa-wimse-verifiable-geo-fence",
+      "headRefName": "ramki",
+      "headRefOid": "bdfda35b74ace86b94cf84041f27c61e3caa31bf",
+      "closedAt": "2025-06-20T05:28:07Z",
+      "mergedAt": "2025-06-20T05:28:07Z",
+      "mergedBy": "gh23600063",
+      "mergeCommit": {
+        "oid": "c39d86a42ddbcf25a82859dd15a105c7069fdc4b"
+      },
+      "comments": [],
+      "reviews": [
+        {
+          "id": "PRR_kwDOOmshaM6vgxj5",
+          "commit": {
+            "abbreviatedOid": "bdfda35"
+          },
+          "author": "gh23600063",
+          "authorAssociation": "COLLABORATOR",
+          "state": "APPROVED",
+          "body": "",
+          "createdAt": "2025-06-20T05:27:57Z",
+          "updatedAt": "2025-06-20T05:27:57Z",
+          "comments": []
+        }
+      ]
+    },
+    {
+      "number": 25,
+      "id": "PR_kwDOOmshaM6bdDrg",
+      "title": "reflect bearer token problem/solution better",
+      "url": "https://github.com/nedmsmith/draft-klspa-wimse-verifiable-geo-fence/pull/25",
+      "state": "OPEN",
+      "author": "ramkri123",
+      "authorAssociation": "COLLABORATOR",
+      "assignees": [],
+      "labels": [],
+      "body": "",
+      "createdAt": "2025-06-20T17:35:52Z",
+      "updatedAt": "2025-06-21T18:04:55Z",
+      "baseRepository": "nedmsmith/draft-klspa-wimse-verifiable-geo-fence",
+      "baseRefName": "main",
+      "baseRefOid": "c39d86a42ddbcf25a82859dd15a105c7069fdc4b",
+      "headRepository": "nedmsmith/draft-klspa-wimse-verifiable-geo-fence",
+      "headRefName": "ramki",
+      "headRefOid": "bbbc270fa0e5cfb66286e01bdee663b63a864311",
+      "closedAt": null,
+      "mergedAt": null,
+      "mergedBy": null,
+      "mergeCommit": null,
+      "comments": [],
+      "reviews": []
     }
   ]
 }
