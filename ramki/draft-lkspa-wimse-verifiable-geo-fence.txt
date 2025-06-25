@@ -1022,13 +1022,13 @@ Table of Contents
 
 15.3.  OPEN ISSUES 3: Attested PTP
 
-   The proposed framework includes a software/hardware-based solution
-   using Precision Time Protocol (PTP) for measuring proximity between
-   hosts in a data center.  However, this is a proposed enhancement to
-   the existing PTP hardware and software, and there is currently no
-   standard for attested PTP.  There is a proposed authetication
-   framework for PTP using symmetric key distribution
-   (https://datatracker.ietf.org/doc/draft-ietf-ntp-nts-for-ptp/).
+   Attested PTP is a software/hardware-based solution using Precision
+   Time Protocol (PTP) for measuring proximity between hosts in a data
+   center.  However, this is a proposed enhancement to the existing PTP
+   hardware and software, and there is currently no standard for
+   attested PTP.  There is a proposed authetication framework for PTP
+   using symmetric key distribution (https://datatracker.ietf.org/doc/
+   draft-ietf-ntp-nts-for-ptp/).
 
 15.4.  OPEN ISSUES 4: Geotagging textual data
 
