@@ -917,9 +917,8 @@ Table of Contents
 
    This signing can be done in two ways: * Software-based: PTP software
    (e.g. Linux PTP daemon), after adding timestamp to PTP message, signs
-   the PTP message with workload identity agent private key.  The
-   corresponding public key, used to verify the signatures, can be
-   attested by the Host TPM Attestation Key (AK).  This approach may not
+   the PTP message with its private key -- Linux PTP daemon is a
+   workload managed by workload identity manager.  This approach may not
    provide sub-microsecond accuracy due to inherent software jitter, but
    it can still provide a reasonable approximation of the proximity of
    the other data center hosts to the location anchor host. * Hardware-
