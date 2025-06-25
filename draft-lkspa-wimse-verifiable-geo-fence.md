@@ -436,8 +436,11 @@ End user location anchor host - goal is to provide an easy to use wireless solut
   * round-trip time (RTT) between the smartphone and laptop/desktop host
 
 Data center location anchor host - goal is to provide an easy to use solution that can be used by data center operators without requiring them to install a geolocation sensor on every data center host.
-* Use a software-based cryptographically signed round-trip-time (RTT) measurement between the location anchor host and other data center hosts. One possible implementation is to add a host proximity plugin to the SPIFFE/SPIRE agent, which can measure RTT between the location anchor host and other data center hosts. The RTT measurement can be used to determine the proximity of the other data center hosts to the location anchor host. The tradeoff is that software-based RTT measurement may not provide sub-microsecond accuracy due to inherent software jitter. However, it can still provide a reasonable approximation of the proximity of the other data center hosts to the location anchor host.
-* Workloads can migrate to any of these proximal hosts while still meeting the geofencing requirements. The location anchor host can be used to provide a cryptographically verifiable proof of residency on the host.
+* Software-based
+  * Use a software-based cryptographically signed round-trip-time (RTT) measurement between the location anchor host and other data center hosts. One possible implementation is to add a host proximity plugin to the SPIFFE/SPIRE agent, which can measure RTT between the location anchor host and other data center hosts. The RTT measurement can be used to determine the proximity of the other data center hosts to the location anchor host. The tradeoff is that software-based RTT measurement may not provide sub-microsecond accuracy due to inherent software jitter. However, it can still provide a reasonable approximation of the proximity of the other data center hosts to the location anchor host.
+  * Workloads can migrate to any of these proximal hosts while still meeting the geofencing requirements. The location anchor host can be used to provide a cryptographically verifiable proof of residency on the host.
+* Hardware-based
+  * Use a hardware-based solution like Precision Time Protocol (PTP). PTP is a network protocol that enables precise synchronization of clocks across a computer network and can be used to measure the round-trip time (RTT) between the location anchor host and other data center hosts with sub-microsecond accuracy. To provide cryptographically verifiable proof of residency on the host - referred to as "attested PTP" - the PTP hardware can be enhanced so that all PTP messages are signed (after adding a timestamp) with a private key on the NIC (e.g., SmartNIC DPU). The corresponding public key, used to verify the signatures, can be attested by the Host TPM Attestation Key (AK). Note that this is a proposed enhancement to the existing PTP hardware and software, and there is currently no standard for attested PTP (OPEN ISSUES 3).
 
 # Authorization Policy Implementers
 
@@ -484,6 +487,16 @@ For the workload identity agent restart case, it is not clear how the storage in
 ## OPEN ISSUES 2: Location privacy options
 
 The current approach includes some location privacy options for the geolocation in the Geolocation Information Cache. This may need to be expanded further in the future.
+
+## OPEN ISSUES 3: Attested PTP
+The proposed framework includes a hardware-based solution using Precision Time Protocol (PTP) for measuring proximity between hosts in a data center. However, this is a proposed enhancement to the existing PTP hardware and software, and there is currently no standard for attested PTP. Further work is needed to define and standardize this enhancement to ensure interoperability and security.
+
+## OPEN ISSUES 4: Geotagging textual data
+Popular standard for geotagging photos/videos is EXIF. There is no standard for geotagging textual data. If there is no geolocation tag, data can be stored/processed in non-compliant locations.
+
+## OPEN ISSUES 5: Attesting Geotags
+There is no standard for attesting (signing) geolocation tag. If geolocation tag is not signed, it can be manipulated through techniques such as VPNs.
+
 
 # Acknowledgments
 
