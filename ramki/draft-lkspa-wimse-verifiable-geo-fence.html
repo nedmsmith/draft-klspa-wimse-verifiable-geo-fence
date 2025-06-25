@@ -1241,6 +1241,14 @@ svg :is([fill="white"], [fill^="#fff"]) {
 </li>
           <li class="compact toc ulBare ulEmpty" id="section-toc.1-1.11">
             <p id="section-toc.1-1.11.1"><a href="#section-11" class="auto internal xref">11</a>. <a href="#name-scalability-considerations" class="internal xref">Scalability Considerations</a></p>
+<ul class="compact toc ulBare ulEmpty">
+<li class="compact toc ulBare ulEmpty" id="section-toc.1-1.11.2.1">
+                <p id="section-toc.1-1.11.2.1.1"><a href="#section-11.1" class="auto internal xref">11.1</a>.  <a href="#name-end-user-location-anchor-ho" class="internal xref">End user location anchor host</a></p>
+</li>
+              <li class="compact toc ulBare ulEmpty" id="section-toc.1-1.11.2.2">
+                <p id="section-toc.1-1.11.2.2.1"><a href="#section-11.2" class="auto internal xref">11.2</a>.  <a href="#name-data-center-location-anchor" class="internal xref">Data center location anchor host</a></p>
+</li>
+            </ul>
 </li>
           <li class="compact toc ulBare ulEmpty" id="section-toc.1-1.12">
             <p id="section-toc.1-1.12.1"><a href="#section-12" class="auto internal xref">12</a>. <a href="#name-authorization-policy-implem" class="internal xref">Authorization Policy Implementers</a></p>
@@ -1836,16 +1844,30 @@ This attestation includes data about the TPM's state and can be used to verify t
 <p id="section-11-1">Having a geolocation sensor on every host is not scalable from a deployment and management perspective and can be cost prohibitive.
 In the case of end user hosts, the geolocation sensor can be on a mobile host (e.g., smartphone with Mobile network capabilities and optionally GNSS capabilities) which can be leveraged by a laptop/desktop host which is proximal to the mobile host. The mobile host serves as the location anchor host.
 In the case of data center hosts, the geolocation sensor can be on a host with Mobile network and/or GNSS capabilities which can be leveraged by other data center hosts. This host serves as the location anchor host.<a href="#section-11-1" class="pilcrow">¶</a></p>
-<p id="section-11-2">End user location anchor host - goal is to provide an easy to use wireless solution that can be used by end users without requiring them to install a geolocation sensor on their laptop/desktop host.
-* The smartphone can be used as a location anchor host for the laptop/desktop host. The smartphone connects to the laptop/desktop host using Bluetooth Low Energy (BLE) or Ultra-Wideband (UWB) technology and continuously measures the following:
+<div id="end-user-location-anchor-host">
+<section id="section-11.1">
+        <h3 id="name-end-user-location-anchor-ho">
+<a href="#section-11.1" class="section-number selfRef">11.1. </a><a href="#name-end-user-location-anchor-ho" class="section-name selfRef">End user location anchor host</a>
+        </h3>
+<p id="section-11.1-1">Goal is to provide an easy to use wireless solution that can be used by end users without requiring them to install a geolocation sensor on their laptop/desktop host.<a href="#section-11.1-1" class="pilcrow">¶</a></p>
+<p id="section-11.1-2">The smartphone can be used as a location anchor host for the laptop/desktop host. The smartphone connects to the laptop/desktop host using Bluetooth Low Energy (BLE) or Ultra-Wideband (UWB) technology and continuously measures the following:
   * signal strength of the laptop/desktop host
-  * round-trip time (RTT) between the smartphone and laptop/desktop host<a href="#section-11-2" class="pilcrow">¶</a></p>
-<p id="section-11-3">Data center location anchor host - goal is to provide an easy to use solution that can be used by data center operators without requiring them to install a geolocation sensor on every data center host.
-* Software-based
-  * Use a software-based cryptographically signed round-trip-time (RTT) measurement between the location anchor host and other data center hosts. One possible implementation is to add a host proximity plugin to the SPIFFE/SPIRE agent, which can measure RTT between the location anchor host and other data center hosts. The RTT measurement can be used to determine the proximity of the other data center hosts to the location anchor host. The tradeoff is that software-based RTT measurement may not provide sub-microsecond accuracy due to inherent software jitter. However, it can still provide a reasonable approximation of the proximity of the other data center hosts to the location anchor host.
-  * Workloads can migrate to any of these proximal hosts while still meeting the geofencing requirements. The location anchor host can be used to provide a cryptographically verifiable proof of residency on the host.
-* Hardware-based
-  * Use a hardware-based solution like Precision Time Protocol (PTP). PTP is a network protocol that enables precise synchronization of clocks across a computer network and can be used to measure the round-trip time (RTT) between the location anchor host and other data center hosts with sub-microsecond accuracy. To provide cryptographically verifiable proof of residency on the host - referred to as "attested PTP" - the PTP hardware can be enhanced so that all PTP messages are signed (after adding a timestamp) with a private key on the NIC (e.g., SmartNIC DPU). The corresponding public key, used to verify the signatures, can be attested by the Host TPM Attestation Key (AK). Note that this is a proposed enhancement to the existing PTP hardware and software, and there is currently no standard for attested PTP (OPEN ISSUES 3).<a href="#section-11-3" class="pilcrow">¶</a></p>
+  * round-trip time (RTT) between the smartphone and laptop/desktop host<a href="#section-11.1-2" class="pilcrow">¶</a></p>
+</section>
+</div>
+<div id="data-center-location-anchor-host">
+<section id="section-11.2">
+        <h3 id="name-data-center-location-anchor">
+<a href="#section-11.2" class="section-number selfRef">11.2. </a><a href="#name-data-center-location-anchor" class="section-name selfRef">Data center location anchor host</a>
+        </h3>
+<p id="section-11.2-1">Goal is to provide an easy to use solution that can be used by data center operators without requiring them to install a geolocation sensor on every data center host.<a href="#section-11.2-1" class="pilcrow">¶</a></p>
+<p id="section-11.2-2">PTP is a network protocol that enables precise synchronization of clocks across a computer network and can be used to measure the round-trip time (RTT) between the location anchor host and other data center hosts with sub-microsecond accuracy. To provide cryptographically verifiable proof of residency on the host - referred to as "attested PTP" - the PTP software/hardware can be enhanced so that all PTP messages are signed with a private key.<a href="#section-11.2-2" class="pilcrow">¶</a></p>
+<p id="section-11.2-3">This signing can be done in two ways:
+* Software-based: PTP software (e.g. Linux PTP daemon), after adding timestamp to PTP message, signs the PTP message with workload identity agent private key. The corresponding public key, used to verify the signatures, can be attested by the Host TPM Attestation Key (AK). This approach may not provide sub-microsecond accuracy due to inherent software jitter, but it can still provide a reasonable approximation of the proximity of the other data center hosts to the location anchor host.
+* Hardware-based: PTP hardware (e.g., SmartNIC), after adding timestamp to PTP message, signs the PTP message with its private key (e.g., SmartNIC DPU). The corresponding public key, used to verify the signatures, can be attested by the Host TPM Attestation Key (AK). This approach provides sub-microsecond accuracy and the perfect proximity measure of the other data center hosts to the location anchor host, and is suitable for data center environments where precise timing is critical.<a href="#section-11.2-3" class="pilcrow">¶</a></p>
+<p id="section-11.2-4">Note that this is a proposed enhancement to the existing PTP hardware and software, and there is currently no standard for attested PTP (OPEN ISSUES 3). Further work is needed to define and standardize this enhancement to ensure interoperability and security.<a href="#section-11.2-4" class="pilcrow">¶</a></p>
+</section>
+</div>
 </section>
 </div>
 <div id="authorization-policy-implementers">
@@ -1930,7 +1952,7 @@ In the case of data center hosts, the geolocation sensor can be on a host with M
         <h3 id="name-open-issues-3-attested-ptp">
 <a href="#section-15.3" class="section-number selfRef">15.3. </a><a href="#name-open-issues-3-attested-ptp" class="section-name selfRef">OPEN ISSUES 3: Attested PTP</a>
         </h3>
-<p id="section-15.3-1">The proposed framework includes a hardware-based solution using Precision Time Protocol (PTP) for measuring proximity between hosts in a data center. However, this is a proposed enhancement to the existing PTP hardware and software, and there is currently no standard for attested PTP. Further work is needed to define and standardize this enhancement to ensure interoperability and security.<a href="#section-15.3-1" class="pilcrow">¶</a></p>
+<p id="section-15.3-1">The proposed framework includes a software/hardware-based solution using Precision Time Protocol (PTP) for measuring proximity between hosts in a data center. However, this is a proposed enhancement to the existing PTP hardware and software, and there is currently no standard for attested PTP. There is a proposed authetication framework for PTP using symmetric key distribution (https://datatracker.ietf.org/doc/draft-ietf-ntp-nts-for-ptp/).<a href="#section-15.3-1" class="pilcrow">¶</a></p>
 </section>
 </div>
 <div id="open-issues-4-geotagging-textual-data">
