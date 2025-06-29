@@ -150,28 +150,21 @@ Modern cloud and distributed environments face significant risks from stolen bea
 
 **Key Terms:**
 
-**Data Residency technical and legal challenges**
+- **Data Residency technical and legal challenges**
 : Ensuring compliance with data protection regulations and laws (e.g. EU GDPR, US HIPPA, PCI DSS, local legal mandates), which require data to be stored and processed within specific geographic boundaries. Data residency requirements are described in more detail in [tcg-geo-loc].
-
-**Data Residency Host-Affinity Requirement**
+- **Data Residency Host-Affinity Requirement**
 : Need for data to be tied to specific computing environments or hosts where it is stored and/or processed.
-
-**Data Residency Geolocation-Affinity Requirement**
+- **Data Residency Geolocation-Affinity Requirement**
 : Data not to be transferred out of and should be stored/processed only in defined geographic region(s).
-
-**Data Residency Host geolocation affinity is aka Geofencing**
+- **Data Residency Host Geolocation Affinity is aka Geofencing**
 : Ensuring data or workloads are processed in specific computing environments or hosts in defined geographic regions.
-
-**Workload Identity Agent (WIA)**
+- **Workload Identity Agent (WIA)**
 : SPIRE agent on each host, with TPM plugin to issue X.509 SVIDs and sign requests.
-
-**Location Anchor Host (LAH)**
+- **Location Anchor Host (LAH)**
 : Host with a trusted GNSS/5G modem attached to its TPM endorsement key.
-
 **Composite Geolocation**
 : Fused location estimate from local GNSS plus mobile-API data.
-
-**Proof-Of-Residency (POR)**
+- **Proof-Of-Residency (POR)**
 : Cryptographic proof that a workload is executing within approved geographic and host boundaries.
 
 # Introduction
@@ -189,18 +182,8 @@ Enterprises (e.g., healthcare, banking) need cryptographic proof of a trustworth
 Enterprises handling sensitive data rely on dedicated cloud hosts (e.g., EU sovereign cloud providers) that ensure compliance with data residency laws, while also ensuring appropriate levels of service (e.g., high availability).
 To meet data residency legal requirements, enterprises need to verify that workload data is processed by hosts within a geographic boundary and that workload data is only transmitted between specified geographic boundaries.
 
-**Example Architecture for Sovereign Cloud AI Inferencing:**
-
-```
-+----------------------+     +-----------+     +------------+
-| Inference Service    |────▶| Key Vault |────▶| HSM        |
-| (WIA + App Host X)   |     | (Secrets) |     | (Decrypt)  |
-+----------------------+     +-----------+     +------------+
-+----------------------+     +-----------+     +------------+
-       │                         │                  │
-       ▼                         ▼                  ▼
-   Fetch Secrets            Fetch Model      Decrypt & Infer
-```
+**Example Sovereign Cloud AI Inferencing use case depicting the key security and compliance challenges:**
+[Figure -- Sovereign Cloud AI Inferencing](https://github.com/nedmsmith/draft-klspa-wimse-verifiable-geo-fence/blob/ramki/pictures/challenges-sovereign-cloud-ai-inferencing.svg)
 
 **Current Key Gaps:**
 - Access control by **bearer token** only → tokens MAY be stolen
@@ -214,17 +197,8 @@ Enterprises need to ensure that the AI agent is located within a specific geogra
 ### Server workload <-> Server workload - Federated AI:
 In federated learning scenarios, multiple organizations collaborate to train machine learning models without sharing raw data. Each organization needs to ensure that its training data remains within a specific geographic boundary. This requires cryptographic proof that the training process is occurring on trusted hosts within the defined boundaries.
 
-**Example Architecture:**
-
-```
-+------------------+    +------------+    +------------------+
-| Participant 1    |───▶| Aggregator |◀───| Participant 2    |
-| (WIA + Host)     |    | (WIA + App)|    | (WIA + Host)     |
-+------------------+    +------------+    +------------------+
-      │ ▲    │ ▲           ▲ │     ▲  │ ▲
-      │ │    ▼ │           │ ▼     │  │
-   Get Secrets  Train     Share Models  Get Secrets
-```
+**Example Federated Learning use case depicting the key security and compliance challenges:**
+[Figure -- Federated Learning](https://github.com/nedmsmith/draft-klspa-wimse-verifiable-geo-fence/blob/ramki/pictures/challenges-federated-learning.svg)
 
 **Current Key Gaps:**
 - **Bearer token** theft grants full pipeline access
@@ -292,7 +266,7 @@ Modern cloud and distributed environments face significant risks from stolen bea
 
 * **Trust in Transit:** HTTP requests can be intercepted and modified by compromised intermediate proxies (e.g., API gateways, SASE firewalls).
 
-# Approach Summary
+# Approach Overview
 This approach enables cryptographically verifiable geofencing by binding workload identity to both platform and geographic attributes using trusted hardware (e.g., TPM), attestation protocols, and geolocation services. The framework supports secure, policy-driven enforcement of data residency and location requirements for workloads in multi-system environments.
 
 Key elements of the approach include:
@@ -306,14 +280,6 @@ Key elements of the approach include:
 For example, in this document:
   * The **Workload Identity Manager** is represented by the SPIFFE/SPIRE server (spire).
   * The **Workload Identity Agent** is represented by the SPIFFE/SPIRE agent (spire).
-
-## SPIFFE/SPIRE Architecture Modifications
-In the context of the SPIFFE/SPIRE architecture (spire), the SPIFFE/SPIRE Agent includes a new geolocation plugin -- this is depicted in the figure below. The Agent is a daemon running on bare-metal Linux OS host (H) as a process with direct access to TPM (root permissions for TPM 2.0 access may be needed for certain Linux distributions for certain H hardware configurations).
-The Agent, using the geolocation plugin, can gather the location from host-local location sensors (e.g., GNSS).
-The Agent has a TPM plugin (spire-tpm) which interacts with the TPM.
-The Workload Identity Manager (SPIFFE/SPIRE server) is running in a cluster which is isolated from the cluster in which the Agent is running.
-
-[Figure -- Modified SPIFFE-SPIRE architecture with new geolocation plugin](https://github.com/nedmsmith/draft-klspa-wimse-verifiable-geo-fence/blob/main/pictures/spiffe-spire.svg)
 
 ## Server Hosts - Solution highlights
 Assumptions: The maximum round-trip delay within a data center typically ranges from 500-1000 microseconds.
@@ -335,6 +301,9 @@ Scalable hierarchical approach – enhancements to Workload Identity (Spiffe/Spi
 * Workload identity agent provides proof that workloads run only on workload/location anchor hosts.
   * This is done using enhancements to existing Spiffe/Spire agent and TPM plugin and addresses bearer token issue
 
+**Addressing the key security and compliance challenges in the Sovereign Cloud AI Inferencing use case:**
+[Figure -- Verifiable Geofencing with Proof of Residency for Sovereign Cloud AI Inferencing](https://github.com/nedmsmith/draft-klspa-wimse-verifiable-geo-fence/blob/ramki/pictures/addressing-challenges-sovereign-cloud-ai-inferencing.svg)
+
 ## End user/IoT hosts - Solution highlights
 Browser solution – new browser extension for proof residency and geofencing
 * Application proxy which intercepts every HTTP request; connects to workload identity agent to add geolocation; signs request using workload identity agent key which is attested by TPM attestation key.
@@ -342,10 +311,21 @@ Browser solution – new browser extension for proof residency and geofencing
 Same as server hosts
 * Each of the hosts run a workload identity agent (Spiffe/Spire agent) which connect to a workload identity manager (Spiffe/Spire server).
 
+**Addressing the key security and compliance challenges in the Federated Learning use case:**
+[Figure -- Verifiable Geofencing with Proof of Residency for Federated Learning](https://github.com/nedmsmith/draft-klspa-wimse-verifiable-geo-fence/blob/ramki/pictures/addressing-challenges-federated-learning.svg)
+
 # Control Plane End-to-End Workflow
 The end-to-end workflow for the proposed framework consists of several key steps, including attestation for system bootstrap and Workload Identity Agent initialization, Workload Identity Agent geolocation and geofencing processing, workload attestation, and remote verification.
 
 [Figure -- End-to-end Workflow](https://github.com/nedmsmith/draft-klspa-wimse-verifiable-geo-fence/blob/main/pictures/end-to-end-flow.svg)
+
+## SPIFFE/SPIRE Architecture Modifications
+In the context of the SPIFFE/SPIRE architecture (spire), the SPIFFE/SPIRE Agent includes a new geolocation plugin -- this is depicted in the figure below. The Agent is a daemon running on bare-metal Linux OS host (H) as a process with direct access to TPM (root permissions for TPM 2.0 access may be needed for certain Linux distributions for certain H hardware configurations).
+The Agent, using the geolocation plugin, can gather the location from host-local location sensors (e.g., GNSS).
+The Agent has a TPM plugin (spire-tpm) which interacts with the TPM.
+The Workload Identity Manager (SPIFFE/SPIRE server) is running in a cluster which is isolated from the cluster in which the Agent is running.
+
+[Figure -- Modified SPIFFE-SPIRE architecture with new geolocation plugin](https://github.com/nedmsmith/draft-klspa-wimse-verifiable-geo-fence/blob/main/pictures/spiffe-spire.svg)
 
 ## Attestation of OS Integrity and Proof of Residency on Host
 
