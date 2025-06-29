@@ -185,9 +185,6 @@ To meet data residency legal requirements, enterprises need to verify that workl
 **Example Sovereign Cloud AI Inferencing use case depicting the key security and compliance challenges:**
 [Figure -- Sovereign Cloud AI Inferencing](https://github.com/nedmsmith/draft-klspa-wimse-verifiable-geo-fence/blob/ramki/pictures/challenges-sovereign-cloud-ai-inferencing.svg)
 
-**Current Key Gaps:**
-- Access control by **bearer token** only → tokens MAY be stolen
-- Geofence check via **source IP** only → bypassable (VPN, proxy)
 
 ### Server workload <-> Server workload - Agentic AI:
 Enterprises need to ensure that the AI agent is located within a specific geographic boundary when downloading sensitive data or performing other sensitive operations. A secure AI agent, running on a trusted host with TPM-backed attestation, interacts with geolocation and geofencing services to obtain verifiable proof of its geographic boundary. The agent periodically collects location data from trusted sensors, obtains attested composite location from a geolocation service, and enforces geofence policies via a geofencing service. The resulting attested geofence proof is used to bind workload identity to both the host and its geographic location, enabling secure, policy-driven execution of AI workloads and compliance with data residency requirements.
@@ -199,10 +196,6 @@ In federated learning scenarios, multiple organizations collaborate to train mac
 
 **Example Federated Learning use case depicting the key security and compliance challenges:**
 [Figure -- Federated Learning](https://github.com/nedmsmith/draft-klspa-wimse-verifiable-geo-fence/blob/ramki/pictures/challenges-federated-learning.svg)
-
-**Current Key Gaps:**
-- **Bearer token** theft grants full pipeline access
-- **IP-based** geofencing lacks cryptographic verifiability
 
 
 ### User workload <-> Server workload:
@@ -240,18 +233,17 @@ Modern cloud and distributed environments face significant risks from stolen bea
 ## Data-in-Use Challenges
 
 ### Authentication and Authorization Challenges
-**Bearer Token Vulnerabilities**
-: Bearer tokens are typically generated via user MFA and used to establish HTTP sessions. A malicious actor can steal a bearer token (e.g., from a still-valid HAR file uploaded to a support portal, as seen in the Okta attack) and present it to a server workload. The attacker may be in a forbidden location and on an unauthorized host (e.g., their own laptop).
-  * Current solution options for addressing bearer token issue and their challenges:
-    * PoP Token: 
-      Not easy to establish trust between the presenter (client) and the token issuer.
-    * PoP via Mutual TLS: 
-      Client certificates are generally not supported in browsers.
-      MITM entities such as API gateways often terminate TLS connections.
-    * Host TPMs for API call signature: 
-      Not scalable to sign every API call with a TPM key, as typical enterprise laptops/servers TPMs support only about 5 signatures per second.
-    * Non-HTTP protocols:
-      No solution for IPSEC etc.
+#### Bearer Token Vulnerabilities
+Bearer tokens are typically generated via user MFA and used to establish HTTP sessions. A malicious actor can steal a bearer token (e.g., from a still-valid HAR file uploaded to a support portal, as seen in the Okta attack) and present it to a server workload. The attacker may be in a forbidden location and on an unauthorized host (e.g., their own laptop). Current solution options for addressing bearer token issue and their challenges:
+* PoP Token: 
+  Not easy to establish trust between the presenter (client) and the token issuer.
+* PoP via Mutual TLS: 
+  Client certificates are generally not supported in browsers.
+  MITM entities such as API gateways often terminate TLS connections.
+* Host TPMs for API call signature: 
+  Not scalable to sign every API call with a TPM key, as typical enterprise laptops/servers TPMs support only about 5 signatures per second.
+* Non-HTTP protocols:
+  No solution for IPSEC etc.
 
 ### Location and Geofencing Challenges
 * **IP Address-Based Location:** This is the typical approach, but it has limitations: network providers can use geographic-region-based IANA-assigned IP addresses anywhere in the world, and enterprise VPNs can hide the user's real IP address.
@@ -260,7 +252,7 @@ Modern cloud and distributed environments face significant risks from stolen bea
 
 * **GNSS:** Certain GNSS, e.g., civilian GPS in smartphones and navigation systems, can be spoofed. A practical example is the Israel GPS spoofing attacks.
 
-## Implicit Trust Challenges
+### Implicit Trust Challenges
 * **Cloud Region Trust**
 : Implicit trust in cloud region assignment with no cryptographic proof of physical locality. There is no auditable link between stored blobs and actual geography.
 
@@ -308,7 +300,7 @@ Scalable hierarchical approach – enhancements to Workload Identity (Spiffe/Spi
 Browser solution – new browser extension for proof residency and geofencing
 * Application proxy which intercepts every HTTP request; connects to workload identity agent to add geolocation; signs request using workload identity agent key which is attested by TPM attestation key.
 
-Same as server hosts
+Similar to the server hosts solution
 * Each of the hosts run a workload identity agent (Spiffe/Spire agent) which connect to a workload identity manager (Spiffe/Spire server).
 
 **Addressing the key security and compliance challenges in the Federated Learning use case:**
@@ -328,7 +320,6 @@ The Workload Identity Manager (SPIFFE/SPIRE server) is running in a cluster whic
 [Figure -- Modified SPIFFE-SPIRE architecture with new geolocation plugin](https://github.com/nedmsmith/draft-klspa-wimse-verifiable-geo-fence/blob/main/pictures/spiffe-spire.svg)
 
 ## Attestation of OS Integrity and Proof of Residency on Host
-
 As part of system boot/reboot process, boot loader-based measured system boot with remote Workload Identity Manager verification is used to ensure only approved OS is running on an approved hardware platform.
 
 **Measurement Collection**: During the boot process, the boot loader collects measurements (hashes) of the boot components and configurations.
