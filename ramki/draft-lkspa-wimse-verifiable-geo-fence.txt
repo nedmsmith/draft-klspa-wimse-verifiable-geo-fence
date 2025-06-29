@@ -100,7 +100,7 @@ Table of Contents
      4.2.  Data-in-Use Challenges
        4.2.1.  Authentication and Authorization Challenges
        4.2.2.  Location and Geofencing Challenges
-     4.3.  Implicit Trust Challenges
+       4.2.3.  Implicit Trust Challenges
    5.  Approach Overview
      5.1.  Server Hosts - Solution highlights
      5.2.  End user/IoT hosts - Solution highlights
@@ -247,10 +247,6 @@ Table of Contents
    verifiable-geo-fence/blob/ramki/pictures/challenges-sovereign-cloud-
    ai-inferencing.svg)
 
-   *Current Key Gaps:* - Access control by *bearer token* only → tokens
-   MAY be stolen - Geofence check via *source IP* only → bypassable
-   (VPN, proxy)
-
 3.1.2.  Server workload <-> Server workload - Agentic AI:
 
    Enterprises need to ensure that the AI agent is located within a
@@ -283,9 +279,6 @@ Table of Contents
    compliance challenges:* Figure -- Federated Learning
    (https://github.com/nedmsmith/draft-klspa-wimse-verifiable-geo-
    fence/blob/ramki/pictures/challenges-federated-learning.svg)
-
-   *Current Key Gaps:* - *Bearer token* theft grants full pipeline
-   access - *IP-based* geofencing lacks cryptographic verifiability
 
 3.1.4.  User workload <-> Server workload:
 
@@ -348,21 +341,21 @@ Table of Contents
 
 4.2.1.  Authentication and Authorization Challenges
 
-   *Bearer Token Vulnerabilities*  Bearer tokens are typically generated
-      via user MFA and used to establish HTTP sessions.  A malicious
-      actor can steal a bearer token (e.g., from a still-valid HAR file
-      uploaded to a support portal, as seen in the Okta attack) and
-      present it to a server workload.  The attacker may be in a
-      forbidden location and on an unauthorized host (e.g., their own
-      laptop). * Current solution options for addressing bearer token
-      issue and their challenges: * PoP Token:  Not easy to establish
-      trust between the presenter (client) and the token issuer.  * PoP
-      via Mutual TLS:  Client certificates are generally not supported
-      in browsers.  MITM entities such as API gateways often terminate
-      TLS connections.  * Host TPMs for API call signature:  Not
-      scalable to sign every API call with a TPM key, as typical
-      enterprise laptops/servers TPMs support only about 5 signatures
-      per second.  * Non-HTTP protocols: No solution for IPSEC etc.
+   #### Bearer Token Vulnerabilities Bearer tokens are typically
+   generated via user MFA and used to establish HTTP sessions.  A
+   malicious actor can steal a bearer token (e.g., from a still-valid
+   HAR file uploaded to a support portal, as seen in the Okta attack)
+   and present it to a server workload.  The attacker may be in a
+   forbidden location and on an unauthorized host (e.g., their own
+   laptop).  Current solution options for addressing bearer token issue
+   and their challenges: * PoP Token:  Not easy to establish trust
+   between the presenter (client) and the token issuer. * PoP via Mutual
+   TLS:  Client certificates are generally not supported in browsers.
+   MITM entities such as API gateways often terminate TLS connections. *
+   Host TPMs for API call signature:  Not scalable to sign every API
+   call with a TPM key, as typical enterprise laptops/servers TPMs
+   support only about 5 signatures per second. * Non-HTTP protocols: No
+   solution for IPSEC etc.
 
 4.2.2.  Location and Geofencing Challenges
 
@@ -380,7 +373,7 @@ Table of Contents
       navigation systems, can be spoofed.  A practical example is the
       Israel GPS spoofing attacks.
 
-4.3.  Implicit Trust Challenges
+4.2.3.  Implicit Trust Challenges
 
    *  *Cloud Region Trust*  Implicit trust in cloud region assignment
          with no cryptographic proof of physical locality.  There is no
@@ -481,9 +474,9 @@ Table of Contents
    using workload identity agent key which is attested by TPM
    attestation key.
 
-   Same as server hosts * Each of the hosts run a workload identity
-   agent (Spiffe/Spire agent) which connect to a workload identity
-   manager (Spiffe/Spire server).
+   Similar to the server hosts solution * Each of the hosts run a
+   workload identity agent (Spiffe/Spire agent) which connect to a
+   workload identity manager (Spiffe/Spire server).
 
    *Addressing the key security and compliance challenges in the
    Federated Learning use case:* Figure -- Verifiable Geofencing with

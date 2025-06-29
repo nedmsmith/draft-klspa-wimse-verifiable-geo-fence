@@ -1216,10 +1216,10 @@ svg :is([fill="white"], [fill^="#fff"]) {
                   <li class="compact toc ulBare ulEmpty" id="section-toc.1-1.4.2.2.2.2">
                     <p id="section-toc.1-1.4.2.2.2.2.1"><a href="#section-4.2.2" class="auto internal xref">4.2.2</a>.  <a href="#name-location-and-geofencing-cha" class="internal xref">Location and Geofencing Challenges</a></p>
 </li>
-                </ul>
+                  <li class="compact toc ulBare ulEmpty" id="section-toc.1-1.4.2.2.2.3">
+                    <p id="section-toc.1-1.4.2.2.2.3.1"><a href="#section-4.2.3" class="auto internal xref">4.2.3</a>.  <a href="#name-implicit-trust-challenges" class="internal xref">Implicit Trust Challenges</a></p>
 </li>
-              <li class="compact toc ulBare ulEmpty" id="section-toc.1-1.4.2.3">
-                <p id="section-toc.1-1.4.2.3.1"><a href="#section-4.3" class="auto internal xref">4.3</a>.  <a href="#name-implicit-trust-challenges" class="internal xref">Implicit Trust Challenges</a></p>
+                </ul>
 </li>
             </ul>
 </li>
@@ -1472,9 +1472,6 @@ appear in all capitals, as shown here.<a href="#section-1-1" class="pilcrow">¶<
 To meet data residency legal requirements, enterprises need to verify that workload data is processed by hosts within a geographic boundary and that workload data is only transmitted between specified geographic boundaries.<a href="#section-3.1.1-1" class="pilcrow">¶</a></p>
 <p id="section-3.1.1-2"><strong>Example Sovereign Cloud AI Inferencing use case depicting the key security and compliance challenges:</strong>
             <a href="https://github.com/nedmsmith/draft-klspa-wimse-verifiable-geo-fence/blob/ramki/pictures/challenges-sovereign-cloud-ai-inferencing.svg">Figure -- Sovereign Cloud AI Inferencing</a><a href="#section-3.1.1-2" class="pilcrow">¶</a></p>
-<p id="section-3.1.1-3"><strong>Current Key Gaps:</strong>
-- Access control by <strong>bearer token</strong> only → tokens <span class="bcp14">MAY</span> be stolen
-- Geofence check via <strong>source IP</strong> only → bypassable (VPN, proxy)<a href="#section-3.1.1-3" class="pilcrow">¶</a></p>
 </section>
 </div>
 <div id="server-workload-server-workload-agentic-ai">
@@ -1494,9 +1491,6 @@ To meet data residency legal requirements, enterprises need to verify that workl
 <p id="section-3.1.3-1">In federated learning scenarios, multiple organizations collaborate to train machine learning models without sharing raw data. Each organization needs to ensure that its training data remains within a specific geographic boundary. This requires cryptographic proof that the training process is occurring on trusted hosts within the defined boundaries.<a href="#section-3.1.3-1" class="pilcrow">¶</a></p>
 <p id="section-3.1.3-2"><strong>Example Federated Learning use case depicting the key security and compliance challenges:</strong>
             <a href="https://github.com/nedmsmith/draft-klspa-wimse-verifiable-geo-fence/blob/ramki/pictures/challenges-federated-learning.svg">Figure -- Federated Learning</a><a href="#section-3.1.3-2" class="pilcrow">¶</a></p>
-<p id="section-3.1.3-3"><strong>Current Key Gaps:</strong>
-- <strong>Bearer token</strong> theft grants full pipeline access
-- <strong>IP-based</strong> geofencing lacks cryptographic verifiability<a href="#section-3.1.3-3" class="pilcrow">¶</a></p>
 </section>
 </div>
 <div id="user-workload-server-workload">
@@ -1579,23 +1573,17 @@ Geolocation enforcement can ensure policy compliance. See <span>[<a href="#doj-c
           <h4 id="name-authentication-and-authoriz">
 <a href="#section-4.2.1" class="section-number selfRef">4.2.1. </a><a href="#name-authentication-and-authoriz" class="section-name selfRef">Authentication and Authorization Challenges</a>
           </h4>
-<span class="break"></span><dl class="dlParallel" id="section-4.2.1-1">
-            <dt id="section-4.2.1-1.1"><strong>Bearer Token Vulnerabilities</strong></dt>
-            <dd style="margin-left: 1.5em" id="section-4.2.1-1.2">
-              <p id="section-4.2.1-1.2.1">Bearer tokens are typically generated via user MFA and used to establish HTTP sessions. A malicious actor can steal a bearer token (e.g., from a still-valid HAR file uploaded to a support portal, as seen in the Okta attack) and present it to a server workload. The attacker may be in a forbidden location and on an unauthorized host (e.g., their own laptop).
-* Current solution options for addressing bearer token issue and their challenges:
-  * PoP Token: 
-    Not easy to establish trust between the presenter (client) and the token issuer.
-  * PoP via Mutual TLS: 
-    Client certificates are generally not supported in browsers.
-    MITM entities such as API gateways often terminate TLS connections.
-  * Host TPMs for API call signature: 
-    Not scalable to sign every API call with a TPM key, as typical enterprise laptops/servers TPMs support only about 5 signatures per second.
-  * Non-HTTP protocols:
-    No solution for IPSEC etc.<a href="#section-4.2.1-1.2.1" class="pilcrow">¶</a></p>
-</dd>
-          <dd class="break"></dd>
-</dl>
+<p id="section-4.2.1-1">#### Bearer Token Vulnerabilities
+Bearer tokens are typically generated via user MFA and used to establish HTTP sessions. A malicious actor can steal a bearer token (e.g., from a still-valid HAR file uploaded to a support portal, as seen in the Okta attack) and present it to a server workload. The attacker may be in a forbidden location and on an unauthorized host (e.g., their own laptop). Current solution options for addressing bearer token issue and their challenges:
+* PoP Token: 
+  Not easy to establish trust between the presenter (client) and the token issuer.
+* PoP via Mutual TLS: 
+  Client certificates are generally not supported in browsers.
+  MITM entities such as API gateways often terminate TLS connections.
+* Host TPMs for API call signature: 
+  Not scalable to sign every API call with a TPM key, as typical enterprise laptops/servers TPMs support only about 5 signatures per second.
+* Non-HTTP protocols:
+  No solution for IPSEC etc.<a href="#section-4.2.1-1" class="pilcrow">¶</a></p>
 </section>
 </div>
 <div id="location-and-geofencing-challenges">
@@ -1616,27 +1604,27 @@ Geolocation enforcement can ensure policy compliance. See <span>[<a href="#doj-c
           </ul>
 </section>
 </div>
-</section>
-</div>
 <div id="implicit-trust-challenges">
-<section id="section-4.3">
-        <h3 id="name-implicit-trust-challenges">
-<a href="#section-4.3" class="section-number selfRef">4.3. </a><a href="#name-implicit-trust-challenges" class="section-name selfRef">Implicit Trust Challenges</a>
-        </h3>
+<section id="section-4.2.3">
+          <h4 id="name-implicit-trust-challenges">
+<a href="#section-4.2.3" class="section-number selfRef">4.2.3. </a><a href="#name-implicit-trust-challenges" class="section-name selfRef">Implicit Trust Challenges</a>
+          </h4>
 <ul class="normal">
-<li class="normal" id="section-4.3-1.1">
-            <span class="break"></span><dl class="dlParallel" id="section-4.3-1.1.1">
-              <dt id="section-4.3-1.1.1.1"><strong>Cloud Region Trust</strong></dt>
-              <dd style="margin-left: 1.5em" id="section-4.3-1.1.1.2">
-                <p id="section-4.3-1.1.1.2.1">Implicit trust in cloud region assignment with no cryptographic proof of physical locality. There is no auditable link between stored blobs and actual geography.<a href="#section-4.3-1.1.1.2.1" class="pilcrow">¶</a></p>
+<li class="normal" id="section-4.2.3-1.1">
+              <span class="break"></span><dl class="dlParallel" id="section-4.2.3-1.1.1">
+                <dt id="section-4.2.3-1.1.1.1"><strong>Cloud Region Trust</strong></dt>
+                <dd style="margin-left: 1.5em" id="section-4.2.3-1.1.1.2">
+                  <p id="section-4.2.3-1.1.1.2.1">Implicit trust in cloud region assignment with no cryptographic proof of physical locality. There is no auditable link between stored blobs and actual geography.<a href="#section-4.2.3-1.1.1.2.1" class="pilcrow">¶</a></p>
 </dd>
-            <dd class="break"></dd>
+              <dd class="break"></dd>
 </dl>
 </li>
-          <li class="normal" id="section-4.3-1.2">
-            <p id="section-4.3-1.2.1"><strong>Trust in Transit:</strong> HTTP requests can be intercepted and modified by compromised intermediate proxies (e.g., API gateways, SASE firewalls).<a href="#section-4.3-1.2.1" class="pilcrow">¶</a></p>
+            <li class="normal" id="section-4.2.3-1.2">
+              <p id="section-4.2.3-1.2.1"><strong>Trust in Transit:</strong> HTTP requests can be intercepted and modified by compromised intermediate proxies (e.g., API gateways, SASE firewalls).<a href="#section-4.2.3-1.2.1" class="pilcrow">¶</a></p>
 </li>
-        </ul>
+          </ul>
+</section>
+</div>
 </section>
 </div>
 </section>
@@ -1716,7 +1704,7 @@ Geolocation enforcement can ensure policy compliance. See <span>[<a href="#doj-c
         </h3>
 <p id="section-5.2-1">Browser solution – new browser extension for proof residency and geofencing
 * Application proxy which intercepts every HTTP request; connects to workload identity agent to add geolocation; signs request using workload identity agent key which is attested by TPM attestation key.<a href="#section-5.2-1" class="pilcrow">¶</a></p>
-<p id="section-5.2-2">Same as server hosts
+<p id="section-5.2-2">Similar to the server hosts solution
 * Each of the hosts run a workload identity agent (Spiffe/Spire agent) which connect to a workload identity manager (Spiffe/Spire server).<a href="#section-5.2-2" class="pilcrow">¶</a></p>
 <p id="section-5.2-3"><strong>Addressing the key security and compliance challenges in the Federated Learning use case:</strong>
           <a href="https://github.com/nedmsmith/draft-klspa-wimse-verifiable-geo-fence/blob/ramki/pictures/addressing-challenges-federated-learning.svg">Figure -- Verifiable Geofencing with Proof of Residency for Federated Learning</a><a href="#section-5.2-3" class="pilcrow">¶</a></p>
