@@ -14,9 +14,6 @@
        Modern cloud and distributed environments face significant risks from stolen bearer tokens, protocol replay, and trust gaps in transit. This document presents a framework for modernizing workload security through cryptographically verifiable geofencing, proof-of-possession, and protocol-aware residency enforcement. By binding workload identity to both geographic and host attributes, and supplementing bearer tokens with verifiable, location- and host-bound claims, the framework addresses the challenges of bearer token theft, proof-of-possession, IPSEC, and trust-in-transit. Leveraging trusted hardware, attestation protocols, and geolocation services, this approach ensures that only authorized workloads in approved locations and environments can access sensitive data or services, even in the presence of advanced threats. 
     " name="description">
 <meta content="xml2rfc 3.29.0" name="generator">
-<meta content="geofence" name="keyword">
-<meta content="location affinity" name="keyword">
-<meta content="host affinity" name="keyword">
 <meta content="draft-lkspa-wimse-verifiable-geo-fence-latest" name="ietf.draft">
 <!-- Generator version information:
   xml2rfc 3.29.0
@@ -1054,7 +1051,7 @@ svg :is([fill="white"], [fill^="#fff"]) {
 </tr></thead>
 <tfoot><tr>
 <td class="left">Krishnan, et al.</td>
-<td class="center">Expires 31 December 2025</td>
+<td class="center">Expires 1 January 2026</td>
 <td class="right">[Page]</td>
 </tr></tfoot>
 </table>
@@ -1067,12 +1064,12 @@ svg :is([fill="white"], [fill^="#fff"]) {
 <dd class="internet-draft">draft-lkspa-wimse-verifiable-geo-fence-latest</dd>
 <dt class="label-published">Published:</dt>
 <dd class="published">
-<time datetime="2025-06-29" class="published">29 June 2025</time>
+<time datetime="2025-06-30" class="published">30 June 2025</time>
     </dd>
 <dt class="label-intended-status">Intended Status:</dt>
 <dd class="intended-status">Informational</dd>
 <dt class="label-expires">Expires:</dt>
-<dd class="expires"><time datetime="2025-12-31">31 December 2025</time></dd>
+<dd class="expires"><time datetime="2026-01-01">1 January 2026</time></dd>
 <dt class="label-authors">Authors:</dt>
 <dd class="authors">
 <div class="author">
@@ -1103,22 +1100,6 @@ svg :is([fill="white"], [fill^="#fff"]) {
       <h2 id="abstract"><a href="#abstract" class="selfRef">Abstract</a></h2>
 <p id="section-abstract-1">Modern cloud and distributed environments face significant risks from stolen bearer tokens, protocol replay, and trust gaps in transit. This document presents a framework for modernizing workload security through cryptographically verifiable geofencing, proof-of-possession, and protocol-aware residency enforcement. By binding workload identity to both geographic and host attributes, and supplementing bearer tokens with verifiable, location- and host-bound claims, the framework addresses the challenges of bearer token theft, proof-of-possession, IPSEC, and trust-in-transit. Leveraging trusted hardware, attestation protocols, and geolocation services, this approach ensures that only authorized workloads in approved locations and environments can access sensitive data or services, even in the presence of advanced threats.<a href="#section-abstract-1" class="pilcrow">¶</a></p>
 </section>
-<section class="note rfcEditorRemove" id="section-note.1">
-      <h2 id="name-about-this-document">
-<a href="#name-about-this-document" class="section-name selfRef">About This Document</a>
-      </h2>
-<p id="section-note.1-1">This note is to be removed before publishing as an RFC.<a href="#section-note.1-1" class="pilcrow">¶</a></p>
-<p id="section-note.1-2">
-        The latest revision of this draft can be found at <span><a href="https://nedmsmith.github.io/draft-klspa-wimse-verifiable-geo-fence/draft-lkspa-wimse-verifiable-geo-fence.html">https://nedmsmith.github.io/draft-klspa-wimse-verifiable-geo-fence/draft-lkspa-wimse-verifiable-geo-fence.html</a></span>.
-        Status information for this document may be found at <span><a href="https://datatracker.ietf.org/doc/draft-lkspa-wimse-verifiable-geo-fence/">https://datatracker.ietf.org/doc/draft-lkspa-wimse-verifiable-geo-fence/</a></span>.<a href="#section-note.1-2" class="pilcrow">¶</a></p>
-<p id="section-note.1-3">
-        Discussion of this document takes place on the
-        Workload Identity in Multi System Environments  mailing list (<span><a href="mailto:wimse@ietf.org">mailto:wimse@ietf.org</a></span>),
-        which is archived at <span><a href="https://mailarchive.ietf.org/arch/browse/wimse/">https://mailarchive.ietf.org/arch/browse/wimse/</a></span>.
-        Subscribe at <span><a href="https://www.ietf.org/mailman/listinfo/wimse/">https://www.ietf.org/mailman/listinfo/wimse/</a></span>.<a href="#section-note.1-3" class="pilcrow">¶</a></p>
-<p id="section-note.1-4">Source for this draft and an issue tracker can be found at
-        <span><a href="https://github.com/nedmsmith/draft-klspa-wimse-verifiable-geo-fence">https://github.com/nedmsmith/draft-klspa-wimse-verifiable-geo-fence</a></span>.<a href="#section-note.1-4" class="pilcrow">¶</a></p>
-</section>
 <div id="status-of-memo">
 <section id="section-boilerplate.1">
         <h2 id="name-status-of-this-memo">
@@ -1138,7 +1119,7 @@ svg :is([fill="white"], [fill^="#fff"]) {
         time. It is inappropriate to use Internet-Drafts as reference
         material or to cite them other than as "work in progress."<a href="#section-boilerplate.1-3" class="pilcrow">¶</a></p>
 <p id="section-boilerplate.1-4">
-        This Internet-Draft will expire on 31 December 2025.<a href="#section-boilerplate.1-4" class="pilcrow">¶</a></p>
+        This Internet-Draft will expire on 1 January 2026.<a href="#section-boilerplate.1-4" class="pilcrow">¶</a></p>
 </section>
 </div>
 <div id="copyright">

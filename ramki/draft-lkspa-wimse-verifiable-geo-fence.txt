@@ -5,13 +5,13 @@
 Workload Identity in Multi System Environments               R. Krishnan
 Internet-Draft                                                  N. Smith
 Intended status: Informational                                     Intel
-Expires: 31 December 2025                                       D. Lopez
+Expires: 1 January 2026                                         D. Lopez
                                                               Telefonica
                                                                A. Prasad
                                                                   Oracle
                                                             S. Addepalli
                                                                   Aryaka
-                                                            29 June 2025
+                                                            30 June 2025
 
 
     Modernizing Workload Security: Verifiable Geofencing, Proof-of-
@@ -34,24 +34,6 @@ Abstract
    and environments can access sensitive data or services, even in the
    presence of advanced threats.
 
-About This Document
-
-   This note is to be removed before publishing as an RFC.
-
-   The latest revision of this draft can be found at
-   https://nedmsmith.github.io/draft-klspa-wimse-verifiable-geo-fence/
-   draft-lkspa-wimse-verifiable-geo-fence.html.  Status information for
-   this document may be found at https://datatracker.ietf.org/doc/draft-
-   lkspa-wimse-verifiable-geo-fence/.
-
-   Discussion of this document takes place on the Workload Identity in
-   Multi System Environments mailing list (mailto:wimse@ietf.org), which
-   is archived at https://mailarchive.ietf.org/arch/browse/wimse/.
-   Subscribe at https://www.ietf.org/mailman/listinfo/wimse/.
-
-   Source for this draft and an issue tracker can be found at
-   https://github.com/nedmsmith/draft-klspa-wimse-verifiable-geo-fence.
-
 Status of This Memo
 
    This Internet-Draft is submitted in full conformance with the
@@ -67,7 +49,7 @@ Status of This Memo
    time.  It is inappropriate to use Internet-Drafts as reference
    material or to cite them other than as "work in progress."
 
-   This Internet-Draft will expire on 31 December 2025.
+   This Internet-Draft will expire on 1 January 2026.
 
 Copyright Notice
 
