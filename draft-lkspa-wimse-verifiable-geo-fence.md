@@ -1,28 +1,41 @@
 ---
 title: "Modernizing Workload Security: Verifiable Geofencing, Proof-of-Possession, and Protocol-Aware Residency Enforcement"
+
 abbrev: "GeoW"
+
 category: info
 
 docname: draft-lkspa-wimse-verifiable-geo-fence-latest
+
 submissiontype: IETF
+
 number:
+
 date:
+
 consensus: true
+
 v: 3
+
 ipr: trust200902
+
 area: "Apps & Realtime"
+
 workgroup: "Workload Identity in Multi System Environments"
-keyword:
- - geofence
- - location affinity
- - host affinity
+
 venue:
-  group: "Workload Identity in Multi System Environments"
-  type: ""
-  mail: "wimse@ietf.org"
-  arch: "https://mailarchive.ietf.org/arch/browse/wimse/"
-  github: "nedmsmith/draft-klspa-wimse-verifiable-geo-fence"
-  latest: "https://nedmsmith.github.io/draft-klspa-wimse-verifiable-geo-fence/draft-lkspa-wimse-verifiable-geo-fence.html"
+
+group: "Workload Identity in Multi System Environments"
+
+type: ""
+
+mail: "wimse@ietf.org"
+
+arch: "https://mailarchive.ietf.org/arch/browse/wimse/"
+
+github: "nedmsmith/draft-klspa-wimse-verifiable-geo-fence"
+
+latest: "https://nedmsmith.github.io/draft-klspa-wimse-verifiable-geo-fence/draft-lkspa-wimse-verifiable-geo-fence.html"
 
 author:
 - ins: R. Krishnan
@@ -47,79 +60,93 @@ author:
   email: srinivasa.addepalli@aryaka.com
 
 contributor:
-  - ins: G. Arfaoui
-    name: Ghada Arfaoui
-    org: Orange
-    email: ghada.arfaoui@orange.com
-  - ins: Michael Epley
-    name: Michael Epley
-    org: Red Hat
-    email: mepley@redhat.com
+- ins: G. Arfaoui
+  name: Ghada Arfaoui
+  org: Orange
+  email: ghada.arfaoui@orange.com
+- ins: Michael Epley
+  name: Michael Epley
+  org: Red Hat
+  email: mepley@redhat.com
 
 normative:
 
 informative:
+
   I-D.ietf-wimse-arch: wimse-arch
+
   galileo:
     title: Galileo Satellite Navigation
     author:
       org: European Commission, EU Space
     target: https://defence-industry-space.ec.europa.eu/eu-space/galileo-satellite-navigation_en
+
   doj-cisa:
     title: DOJ and CISA Issue New National Security Program to Regulate Foreign Access to Sensitive Data
     author:
       org: DOJ and CISA
     target: https://www.justice.gov/opa/pr/justice-department-implements-critical-national-security-program-protect-americans-sensitive
+
   tcg-geo-loc:
     title: TCG keynote and whitepaper-Trusted Computing Future-Emerging Use Cases and Solutions
     author:
       org: TCG
     target: https://trustedcomputinggroup.org/resource/trusted-computing-future-emerging-use-cases-and-solutions/
+
   tcg-tpm:
     title: Trusted Platform Module 2.0-A Brief Introduction
     author:
       org: TCG
     target: https://trustedcomputinggroup.org/resource/trusted-platform-module-2-0-a-brief-introduction/
+
   spire:
     title: SPIFFE/SPIRE workload identity
     author:
       org: Spire open source project
     target: https://spiffe.io/
+
   spire-tpm:
     title: SPIFFE/SPIRE TPM plugin
     author:
       org: Spire open source project plugin
     target: https://github.com/bloomberg/spire-tpm-plugin
+
   linux-ima:
     title: Linux Integrity Measurement Architecture
     author:
       org: Sourceforge Linux IMA documentation
     target: https://linux-ima.sourceforge.net/
+
   gsma-loc:
     title: GSMA location API
     author:
       org: GSMA open gateway documentation
     target: https://www.gsma.com/solutions-and-impact/gsma-open-gateway/gsma-open-gateway-api-descriptions/
+
   spiffe-x509-svid:
     title: SPIFFE X.509-SVID Standard
     author:
       org: SPIFFE Project
     target: https://github.com/spiffe/spiffe/blob/main/standards/X509-SVID.md
+
   spiffe-jwt-svid:
     title: SPIFFE JWT-SVID Standard
     author:
       org: SPIFFE Project
     target: https://github.com/spiffe/spiffe/blob/main/standards/JWT-SVID.md
+
   RFC-7800:
     title: Proof-of-Possession Key Semantics for JSON Web Tokens (JWT)
     author:
       org: IETF
     target: https://datatracker.ietf.org/doc/html/rfc7800
+
   RFC-8705:
     title: OAuth 2.0 Mutual-TLS Client Authentication and Certificate-Bound Access Tokens
     author:
       org: IETF
     target: https://datatracker.ietf.org/doc/html/rfc8705
+
   tpm-performance:
     title: TPM Performance - How Fast is Your TPM?
     author:
@@ -128,12 +155,12 @@ informative:
 
 entity:
   SELF: "RFCthis"
+
 --- abstract
 
-Modern cloud and distributed environments face significant risks from stolen bearer tokens, protocol replay, and trust gaps in transit. This document presents a framework for modernizing workload security through cryptographically verifiable geofencing, proof-of-possession, and protocol-aware residency enforcement. By binding workload identity to both geographic and host attributes, and supplementing bearer tokens with verifiable, location- and host-bound claims, the framework addresses the challenges of bearer token theft, proof-of-possession, IPSEC, and trust-in-transit. Leveraging trusted hardware, attestation protocols, and geolocation services, this approach ensures that only authorized workloads in approved locations and environments can access sensitive data or services, even in the presence of advanced threats.
+Modern cloud and distributed environments face significant risks from stolen bearer tokens, protocol replay, and trust gaps in transit. This document presents a framework for modernizing workload security through cryptographically verifiable geofencing, proof-of-possession, and protocol-aware residency enforcement. By binding workload identity to both geographic and host attributes, and supplementing bearer tokens with verifiable, location- and host-bound claims, the framework addresses the challenges of bearer token theft, proof-of-possession and trust-in-transit for all networking protocols. Leveraging trusted hardware, attestation protocols, and geolocation services, this approach ensures that only authorized workloads in approved locations and environments can access sensitive data or services, even in the presence of advanced threats.
 
 --- middle
-
 
 # Conventions and Definitions
 {::boilerplate bcp14-tagged}
