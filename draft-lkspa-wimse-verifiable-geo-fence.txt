@@ -28,29 +28,11 @@ Abstract
    identity to both geographic and host attributes, and supplementing
    bearer tokens with verifiable, location- and host-bound claims, the
    framework addresses the challenges of bearer token theft, proof-of-
-   possession, IPSEC, and trust-in-transit.  Leveraging trusted
-   hardware, attestation protocols, and geolocation services, this
-   approach ensures that only authorized workloads in approved locations
-   and environments can access sensitive data or services, even in the
-   presence of advanced threats.
-
-About This Document
-
-   This note is to be removed before publishing as an RFC.
-
-   The latest revision of this draft can be found at
-   https://nedmsmith.github.io/draft-klspa-wimse-verifiable-geo-fence/
-   draft-lkspa-wimse-verifiable-geo-fence.html.  Status information for
-   this document may be found at https://datatracker.ietf.org/doc/draft-
-   lkspa-wimse-verifiable-geo-fence/.
-
-   Discussion of this document takes place on the Workload Identity in
-   Multi System Environments mailing list (mailto:wimse@ietf.org), which
-   is archived at https://mailarchive.ietf.org/arch/browse/wimse/.
-   Subscribe at https://www.ietf.org/mailman/listinfo/wimse/.
-
-   Source for this draft and an issue tracker can be found at
-   https://github.com/nedmsmith/draft-klspa-wimse-verifiable-geo-fence.
+   possession and trust-in-transit for all networking protocols.
+   Leveraging trusted hardware, attestation protocols, and geolocation
+   services, this approach ensures that only authorized workloads in
+   approved locations and environments can access sensitive data or
+   services, even in the presence of advanced threats.
 
 Status of This Memo
 
