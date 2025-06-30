@@ -162,7 +162,6 @@ Modern cloud and distributed environments face significant risks from stolen bea
 
 --- middle
 
-
 # Conventions and Definitions
 {::boilerplate bcp14-tagged}
 
