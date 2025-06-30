@@ -60,14 +60,14 @@ author:
   email: srinivasa.addepalli@aryaka.com
 
 contributor:
-  - ins: G. Arfaoui
-    name: Ghada Arfaoui
-    org: Orange
-    email: ghada.arfaoui@orange.com
-  - ins: Michael Epley
-    name: Michael Epley
-    org: Red Hat
-    email: mepley@redhat.com
+- ins: G. Arfaoui
+  name: Ghada Arfaoui
+  org: Orange
+  email: ghada.arfaoui@orange.com
+- ins: Michael Epley
+  name: Michael Epley
+  org: Red Hat
+  email: mepley@redhat.com
 
 normative:
 
@@ -155,6 +155,7 @@ informative:
 
 entity:
   SELF: "RFCthis"
+
 --- abstract
 
 Modern cloud and distributed environments face significant risks from stolen bearer tokens, protocol replay, and trust gaps in transit. This document presents a framework for modernizing workload security through cryptographically verifiable geofencing, proof-of-possession, and protocol-aware residency enforcement. By binding workload identity to both geographic and host attributes, and supplementing bearer tokens with verifiable, location- and host-bound claims, the framework addresses the challenges of bearer token theft, proof-of-possession, IPSEC, and trust-in-transit. Leveraging trusted hardware, attestation protocols, and geolocation services, this approach ensures that only authorized workloads in approved locations and environments can access sensitive data or services, even in the presence of advanced threats.
