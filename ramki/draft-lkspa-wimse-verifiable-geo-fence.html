@@ -1915,7 +1915,7 @@ In the case of data center hosts, the geolocation sensor can be on a host with M
         <h3 id="name-http-networking-protocol">
 <a href="#section-8.1" class="section-number selfRef">8.1. </a><a href="#name-http-networking-protocol" class="section-name selfRef">HTTP Networking Protocol</a>
         </h3>
-<p id="section-8.1-1">A new HTTP header field 'Workload-Geo-ID' is proposed for conveying the Geolocation Information Cache.  The HTTP request is signed--the signature is generated using the Workload private key (thick client) or the Workload Identity Agent private key. The following steps describe the end-to-end workflow for HTTP requests between client workloads (e.g. Microsoft Teams thick client app, Microsoft Teams thin client browser app) and server workloads (e.g. Microsoft Teams server), including intermediate proxies (e.g., API gateways, SASE firewalls):<a href="#section-8.1-1" class="pilcrow">¶</a></p>
+<p id="section-8.1-1">A new HTTP header field 'Workload-Geo-ID' is proposed for conveying the Geolocation Information Cache.  The HTTP request is signed--the signature is generated using the Workload private key (thick client) or the Workload Identity Agent private key. The following steps describe the end-to-end workflow for HTTP requests between client workloads (e.g. Microsoft Teams thick client app, Microsoft Teams thin client browser app) and server workloads (e.g. Microsoft Teams server), including intermediate proxies (e.g., API gateways, SASE firewalls). The server workload (e.g. Microsoft Teams server) acts as a thick client when it connects to other server workloads (e.g. Microsoft OneDrive for Business).<a href="#section-8.1-1" class="pilcrow">¶</a></p>
 <ol start="1" type="1" class="normal type-1" id="section-8.1-2">
 <li id="section-8.1-2.1">
             <p id="section-8.1-2.1.1">Client workload gets OAuth bearer token for the server workload from the Authentication/Authorization server.<a href="#section-8.1-2.1.1" class="pilcrow">¶</a></p>
@@ -1924,7 +1924,21 @@ In the case of data center hosts, the geolocation sensor can be on a host with M
             <p id="section-8.1-2.2.1">Client workload (browser extension for thin client) contacts the Workload Identity Agent to get the latest Geolocation Information Cache relevant to it. If the location is gathered only using existing OS APIs, it may be done in the workload (thick client) or browser extension (thin client). The client workload (browser extension for thin client) constructs a Workload-Geo-ID extension header containing the following fields:<a href="#section-8.1-2.2.1" class="pilcrow">¶</a></p>
 <ul class="normal">
 <li class="normal" id="section-8.1-2.2.2.1">
-                <p id="section-8.1-2.2.2.1.1">The latest Geolocation Information Cache relevant to the client workload ID (thick clients) or user in OAuth bearer token/server website URL (thin clients).<a href="#section-8.1-2.2.2.1.1" class="pilcrow">¶</a></p>
+                <p id="section-8.1-2.2.2.1.1">The latest Geolocation Information Cache relevant to the client workload ID (thick clients) or user in OAuth bearer token/server website URL (thin clients) which has the following details:<a href="#section-8.1-2.2.2.1.1" class="pilcrow">¶</a></p>
+<ul class="normal">
+<li class="normal" id="section-8.1-2.2.2.1.2.1">
+                    <p id="section-8.1-2.2.2.1.2.1.1">client workload location,<a href="#section-8.1-2.2.2.1.2.1.1" class="pilcrow">¶</a></p>
+</li>
+                  <li class="normal" id="section-8.1-2.2.2.1.2.2">
+                    <p id="section-8.1-2.2.2.1.2.2.1">client workload location type (e.g. precise, approximated, geographic region based),<a href="#section-8.1-2.2.2.1.2.2.1" class="pilcrow">¶</a></p>
+</li>
+                  <li class="normal" id="section-8.1-2.2.2.1.2.3">
+                    <p id="section-8.1-2.2.2.1.2.3.1">client workload location quality (e.g. GNSS, mobile network, Wi-Fi, IP address).<a href="#section-8.1-2.2.2.1.2.3.1" class="pilcrow">¶</a></p>
+</li>
+                </ul>
+</li>
+              <li class="normal" id="section-8.1-2.2.2.2">
+                <p id="section-8.1-2.2.2.2.1">Thick or Thin client flag: Indicates whether the client workload is a thick client (e.g., Microsoft Teams thick client app) or a thin client (e.g., Microsoft Teams thin client browser app).<a href="#section-8.1-2.2.2.2.1" class="pilcrow">¶</a></p>
 </li>
             </ul>
 </li>
@@ -1995,7 +2009,8 @@ In the case of data center hosts, the geolocation sensor can be on a host with M
             <p id="section-8.1-2.9.1">Note that these HTTP extension header checks can be performed by the server as well, but it is more efficient to do them at the intermediate proxy level and aligns well with how Zero Trust Network Access (ZTNA) solutions operate. If the verification passes, the request is forwarded to the destination server. If the verification fails, the request is dropped, and an error response is generated.<a href="#section-8.1-2.9.1" class="pilcrow">¶</a></p>
 </li>
           <li id="section-8.1-2.10">
-            <p id="section-8.1-2.10.1">Intermediate proxies (e.g., API gateways, SASE firewalls) or server workloads connect to Composite Geolocation Manager, to supply GNSS geolocation/workload identity agent ID and get attested composite location. Composite Geolocation Manager can use the host TPM EK certificate in the Workload Identity Agent ID to retrieve the mobile geolocation sensor IMEI/IMSI from the Host hardware identity datastore. Using the IMEI/IMSI, they can retrieve the location of the host from the mobile network operator's location service. This is useful for mobile devices that may not have GNSS sensors or when GNSS is not available (e.g., indoors) or when GPS/GNSS location is subject to spoofing. As compared to IP address, Wi-Fi and GPS/GNSS geolocation methods, mobile network location services provide a more reliable and cryptographically verifiable location. Based on the mobile geolocation and existing geolocation in the Workload-Geo-ID header, a more accurate composite location can be constructed.<a href="#section-8.1-2.10.1" class="pilcrow">¶</a></p>
+            <p id="section-8.1-2.10.1">Intermediate proxies (e.g., API gateways, SASE firewalls) or server workloads connect to Composite Geolocation Manager, to supply GNSS geolocation/workload identity agent ID and get attested composite location. Composite Geolocation Manager can use the host TPM EK certificate in the Workload Identity Agent ID to retrieve the mobile geolocation sensor IMEI/IMSI from the Host hardware identity datastore. Using the IMEI/IMSI, they can retrieve the location of the host from the mobile network operator's location service. This is useful for mobile devices that may not have GNSS sensors or when GNSS is not available (e.g., indoors) or when GPS/GNSS location is subject to spoofing. As compared to IP address, Wi-Fi and GPS/GNSS geolocation methods, mobile network location services provide a more reliable and cryptographically verifiable location. Based on the mobile geolocation and existing geolocation in the Workload-Geo-ID header, a more accurate composite location can be constructed.
+   - Note: For performance considerations, the Composite Geolocation Manager can be a library function which is integrated into intermediate proxies or server workloads.<a href="#section-8.1-2.10.1" class="pilcrow">¶</a></p>
 </li>
           <li id="section-8.1-2.11">
             <p id="section-8.1-2.11.1">Intermediate proxies (e.g., API gateway, Firewall) or server workloads can enforce policies based on:

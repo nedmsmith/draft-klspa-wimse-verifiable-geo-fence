@@ -822,7 +822,9 @@ Table of Contents
    workloads (e.g. Microsoft Teams thick client app, Microsoft Teams
    thin client browser app) and server workloads (e.g. Microsoft Teams
    server), including intermediate proxies (e.g., API gateways, SASE
-   firewalls):
+   firewalls).  The server workload (e.g. Microsoft Teams server) acts
+   as a thick client when it connects to other server workloads (e.g.
+   Microsoft OneDrive for Business).
 
    1.   Client workload gets OAuth bearer token for the server workload
         from the Authentication/Authorization server.
@@ -838,7 +840,21 @@ Table of Contents
 
         *  The latest Geolocation Information Cache relevant to the
            client workload ID (thick clients) or user in OAuth bearer
-           token/server website URL (thin clients).
+           token/server website URL (thin clients) which has the
+           following details:
+
+           -  client workload location,
+
+           -  client workload location type (e.g. precise, approximated,
+              geographic region based),
+
+           -  client workload location quality (e.g. GNSS, mobile
+              network, Wi-Fi, IP address).
+
+        *  Thick or Thin client flag: Indicates whether the client
+           workload is a thick client (e.g., Microsoft Teams thick
+           client app) or a thin client (e.g., Microsoft Teams thin
+           client browser app).
 
    3.   Client workload then appends the Workload-Geo-ID header field to
         the HTTP request.
@@ -933,7 +949,9 @@ Table of Contents
         more reliable and cryptographically verifiable location.  Based
         on the mobile geolocation and existing geolocation in the
         Workload-Geo-ID header, a more accurate composite location can
-        be constructed.
+        be constructed.  - Note: For performance considerations, the
+        Composite Geolocation Manager can be a library function which is
+        integrated into intermediate proxies or server workloads.
 
    11.  Intermediate proxies (e.g., API gateway, Firewall) or server
         workloads can enforce policies based on: - Workload Identity
