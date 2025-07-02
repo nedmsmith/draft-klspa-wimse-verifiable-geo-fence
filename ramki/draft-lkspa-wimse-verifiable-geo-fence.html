@@ -1990,20 +1990,20 @@ In the case of data center hosts, the geolocation sensor can be on a host with M
 </li>
           <li id="section-8.1-2.8">
             <p id="section-8.1-2.8.1">Intermediate proxies (e.g., API gateways, SASE firewalls) inspect the Workload-Geo-ID, Signature and Signature-Input header fields and perform the following checks:<a href="#section-8.1-2.8.1" class="pilcrow">¶</a></p>
-<ol start="1" type="1" class="normal type-1" id="section-8.1-2.8.2">
-<li id="section-8.1-2.8.2.1">
+<ul class="normal">
+<li class="normal" id="section-8.1-2.8.2.1">
                 <p id="section-8.1-2.8.2.1.1">Verify that the Workload Identity Agent ID hash in the Signature-Input header matches a configured Workload Identity Agent ID. They can retrieve the host TPM EK certificate from the Workload Identity Agent ID and compare it with the host TPM EK certificate in the Host hardware identity datastore.<a href="#section-8.1-2.8.2.1.1" class="pilcrow">¶</a></p>
 </li>
-              <li id="section-8.1-2.8.2.2">
+              <li class="normal" id="section-8.1-2.8.2.2">
                 <p id="section-8.1-2.8.2.2.1">Verify that the HTTP request signature in the Signature header is valid by verifying it against the Workload Identity Agent Public Key in the Signature-Input header.<a href="#section-8.1-2.8.2.2.1" class="pilcrow">¶</a></p>
 </li>
-              <li id="section-8.1-2.8.2.3">
+              <li class="normal" id="section-8.1-2.8.2.3">
                 <p id="section-8.1-2.8.2.3.1">Verify that the timestamp in the Signature-Input header is within an acceptable range (e.g., 5 minutes).<a href="#section-8.1-2.8.2.3.1" class="pilcrow">¶</a></p>
 </li>
-              <li id="section-8.1-2.8.2.4">
+              <li class="normal" id="section-8.1-2.8.2.4">
                 <p id="section-8.1-2.8.2.4.1">Verify that the nonce in the Signature-Input header is unique and monotonically increasing to prevent replay attacks.<a href="#section-8.1-2.8.2.4.1" class="pilcrow">¶</a></p>
 </li>
-            </ol>
+            </ul>
 </li>
           <li id="section-8.1-2.9">
             <p id="section-8.1-2.9.1">Note that these HTTP extension header checks can be performed by the server as well, but it is more efficient to do them at the intermediate proxy level and aligns well with how Zero Trust Network Access (ZTNA) solutions operate. If the verification passes, the request is forwarded to the destination server. If the verification fails, the request is dropped, and an error response is generated.<a href="#section-8.1-2.9.1" class="pilcrow">¶</a></p>

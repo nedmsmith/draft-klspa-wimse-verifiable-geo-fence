@@ -907,23 +907,21 @@ Table of Contents
         inspect the Workload-Geo-ID, Signature and Signature-Input
         header fields and perform the following checks:
 
-        1.  Verify that the Workload Identity Agent ID hash in the
-            Signature-Input header matches a configured Workload
-            Identity Agent ID.  They can retrieve the host TPM EK
-            certificate from the Workload Identity Agent ID and compare
-            it with the host TPM EK certificate in the Host hardware
-            identity datastore.
+        *  Verify that the Workload Identity Agent ID hash in the
+           Signature-Input header matches a configured Workload Identity
+           Agent ID.  They can retrieve the host TPM EK certificate from
+           the Workload Identity Agent ID and compare it with the host
+           TPM EK certificate in the Host hardware identity datastore.
 
-        2.  Verify that the HTTP request signature in the Signature
-            header is valid by verifying it against the Workload
-            Identity Agent Public Key in the Signature-Input header.
+        *  Verify that the HTTP request signature in the Signature
+           header is valid by verifying it against the Workload Identity
+           Agent Public Key in the Signature-Input header.
 
-        3.  Verify that the timestamp in the Signature-Input header is
-            within an acceptable range (e.g., 5 minutes).
+        *  Verify that the timestamp in the Signature-Input header is
+           within an acceptable range (e.g., 5 minutes).
 
-        4.  Verify that the nonce in the Signature-Input header is
-            unique and monotonically increasing to prevent replay
-            attacks.
+        *  Verify that the nonce in the Signature-Input header is unique
+           and monotonically increasing to prevent replay attacks.
 
    9.   Note that these HTTP extension header checks can be performed by
         the server as well, but it is more efficient to do them at the
