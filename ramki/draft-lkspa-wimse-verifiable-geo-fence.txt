@@ -947,7 +947,7 @@ Table of Contents
         more reliable and cryptographically verifiable location.  Based
         on the mobile geolocation and existing geolocation in the
         Workload-Geo-ID header, a more accurate composite location can
-        be constructed.  - Note: For performance considerations, the
+        be constructed.  - Note that for performance considerations, the
         Composite Geolocation Manager can be a library function which is
         integrated into intermediate proxies or server workloads.
 
