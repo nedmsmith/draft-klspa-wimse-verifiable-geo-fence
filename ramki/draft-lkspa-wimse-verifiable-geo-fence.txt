@@ -5,13 +5,13 @@
 Workload Identity in Multi System Environments               R. Krishnan
 Internet-Draft                                                  N. Smith
 Intended status: Informational                                     Intel
-Expires: 1 January 2026                                         D. Lopez
+Expires: 3 January 2026                                         D. Lopez
                                                               Telefonica
                                                                A. Prasad
                                                                   Oracle
                                                             S. Addepalli
                                                                   Aryaka
-                                                            30 June 2025
+                                                             2 July 2025
 
 
     Modernizing Workload Security: Verifiable Geofencing, Proof-of-
@@ -49,7 +49,7 @@ Status of This Memo
    time.  It is inappropriate to use Internet-Drafts as reference
    material or to cite them other than as "work in progress."
 
-   This Internet-Draft will expire on 1 January 2026.
+   This Internet-Draft will expire on 3 January 2026.
 
 Copyright Notice
 
@@ -93,8 +93,8 @@ Table of Contents
            Workload Identity Agent for integrity and proof of residency
            on Host
      6.4.  Workload Public Key Attestation and Remote Verification
-     6.5.  Host Geofencing Manager and Host Composition Change
-           Tracking
+     6.5.  Host geolocation sensor composition manager and Host
+           Composition Change Tracking
      6.6.  Workload Identity Agent Geolocation Gathering Workflow
    7.  Scaling the Solution
      7.1.  End user location anchor host
@@ -420,8 +420,9 @@ Table of Contents
       -  For mobile sensors, the location can be tracked outside of host
          using a GSMA standards based mobile service provider API.
 
-   *  Host geofencing manager periodically verifies location anchor
-      hosts device composition (primarily location sensors).
+   *  Host geolocation sensor composition manager periodically verifies
+      location anchor hosts device composition (primarily location
+      sensors).
 
       -  Use Spiffe/Spire agent host geolocation plugin (new)
 
@@ -475,9 +476,9 @@ Table of Contents
    geolocation and geofencing processing, workload attestation, and
    remote verification.
 
-   Figure -- End-to-end Workflow (https://github.com/nedmsmith/draft-
-   klspa-wimse-verifiable-geo-fence/blob/main/pictures/end-to-end-
-   flow.svg)
+   Figure -- Control Plane End-to-end Workflow
+   (https://github.com/nedmsmith/draft-klspa-wimse-verifiable-geo-
+   fence/blob/main/pictures/control-plane-end-to-end-flow.svg)
 
 6.1.  SPIFFE/SPIRE Architecture Modifications
 
@@ -649,30 +650,33 @@ Table of Contents
    11.  The workload receives its private key and workload ID from the
         Workload Identity Agent.
 
-6.5.  Host Geofencing Manager and Host Composition Change Tracking
+6.5.  Host geolocation sensor composition manager and Host Composition
+      Change Tracking
 
-   The Host Geofencing Manager runs outside of the host.  In addition to
-   obtaining location from device location sources (e.g., GNSS), it
-   connects to mobile location service providers (e.g., Telefonica)
-   using the GSMA Location API ([gsma-loc]).  The process described
-   below is run periodically (e.g., every 5 minutes) to check if the
-   host hardware composition has changed.  Host hardware composition
-   comprises TPM EK, GNSS sensor hardware ID, mobile sensor hardware ID
-   (IMEI), and mobile-SIM IMSI.  Note that this workflow is feasible
-   only in enterprise environments where the host hardware is owned and
-   managed by the enterprise.
+   The Host geolocation sensor composition manager runs outside of the
+   host.  In addition to obtaining location from device location sources
+   (e.g., GNSS), it connects to mobile location service providers (e.g.,
+   Telefonica) using the GSMA Location API ([gsma-loc]).  The process
+   described below is run periodically (e.g., every 5 minutes) to check
+   if the host hardware composition has changed.  Host hardware
+   composition comprises TPM EK, GNSS sensor hardware ID, mobile sensor
+   hardware ID (IMEI), and mobile-SIM IMSI.  Note that this workflow is
+   feasible only in enterprise environments where the host hardware is
+   owned and managed by the enterprise.
 
    1.  The Workload Identity Agent periodically gathers host composition
        details (e.g., mobile sensor hardware ID (IMEI), mobile-SIM IMSI)
-       and sends them to the Host Geofencing Manager.
+       and sends them to the Host geolocation sensor composition
+       manager.
 
-   2.  The Host Geofencing Manager cross-verifies that the components of
-       the host are still intact or detects if anything has been
-       removed.  (Plugging out components can decrease the quality of
-       location.  Host hardware composition comprises TPM EK, GNSS
-       sensor hardware ID, mobile sensor hardware ID (IMEI), and mobile-
-       SIM IMSI.  Note that e-SIM does not have the plugging out problem
-       like standard SIM but could be subject to e-SIM swap attack.)
+   2.  The Host geolocation sensor composition manager cross-verifies
+       that the components of the host are still intact or detects if
+       anything has been removed.  (Plugging out components can decrease
+       the quality of location.  Host hardware composition comprises TPM
+       EK, GNSS sensor hardware ID, mobile sensor hardware ID (IMEI),
+       and mobile-SIM IMSI.  Note that e-SIM does not have the plugging
+       out problem like standard SIM but could be subject to e-SIM swap
+       attack.)
 
 6.6.  Workload Identity Agent Geolocation Gathering Workflow
 

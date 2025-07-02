@@ -1047,11 +1047,11 @@ svg :is([fill="white"], [fill^="#fff"]) {
 <thead><tr>
 <td class="left">Internet-Draft</td>
 <td class="center">GeoW</td>
-<td class="right">June 2025</td>
+<td class="right">July 2025</td>
 </tr></thead>
 <tfoot><tr>
 <td class="left">Krishnan, et al.</td>
-<td class="center">Expires 1 January 2026</td>
+<td class="center">Expires 3 January 2026</td>
 <td class="right">[Page]</td>
 </tr></tfoot>
 </table>
@@ -1064,12 +1064,12 @@ svg :is([fill="white"], [fill^="#fff"]) {
 <dd class="internet-draft">draft-lkspa-wimse-verifiable-geo-fence-latest</dd>
 <dt class="label-published">Published:</dt>
 <dd class="published">
-<time datetime="2025-06-30" class="published">30 June 2025</time>
+<time datetime="2025-07-02" class="published">2 July 2025</time>
     </dd>
 <dt class="label-intended-status">Intended Status:</dt>
 <dd class="intended-status">Informational</dd>
 <dt class="label-expires">Expires:</dt>
-<dd class="expires"><time datetime="2026-01-01">1 January 2026</time></dd>
+<dd class="expires"><time datetime="2026-01-03">3 January 2026</time></dd>
 <dt class="label-authors">Authors:</dt>
 <dd class="authors">
 <div class="author">
@@ -1119,7 +1119,7 @@ svg :is([fill="white"], [fill^="#fff"]) {
         time. It is inappropriate to use Internet-Drafts as reference
         material or to cite them other than as "work in progress."<a href="#section-boilerplate.1-3" class="pilcrow">¶</a></p>
 <p id="section-boilerplate.1-4">
-        This Internet-Draft will expire on 1 January 2026.<a href="#section-boilerplate.1-4" class="pilcrow">¶</a></p>
+        This Internet-Draft will expire on 3 January 2026.<a href="#section-boilerplate.1-4" class="pilcrow">¶</a></p>
 </section>
 </div>
 <div id="copyright">
@@ -1231,7 +1231,7 @@ svg :is([fill="white"], [fill^="#fff"]) {
                 <p id="section-toc.1-1.6.2.4.1"><a href="#section-6.4" class="auto internal xref">6.4</a>.  <a href="#name-workload-public-key-attesta" class="internal xref">Workload Public Key Attestation and Remote Verification</a></p>
 </li>
               <li class="compact toc ulBare ulEmpty" id="section-toc.1-1.6.2.5">
-                <p id="section-toc.1-1.6.2.5.1"><a href="#section-6.5" class="auto internal xref">6.5</a>.  <a href="#name-host-geofencing-manager-and" class="internal xref">Host Geofencing Manager and Host Composition Change Tracking</a></p>
+                <p id="section-toc.1-1.6.2.5.1"><a href="#section-6.5" class="auto internal xref">6.5</a>.  <a href="#name-host-geolocation-sensor-com" class="internal xref">Host geolocation sensor composition manager and Host Composition Change Tracking</a></p>
 </li>
               <li class="compact toc ulBare ulEmpty" id="section-toc.1-1.6.2.6">
                 <p id="section-toc.1-1.6.2.6.1"><a href="#section-6.6" class="auto internal xref">6.6</a>.  <a href="#name-workload-identity-agent-geo" class="internal xref">Workload Identity Agent Geolocation Gathering Workflow</a></p>
@@ -1647,7 +1647,7 @@ Bearer tokens are typically generated via user MFA and used to establish HTTP se
             </ul>
 </li>
           <li class="normal" id="section-5.1-3.2">
-            <p id="section-5.1-3.2.1">Host geofencing manager periodically verifies location anchor hosts device composition (primarily location sensors).<a href="#section-5.1-3.2.1" class="pilcrow">¶</a></p>
+            <p id="section-5.1-3.2.1">Host geolocation sensor composition manager periodically verifies location anchor hosts device composition (primarily location sensors).<a href="#section-5.1-3.2.1" class="pilcrow">¶</a></p>
 <ul class="normal">
 <li class="normal" id="section-5.1-3.2.2.1">
                 <p id="section-5.1-3.2.2.1.1">Use Spiffe/Spire agent host geolocation plugin (new)<a href="#section-5.1-3.2.2.1.1" class="pilcrow">¶</a></p>
@@ -1699,7 +1699,7 @@ Bearer tokens are typically generated via user MFA and used to establish HTTP se
 <a href="#section-6" class="section-number selfRef">6. </a><a href="#name-control-plane-end-to-end-wo" class="section-name selfRef">Control Plane End-to-End Workflow</a>
       </h2>
 <p id="section-6-1">The end-to-end workflow for the proposed framework consists of several key steps, including attestation for system bootstrap and Workload Identity Agent initialization, Workload Identity Agent geolocation and geofencing processing, workload attestation, and remote verification.<a href="#section-6-1" class="pilcrow">¶</a></p>
-<p id="section-6-2"><a href="https://github.com/nedmsmith/draft-klspa-wimse-verifiable-geo-fence/blob/main/pictures/end-to-end-flow.svg">Figure -- End-to-end Workflow</a><a href="#section-6-2" class="pilcrow">¶</a></p>
+<p id="section-6-2"><a href="https://github.com/nedmsmith/draft-klspa-wimse-verifiable-geo-fence/blob/main/pictures/control-plane-end-to-end-flow.svg">Figure -- Control Plane End-to-end Workflow</a><a href="#section-6-2" class="pilcrow">¶</a></p>
 <div id="spiffespire-architecture-modifications">
 <section id="section-6.1">
         <h3 id="name-spiffe-spire-architecture-m">
@@ -1805,18 +1805,18 @@ This attestation includes data about the TPM's state and can be used to verify t
         </ol>
 </section>
 </div>
-<div id="host-geofencing-manager-and-host-composition-change-tracking">
+<div id="host-geolocation-sensor-composition-manager-and-host-composition-change-tracking">
 <section id="section-6.5">
-        <h3 id="name-host-geofencing-manager-and">
-<a href="#section-6.5" class="section-number selfRef">6.5. </a><a href="#name-host-geofencing-manager-and" class="section-name selfRef">Host Geofencing Manager and Host Composition Change Tracking</a>
+        <h3 id="name-host-geolocation-sensor-com">
+<a href="#section-6.5" class="section-number selfRef">6.5. </a><a href="#name-host-geolocation-sensor-com" class="section-name selfRef">Host geolocation sensor composition manager and Host Composition Change Tracking</a>
         </h3>
-<p id="section-6.5-1">The Host Geofencing Manager runs outside of the host. In addition to obtaining location from device location sources (e.g., GNSS), it connects to mobile location service providers (e.g., Telefonica) using the GSMA Location API (<span>[<a href="#gsma-loc" class="cite xref">gsma-loc</a>]</span>). The process described below is run periodically (e.g., every 5 minutes) to check if the host hardware composition has changed. Host hardware composition comprises TPM EK, GNSS sensor hardware ID, mobile sensor hardware ID (IMEI), and mobile-SIM IMSI. Note that this workflow is feasible only in enterprise environments where the host hardware is owned and managed by the enterprise.<a href="#section-6.5-1" class="pilcrow">¶</a></p>
+<p id="section-6.5-1">The Host geolocation sensor composition manager runs outside of the host. In addition to obtaining location from device location sources (e.g., GNSS), it connects to mobile location service providers (e.g., Telefonica) using the GSMA Location API (<span>[<a href="#gsma-loc" class="cite xref">gsma-loc</a>]</span>). The process described below is run periodically (e.g., every 5 minutes) to check if the host hardware composition has changed. Host hardware composition comprises TPM EK, GNSS sensor hardware ID, mobile sensor hardware ID (IMEI), and mobile-SIM IMSI. Note that this workflow is feasible only in enterprise environments where the host hardware is owned and managed by the enterprise.<a href="#section-6.5-1" class="pilcrow">¶</a></p>
 <ol start="1" type="1" class="normal type-1" id="section-6.5-2">
 <li id="section-6.5-2.1">
-            <p id="section-6.5-2.1.1">The Workload Identity Agent periodically gathers host composition details (e.g., mobile sensor hardware ID (IMEI), mobile-SIM IMSI) and sends them to the Host Geofencing Manager.<a href="#section-6.5-2.1.1" class="pilcrow">¶</a></p>
+            <p id="section-6.5-2.1.1">The Workload Identity Agent periodically gathers host composition details (e.g., mobile sensor hardware ID (IMEI), mobile-SIM IMSI) and sends them to the Host geolocation sensor composition manager.<a href="#section-6.5-2.1.1" class="pilcrow">¶</a></p>
 </li>
           <li id="section-6.5-2.2">
-            <p id="section-6.5-2.2.1">The Host Geofencing Manager cross-verifies that the components of the host are still intact or detects if anything has been removed. (Plugging out components can decrease the quality of location. Host hardware composition comprises TPM EK, GNSS sensor hardware ID, mobile sensor hardware ID (IMEI), and mobile-SIM IMSI. Note that e-SIM does not have the plugging out problem like standard SIM but could be subject to e-SIM swap attack.)<a href="#section-6.5-2.2.1" class="pilcrow">¶</a></p>
+            <p id="section-6.5-2.2.1">The Host geolocation sensor composition manager cross-verifies that the components of the host are still intact or detects if anything has been removed. (Plugging out components can decrease the quality of location. Host hardware composition comprises TPM EK, GNSS sensor hardware ID, mobile sensor hardware ID (IMEI), and mobile-SIM IMSI. Note that e-SIM does not have the plugging out problem like standard SIM but could be subject to e-SIM swap attack.)<a href="#section-6.5-2.2.1" class="pilcrow">¶</a></p>
 </li>
         </ol>
 </section>
