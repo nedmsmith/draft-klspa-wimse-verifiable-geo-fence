@@ -5,13 +5,13 @@
 Workload Identity in Multi System Environments               R. Krishnan
 Internet-Draft                                                  N. Smith
 Intended status: Informational                                     Intel
-Expires: 3 January 2026                                         D. Lopez
+Expires: 7 January 2026                                         D. Lopez
                                                               Telefonica
                                                                A. Prasad
                                                                   Oracle
                                                             S. Addepalli
                                                                   Aryaka
-                                                             2 July 2025
+                                                             6 July 2025
 
 
     Modernizing Workload Security: Verifiable Geofencing, Proof-of-
@@ -49,7 +49,7 @@ Status of This Memo
    time.  It is inappropriate to use Internet-Drafts as reference
    material or to cite them other than as "work in progress."
 
-   This Internet-Draft will expire on 3 January 2026.
+   This Internet-Draft will expire on 7 January 2026.
 
 Copyright Notice
 
@@ -563,8 +563,9 @@ Table of Contents
 
    *TPM attestation and remote Workload Identity Manager verification*:
 
-   Step 1: 1.  The Workload Identity Agent generates a TPM Attestation
-   Key (AK) for proof of residency on the host.  2.  The Workload
+   Step 1 (Workload Identity Agent AK ID issuance): 1.  The Workload
+   Identity Agent generates a TPM Attestation Key (AK) for proof of
+   residency on the host for each start/restart.  2.  The Workload
    Identity Agent sends the AK attestation parameters (PCR quote,
    attestation public key, etc.) and TPM EK certificate to the Workload
    Identity Manager.  3.  The Workload Identity Manager inspects the TPM
@@ -583,30 +584,54 @@ Table of Contents
    Identity Agent AK ID using the TPM AK public key and TPM EK
    certificate.
 
-   Step 2: 1.  The Workload Identity Agent generates a private/public
-   key pair.  2.  The Workload Identity Agent uses the TPM AK private
-   key, stored in the TPM, to sign the public key.  3.  The Workload
-   Identity Agent sends the public key, signed by the TPM AK, to the
-   Workload Identity Manager.  4.  The Workload Identity Manager ensures
-   the TPM AK is associated with a Workload Identity Agent AK ID.  5.
-   If validation passes, the Workload Identity Manager generates a
-   credential activation challenge.  The challenge's secret is encrypted
-   using the Workload Identity Agent public key.  6.  The Workload
-   Identity Manager sends the challenge to the Workload Identity Agent.
-   7.  The Workload Identity Agent decrypts the challenge's secret using
-   its private key.  8.  The Workload Identity Agent sends back the
-   decrypted secret.  9.  The Workload Identity Manager verifies that
-   the decrypted secret matches the original secret used to build the
-   challenge.  10.  The Workload Identity Manager issues the Workload
-   Identity Agent ID using the Workload Identity Agent public key, the
-   TPM AK signature of the Workload Identity Agent public key, and the
-   Workload Identity Agent AK ID.
+   Step 2 (Workload Identity Agent ID issuance): 1.  The Workload
+   Identity Agent generates a private/public key pair.  2.  The Workload
+   Identity Agent uses the TPM AK private key, stored in the TPM, to
+   sign the public key.  3.  The Workload Identity Agent sends the
+   public key, signed by the TPM AK, to the Workload Identity Manager.
+   4.  The Workload Identity Manager ensures the TPM AK is associated
+   with a Workload Identity Agent AK ID.  5.  If validation passes, the
+   Workload Identity Manager generates a credential activation
+   challenge.  The challenge's secret is encrypted using the Workload
+   Identity Agent public key.  6.  The Workload Identity Manager sends
+   the challenge to the Workload Identity Agent.  7.  The Workload
+   Identity Agent decrypts the challenge's secret using its private key.
+   8.  The Workload Identity Agent sends back the decrypted secret.  9.
+   The Workload Identity Manager verifies that the decrypted secret
+   matches the original secret used to build the challenge.  10.  The
+   Workload Identity Manager issues the Workload Identity Agent ID using
+   the Workload Identity Agent public key, the TPM AK signature of the
+   Workload Identity Agent public key, and the Workload Identity Agent
+   AK ID.
+
+   Design Options for TPM-Based Workload Identity with Privacy * From a
+   privacy standpoint, sharing TPM details—especially the EK
+   certificate—across organizational boundaries can be problematic.
+   Below are two approaches that let you attest workload identities
+   without exposing raw EK data. * Option 1 – Pseudonymity - Only the
+   Workload Identity Agent’s Attestation Key (AK) is shared outside the
+   host-owner organization.  - The consuming organization’s Workload
+   Identity Manager verifies that AK against its own list of trusted AK
+   public keys.  - A unique TPM AK is generated and attested per tenant,
+   so no single AK maps across tenants.  - Supported by all TPM 2.0+
+   devices, this gives you per-tenant pseudonymity without ever
+   revealing the EK. * Option 2 – Full Anonymity - Leverage TPM 2.0+
+   Direct Anonymous Attestation (DAA) or EPID.  Note that this requires
+   TPM 2.0+ devices with DAA support.  - Each host’s TPM runs the DAA
+   Join protocol with a Privacy CA to obtain a group credential.  - The
+   Workload Identity Agent signs its public key with that DAA credential
+   (using a session-specific basename).  - The Workload Identity Manager
+   verifies the signature against the DAA group public key—proving
+   membership without exposing or linking any device identity. * Both
+   options remove direct TPM EK exposure.  Pseudonymity uses the
+   standard TPM AK model, while TPM DAA offers unlinkable, anonymous
+   proofs of TPM possession.
 
 6.4.  Workload Public Key Attestation and Remote Verification
 
-   Workload Identity Agent public/private key attestation, instead of
-   TPM AK attestation, is the change compared to the original SPIFFE/
-   SPIRE architecture with the TPM plugin.
+   Workload Identity Agent public/private key attestation, rather than
+   TPM Attestation Key (AK) attestation, is the key change compared to
+   the original SPIFFE/SPIRE architecture with the TPM plugin.
 
    1.   The Workload Identity Agent ensures that the workload connects
         to it on a host-local socket (e.g., Unix-domain socket).
@@ -615,25 +640,28 @@ Table of Contents
         for the workload.
 
    3.   The Workload Identity Agent signs the workload public key with
-        its private key.
+        its own private key.
 
    4.   The Workload Identity Agent sends the signed workload public
-        key, along with its Workload Identity Agent ID, to the Workload
-        Identity Manager.  (Note: The Workload Identity Agent ID is
-        already verified by the Workload Identity Manager as part of the
-        Workload Identity Agent attestation process, establishing proof
-        of residency of the Workload Identity Agent to the host.)
+        key, along with its cryptographically attested Workload Identity
+        Agent ID, to the Workload Identity Manager.  (Note: The Workload
+        Identity Agent ID has already been verified by the Workload
+        Identity Manager during the agent attestation process,
+        establishing proof of residency of the Workload Identity Agent
+        on the host.)
 
-   5.   The Workload Identity Manager verifies that the Workload
-        Identity Agent ID's TPM EK is present in the Host hardware
-        identity datastore.
+   5.   The Workload Identity Manager verifies that the TPM Endorsement
+        Key (EK) associated with the Workload Identity Agent ID is
+        present in the trusted host hardware database.
 
    6.   The Workload Identity Manager verifies the workload public key
-        signature using the Workload Identity Agent's public key.
+        signature using the Workload Identity Agent's public key (which
+        was previously attested).
 
    7.   The Workload Identity Manager sends an encrypted challenge to
         the Workload Identity Agent.  The challenge's secret is
-        encrypted using the workload's public key.
+        encrypted using the workload's public key.  (This step proves
+        that the workload controls the corresponding private key.)
 
    8.   The Workload Identity Agent decrypts the challenge using the
         workload's private key and sends the response back to the
@@ -647,8 +675,20 @@ Table of Contents
         the Workload Identity Manager and contains the workload's public
         key and the Workload Identity Agent ID.
 
-   11.  The workload receives its private key and workload ID from the
-        Workload Identity Agent.
+   11.  Design Options: * *Option 1:* The workload can use the Workload
+        Identity Agent to manage its keys and perform cryptographic
+        operations on its behalf.  In this case, the workload receives
+        its workload ID from the Workload Identity Agent.  * *Option 2:*
+        The workload can manage its own keys and perform cryptographic
+        operations independently.  In this case, the workload receives
+        its private key and workload ID from the Workload Identity
+        Agent.  * *Comparison:* Option 1 (software HSM delegated model)
+        is more secure, as the workload's private key is never exposed
+        outside the Workload Identity Agent.  Option 2 provides more
+        flexibility for workloads that require independent key
+        management and may offer slightly better performance, since the
+        workload can optimize cryptographic operations without going
+        through the Workload Identity Agent.
 
 6.5.  Host geolocation sensor composition manager and Host Composition
       Change Tracking
@@ -856,19 +896,30 @@ Table of Contents
            client app) or a thin client (e.g., Microsoft Teams thin
            client browser app).
 
-   3.   Client workload then appends the Workload-Geo-ID header field to
-        the HTTP request.
+        *  Using a browser extension (thin client) is attractive
+           especially for web applications which already use a browser
+           extension for functions such as URL filtering, ad blocking,
+           privacy protection, etc.  The tradeoffs are:
 
-   4.   For thick clients, the Client workload signs the hash of the
+           -  Pros: Leverages Workload Identity agent (Spiffe/Spire
+              agent) hardened key store (TPM etc.); Keeps keys out of
+              browser javascript entirely; Centralized management of
+              keys and policies; Provides a consistent interface for all
+              web applications.
+
+           -  Cons: Requires browser extension installation; May not be
+              supported by all browsers
+
+   3.   For thick clients, the Client workload signs the hash of the
         HTTP request using the workload private key.
 
-   5.   For thin clients, the Client workload passes the hash of the
+   4.   For thin clients, the Client workload passes the hash of the
         HTTP request to the Workload Identity Agent for signature.  The
         Workload Identity Agent signs the HTTP Request using the
         Workload Identity Agent Private Key and returns the signature of
         the HTTP request to the workload.
 
-   6.   Details of the HTTP request signature:
+   5.   Details of the HTTP request signature:
 
         *  The resulting signature is included in a separate header,
            Signature (RFC 9421)
@@ -900,10 +951,10 @@ Table of Contents
            to validate the authenticity of the signature and the binding
            to the specific Workload Identity Agent.
 
-   7.   Client workload appends the Signature header and the Signature-
+   6.   Client workload appends the Signature header and the Signature-
         Input header to the HTTP request.
 
-   8.   Intermediate proxies (e.g., API gateways, SASE firewalls)
+   7.   Intermediate proxies (e.g., API gateways, SASE firewalls)
         inspect the Workload-Geo-ID, Signature and Signature-Input
         header fields and perform the following checks:
 
@@ -923,7 +974,7 @@ Table of Contents
         *  Verify that the nonce in the Signature-Input header is unique
            and monotonically increasing to prevent replay attacks.
 
-   9.   Note that these HTTP extension header checks can be performed by
+   8.   Note that these HTTP extension header checks can be performed by
         the server as well, but it is more efficient to do them at the
         intermediate proxy level and aligns well with how Zero Trust
         Network Access (ZTNA) solutions operate.  If the verification
@@ -931,7 +982,7 @@ Table of Contents
         the verification fails, the request is dropped, and an error
         response is generated.
 
-   10.  Intermediate proxies (e.g., API gateways, SASE firewalls) or
+   9.   Intermediate proxies (e.g., API gateways, SASE firewalls) or
         server workloads connect to Composite Geolocation Manager, to
         supply GNSS geolocation/workload identity agent ID and get
         attested composite location.  Composite Geolocation Manager can
@@ -951,7 +1002,7 @@ Table of Contents
         Composite Geolocation Manager can be a library function which is
         integrated into intermediate proxies or server workloads.
 
-   11.  Intermediate proxies (e.g., API gateway, Firewall) or server
+   10.  Intermediate proxies (e.g., API gateway, Firewall) or server
         workloads can enforce policies based on: - Workload Identity
         Agent ID (running on the same host as the client workload), -
         user in OAuth bearer token, - server website URL, - client
