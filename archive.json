@@ -1,6 +1,6 @@
 {
   "magic": "E!vIA5L86J2I",
-  "timestamp": "2025-07-03T01:13:39.572457+00:00",
+  "timestamp": "2025-07-08T01:14:16.474403+00:00",
   "repo": "nedmsmith/draft-klspa-wimse-verifiable-geo-fence",
   "labels": [
     {
@@ -1728,26 +1728,63 @@
       "id": "PR_kwDOOmshaM6dGsk8",
       "title": "fixed data plane http header usage",
       "url": "https://github.com/nedmsmith/draft-klspa-wimse-verifiable-geo-fence/pull/33",
-      "state": "OPEN",
+      "state": "MERGED",
       "author": "ramkri123",
       "authorAssociation": "COLLABORATOR",
       "assignees": [],
       "labels": [],
       "body": "",
       "createdAt": "2025-07-02T15:16:48Z",
-      "updatedAt": "2025-07-02T15:27:19Z",
+      "updatedAt": "2025-07-07T14:08:45Z",
       "baseRepository": "nedmsmith/draft-klspa-wimse-verifiable-geo-fence",
       "baseRefName": "main",
       "baseRefOid": "c53354688f26f0e42336be3c7660a9f046ba243e",
       "headRepository": "nedmsmith/draft-klspa-wimse-verifiable-geo-fence",
       "headRefName": "ramki",
-      "headRefOid": "767173a12ffd93f920877740b05e07461a8428cc",
-      "closedAt": null,
-      "mergedAt": null,
-      "mergedBy": null,
-      "mergeCommit": null,
-      "comments": [],
-      "reviews": []
+      "headRefOid": "61988660cfd2acc201b9d28f720f4468f6d4bc09",
+      "closedAt": "2025-07-07T14:08:44Z",
+      "mergedAt": "2025-07-07T14:08:44Z",
+      "mergedBy": "ramkri123",
+      "mergeCommit": {
+        "oid": "5e4c29220e2e6d4110486e14b10437408621d444"
+      },
+      "comments": [
+        {
+          "author": "dr2lopez",
+          "authorAssociation": "COLLABORATOR",
+          "body": "It seems a review from my side has not been requested, so I cannot submit anything but this comment...",
+          "createdAt": "2025-07-07T13:21:10Z",
+          "updatedAt": "2025-07-07T13:21:10Z"
+        }
+      ],
+      "reviews": [
+        {
+          "id": "PRR_kwDOOmshaM6ydV3p",
+          "commit": {
+            "abbreviatedOid": "6198866"
+          },
+          "author": "dr2lopez",
+          "authorAssociation": "COLLABORATOR",
+          "state": "COMMENTED",
+          "body": "It looks good to me. Just in time for the IETF 123 cut-off...",
+          "createdAt": "2025-07-07T14:00:14Z",
+          "updatedAt": "2025-07-07T14:00:14Z",
+          "comments": []
+        },
+        {
+          "id": "PRR_kwDOOmshaM6yddVj",
+          "commit": {
+            "abbreviatedOid": "6198866"
+          },
+          "author": "dr2lopez",
+          "authorAssociation": "COLLABORATOR",
+          "state": "APPROVED",
+          "body": "Now with explicit approval",
+          "createdAt": "2025-07-07T14:08:08Z",
+          "updatedAt": "2025-07-07T14:08:08Z",
+          "comments": []
+        }
+      ]
     }
   ]
 }
