@@ -5,13 +5,13 @@
 Workload Identity in Multi System Environments               R. Krishnan
 Internet-Draft                                                  N. Smith
 Intended status: Informational                                     Intel
-Expires: 7 January 2026                                         D. Lopez
+Expires: 17 January 2026                                        D. Lopez
                                                               Telefonica
                                                                A. Prasad
                                                                   Oracle
                                                             S. Addepalli
                                                                   Aryaka
-                                                             6 July 2025
+                                                            16 July 2025
 
 
     Modernizing Workload Security: Verifiable Geofencing, Proof-of-
@@ -49,7 +49,7 @@ Status of This Memo
    time.  It is inappropriate to use Internet-Drafts as reference
    material or to cite them other than as "work in progress."
 
-   This Internet-Draft will expire on 7 January 2026.
+   This Internet-Draft will expire on 17 January 2026.
 
 Copyright Notice
 
@@ -67,61 +67,66 @@ Copyright Notice
 
 Table of Contents
 
-   1.  Conventions and Definitions
-   2.  Introduction
-   3.  Use Cases
-     3.1.  Category 1: Server-centric Location
-       3.1.1.  Server workload <-> Server workload - General:
-       3.1.2.  Server workload <-> Server workload - Agentic AI:
-       3.1.3.  Server workload <-> Server workload - Federated AI:
-       3.1.4.  User workload <-> Server workload:
-     3.2.  Category 2: User-centric Location
-     3.3.  Category 3: Regulatory Compliance
-   4.  Industry Gaps and Problem Statements
-     4.1.  Data Generation/at-Rest Challenges
-     4.2.  Data-in-Use Challenges
-       4.2.1.  Authentication and Authorization Challenges
-       4.2.2.  Location and Geofencing Challenges
-       4.2.3.  Implicit Trust Challenges
-   5.  Approach Overview
-     5.1.  Server Hosts - Solution highlights
-     5.2.  End user/IoT hosts - Solution highlights
-   6.  Control Plane End-to-End Workflow
-     6.1.  SPIFFE/SPIRE Architecture Modifications
-     6.2.  Attestation of OS Integrity and Proof of Residency on Host
-     6.3.  Start/Restart time attestation/remote verification of
+   1.  1.  Conventions and Definitions
+   2.  2.  Introduction
+   3.  3.  Use Cases
+     3.1.  3.1.  Category 1: Server-centric Location
+       3.1.1.  3.1.1.  Server workload <-> Server workload - General:
+       3.1.2.  3.1.2.  Server workload <-> Server workload - Agentic
+               AI:
+       3.1.3.  3.1.3.  Server workload <-> Server workload - Federated
+               AI:
+       3.1.4.  3.1.4.  User workload <-> Server workload:
+     3.2.  3.2.  Category 2: User-centric Location
+     3.3.  3.3.  Category 3: Regulatory Compliance
+   4.  4.  Industry Gaps and Problem Statements
+     4.1.  4.1.  Data Generation/at-Rest Challenges
+     4.2.  4.2.  Data-in-Use Challenges
+       4.2.1.  4.2.1.  Authentication and Authorization Challenges
+       4.2.2.  4.2.2.  Location and Geofencing Challenges
+       4.2.3.  4.2.3.  Implicit Trust Challenges
+   5.  5.  Approach Overview
+     5.1.  5.1.  Server Hosts - Solution highlights
+     5.2.  5.2.  End user/IoT hosts - Solution highlights
+   6.  6.  Control Plane End-to-End Workflow
+     6.1.  6.1.  SPIFFE/SPIRE Architecture Modifications
+     6.2.  6.2.  Attestation of OS Integrity and Proof of Residency on
+           Host
+     6.3.  6.3.  Start/Restart time attestation/remote verification of
            Workload Identity Agent for integrity and proof of residency
            on Host
-     6.4.  Workload Public Key Attestation and Remote Verification
-     6.5.  Host geolocation sensor composition manager and Host
+     6.4.  6.4.  Workload Public Key Attestation and Remote
+           Verification
+     6.5.  6.5.  Host geolocation sensor composition manager and Host
            Composition Change Tracking
-     6.6.  Workload Identity Agent Geolocation Gathering Workflow
-   7.  Scaling the Solution
-     7.1.  End user location anchor host
-     7.2.  Data center location anchor host
-   8.  Data Plane End-to-End Workflow
-     8.1.  HTTP Networking Protocol
-     8.2.  IPSEC Tunnel Networking Protocol
-   9.  Solution Mapping to Industry Gaps and Problem Statements
-   10. Authorization Policy Implementers
-   11. Security Considerations
-   12. IANA Considerations
-   13. Appendix - Items to follow up
-     13.1.  OPEN ISSUES 1: Restart time attestation/remote
+     6.6.  6.6.  Workload Identity Agent Geolocation Gathering
+           Workflow
+   7.  7.  Scaling the Solution
+     7.1.  7.1.  End user location anchor host
+     7.2.  7.2.  Data center location anchor host
+   8.  8.  Data Plane End-to-End Workflow
+     8.1.  8.1.  HTTP Networking Protocol
+     8.2.  8.2.  IPSEC Tunnel Networking Protocol
+   9.  9.  Solution Mapping to Industry Gaps and Problem Statements
+   10. 10.  Authorization Policy Implementers
+   11. 11.  Security Considerations
+   12. 12.  IANA Considerations
+   13. 13.  Appendix - Items to follow up
+     13.1.  13.1.  OPEN ISSUES 1: Restart time attestation/remote
             verification of workload identity agent for integrity and
             proof of residency on Host
-     13.2.  OPEN ISSUES 2: Location privacy options
-     13.3.  OPEN ISSUES 3: Attested PTP
-     13.4.  OPEN ISSUES 4: Geotagging textual data
-     13.5.  OPEN ISSUES 5: Attesting Geotags
-   14. Acknowledgments
+     13.2.  13.2.  OPEN ISSUES 2: Location privacy options
+     13.3.  13.3.  OPEN ISSUES 3: Attested PTP
+     13.4.  13.4.  OPEN ISSUES 4: Geotagging textual data
+     13.5.  13.5.  OPEN ISSUES 5: Attesting Geotags
+   14. 14.  Acknowledgments
    15. References
      15.1.  Normative References
      15.2.  Informative References
    Contributors
    Authors' Addresses
 
-1.  Conventions and Definitions
+1.  1.  Conventions and Definitions
 
    The key words "MUST", "MUST NOT", "REQUIRED", "SHALL", "SHALL NOT",
    "SHOULD", "SHOULD NOT", "RECOMMENDED", "NOT RECOMMENDED", "MAY", and
@@ -177,7 +182,7 @@ Table of Contents
    *  *Proof-Of-Residency (POR)*  Cryptographic proof that a workload is
          executing within approved geographic and host boundaries.
 
-2.  Introduction
+2.  2.  Introduction
 
    As organizations increasingly adopt cloud and distributed computing,
    the need to enforce data residency, geolocation affinity, and host
@@ -201,19 +206,19 @@ Table of Contents
    and directly addresses the limitations of bearer tokens, proof-of-
    possession, IPSEC, and trust-in-transit.
 
-3.  Use Cases
+3.  3.  Use Cases
 
    Data residency use cases can be divided into three categories: (1)
    server-centric location, (2) user-centric location, and (3)
    regulatory compliance.
 
-3.1.  Category 1: Server-centric Location
+3.1.  3.1.  Category 1: Server-centric Location
 
    Enterprises (e.g., healthcare, banking) need cryptographic proof of a
    trustworthy geographic boundary (i.e., region, zone, country, state,
    etc.) for cloud-facing workloads.
 
-3.1.1.  Server workload <-> Server workload - General:
+3.1.1.  3.1.1.  Server workload <-> Server workload - General:
 
    Enterprises handling sensitive data rely on dedicated cloud hosts
    (e.g., EU sovereign cloud providers) that ensure compliance with data
@@ -229,7 +234,7 @@ Table of Contents
    verifiable-geo-fence/blob/ramki/pictures/challenges-sovereign-cloud-
    ai-inferencing.svg)
 
-3.1.2.  Server workload <-> Server workload - Agentic AI:
+3.1.2.  3.1.2.  Server workload <-> Server workload - Agentic AI:
 
    Enterprises need to ensure that the AI agent is located within a
    specific geographic boundary when downloading sensitive data or
@@ -248,7 +253,7 @@ Table of Contents
    (https://github.com/nedmsmith/draft-klspa-wimse-verifiable-geo-
    fence/blob/main/pictures/secure-agentic-workflow.svg/)
 
-3.1.3.  Server workload <-> Server workload - Federated AI:
+3.1.3.  3.1.3.  Server workload <-> Server workload - Federated AI:
 
    In federated learning scenarios, multiple organizations collaborate
    to train machine learning models without sharing raw data.  Each
@@ -262,12 +267,12 @@ Table of Contents
    (https://github.com/nedmsmith/draft-klspa-wimse-verifiable-geo-
    fence/blob/ramki/pictures/challenges-federated-learning.svg)
 
-3.1.4.  User workload <-> Server workload:
+3.1.4.  3.1.4.  User workload <-> Server workload:
 
    Enterprises ensure that they are communicating with a server (e.g.,
    cloud services) located within a specific geographic boundary.
 
-3.2.  Category 2: User-centric Location
+3.2.  3.2.  Category 2: User-centric Location
 
    Enterprises need cryptographic proof of trustworthy geographic
    boundary for user-facing workloads.
@@ -297,12 +302,12 @@ Table of Contents
       U.S. customers.  Geolocation enforcement can ensure policy
       compliance.  See [doj-cisa].
 
-3.3.  Category 3: Regulatory Compliance
+3.3.  3.3.  Category 3: Regulatory Compliance
 
    Geographic boundary attestation helps satisfy data residency and data
    sovereignty requirements for regulatory compliance.
 
-4.  Industry Gaps and Problem Statements
+4.  4.  Industry Gaps and Problem Statements
 
    Modern cloud and distributed environments face significant risks from
    stolen bearer tokens, protocol replay, and trust gaps in transit.
@@ -311,7 +316,7 @@ Table of Contents
    sources, and authentication mechanisms.  This section outlines the
    key gaps and problems that this specification aims to address.
 
-4.1.  Data Generation/at-Rest Challenges
+4.1.  4.1.  Data Generation/at-Rest Challenges
 
    *Textual Geotags*  No standard for textual geotags (EXIF covers media
       only).
@@ -319,13 +324,13 @@ Table of Contents
    *Attesting Geotags*: Existing geotag formats are unsigned and
    forgeable via VPN/MITM attacks.
 
-4.2.  Data-in-Use Challenges
+4.2.  4.2.  Data-in-Use Challenges
 
-4.2.1.  Authentication and Authorization Challenges
+4.2.1.  4.2.1.  Authentication and Authorization Challenges
 
-   #### Bearer Token Vulnerabilities Bearer tokens are typically
-   generated via user MFA and used to establish HTTP sessions.  A
-   malicious actor can steal a bearer token (e.g., from a still-valid
+   #### 4.2.1.1.  Bearer Token Vulnerabilities Bearer tokens are
+   typically generated via user MFA and used to establish HTTP sessions.
+   A malicious actor can steal a bearer token (e.g., from a still-valid
    HAR file uploaded to a support portal, as seen in the Okta attack)
    and present it to a server workload.  The attacker may be in a
    forbidden location and on an unauthorized host (e.g., their own
@@ -339,7 +344,7 @@ Table of Contents
    support only about 5 signatures per second. * Non-HTTP protocols: No
    solution for IPSEC etc.
 
-4.2.2.  Location and Geofencing Challenges
+4.2.2.  4.2.2.  Location and Geofencing Challenges
 
    *  *IP Address-Based Location:* This is the typical approach, but it
       has limitations: network providers can use geographic-region-based
@@ -355,7 +360,7 @@ Table of Contents
       navigation systems, can be spoofed.  A practical example is the
       Israel GPS spoofing attacks.
 
-4.2.3.  Implicit Trust Challenges
+4.2.3.  4.2.3.  Implicit Trust Challenges
 
    *  *Cloud Region Trust*  Implicit trust in cloud region assignment
          with no cryptographic proof of physical locality.  There is no
@@ -365,7 +370,7 @@ Table of Contents
       by compromised intermediate proxies (e.g., API gateways, SASE
       firewalls).
 
-5.  Approach Overview
+5.  5.  Approach Overview
 
    This approach enables cryptographically verifiable geofencing by
    binding workload identity to both platform and geographic attributes
@@ -401,7 +406,7 @@ Table of Contents
    represented by the SPIFFE/SPIRE server (spire).  * The *Workload
    Identity Agent* is represented by the SPIFFE/SPIRE agent (spire).
 
-5.1.  Server Hosts - Solution highlights
+5.1.  5.1.  Server Hosts - Solution highlights
 
    Assumptions: The maximum round-trip delay within a data center
    typically ranges from 500-1000 microseconds.
@@ -449,7 +454,7 @@ Table of Contents
    fence/blob/ramki/pictures/addressing-challenges-sovereign-cloud-ai-
    inferencing.svg)
 
-5.2.  End user/IoT hosts - Solution highlights
+5.2.  5.2.  End user/IoT hosts - Solution highlights
 
    Browser solution – new browser extension for proof residency and
    geofencing * Application proxy which intercepts every HTTP request;
@@ -468,7 +473,7 @@ Table of Contents
    fence/blob/ramki/pictures/addressing-challenges-federated-
    learning.svg)
 
-6.  Control Plane End-to-End Workflow
+6.  6.  Control Plane End-to-End Workflow
 
    The end-to-end workflow for the proposed framework consists of
    several key steps, including attestation for system bootstrap and
@@ -480,7 +485,7 @@ Table of Contents
    (https://github.com/nedmsmith/draft-klspa-wimse-verifiable-geo-
    fence/blob/main/pictures/control-plane-end-to-end-flow.svg)
 
-6.1.  SPIFFE/SPIRE Architecture Modifications
+6.1.  6.1.  SPIFFE/SPIRE Architecture Modifications
 
    In the context of the SPIFFE/SPIRE architecture (spire), the SPIFFE/
    SPIRE Agent includes a new geolocation plugin -- this is depicted in
@@ -498,7 +503,7 @@ Table of Contents
    plugin (https://github.com/nedmsmith/draft-klspa-wimse-verifiable-
    geo-fence/blob/main/pictures/spiffe-spire.svg)
 
-6.2.  Attestation of OS Integrity and Proof of Residency on Host
+6.2.  6.2.  Attestation of OS Integrity and Proof of Residency on Host
 
    As part of system boot/reboot process, boot loader-based measured
    system boot with remote Workload Identity Manager verification is
@@ -539,8 +544,9 @@ Table of Contents
    that the hardware platform is approved for running workloads and is
    running an approved OS.
 
-6.3.  Start/Restart time attestation/remote verification of Workload
-      Identity Agent for integrity and proof of residency on Host
+6.3.  6.3.  Start/Restart time attestation/remote verification of
+      Workload Identity Agent for integrity and proof of residency on
+      Host
 
    The Workload Identity Agent is a process with elevated privileges
    with access to TPM and location sensor hardware.  Linux IMA and
@@ -627,7 +633,7 @@ Table of Contents
    standard TPM AK model, while TPM DAA offers unlinkable, anonymous
    proofs of TPM possession.
 
-6.4.  Workload Public Key Attestation and Remote Verification
+6.4.  6.4.  Workload Public Key Attestation and Remote Verification
 
    Workload Identity Agent public/private key attestation, rather than
    TPM Attestation Key (AK) attestation, is the key change compared to
@@ -690,8 +696,8 @@ Table of Contents
         workload can optimize cryptographic operations without going
         through the Workload Identity Agent.
 
-6.5.  Host geolocation sensor composition manager and Host Composition
-      Change Tracking
+6.5.  6.5.  Host geolocation sensor composition manager and Host
+      Composition Change Tracking
 
    The Host geolocation sensor composition manager runs outside of the
    host.  In addition to obtaining location from device location sources
@@ -718,7 +724,7 @@ Table of Contents
        out problem like standard SIM but could be subject to e-SIM swap
        attack.)
 
-6.6.  Workload Identity Agent Geolocation Gathering Workflow
+6.6.  6.6.  Workload Identity Agent Geolocation Gathering Workflow
 
    The process described below is run periodically (e.g., every 30
    seconds for frequently mobile hosts such as smartphones; every 5
@@ -779,7 +785,7 @@ Table of Contents
    (relevant to all thin clients and indexed using user in OAuth bearer
    token/server website URL).
 
-7.  Scaling the Solution
+7.  7.  Scaling the Solution
 
    Having a geolocation sensor on every host is not scalable from a
    deployment and management perspective and can be cost prohibitive.
@@ -792,7 +798,7 @@ Table of Contents
    and/or GNSS capabilities which can be leveraged by other data center
    hosts.  This host serves as the location anchor host.
 
-7.1.  End user location anchor host
+7.1.  7.1.  End user location anchor host
 
    Goal is to provide an easy to use wireless solution that can be used
    by end users without requiring them to install a geolocation sensor
@@ -809,7 +815,7 @@ Table of Contents
    provides proof that the laptop/desktop host is in proximity using the
    measured signal strength and RTT.
 
-7.2.  Data center location anchor host
+7.2.  7.2.  Data center location anchor host
 
    Goal is to provide an easy to use solution that can be used by data
    center operators without requiring them to install a geolocation
@@ -850,9 +856,9 @@ Table of Contents
    (OPEN ISSUES 3).  Further work is needed to define and standardize
    this enhancement to ensure interoperability and security.
 
-8.  Data Plane End-to-End Workflow
+8.  8.  Data Plane End-to-End Workflow
 
-8.1.  HTTP Networking Protocol
+8.1.  8.1.  HTTP Networking Protocol
 
    A new HTTP header field 'Workload-Geo-ID' is proposed for conveying
    the Geolocation Information Cache.  The HTTP request is signed--the
@@ -1018,7 +1024,7 @@ Table of Contents
    Protocol (RDP) terminal (common for cloud access by customers) which
    tunnels RDP traffic over HTTP/TLS.
 
-8.2.  IPSEC Tunnel Networking Protocol
+8.2.  8.2.  IPSEC Tunnel Networking Protocol
 
    In the IPSEC key exchange protocol (IKE), the following changes are
    proposed: * Proof of residency * In the IPSEC client, in the Elliptic
@@ -1056,7 +1062,7 @@ Table of Contents
    host level and not at the individual workload level, which may be a
    challenge for some use cases.
 
-9.  Solution Mapping to Industry Gaps and Problem Statements
+9.  9.  Solution Mapping to Industry Gaps and Problem Statements
 
    *  *Host TPMs for Signature* challenges are addressed
 
@@ -1108,7 +1114,7 @@ Table of Contents
          included in the IPSEC IKEv2 notification payload, which is
          verified by the IPSEC server.
 
-10.  Authorization Policy Implementers
+10.  10.  Authorization Policy Implementers
 
    Policy implementers use attested geographic boundary from Workload to
    make decisions.  Example implementers: * Intermediate proxies (e.g.,
@@ -1120,7 +1126,7 @@ Table of Contents
    process scheduler or JVM class loader/deserializer, then malware can
    be prevented (similar to a code-signed application).
 
-11.  Security Considerations
+11.  11.  Security Considerations
 
    The proposed framework introduces several security considerations
    that must be addressed to ensure the integrity and trustworthiness of
@@ -1170,28 +1176,28 @@ Table of Contents
    secure and reliable foundation for verifiable geofencing in diverse
    deployment environments.
 
-12.  IANA Considerations
+12.  12.  IANA Considerations
 
    This document has no IANA actions.
 
-13.  Appendix - Items to follow up
+13.  13.  Appendix - Items to follow up
 
-13.1.  OPEN ISSUES 1: Restart time attestation/remote verification of
-       workload identity agent for integrity and proof of residency on
-       Host
+13.1.  13.1.  OPEN ISSUES 1: Restart time attestation/remote
+       verification of workload identity agent for integrity and proof
+       of residency on Host
 
    For the workload identity agent restart case, it is not clear how the
    storage in TPM PCR will be accomplished - ideally this should be
    natively handled in the IMA measurement process with an ability to
    retrigger on restart or refresh cycles.
 
-13.2.  OPEN ISSUES 2: Location privacy options
+13.2.  13.2.  OPEN ISSUES 2: Location privacy options
 
    The current approach includes some location privacy options for the
    geolocation in the Geolocation Information Cache.  This may need to
    be expanded further in the future.
 
-13.3.  OPEN ISSUES 3: Attested PTP
+13.3.  13.3.  OPEN ISSUES 3: Attested PTP
 
    Attested PTP is a software/hardware-based solution using Precision
    Time Protocol (PTP) for measuring proximity between hosts in a data
@@ -1201,19 +1207,19 @@ Table of Contents
    using symmetric key distribution (https://datatracker.ietf.org/doc/
    draft-ietf-ntp-nts-for-ptp/).
 
-13.4.  OPEN ISSUES 4: Geotagging textual data
+13.4.  13.4.  OPEN ISSUES 4: Geotagging textual data
 
    Popular standard for geotagging photos/videos is EXIF.  There is no
    standard for geotagging textual data.  If there is no geolocation
    tag, data can be stored/processed in non-compliant locations.
 
-13.5.  OPEN ISSUES 5: Attesting Geotags
+13.5.  13.5.  OPEN ISSUES 5: Attesting Geotags
 
    There is no standard for attesting (signing) geolocation tag.  If
    geolocation tag is not signed, it can be manipulated through
    techniques such as VPNs.
 
-14.  Acknowledgments
+14.  14.  Acknowledgments
 
 15.  References
 
@@ -1249,9 +1255,9 @@ Table of Contents
               Salowey, J. A., Rosomakho, Y., and H. Tschofenig,
               "Workload Identity in a Multi System Environment (WIMSE)
               Architecture", Work in Progress, Internet-Draft, draft-
-              ietf-wimse-arch-04, 2 March 2025,
+              ietf-wimse-arch-05, 7 July 2025,
               <https://datatracker.ietf.org/doc/html/draft-ietf-wimse-
-              arch-04>.
+              arch-05>.
 
    [linux-ima]
               Sourceforge Linux IMA documentation, "Linux Integrity
