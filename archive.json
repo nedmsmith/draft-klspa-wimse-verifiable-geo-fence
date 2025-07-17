@@ -1,6 +1,6 @@
 {
   "magic": "E!vIA5L86J2I",
-  "timestamp": "2025-07-08T01:14:16.474403+00:00",
+  "timestamp": "2025-07-17T01:17:44.971797+00:00",
   "repo": "nedmsmith/draft-klspa-wimse-verifiable-geo-fence",
   "labels": [
     {
@@ -1782,6 +1782,48 @@
           "body": "Now with explicit approval",
           "createdAt": "2025-07-07T14:08:08Z",
           "updatedAt": "2025-07-07T14:08:08Z",
+          "comments": []
+        }
+      ]
+    },
+    {
+      "number": 34,
+      "id": "PR_kwDOOmshaM6fRVdq",
+      "title": "better formatting",
+      "url": "https://github.com/nedmsmith/draft-klspa-wimse-verifiable-geo-fence/pull/34",
+      "state": "MERGED",
+      "author": "ramkri123",
+      "authorAssociation": "COLLABORATOR",
+      "assignees": [],
+      "labels": [],
+      "body": "",
+      "createdAt": "2025-07-16T22:34:31Z",
+      "updatedAt": "2025-07-16T22:44:39Z",
+      "baseRepository": "nedmsmith/draft-klspa-wimse-verifiable-geo-fence",
+      "baseRefName": "main",
+      "baseRefOid": "5e4c29220e2e6d4110486e14b10437408621d444",
+      "headRepository": "nedmsmith/draft-klspa-wimse-verifiable-geo-fence",
+      "headRefName": "ramki",
+      "headRefOid": "021f2f3ada445e3650b204d51d4672f49592dffd",
+      "closedAt": "2025-07-16T22:44:39Z",
+      "mergedAt": "2025-07-16T22:44:39Z",
+      "mergedBy": "gh23600063",
+      "mergeCommit": {
+        "oid": "f9da00e622e8429f618a30055a0d857a76acc9f3"
+      },
+      "comments": [],
+      "reviews": [
+        {
+          "id": "PRR_kwDOOmshaM60bjnC",
+          "commit": {
+            "abbreviatedOid": "021f2f3"
+          },
+          "author": "gh23600063",
+          "authorAssociation": "COLLABORATOR",
+          "state": "APPROVED",
+          "body": "",
+          "createdAt": "2025-07-16T22:44:30Z",
+          "updatedAt": "2025-07-16T22:44:30Z",
           "comments": []
         }
       ]
