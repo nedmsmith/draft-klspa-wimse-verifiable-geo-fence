@@ -2097,7 +2097,7 @@ In the case of data center hosts, the geolocation sensor can be on a host with M
 * The platform owner receives this attestation and binds the reported CPU ID to the TPM EK.
 * This binding produces a cryptographic proof that the workload is running on the expected physical CPU.<a href="#section-9-2" class="pilcrow">¶</a></p>
 <p id="section-9-3">Proof of Geolocation
-* The geolocation sensor creates a signed location report using its private key.
+* The geolocation sensor creates a signed location report using its private key. This is supported in popular GNSS sensors such as https://www.u-blox.com/en.
 * An agent on the bare-metal host periodically polls the sensor and collects these signed reports.
 * The platform owner maps each sensor’s ID and its signed geolocation to the corresponding CPU ID and TPM EK.
 * This mapping yields a verifiable proof that the workload is executing at the claimed physical location.<a href="#section-9-3" class="pilcrow">¶</a></p>
