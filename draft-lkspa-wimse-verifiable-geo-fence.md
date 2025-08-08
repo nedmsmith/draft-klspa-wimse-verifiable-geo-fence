@@ -1,5 +1,5 @@
 ---
-title: "Modernizing Workload Security: Verifiable Geofencing, Proof-of-Possession, and Protocol-Aware Residency Enforcement"
+title: "Zero-Trust Sovereign AI: Verifiable Geofencing & Residency Proofs for Cybersecure Workloads"
 
 abbrev: "GeoW"
 
@@ -20,10 +20,6 @@ v: 3
 ipr: trust200902
 
 area: "Apps & Realtime"
-
-tocparam: yes
-
-toc: yes
 
 workgroup: "Workload Identity in Multi System Environments"
 
@@ -72,6 +68,10 @@ contributor:
   name: Michael Epley
   org: Red Hat
   email: mepley@redhat.com
+- ins: Vijay Masilamani
+  name: Vijay Masilamani
+  org: Fidelity
+  email: saanvijay20@gmail.com
 
 normative:
 
@@ -553,7 +553,24 @@ Benefit:
 Challenge:
 * Location information granularity is at the IPSEC client host level and not at the individual workload level, which may be a challenge for some use cases.
 
-# 9. Solution Mapping to Industry Gaps and Problem Statements
+# 9. Confidential Computing Considerations
+In confidential computing, the host operating system cannot be trusted. Instead, the platform owner must maintain and verify the relationships between three hardware identifiers:
+* CPU ID
+* TPM Endorsement Key (EK)
+* Geolocation Sensor ID + public key
+
+Proof of Residency
+* The confidential workload generates a hardware attestation that includes its CPU ID.
+* The platform owner receives this attestation and binds the reported CPU ID to the TPM EK.
+* This binding produces a cryptographic proof that the workload is running on the expected physical CPU.
+
+Proof of Geolocation
+* The geolocation sensor creates a signed location report using its private key.
+* An agent on the bare-metal host periodically polls the sensor and collects these signed reports.
+* The platform owner maps each sensor’s ID and its signed geolocation to the corresponding CPU ID and TPM EK.
+* This mapping yields a verifiable proof that the workload is executing at the claimed physical location.
+
+# 10. Solution Mapping to Industry Gaps and Problem Statements
 * **Host TPMs for Signature** challenges are addressed
   * Workload Identity Agent private key, which is used for signing, is signed by the Host TPM AK providing a cryptographically verifiable proof of residency of Workload Identity Agent on the host. The Workload Identity Agent generates a public/private key pair for each workload which connects through a host local socket and signs the workload public key with its private key. The Workload Identity Manager verifies the signature using the Workload Identity Agent Public Key, providing a cryptographically verifiable proof of residency of workload on the host.
 
@@ -569,7 +586,7 @@ Challenge:
 * **IPSEC Tunnel Networking Protocol** challenges are addressed
   * The IPSEC client uses the Workload Identity Agent Public Key as the ephemeral public key in the ECDHE phase of the IPSEC IKEv2 key exchange protocol, providing a cryptographically verifiable proof of residency on host. The Geolocation Information is included in the IPSEC IKEv2 notification payload, which is verified by the IPSEC server.
 
-# 10. Authorization Policy Implementers
+# 11. Authorization Policy Implementers
 Policy implementers use attested geographic boundary from Workload to make decisions. Example implementers:
 * Intermediate proxies (e.g., API gateway, Firewall)
 * SaaS application.
@@ -578,7 +595,7 @@ Policy implementers use attested geographic boundary from Workload to make decis
 
 If the policy implementer is at the SaaS application level, things are simpler. However, if it is pushed down to, say, K8s or OS process scheduler or JVM class loader/deserializer, then malware can be prevented (similar to a code-signed application).
 
-# 11. Security Considerations
+# 12. Security Considerations
 The proposed framework introduces several security considerations that must be addressed to ensure the integrity and trustworthiness of geofencing:
 
 - **TPM and Hardware Trust**: The security of the solution depends on the integrity of the TPM and other hardware roots of trust. Physical attacks, firmware vulnerabilities, or supply chain compromises could undermine attestation. Regular updates, secure provisioning, and monitoring are required.
@@ -599,28 +616,28 @@ The proposed framework introduces several security considerations that must be a
 
 By addressing these considerations, the framework aims to provide a secure and reliable foundation for verifiable geofencing in diverse deployment environments.
 
-# 12. IANA Considerations
+# 13. IANA Considerations
 This document has no IANA actions.
 
-# 13. Appendix - Items to follow up
+# 14. Appendix - Items to follow up
 
-## 13.1. OPEN ISSUES 1: Restart time attestation/remote verification of workload identity agent for integrity and proof of residency on Host
+## OPEN ISSUES 1: Restart time attestation/remote verification of workload identity agent for integrity and proof of residency on Host
 For the workload identity agent restart case, it is not clear how the storage in TPM PCR will be accomplished - ideally this should be natively handled in the IMA measurement process with an ability to retrigger on restart or refresh cycles.
 
-## 13.2. OPEN ISSUES 2: Location privacy options
+## OPEN ISSUES 2: Location privacy options
 The current approach includes some location privacy options for the geolocation in the Geolocation Information Cache. This may need to be expanded further in the future.
 
-## 13.3. OPEN ISSUES 3: Attested PTP
+## OPEN ISSUES 3: Attested PTP
 Attested PTP is a software/hardware-based solution using Precision Time Protocol (PTP) for measuring proximity between hosts in a data center. However, this is a proposed enhancement to the existing PTP hardware and software, and there is currently no standard for attested PTP. There is a proposed authetication framework for PTP using symmetric key distribution (https://datatracker.ietf.org/doc/draft-ietf-ntp-nts-for-ptp/).
 
-## 13.4. OPEN ISSUES 4: Geotagging textual data
+## OPEN ISSUES 4: Geotagging textual data
 Popular standard for geotagging photos/videos is EXIF. There is no standard for geotagging textual data. If there is no geolocation tag, data can be stored/processed in non-compliant locations.
 
-## 13.5. OPEN ISSUES 5: Attesting Geotags
+## OPEN ISSUES 5: Attesting Geotags
 There is no standard for attesting (signing) geolocation tag. If geolocation tag is not signed, it can be manipulated through techniques such as VPNs.
 
 
-# 14. Acknowledgments
+# 15. Acknowledgments
 
 
 
