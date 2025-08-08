@@ -565,7 +565,7 @@ Proof of Residency
 * This binding produces a cryptographic proof that the workload is running on the expected physical CPU.
 
 Proof of Geolocation
-* The geolocation sensor creates a signed location report using its private key.
+* The geolocation sensor creates a signed location report using its private key. This is supported in popular GNSS sensors such as https://www.u-blox.com/en.
 * An agent on the bare-metal host periodically polls the sensor and collects these signed reports.
 * The platform owner maps each sensor’s ID and its signed geolocation to the corresponding CPU ID and TPM EK.
 * This mapping yields a verifiable proof that the workload is executing at the claimed physical location.
