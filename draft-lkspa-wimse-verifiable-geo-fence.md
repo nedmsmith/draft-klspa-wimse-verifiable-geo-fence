@@ -636,11 +636,7 @@ Popular standard for geotagging photos/videos is EXIF. There is no standard for 
 ## OPEN ISSUES 5: Attesting Geotags
 There is no standard for attesting (signing) geolocation tag. If geolocation tag is not signed, it can be manipulated through techniques such as VPNs.
 
-
-# 15. Acknowledgments
-
-#16 Appendix - Public References for Strict Data Residency Rules
-
+# 15. Appendix - Public References for Strict Data Residency Rules
 1. Russia
 Federal Law No. 152-FZ “On Personal Data” (2006), Article 18(1): mandates that operators collecting personal data of Russian residents must store that data in databases located in Russia. https://www.wipo.int/edocs/lexdocs/laws/en/ru/ru190en.pdf
 
@@ -662,6 +658,8 @@ Law on Cybersecurity (2018), Articles 26 & 27: imposes localization for “perso
 Brazil’s National Health Data Network (RNDS): Ordinance 466/2021 mandates all “electronic health records” be stored within Brazil’s cloud. https://bvsms.saude.gov.br/bvs/saudelegis/gm/2021/prt0466_22_02_2021.html
 
 Quebec’s Bill 64 (Act Respecting the Protection of Personal Information in the Private Sector, 2021): includes data residency provisions for “sensitive personal information” and prescribes in-province storage for certain health and financial records. https://www.legisquebec.gouv.qc.ca/en/document/cs/P-39.1
+
+# 16. Acknowledgments
 
 
 
