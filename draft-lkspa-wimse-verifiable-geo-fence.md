@@ -182,7 +182,7 @@ Modern cloud and distributed environments face significant risks from stolen bea
 **Key Terms:**
 
 - **Data Residency technical and legal challenges**
-: Ensuring compliance with data protection regulations and laws (e.g. EU GDPR, US HIPPA, PCI DSS, local legal mandates), which require data to be stored and processed within specific geographic boundaries. Data residency requirements are described in more detail in [tcg-geo-loc].
+: Ensuring compliance with data protection regulations and laws (e.g. EU GDPR, US HIPPA, PCI DSS, local legal mandates --  Appendix has detailed public references for Strict Data Residency Rules), which require data to be stored and processed within specific geographic boundaries. Data residency requirements are described in more detail in [tcg-geo-loc].
 - **Data Residency Host-Affinity Requirement**
 : Need for data to be tied to specific computing environments or hosts where it is stored and/or processed.
 - **Data Residency Geolocation-Affinity Requirement**
@@ -638,6 +638,30 @@ There is no standard for attesting (signing) geolocation tag. If geolocation tag
 
 
 # 15. Acknowledgments
+
+#16 Appendix - Public References for Strict Data Residency Rules
+
+1. Russia
+Federal Law No. 152-FZ “On Personal Data” (2006), Article 18(1): mandates that operators collecting personal data of Russian residents must store that data in databases located in Russia. https://www.wipo.int/edocs/lexdocs/laws/en/ru/ru190en.pdf
+
+2. China
+Cybersecurity Law of the People’s Republic of China (2017), Articles 37 & 42: requires “critical information infrastructure operators” and network operators handling personal information to store data within China, with any export subject to a security assessment. http://www.npc.gov.cn/zgrdw/englishnpc/Law/2009-02/20/content_1471582.htm
+
+Personal Information Protection Law (PIPL, 2021), Article 38: enforces localization of “personal information and important data” collected or generated within China, and prescribes security assessment or use of standard contracts for cross-border transfers. https://en.pkulaw.cn/display.aspx?cgid=537239&lib=law
+
+3. India (Draft Legislation)
+Digital Personal Data Protection Bill, 2023 (Ministry of Electronics and Information Technology): proposes keeping at least one copy of all personal data in India, with “critical personal data” processed only on-shore. https://www.meity.gov.in/writereaddata/files/Draft%20DPDP%20Bill,%202023.pdf
+
+4. Indonesia
+Government Regulation No. 71 of 2019 on the Implementation of Electronic Systems and Transactions, Article 17: requires electronic system operators providing public services to store “public data” within Indonesian territory. https://www.aptika.kominfo.go.id/dokumen/english_translation_of_PP_71_2019.pdf
+
+5. Vietnam
+Law on Cybersecurity (2018), Articles 26 & 27: imposes localization for “personal data” and “user data” on network service providers, with cross-border transfers only after approval by the Ministry of Public Security. https://e-comlaw.org/vietnam-cybersecurity-law-english-translation/
+
+6. Sector-Specific Examples
+Brazil’s National Health Data Network (RNDS): Ordinance 466/2021 mandates all “electronic health records” be stored within Brazil’s cloud. https://bvsms.saude.gov.br/bvs/saudelegis/gm/2021/prt0466_22_02_2021.html
+
+Quebec’s Bill 64 (Act Respecting the Protection of Personal Information in the Private Sector, 2021): includes data residency provisions for “sensitive personal information” and prescribes in-province storage for certain health and financial records. https://www.legisquebec.gouv.qc.ca/en/document/cs/P-39.1
 
 
 
