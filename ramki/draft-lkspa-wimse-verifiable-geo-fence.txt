@@ -120,8 +120,9 @@ Table of Contents
      14.3.  OPEN ISSUES 3: Attested PTP
      14.4.  OPEN ISSUES 4: Geotagging textual data
      14.5.  OPEN ISSUES 5: Attesting Geotags
-   15. 15.  Acknowledgments
-   16. 16 Appendix - Public References for Strict Data Residency Rules
+   15. 15.  Appendix - Public References for Strict Data Residency
+           Rules
+   16. 16.  Acknowledgments
    17. References
      17.1.  Normative References
      17.2.  Informative References
@@ -1243,9 +1244,7 @@ Table of Contents
    geolocation tag is not signed, it can be manipulated through
    techniques such as VPNs.
 
-15.  15.  Acknowledgments
-
-16.  16 Appendix - Public References for Strict Data Residency Rules
+15.  15.  Appendix - Public References for Strict Data Residency Rules
 
    1.  Russia Federal Law No. 152-FZ “On Personal Data” (2006), Article
        18(1): mandates that operators collecting personal data of
@@ -1296,6 +1295,8 @@ Table of Contents
    provisions for “sensitive personal information” and prescribes in-
    province storage for certain health and financial records.
    https://www.legisquebec.gouv.qc.ca/en/document/cs/P-39.1
+
+16.  16.  Acknowledgments
 
 17.  References
 
