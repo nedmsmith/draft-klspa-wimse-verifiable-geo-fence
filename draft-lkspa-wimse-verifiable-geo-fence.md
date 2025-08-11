@@ -180,15 +180,14 @@ Modern cloud and distributed environments face significant risks from stolen bea
 - **IPSEC**: Internet Protocol Security
 
 **Key Terms:**
-
-- **Data Residency technical and legal challenges**
-: Ensuring compliance with data protection regulations and laws (e.g. EU GDPR, US HIPPA, PCI DSS, local legal mandates --  Appendix has detailed public references for Strict Data Residency Rules), which require data to be stored and processed within specific geographic boundaries. Data residency requirements are described in more detail in [tcg-geo-loc].
+- **Data Residency**
+: Technical and Legal Challenges Ensuring compliance with global and local data protection regulations and mandates (e.g., EU GDPR, US HIPAA, PCI DSS, and jurisdiction-specific laws; see Appendix for public references on strict data residency rules). Strict data residency rules require that specific categories of data must be stored and processed exclusively within designated geographic boundaries. Enforcing these mandates relies on a combination of trusted computing, host-affinity, geolocation-affinity, and geofencing—each defined below.
 - **Data Residency Host-Affinity Requirement**
-: Need for data to be tied to specific computing environments or hosts where it is stored and/or processed.
+: Data must remain bound to explicitly trusted computing environments or hosts, governing where storage and processing occur.
 - **Data Residency Geolocation-Affinity Requirement**
-: Data not to be transferred out of and should be stored/processed only in defined geographic region(s).
-- **Data Residency Host Geolocation Affinity is aka Geofencing**
-: Ensuring data or workloads are processed in specific computing environments or hosts in defined geographic regions.
+: Data must not be transferred beyond defined geographic regions. All storage and computation must remain within the specified boundaries.
+- **Data Residency Host Geolocation Affinity (aka Geofencing)**
+: A compound enforcement mechanism requiring that data and workloads are executed only on authorized hosts located within the approved geographic regions.
 - **Workload Identity Agent (WIA)**
 : SPIRE agent on each host, with TPM plugin to issue X.509 SVIDs and sign requests.
 - **Location Anchor Host (LAH)**
@@ -570,6 +569,13 @@ Proof of Geolocation
 * The platform owner maps each sensor’s ID and its signed geolocation to the corresponding CPU ID and TPM EK.
 * This mapping yields a verifiable proof that the workload is executing at the claimed physical location.
 
+CPU ID is a platform specific unique id defined as follows.
+
+For AMD SEV-SNP, CPU ID is defined as chip_id (unique id of the AMD processor's chip). The document "SEV Secure Nested Paging Firmware ABI Specification" (https://www.amd.com/content/dam/amd/en/documents/epyc-technical-docs/specifications/56860.pdf) describes the usage of chip_id.
+
+For Intel TDX, CPU ID is defined as platform instance id (unique id of Intel TDX platform). The document "Intel® Trust Domain Extensions Data Center Attestation Primitives (Intel® TDX DCAP): Quote Generation Library and
+Quote Verification Library" (https://download.01.org/intel-sgx/latest/dcap-latest/linux/docs/Intel_TDX_DCAP_Quoting_Library_API.pdf) describes the usage of platform instance id.
+
 # 10. Solution Mapping to Industry Gaps and Problem Statements
 * **Host TPMs for Signature** challenges are addressed
   * Workload Identity Agent private key, which is used for signing, is signed by the Host TPM AK providing a cryptographically verifiable proof of residency of Workload Identity Agent on the host. The Workload Identity Agent generates a public/private key pair for each workload which connects through a host local socket and signs the workload public key with its private key. The Workload Identity Manager verifies the signature using the Workload Identity Agent Public Key, providing a cryptographically verifiable proof of residency of workload on the host.
@@ -636,34 +642,19 @@ Popular standard for geotagging photos/videos is EXIF. There is no standard for 
 ## OPEN ISSUES 5: Attesting Geotags
 There is no standard for attesting (signing) geolocation tag. If geolocation tag is not signed, it can be manipulated through techniques such as VPNs.
 
-# 15. Appendix - Public References for Strict Data Residency Rules
-1. Russia
-* Federal Law No. 152-FZ “On Personal Data” (2006), Article 18(1): mandates that operators collecting personal data of Russian residents must store that data in databases located in Russia. https://www.wipo.int/edocs/lexdocs/laws/en/ru/ru190en.pdf
+# 15.  Appendix - Public References for Strict Data Residency Rules
 
-2. China
-* Cybersecurity Law of the People’s Republic of China (2017), Articles 37 & 42: requires “critical information infrastructure operators” and network operators handling personal information to store data within China, with any export subject to a security assessment. http://www.npc.gov.cn/zgrdw/englishnpc/Law/2009-02/20/content_1471582.htm
+India — Reserve Bank of India (RBI): Payment System Data Localization (2018)
+* From RBI Circular RBI/2017-18/153 (April 6, 2018):
+  * “All system providers shall ensure that the entire data relating to payment systems operated by them are stored in a system only in India. This data should include the full end-to-end transaction details / information collected / carried / processed as part of the message / payment instruction.” (https://www.scribd.com/document/381345612/RBI-Circular-Data-Residency - Note: document access is not free)
 
-* Personal Information Protection Law (PIPL, 2021), Article 38: enforces localization of “personal information and important data” collected or generated within China, and prescribes security assessment or use of standard contracts for cross-border transfers. https://en.pkulaw.cn/display.aspx?cgid=537239&lib=law
+* Further clarified in RBI’s FAQs (June 2019):
+  * “The entire payment data shall be stored in systems located only in India… The data should be deleted from the systems abroad and brought back to India not later than one business day or 24 hours from the payment processing, whichever is earlier.” (https://www.business-standard.com/article/economy-policy/payments-data-must-be-stored-in-systems-located-in-india-says-rbi-119062700043_1.html; https://www.scribd.com/document/381345612/RBI-Circular-Data-Residency)
 
-3. India (Draft Legislation)
-* Digital Personal Data Protection Bill, 2023 (Ministry of Electronics and Information Technology): proposes keeping at least one copy of all personal data in India, with “critical personal data” processed only on-shore. https://www.meity.gov.in/writereaddata/files/Draft%20DPDP%20Bill,%202023.pdf
-
-4. Indonesia
-* Government Regulation No. 71 of 2019 on the Implementation of Electronic Systems and Transactions, Article 17: requires electronic system operators providing public services to store “public data” within Indonesian territory. https://www.aptika.kominfo.go.id/dokumen/english_translation_of_PP_71_2019.pdf
-
-5. Vietnam
-* Law on Cybersecurity (2018), Articles 26 & 27: imposes localization for “personal data” and “user data” on network service providers, with cross-border transfers only after approval by the Ministry of Public Security. https://e-comlaw.org/vietnam-cybersecurity-law-english-translation/
-
-6. Sector-Specific Examples
-* Brazil’s National Health Data Network (RNDS): Ordinance 466/2021 mandates all “electronic health records” be stored within Brazil’s cloud. https://bvsms.saude.gov.br/bvs/saudelegis/gm/2021/prt0466_22_02_2021.html
-
-* Quebec’s Bill 64 (Act Respecting the Protection of Personal Information in the Private Sector, 2021): includes data residency provisions for “sensitive personal information” and prescribes in-province storage for certain health and financial records. https://www.legisquebec.gouv.qc.ca/en/document/cs/P-39.1
-
-# 16. Acknowledgments
-
-
-
-
+South Korea — Geospatial Information Management Restrictions
+* From Wikipedia's summary of restrictions (based on the Geospatial Information Management Act): (https://en.wikipedia.org/wiki/Restrictions_on_geographic_data_in_South_Korea)
+  * Article 16, Paragraph 1: prohibits state-led survey data from crossing Korea’s physical boundaries.
+  * Article 26 of the Security Regulations on National Spatial Information: prohibits release (especially cross-border) of aerial photographs containing national security or military sites.
 
 
 
