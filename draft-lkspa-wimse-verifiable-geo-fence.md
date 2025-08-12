@@ -554,13 +554,13 @@ Challenge:
 
 # 9. Confidential Computing Considerations
 In confidential computing, the host operating system cannot be trusted. Instead, the platform owner must maintain and verify the relationships between three hardware identifiers:
-* CPU ID
+* Attestation key
 * TPM Endorsement Key (EK)
 * Geolocation Sensor ID + public key
 
 Proof of Residency
-* The confidential workload generates a hardware attestation that includes its CPU ID.
-* The platform owner receives this attestation and binds the reported CPU ID to the TPM EK.
+* The confidential workload generates a hardware attestation that includes its Attestation key.
+* The platform owner receives this attestation and binds the reported Attestation key to the TPM EK.
 * This binding produces a cryptographic proof that the workload is running on the expected physical CPU.
 
 Proof of Geolocation
@@ -569,12 +569,12 @@ Proof of Geolocation
 * The platform owner maps each sensor’s ID and its signed geolocation to the corresponding CPU ID and TPM EK.
 * This mapping yields a verifiable proof that the workload is executing at the claimed physical location.
 
-CPU ID is a platform specific unique id defined as follows.
+Attestation key is unique per CPU and defined as follows.
 
-For AMD SEV-SNP, CPU ID is defined as chip_id (unique id of the AMD processor's chip). The document "SEV Secure Nested Paging Firmware ABI Specification" (https://www.amd.com/content/dam/amd/en/documents/epyc-technical-docs/specifications/56860.pdf) describes the usage of chip_id.
+For AMD SEV-SNP, it is called "Versioned Chip Endorsement Key – VCEK" and defined in https://www.amd.com/content/dam/amd/en/documents/epyc-technical-docs/specifications/57230.pdf (Location: Chapter 1 (Glossary), specifically in Table 2 – Terms and Definitions)
 
-For Intel TDX, CPU ID is defined as platform instance id (unique id of Intel TDX platform). The document "Intel® Trust Domain Extensions Data Center Attestation Primitives (Intel® TDX DCAP): Quote Generation Library and
-Quote Verification Library" (https://download.01.org/intel-sgx/latest/dcap-latest/linux/docs/Intel_TDX_DCAP_Quoting_Library_API.pdf) describes the usage of platform instance id.
+For Intel TDX, it is called "Provisioning Certification Key – PCK" and defined in https://download.01.org/intel-sgx/latest/dcap-latest/linux/docs/Intel_TDX_DCAP_Quoting_Library_API.pdf (Location: Page 6, under Table 1-1: Terminology)
+
 
 # 10. Solution Mapping to Industry Gaps and Problem Statements
 * **Host TPMs for Signature** challenges are addressed
