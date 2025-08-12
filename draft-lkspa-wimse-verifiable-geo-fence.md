@@ -180,15 +180,14 @@ Modern cloud and distributed environments face significant risks from stolen bea
 - **IPSEC**: Internet Protocol Security
 
 **Key Terms:**
-
-- **Data Residency technical and legal challenges**
-: Ensuring compliance with data protection regulations and laws (e.g. EU GDPR, US HIPPA, PCI DSS, local legal mandates), which require data to be stored and processed within specific geographic boundaries. Data residency requirements are described in more detail in [tcg-geo-loc].
+- **Data Residency**
+: Technical and Legal Challenges Ensuring compliance with global and local data protection regulations and mandates (e.g., EU GDPR, US HIPAA, PCI DSS, and jurisdiction-specific laws; see Appendix for public references on strict data residency rules). Strict data residency rules require that specific categories of data must be stored and processed exclusively within designated geographic boundaries. Enforcing these mandates relies on a combination of trusted computing, host-affinity, geolocation-affinity, and geofencing—each defined below.
 - **Data Residency Host-Affinity Requirement**
-: Need for data to be tied to specific computing environments or hosts where it is stored and/or processed.
+: Data must remain bound to explicitly trusted computing environments or hosts, governing where storage and processing occur.
 - **Data Residency Geolocation-Affinity Requirement**
-: Data not to be transferred out of and should be stored/processed only in defined geographic region(s).
-- **Data Residency Host Geolocation Affinity is aka Geofencing**
-: Ensuring data or workloads are processed in specific computing environments or hosts in defined geographic regions.
+: Data must not be transferred beyond defined geographic regions. All storage and computation must remain within the specified boundaries.
+- **Data Residency Host Geolocation Affinity (aka Geofencing)**
+: A compound enforcement mechanism requiring that data and workloads are executed only on authorized hosts located within the approved geographic regions.
 - **Workload Identity Agent (WIA)**
 : SPIRE agent on each host, with TPM plugin to issue X.509 SVIDs and sign requests.
 - **Location Anchor Host (LAH)**
@@ -555,20 +554,27 @@ Challenge:
 
 # 9. Confidential Computing Considerations
 In confidential computing, the host operating system cannot be trusted. Instead, the platform owner must maintain and verify the relationships between three hardware identifiers:
-* CPU ID
+* Attestation key
 * TPM Endorsement Key (EK)
 * Geolocation Sensor ID + public key
 
 Proof of Residency
-* The confidential workload generates a hardware attestation that includes its CPU ID.
-* The platform owner receives this attestation and binds the reported CPU ID to the TPM EK.
+* The confidential workload generates a hardware attestation that includes its Attestation key.
+* The platform owner receives this attestation and binds the reported Attestation key to the TPM EK.
 * This binding produces a cryptographic proof that the workload is running on the expected physical CPU.
 
 Proof of Geolocation
-* The geolocation sensor creates a signed location report using its private key.
+* The geolocation sensor creates a signed location report using its private key. This is supported in popular GNSS sensors such as https://www.u-blox.com/en.
 * An agent on the bare-metal host periodically polls the sensor and collects these signed reports.
 * The platform owner maps each sensor’s ID and its signed geolocation to the corresponding CPU ID and TPM EK.
 * This mapping yields a verifiable proof that the workload is executing at the claimed physical location.
+
+Attestation key is unique per CPU and defined as follows.
+
+For AMD SEV-SNP, it is called "Versioned Chip Endorsement Key – VCEK" and defined in https://www.amd.com/content/dam/amd/en/documents/epyc-technical-docs/specifications/57230.pdf (Location: Chapter 1 (Glossary), specifically in Table 2 – Terms and Definitions)
+
+For Intel TDX, it is called "Provisioning Certification Key – PCK" and defined in https://download.01.org/intel-sgx/latest/dcap-latest/linux/docs/Intel_TDX_DCAP_Quoting_Library_API.pdf (Location: Page 6, under Table 1-1: Terminology)
+
 
 # 10. Solution Mapping to Industry Gaps and Problem Statements
 * **Host TPMs for Signature** challenges are addressed
@@ -636,12 +642,12 @@ Popular standard for geotagging photos/videos is EXIF. There is no standard for 
 ## OPEN ISSUES 5: Attesting Geotags
 There is no standard for attesting (signing) geolocation tag. If geolocation tag is not signed, it can be manipulated through techniques such as VPNs.
 
+# 15.  Appendix - Public References for Strict Data Residency Rules
 
-# 15. Acknowledgments
+India — Reserve Bank of India (RBI): Payment System Data Localization (2018)
+* From RBI Circular RBI/2017-18/153 (April 6, 2018):
+  * “All system providers shall ensure that the entire data relating to payment systems operated by them are stored in a system only in India. This data should include the full end-to-end transaction details / information collected / carried / processed as part of the message / payment instruction.” (https://www.rbi.org.in/SCRIPTs/NotificationUser.aspx?Id=11244)
 
-
-
-
-
-
-
+South Korea’s Data Localization Regulations
+* Geospatial Information Management Act (Spatial Data Act)
+  * Article 16, Paragraph 1: Prohibits the export of state-led survey data (https://elaw.klri.re.kr/eng_service/lawView.do?hseq=45348&lang=ENG).
