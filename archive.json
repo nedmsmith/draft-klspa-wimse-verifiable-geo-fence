@@ -1,6 +1,6 @@
 {
   "magic": "E!vIA5L86J2I",
-  "timestamp": "2025-08-10T01:23:22.360061+00:00",
+  "timestamp": "2025-08-12T01:12:37.059179+00:00",
   "repo": "nedmsmith/draft-klspa-wimse-verifiable-geo-fence",
   "labels": [
     {
@@ -1921,7 +1921,7 @@
       "id": "PR_kwDOOmshaM6i0wpq",
       "title": "data residency references",
       "url": "https://github.com/nedmsmith/draft-klspa-wimse-verifiable-geo-fence/pull/37",
-      "state": "OPEN",
+      "state": "CLOSED",
       "author": "ramkri123",
       "authorAssociation": "COLLABORATOR",
       "assignees": [
@@ -1932,18 +1932,26 @@
       "labels": [],
       "body": "added references",
       "createdAt": "2025-08-08T20:42:22Z",
-      "updatedAt": "2025-08-09T06:59:37Z",
+      "updatedAt": "2025-08-11T23:20:53Z",
       "baseRepository": "nedmsmith/draft-klspa-wimse-verifiable-geo-fence",
       "baseRefName": "main",
       "baseRefOid": "5237a966d85867847e98f7af494b39c7c9cabd1b",
       "headRepository": "nedmsmith/draft-klspa-wimse-verifiable-geo-fence",
       "headRefName": "ramki",
-      "headRefOid": "11e6853195f4d3679b56ada2608246a5b98b0145",
-      "closedAt": null,
+      "headRefOid": "538603838ad0888def3d5d9068ea7fa756e3c1e3",
+      "closedAt": "2025-08-11T23:20:36Z",
       "mergedAt": null,
       "mergedBy": null,
       "mergeCommit": null,
-      "comments": [],
+      "comments": [
+        {
+          "author": "ramkri123",
+          "authorAssociation": "COLLABORATOR",
+          "body": "dont merg",
+          "createdAt": "2025-08-11T23:20:52Z",
+          "updatedAt": "2025-08-11T23:20:52Z"
+        }
+      ],
       "reviews": [
         {
           "id": "PRR_kwDOOmshaM646Kt8",
@@ -1984,24 +1992,6 @@
           "updatedAt": "2025-08-09T06:59:37Z",
           "comments": [
             {
-              "originalPosition": 24,
-              "body": "Link is broken!",
-              "createdAt": "2025-08-09T06:21:23Z",
-              "updatedAt": "2025-08-09T06:59:37Z"
-            },
-            {
-              "originalPosition": 30,
-              "body": "The link is of congress website, not of the law!",
-              "createdAt": "2025-08-09T06:23:24Z",
-              "updatedAt": "2025-08-09T06:59:37Z"
-            },
-            {
-              "originalPosition": 33,
-              "body": "Another broken link!",
-              "createdAt": "2025-08-09T06:23:52Z",
-              "updatedAt": "2025-08-09T06:59:37Z"
-            },
-            {
               "originalPosition": 36,
               "body": "Yet another broken link!",
               "createdAt": "2025-08-09T06:24:36Z",
@@ -2028,6 +2018,32 @@
           ]
         }
       ]
+    },
+    {
+      "number": 39,
+      "id": "PR_kwDOOmshaM6jJaaS",
+      "title": "Ramki",
+      "url": "https://github.com/nedmsmith/draft-klspa-wimse-verifiable-geo-fence/pull/39",
+      "state": "OPEN",
+      "author": "ramkri123",
+      "authorAssociation": "COLLABORATOR",
+      "assignees": [],
+      "labels": [],
+      "body": "cleanup and more references",
+      "createdAt": "2025-08-11T23:21:44Z",
+      "updatedAt": "2025-08-11T23:21:44Z",
+      "baseRepository": "nedmsmith/draft-klspa-wimse-verifiable-geo-fence",
+      "baseRefName": "main",
+      "baseRefOid": "5237a966d85867847e98f7af494b39c7c9cabd1b",
+      "headRepository": "nedmsmith/draft-klspa-wimse-verifiable-geo-fence",
+      "headRefName": "ramki",
+      "headRefOid": "538603838ad0888def3d5d9068ea7fa756e3c1e3",
+      "closedAt": null,
+      "mergedAt": null,
+      "mergedBy": null,
+      "mergeCommit": null,
+      "comments": [],
+      "reviews": []
     }
   ]
 }
