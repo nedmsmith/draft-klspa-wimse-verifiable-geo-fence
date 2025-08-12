@@ -1051,7 +1051,7 @@ svg :is([fill="white"], [fill^="#fff"]) {
 </tr></thead>
 <tfoot><tr>
 <td class="left">Krishnan, et al.</td>
-<td class="center">Expires 12 February 2026</td>
+<td class="center">Expires 13 February 2026</td>
 <td class="right">[Page]</td>
 </tr></tfoot>
 </table>
@@ -1064,12 +1064,12 @@ svg :is([fill="white"], [fill^="#fff"]) {
 <dd class="internet-draft">draft-lkspa-wimse-verifiable-geo-fence-latest</dd>
 <dt class="label-published">Published:</dt>
 <dd class="published">
-<time datetime="2025-08-11" class="published">11 August 2025</time>
+<time datetime="2025-08-12" class="published">12 August 2025</time>
     </dd>
 <dt class="label-intended-status">Intended Status:</dt>
 <dd class="intended-status">Informational</dd>
 <dt class="label-expires">Expires:</dt>
-<dd class="expires"><time datetime="2026-02-12">12 February 2026</time></dd>
+<dd class="expires"><time datetime="2026-02-13">13 February 2026</time></dd>
 <dt class="label-authors">Authors:</dt>
 <dd class="authors">
 <div class="author">
@@ -1119,7 +1119,7 @@ svg :is([fill="white"], [fill^="#fff"]) {
         time. It is inappropriate to use Internet-Drafts as reference
         material or to cite them other than as "work in progress."<a href="#section-boilerplate.1-3" class="pilcrow">¶</a></p>
 <p id="section-boilerplate.1-4">
-        This Internet-Draft will expire on 12 February 2026.<a href="#section-boilerplate.1-4" class="pilcrow">¶</a></p>
+        This Internet-Draft will expire on 13 February 2026.<a href="#section-boilerplate.1-4" class="pilcrow">¶</a></p>
 </section>
 </div>
 <div id="copyright">
@@ -2069,22 +2069,21 @@ In the case of data center hosts, the geolocation sensor can be on a host with M
 <a href="#section-9" class="section-number selfRef">9. </a><a href="#name-9-confidential-computing-co" class="section-name selfRef">9. Confidential Computing Considerations</a>
       </h2>
 <p id="section-9-1">In confidential computing, the host operating system cannot be trusted. Instead, the platform owner must maintain and verify the relationships between three hardware identifiers:
-* CPU ID
+* Attestation key
 * TPM Endorsement Key (EK)
 * Geolocation Sensor ID + public key<a href="#section-9-1" class="pilcrow">¶</a></p>
 <p id="section-9-2">Proof of Residency
-* The confidential workload generates a hardware attestation that includes its CPU ID.
-* The platform owner receives this attestation and binds the reported CPU ID to the TPM EK.
+* The confidential workload generates a hardware attestation that includes its Attestation key.
+* The platform owner receives this attestation and binds the reported Attestation key to the TPM EK.
 * This binding produces a cryptographic proof that the workload is running on the expected physical CPU.<a href="#section-9-2" class="pilcrow">¶</a></p>
 <p id="section-9-3">Proof of Geolocation
 * The geolocation sensor creates a signed location report using its private key. This is supported in popular GNSS sensors such as https://www.u-blox.com/en.
 * An agent on the bare-metal host periodically polls the sensor and collects these signed reports.
 * The platform owner maps each sensor’s ID and its signed geolocation to the corresponding CPU ID and TPM EK.
 * This mapping yields a verifiable proof that the workload is executing at the claimed physical location.<a href="#section-9-3" class="pilcrow">¶</a></p>
-<p id="section-9-4">CPU ID is a platform specific unique id defined as follows.<a href="#section-9-4" class="pilcrow">¶</a></p>
-<p id="section-9-5">For AMD SEV-SNP, CPU ID is defined as chip_id (unique id of the AMD processor's chip). The document "SEV Secure Nested Paging Firmware ABI Specification" (https://www.amd.com/content/dam/amd/en/documents/epyc-technical-docs/specifications/56860.pdf) describes the usage of chip_id.<a href="#section-9-5" class="pilcrow">¶</a></p>
-<p id="section-9-6">For Intel TDX, CPU ID is defined as platform instance id (unique id of Intel TDX platform). The document "Intel® Trust Domain Extensions Data Center Attestation Primitives (Intel® TDX DCAP): Quote Generation Library and
-Quote Verification Library" (https://download.01.org/intel-sgx/latest/dcap-latest/linux/docs/Intel_TDX_DCAP_Quoting_Library_API.pdf) describes the usage of platform instance id.<a href="#section-9-6" class="pilcrow">¶</a></p>
+<p id="section-9-4">Attestation key is unique per CPU and defined as follows.<a href="#section-9-4" class="pilcrow">¶</a></p>
+<p id="section-9-5">For AMD SEV-SNP, it is called "Versioned Chip Endorsement Key – VCEK" and defined in https://www.amd.com/content/dam/amd/en/documents/epyc-technical-docs/specifications/57230.pdf (Location: Chapter 1 (Glossary), specifically in Table 2 – Terms and Definitions)<a href="#section-9-5" class="pilcrow">¶</a></p>
+<p id="section-9-6">For Intel TDX, it is called "Provisioning Certification Key – PCK" and defined in https://download.01.org/intel-sgx/latest/dcap-latest/linux/docs/Intel_TDX_DCAP_Quoting_Library_API.pdf (Location: Page 6, under Table 1-1: Terminology)<a href="#section-9-6" class="pilcrow">¶</a></p>
 </section>
 </div>
 <div id="solution-mapping-to-industry-gaps-and-problem-statements">
