@@ -1,6 +1,6 @@
 {
   "magic": "E!vIA5L86J2I",
-  "timestamp": "2025-08-12T01:12:37.059179+00:00",
+  "timestamp": "2025-08-14T01:14:30.281235+00:00",
   "repo": "nedmsmith/draft-klspa-wimse-verifiable-geo-fence",
   "labels": [
     {
@@ -71,7 +71,7 @@
       "id": "I_kwDOOmshaM7Ey83P",
       "title": "Comments on -01",
       "url": "https://github.com/nedmsmith/draft-klspa-wimse-verifiable-geo-fence/issues/35",
-      "state": "OPEN",
+      "state": "CLOSED",
       "author": "muhammad-usama-sardar",
       "authorAssociation": "NONE",
       "assignees": [
@@ -80,8 +80,8 @@
       "labels": [],
       "body": "I am following up on the presentations made on this draft in WIMSE and RATS.\n\n**General comments**:\n\n1. As a general comment, the draft is very hard to read. There are several external links to github for figures (e.g., in section 3). Please add figures inline in the draft.\n\n2. Most (if not all) of the presentation [0] in RATS was talking about Confidential Computing (CC) workloads. I was trying to find \"Confidential\" in the draft. I couldn't find even a single instance. Has the draft got anything to do with CC? If not, why was the presentation [0] focusing on CC?\n\n**Concrete questions**:\n\n1. There is a lot going on in slide 4 of [0]. Where can I find the details?\n\n2. Isn't host geolocation affinity = host affinity + location affinity? If yes, then why is it mentioned as a third requirement on slide 3? If not, then clarify what else does it entail?\n \n3. Several regulations are mentioned on slide 3 of [0]. Can you point me to at least one concrete clause of at least one concrete regulation from where these \"data residency technical requirements\" are coming from?\n\n4. What is the threat model? Is the host trusted? If not, how can the guest VM trust the reading of GPS?\n\n[0] https://datatracker.ietf.org/meeting/123/materials/slides-123-rats-zero-trust-sovereign-ai-rats-impact-00",
       "createdAt": "2025-08-07T19:50:53Z",
-      "updatedAt": "2025-08-08T21:21:24Z",
-      "closedAt": null,
+      "updatedAt": "2025-08-12T22:13:25Z",
+      "closedAt": "2025-08-12T22:13:24Z",
       "comments": [
         {
           "author": "ramkri123",
@@ -89,6 +89,13 @@
           "body": "> I am following up on the presentations made on this draft in WIMSE and RATS.\n> \n> **General comments**:\n> \n> 1. As a general comment, the draft is very hard to read. There are several external links to github for figures (e.g., in section 3). Please add figures inline in the draft.\n> 2. Most (if not all) of the presentation [0] in RATS was talking about Confidential Computing (CC) workloads. I was trying to find \"Confidential\" in the draft. I couldn't find even a single instance. Has the draft got anything to do with CC? If not, why was the presentation [0] focusing on CC?\n> \n> **Concrete questions**:\n> \n> 1. There is a lot going on in slide 4 of [0]. Where can I find the details?\n> 2. Isn't host geolocation affinity = host affinity + location affinity? If yes, then why is it mentioned as a third requirement on slide 3? If not, then clarify what else does it entail?\n> 3. Several regulations are mentioned on slide 3 of [0]. Can you point me to at least one concrete clause of at least one concrete regulation from where these \"data residency technical requirements\" are coming from?\n> 4. What is the threat model? Is the host trusted? If not, how can the guest VM trust the reading of GPS?\n> \n> [0] https://datatracker.ietf.org/meeting/123/materials/slides-123-rats-zero-trust-sovereign-ai-rats-impact-00\n\nThank you Usama for the review and comments and opening the github issue. \n\nThe following aspects are addressed in https://github.com/nedmsmith/draft-klspa-wimse-verifiable-geo-fence/blob/main/draft-lkspa-wimse-verifiable-geo-fence.md. Will publish 02 version soon.\n\n1 >> Several regulations are mentioned on slide 3 of [0]. Can you point me to at least one concrete clause of at least one concrete regulation from where these \"data residency technical requirements\" are coming from?  \n\"Appendix - Public References for Strict Data Residency Rules\" give several concrete examples\n\n2 >> What is the threat model? Is the host trusted? If not, how can the guest VM trust the reading of GPS? \n\"Confidential Computing Considerations\" describes this.\n\nThanks,\nRamki\n",
           "createdAt": "2025-08-08T21:20:56Z",
           "updatedAt": "2025-08-08T21:21:24Z"
+        },
+        {
+          "author": "ramkri123",
+          "authorAssociation": "COLLABORATOR",
+          "body": "Addressed.",
+          "createdAt": "2025-08-12T22:13:25Z",
+          "updatedAt": "2025-08-12T22:13:25Z"
         }
       ]
     },
@@ -97,16 +104,24 @@
       "id": "I_kwDOOmshaM7FDZ_-",
       "title": "Follow-up on IETF 122 issue on the list",
       "url": "https://github.com/nedmsmith/draft-klspa-wimse-verifiable-geo-fence/issues/38",
-      "state": "OPEN",
+      "state": "CLOSED",
       "author": "muhammad-usama-sardar",
       "authorAssociation": "NONE",
       "assignees": [],
       "labels": [],
       "body": "Posted [here](https://mailarchive.ietf.org/arch/msg/wimse/_ZP9fGxj9kTBZHMKjThwVaEzGt0/)\n\n> *Data residency:*\n> \n> What _exactly_ is \"Confidential Computing hardware TEE ID\" for Intel SGX \n> or Intel TDX in the Quote structure? QE_ID was mentioned in the meeting. \n> Sec 3.5.1 of latest Intel specification of DCAP API (p.36) [1] states:\n> \n> \"If the BIOS non-volatile memory (FLASH) is wiped, then the QE_ID \n> changes even if generated by the same QE. *This prevents the QE_ID from \n> being a true HW ID.* A true HW ID cannot be modified by the platform owner.\"\n> \n> Thanks,\n> \n> Usama\n> \n> [1] \n> https://download.01.org/intel-sgx/sgx-dcap/1.22/linux/docs/Intel_SGX_ECDSA_QuoteLibReference_DCAP_API.pdf",
       "createdAt": "2025-08-09T06:48:30Z",
-      "updatedAt": "2025-08-09T06:48:30Z",
-      "closedAt": null,
-      "comments": []
+      "updatedAt": "2025-08-12T22:12:26Z",
+      "closedAt": "2025-08-12T22:12:26Z",
+      "comments": [
+        {
+          "author": "ramkri123",
+          "authorAssociation": "COLLABORATOR",
+          "body": "Addressed.",
+          "createdAt": "2025-08-12T22:12:26Z",
+          "updatedAt": "2025-08-12T22:12:26Z"
+        }
+      ]
     }
   ],
   "pulls": [
@@ -2024,26 +2039,134 @@
       "id": "PR_kwDOOmshaM6jJaaS",
       "title": "Ramki",
       "url": "https://github.com/nedmsmith/draft-klspa-wimse-verifiable-geo-fence/pull/39",
-      "state": "OPEN",
+      "state": "MERGED",
       "author": "ramkri123",
       "authorAssociation": "COLLABORATOR",
       "assignees": [],
       "labels": [],
       "body": "cleanup and more references",
       "createdAt": "2025-08-11T23:21:44Z",
-      "updatedAt": "2025-08-11T23:21:44Z",
+      "updatedAt": "2025-08-12T18:20:08Z",
       "baseRepository": "nedmsmith/draft-klspa-wimse-verifiable-geo-fence",
       "baseRefName": "main",
       "baseRefOid": "5237a966d85867847e98f7af494b39c7c9cabd1b",
       "headRepository": "nedmsmith/draft-klspa-wimse-verifiable-geo-fence",
       "headRefName": "ramki",
-      "headRefOid": "538603838ad0888def3d5d9068ea7fa756e3c1e3",
-      "closedAt": null,
-      "mergedAt": null,
-      "mergedBy": null,
-      "mergeCommit": null,
+      "headRefOid": "b2dc107c7e3622bb9779097f8877f94228e39f01",
+      "closedAt": "2025-08-12T18:20:08Z",
+      "mergedAt": "2025-08-12T18:20:08Z",
+      "mergedBy": "gh23600063",
+      "mergeCommit": {
+        "oid": "e51cf2c1af55daa44c53eae2b11ce24860c53c88"
+      },
       "comments": [],
-      "reviews": []
+      "reviews": [
+        {
+          "id": "PRR_kwDOOmshaM65T_nI",
+          "commit": {
+            "abbreviatedOid": "5386038"
+          },
+          "author": "muhammad-usama-sardar",
+          "authorAssociation": "NONE",
+          "state": "CHANGES_REQUESTED",
+          "body": "None of the references is authentic and credible. ",
+          "createdAt": "2025-08-12T07:37:44Z",
+          "updatedAt": "2025-08-12T07:44:56Z",
+          "comments": [
+            {
+              "originalPosition": 53,
+              "body": "The link points to an unsigned draft. Gives me no guarantee whether it was ever signed or it is in place or not. ",
+              "createdAt": "2025-08-12T07:37:45Z",
+              "updatedAt": "2025-08-12T07:44:56Z"
+            },
+            {
+              "originalPosition": 56,
+              "body": "The first link is just a news article, not a regulation. Second link is to the same one (see above)",
+              "createdAt": "2025-08-12T07:38:30Z",
+              "updatedAt": "2025-08-12T07:44:56Z"
+            },
+            {
+              "originalPosition": 59,
+              "body": "Anyone can put anything on wikipedia. Please put the link to the original South Korean regulation.",
+              "createdAt": "2025-08-12T07:41:02Z",
+              "updatedAt": "2025-08-12T07:44:56Z"
+            }
+          ]
+        },
+        {
+          "id": "PRR_kwDOOmshaM65evJV",
+          "commit": {
+            "abbreviatedOid": "7ea744d"
+          },
+          "author": "ramkri123",
+          "authorAssociation": "COLLABORATOR",
+          "state": "COMMENTED",
+          "body": "",
+          "createdAt": "2025-08-12T16:41:11Z",
+          "updatedAt": "2025-08-12T16:41:13Z",
+          "comments": [
+            {
+              "originalPosition": 53,
+              "body": "Addressed.",
+              "createdAt": "2025-08-12T16:41:12Z",
+              "updatedAt": "2025-08-12T16:41:13Z"
+            }
+          ]
+        },
+        {
+          "id": "PRR_kwDOOmshaM65eve5",
+          "commit": {
+            "abbreviatedOid": "7ea744d"
+          },
+          "author": "ramkri123",
+          "authorAssociation": "COLLABORATOR",
+          "state": "COMMENTED",
+          "body": "",
+          "createdAt": "2025-08-12T16:41:39Z",
+          "updatedAt": "2025-08-12T16:41:42Z",
+          "comments": [
+            {
+              "originalPosition": 56,
+              "body": "addressed.",
+              "createdAt": "2025-08-12T16:41:41Z",
+              "updatedAt": "2025-08-12T16:41:42Z"
+            }
+          ]
+        },
+        {
+          "id": "PRR_kwDOOmshaM65evqB",
+          "commit": {
+            "abbreviatedOid": "7ea744d"
+          },
+          "author": "ramkri123",
+          "authorAssociation": "COLLABORATOR",
+          "state": "COMMENTED",
+          "body": "",
+          "createdAt": "2025-08-12T16:41:54Z",
+          "updatedAt": "2025-08-12T16:41:56Z",
+          "comments": [
+            {
+              "originalPosition": 59,
+              "body": "addressed",
+              "createdAt": "2025-08-12T16:41:55Z",
+              "updatedAt": "2025-08-12T16:41:56Z"
+            }
+          ]
+        },
+        {
+          "id": "PRR_kwDOOmshaM65f9-g",
+          "commit": {
+            "abbreviatedOid": "b2dc107"
+          },
+          "author": "gh23600063",
+          "authorAssociation": "COLLABORATOR",
+          "state": "APPROVED",
+          "body": "",
+          "createdAt": "2025-08-12T18:19:54Z",
+          "updatedAt": "2025-08-12T18:19:54Z",
+          "comments": []
+        }
+      ]
     }
   ]
 }
