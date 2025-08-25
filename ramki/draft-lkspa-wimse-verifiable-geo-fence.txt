@@ -5,13 +5,13 @@
 Workload Identity in Multi System Environments               R. Krishnan
 Internet-Draft                                                  N. Smith
 Intended status: Informational                                     Intel
-Expires: 13 February 2026                                       D. Lopez
+Expires: 26 February 2026                                       D. Lopez
                                                               Telefonica
                                                                A. Prasad
                                                                   Oracle
                                                             S. Addepalli
                                                                   Aryaka
-                                                          12 August 2025
+                                                          25 August 2025
 
 
  Zero-Trust Sovereign AI: Verifiable Geofencing & Residency Proofs for
@@ -49,7 +49,7 @@ Status of This Memo
    time.  It is inappropriate to use Internet-Drafts as reference
    material or to cite them other than as "work in progress."
 
-   This Internet-Draft will expire on 13 February 2026.
+   This Internet-Draft will expire on 26 February 2026.
 
 Copyright Notice
 
@@ -1074,14 +1074,28 @@ Table of Contents
 
    In confidential computing, the host operating system cannot be
    trusted.  Instead, the platform owner must maintain and verify the
-   relationships between three hardware identifiers: * Attestation key *
-   TPM Endorsement Key (EK) * Geolocation Sensor ID + public key
+   relationships between three hardware identifiers: * Hardware-rooted
+   certification key * Hardware-rooted certification key —
+   Vendor-issued, CPU-bound asymmetric key pair used to either sign
+   attestation evidence directly (AMD VCEK) or certify an attestation
+   signing key (Intel PCK).  Always anchored in the vendor’s root CA.  *
+   AMD SEV-SNP "Versioned Chip Endorsement Key – VCEK" is defined in
+   https://www.amd.com/content/dam/amd/en/documents/epyc-technical-docs/
+   specifications/57230.pdf (Location: Chapter 1 (Glossary),
+   specifically in Table 2 – Terms and Definitions) * Intel TDX,
+   "Provisioning Certification Key – PCK" is defined in
+   https://download.01.org/intel-sgx/latest/dcap-latest/linux/docs/
+   Intel_TDX_DCAP_Quoting_Library_API.pdf (Location: Page 6, under
+   Table 1-1: Terminology) * Role: Certifies the Attestation Key inside
+   the TDX Quoting Enclave, which signs the quote. * TPM Endorsement Key
+   (EK) * Geolocation Sensor ID + public key
 
    Proof of Residency * The confidential workload generates a hardware
-   attestation that includes its Attestation key. * The platform owner
-   receives this attestation and binds the reported Attestation key to
-   the TPM EK. * This binding produces a cryptographic proof that the
-   workload is running on the expected physical CPU.
+   attestation that includes its hardware-rooted certification key. *
+   The platform owner receives this attestation and binds the reported
+   hardware-rooted certification key to the TPM EK. * This binding
+   produces a cryptographic proof that the workload is running on the
+   expected physical CPU.
 
    Proof of Geolocation * The geolocation sensor creates a signed
    location report using its private key.  This is supported in popular
@@ -1091,18 +1105,6 @@ Table of Contents
    signed geolocation to the corresponding CPU ID and TPM EK. * This
    mapping yields a verifiable proof that the workload is executing at
    the claimed physical location.
-
-   Attestation key is unique per CPU and defined as follows.
-
-   For AMD SEV-SNP, it is called "Versioned Chip Endorsement Key – VCEK"
-   and defined in https://www.amd.com/content/dam/amd/en/documents/epyc-
-   technical-docs/specifications/57230.pdf (Location: Chapter 1
-   (Glossary), specifically in Table 2 – Terms and Definitions)
-
-   For Intel TDX, it is called "Provisioning Certification Key – PCK"
-   and defined in https://download.01.org/intel-sgx/latest/dcap-
-   latest/linux/docs/Intel_TDX_DCAP_Quoting_Library_API.pdf (Location:
-   Page 6, under Table 1-1: Terminology)
 
 10.  10.  Solution Mapping to Industry Gaps and Problem Statements
 
