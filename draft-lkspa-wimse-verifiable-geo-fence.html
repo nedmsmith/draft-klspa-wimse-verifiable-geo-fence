@@ -1051,7 +1051,7 @@ svg :is([fill="white"], [fill^="#fff"]) {
 </tr></thead>
 <tfoot><tr>
 <td class="left">Krishnan, et al.</td>
-<td class="center">Expires 13 February 2026</td>
+<td class="center">Expires 27 February 2026</td>
 <td class="right">[Page]</td>
 </tr></tfoot>
 </table>
@@ -1064,12 +1064,12 @@ svg :is([fill="white"], [fill^="#fff"]) {
 <dd class="internet-draft">draft-lkspa-wimse-verifiable-geo-fence-latest</dd>
 <dt class="label-published">Published:</dt>
 <dd class="published">
-<time datetime="2025-08-12" class="published">12 August 2025</time>
+<time datetime="2025-08-26" class="published">26 August 2025</time>
     </dd>
 <dt class="label-intended-status">Intended Status:</dt>
 <dd class="intended-status">Informational</dd>
 <dt class="label-expires">Expires:</dt>
-<dd class="expires"><time datetime="2026-02-13">13 February 2026</time></dd>
+<dd class="expires"><time datetime="2026-02-27">27 February 2026</time></dd>
 <dt class="label-authors">Authors:</dt>
 <dd class="authors">
 <div class="author">
@@ -1119,7 +1119,7 @@ svg :is([fill="white"], [fill^="#fff"]) {
         time. It is inappropriate to use Internet-Drafts as reference
         material or to cite them other than as "work in progress."<a href="#section-boilerplate.1-3" class="pilcrow">¶</a></p>
 <p id="section-boilerplate.1-4">
-        This Internet-Draft will expire on 13 February 2026.<a href="#section-boilerplate.1-4" class="pilcrow">¶</a></p>
+        This Internet-Draft will expire on 27 February 2026.<a href="#section-boilerplate.1-4" class="pilcrow">¶</a></p>
 </section>
 </div>
 <div id="copyright">
@@ -2069,21 +2069,23 @@ In the case of data center hosts, the geolocation sensor can be on a host with M
 <a href="#section-9" class="section-number selfRef">9. </a><a href="#name-9-confidential-computing-co" class="section-name selfRef">9. Confidential Computing Considerations</a>
       </h2>
 <p id="section-9-1">In confidential computing, the host operating system cannot be trusted. Instead, the platform owner must maintain and verify the relationships between three hardware identifiers:
-* Attestation key
+* Hardware-rooted certification key
+  * Hardware‑rooted certification key — Vendor‑issued, CPU‑bound asymmetric key pair used to either sign attestation evidence directly (AMD VCEK) or certify an attestation signing key (Intel PCK). Always anchored in the vendor’s root CA.
+    * AMD SEV-SNP "Versioned Chip Endorsement Key – VCEK" is defined in https://www.amd.com/content/dam/amd/en/documents/epyc-technical-docs/specifications/57230.pdf (Location: Chapter 1 (Glossary), specifically in Table 2 – Terms and Definitions)
+    * Intel TDX, "Provisioning Certification Key – PCK" is defined in https://download.01.org/intel-sgx/latest/dcap-latest/linux/docs/Intel_TDX_DCAP_Quoting_Library_API.pdf (Location: Page 6, under Table 1-1: Terminology)
+      * Role: Certifies the Attestation Key inside the TDX Quoting Enclave, which signs the quote.
 * TPM Endorsement Key (EK)
 * Geolocation Sensor ID + public key<a href="#section-9-1" class="pilcrow">¶</a></p>
 <p id="section-9-2">Proof of Residency
-* The confidential workload generates a hardware attestation that includes its Attestation key.
-* The platform owner receives this attestation and binds the reported Attestation key to the TPM EK.
+* The confidential workload generates a hardware attestation that includes its hardware-rooted certification key.
+* The platform owner receives this attestation and binds the reported hardware-rooted certification key to the TPM EK.
 * This binding produces a cryptographic proof that the workload is running on the expected physical CPU.<a href="#section-9-2" class="pilcrow">¶</a></p>
 <p id="section-9-3">Proof of Geolocation
 * The geolocation sensor creates a signed location report using its private key. This is supported in popular GNSS sensors such as https://www.u-blox.com/en.
 * An agent on the bare-metal host periodically polls the sensor and collects these signed reports.
 * The platform owner maps each sensor’s ID and its signed geolocation to the corresponding CPU ID and TPM EK.
 * This mapping yields a verifiable proof that the workload is executing at the claimed physical location.<a href="#section-9-3" class="pilcrow">¶</a></p>
-<p id="section-9-4">Attestation key is unique per CPU and defined as follows.<a href="#section-9-4" class="pilcrow">¶</a></p>
-<p id="section-9-5">For AMD SEV-SNP, it is called "Versioned Chip Endorsement Key – VCEK" and defined in https://www.amd.com/content/dam/amd/en/documents/epyc-technical-docs/specifications/57230.pdf (Location: Chapter 1 (Glossary), specifically in Table 2 – Terms and Definitions)<a href="#section-9-5" class="pilcrow">¶</a></p>
-<p id="section-9-6">For Intel TDX, it is called "Provisioning Certification Key – PCK" and defined in https://download.01.org/intel-sgx/latest/dcap-latest/linux/docs/Intel_TDX_DCAP_Quoting_Library_API.pdf (Location: Page 6, under Table 1-1: Terminology)<a href="#section-9-6" class="pilcrow">¶</a></p>
+<p id="section-9-4">Note: The Intel® Software Guard Extensions (Intel® SGX) Attestation Service utilizing the Enhanced Privacy ID (EPID) group‑signature mechanism is a legacy, privacy‑preserving attestation path. Intel has announced that this service will reach end‑of‑life on April 2 2025, after which EPID‑based attestation will no longer be supported. See Intel’s IAS End‑of‑Life announcement (https://community.intel.com/t5/Intel-Software-Guard-Extensions/IAS-End-of-Life-Announcement/m-p/1545831) for details. This discussion focuses on current attestation models (e.g., ECDSA‑based DCAP for SGX and PCK‑based attestation for TDX) and excludes EPID/DAA from scope. ECDSA‑based DCAP for SGX and PCK‑based attestation for TDX are closely related in structure and trust model — both are part of Intel’s Data Center Attestation Primitives (DCAP).<a href="#section-9-4" class="pilcrow">¶</a></p>
 </section>
 </div>
 <div id="solution-mapping-to-industry-gaps-and-problem-statements">
