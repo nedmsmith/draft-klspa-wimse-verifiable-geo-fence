@@ -554,13 +554,17 @@ Challenge:
 
 # 9. Confidential Computing Considerations
 In confidential computing, the host operating system cannot be trusted. Instead, the platform owner must maintain and verify the relationships between three hardware identifiers:
-* Attestation key
+* Hardware-rooted certification key
+  * Hardware‑rooted certification key — Vendor‑issued, CPU‑bound asymmetric key pair used to either sign attestation evidence directly (AMD VCEK) or certify an attestation signing key (Intel PCK). Always anchored in the vendor’s root CA.
+    * AMD SEV-SNP "Versioned Chip Endorsement Key – VCEK" is defined in https://www.amd.com/content/dam/amd/en/documents/epyc-technical-docs/specifications/57230.pdf (Location: Chapter 1 (Glossary), specifically in Table 2 – Terms and Definitions)
+    * Intel TDX, "Provisioning Certification Key – PCK" is defined in https://download.01.org/intel-sgx/latest/dcap-latest/linux/docs/Intel_TDX_DCAP_Quoting_Library_API.pdf (Location: Page 6, under Table 1-1: Terminology)
+      * Role: Certifies the Attestation Key inside the TDX Quoting Enclave, which signs the quote.
 * TPM Endorsement Key (EK)
 * Geolocation Sensor ID + public key
 
 Proof of Residency
-* The confidential workload generates a hardware attestation that includes its Attestation key.
-* The platform owner receives this attestation and binds the reported Attestation key to the TPM EK.
+* The confidential workload generates a hardware attestation that includes its hardware-rooted certification key.
+* The platform owner receives this attestation and binds the reported hardware-rooted certification key to the TPM EK.
 * This binding produces a cryptographic proof that the workload is running on the expected physical CPU.
 
 Proof of Geolocation
@@ -569,12 +573,7 @@ Proof of Geolocation
 * The platform owner maps each sensor’s ID and its signed geolocation to the corresponding CPU ID and TPM EK.
 * This mapping yields a verifiable proof that the workload is executing at the claimed physical location.
 
-Attestation key is unique per CPU and defined as follows.
-
-For AMD SEV-SNP, it is called "Versioned Chip Endorsement Key – VCEK" and defined in https://www.amd.com/content/dam/amd/en/documents/epyc-technical-docs/specifications/57230.pdf (Location: Chapter 1 (Glossary), specifically in Table 2 – Terms and Definitions)
-
-For Intel TDX, it is called "Provisioning Certification Key – PCK" and defined in https://download.01.org/intel-sgx/latest/dcap-latest/linux/docs/Intel_TDX_DCAP_Quoting_Library_API.pdf (Location: Page 6, under Table 1-1: Terminology)
-
+Note: The Intel® Software Guard Extensions (Intel® SGX) Attestation Service utilizing the Enhanced Privacy ID (EPID) group‑signature mechanism is a legacy, privacy‑preserving attestation path. Intel has announced that this service will reach end‑of‑life on April 2 2025, after which EPID‑based attestation will no longer be supported. See Intel’s IAS End‑of‑Life announcement (https://community.intel.com/t5/Intel-Software-Guard-Extensions/IAS-End-of-Life-Announcement/m-p/1545831) for details. This discussion focuses on current attestation models (e.g., ECDSA‑based DCAP for SGX and PCK‑based attestation for TDX) and excludes EPID/DAA from scope. ECDSA‑based DCAP for SGX and PCK‑based attestation for TDX are closely related in structure and trust model — both are part of Intel’s Data Center Attestation Primitives (DCAP).
 
 # 10. Solution Mapping to Industry Gaps and Problem Statements
 * **Host TPMs for Signature** challenges are addressed
