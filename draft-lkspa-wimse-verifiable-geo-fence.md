@@ -567,12 +567,13 @@ Proof of Residency
 * The platform owner receives this attestation and binds the reported hardware-rooted certification key to the TPM EK.
 * This binding produces a cryptographic proof that the workload is running on the expected physical CPU.
 
-
 Proof of Geolocation
 * The geolocation sensor creates a signed location report using its private key. This is supported in popular GNSS sensors such as https://www.u-blox.com/en.
 * An agent on the bare-metal host periodically polls the sensor and collects these signed reports.
 * The platform owner maps each sensor’s ID and its signed geolocation to the corresponding CPU ID and TPM EK.
 * This mapping yields a verifiable proof that the workload is executing at the claimed physical location.
+
+Note: The Intel® Software Guard Extensions (Intel® SGX) Attestation Service utilizing the Enhanced Privacy ID (EPID) group‑signature mechanism is a legacy, privacy‑preserving attestation path. Intel has announced that this service will reach end‑of‑life on April 2 2025, after which EPID‑based attestation will no longer be supported. See Intel’s IAS End‑of‑Life announcement (https://community.intel.com/t5/Intel-Software-Guard-Extensions/IAS-End-of-Life-Announcement/m-p/1545831) for details. This discussion focuses on current attestation models (e.g., ECDSA‑based DCAP for SGX and PCK‑based attestation for TDX) and excludes EPID/DAA from scope. ECDSA‑based DCAP for SGX and PCK‑based attestation for TDX are closely related in structure and trust model — both are part of Intel’s Data Center Attestation Primitives (DCAP).
 
 # 10. Solution Mapping to Industry Gaps and Problem Statements
 * **Host TPMs for Signature** challenges are addressed
