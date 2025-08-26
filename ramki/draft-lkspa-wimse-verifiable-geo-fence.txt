@@ -5,13 +5,13 @@
 Workload Identity in Multi System Environments               R. Krishnan
 Internet-Draft                                                  N. Smith
 Intended status: Informational                                     Intel
-Expires: 26 February 2026                                       D. Lopez
+Expires: 27 February 2026                                       D. Lopez
                                                               Telefonica
                                                                A. Prasad
                                                                   Oracle
                                                             S. Addepalli
                                                                   Aryaka
-                                                          25 August 2025
+                                                          26 August 2025
 
 
  Zero-Trust Sovereign AI: Verifiable Geofencing & Residency Proofs for
@@ -49,7 +49,7 @@ Status of This Memo
    time.  It is inappropriate to use Internet-Drafts as reference
    material or to cite them other than as "work in progress."
 
-   This Internet-Draft will expire on 26 February 2026.
+   This Internet-Draft will expire on 27 February 2026.
 
 Copyright Notice
 
@@ -1105,6 +1105,20 @@ Table of Contents
    signed geolocation to the corresponding CPU ID and TPM EK. * This
    mapping yields a verifiable proof that the workload is executing at
    the claimed physical location.
+
+   Note: The Intel® Software Guard Extensions (Intel® SGX) Attestation
+   Service utilizing the Enhanced Privacy ID (EPID) group-signature
+   mechanism is a legacy, privacy-preserving attestation path.  Intel
+   has announced that this service will reach end-of-life on
+   April 2 2025, after which EPID-based attestation will no longer be
+   supported.  See Intel’s IAS End-of-Life announcement
+   (https://community.intel.com/t5/Intel-Software-Guard-Extensions/IAS-
+   End-of-Life-Announcement/m-p/1545831) for details.  This discussion
+   focuses on current attestation models (e.g., ECDSA-based DCAP for SGX
+   and PCK-based attestation for TDX) and excludes EPID/DAA from scope.
+   ECDSA-based DCAP for SGX and PCK-based attestation for TDX are
+   closely related in structure and trust model — both are part of
+   Intel’s Data Center Attestation Primitives (DCAP).
 
 10.  10.  Solution Mapping to Industry Gaps and Problem Statements
 
