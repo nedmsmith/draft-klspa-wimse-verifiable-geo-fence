@@ -1,6 +1,6 @@
 {
   "magic": "E!vIA5L86J2I",
-  "timestamp": "2025-08-28T01:06:57.636827+00:00",
+  "timestamp": "2025-09-11T01:06:25.732870+00:00",
   "repo": "nedmsmith/draft-klspa-wimse-verifiable-geo-fence",
   "labels": [
     {
@@ -2210,6 +2210,52 @@
           "body": "",
           "createdAt": "2025-08-26T22:39:49Z",
           "updatedAt": "2025-08-26T22:39:49Z",
+          "comments": []
+        }
+      ]
+    },
+    {
+      "number": 41,
+      "id": "PR_kwDOOmshaM6nlya6",
+      "title": "added host identity (keylime etc.) interaction",
+      "url": "https://github.com/nedmsmith/draft-klspa-wimse-verifiable-geo-fence/pull/41",
+      "state": "MERGED",
+      "author": "ramkri123",
+      "authorAssociation": "COLLABORATOR",
+      "assignees": [
+        "nedmsmith",
+        "dr2lopez",
+        "gh23600063"
+      ],
+      "labels": [],
+      "body": "added host identity (keylime etc.) interaction\r\ncleaned up spire tpm usage",
+      "createdAt": "2025-09-09T11:54:58Z",
+      "updatedAt": "2025-09-09T17:04:23Z",
+      "baseRepository": "nedmsmith/draft-klspa-wimse-verifiable-geo-fence",
+      "baseRefName": "main",
+      "baseRefOid": "4c850642ee9278eeb0c68e6abc7dac2f150baaab",
+      "headRepository": "nedmsmith/draft-klspa-wimse-verifiable-geo-fence",
+      "headRefName": "ramki",
+      "headRefOid": "72e666a83822e1b807ddfe096ae39e9174aae0df",
+      "closedAt": "2025-09-09T17:04:22Z",
+      "mergedAt": "2025-09-09T17:04:22Z",
+      "mergedBy": "gh23600063",
+      "mergeCommit": {
+        "oid": "ca7fcfa1f73a45deab47569b22afa07ca6a7a9e9"
+      },
+      "comments": [],
+      "reviews": [
+        {
+          "id": "PRR_kwDOOmshaM6-4l7j",
+          "commit": {
+            "abbreviatedOid": "72e666a"
+          },
+          "author": "gh23600063",
+          "authorAssociation": "COLLABORATOR",
+          "state": "APPROVED",
+          "body": "",
+          "createdAt": "2025-09-09T17:04:10Z",
+          "updatedAt": "2025-09-09T17:04:10Z",
           "comments": []
         }
       ]
