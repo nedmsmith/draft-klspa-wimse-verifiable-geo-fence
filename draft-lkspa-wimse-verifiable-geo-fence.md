@@ -70,7 +70,7 @@ contributor:
   email: mepley@redhat.com
 - ins: Vijay Masilamani
   name: Vijay Masilamani
-  org: Fidelity
+  org: Independent
   email: saanvijay20@gmail.com
 
 normative:
