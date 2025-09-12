@@ -5,13 +5,13 @@
 Workload Identity in Multi System Environments               R. Krishnan
 Internet-Draft                                                  N. Smith
 Intended status: Informational                                     Intel
-Expires: 13 March 2026                                          D. Lopez
+Expires: 16 March 2026                                          D. Lopez
                                                               Telefonica
                                                                A. Prasad
                                                                   Oracle
                                                             S. Addepalli
                                                                   Aryaka
-                                                        9 September 2025
+                                                       12 September 2025
 
 
  Zero-Trust Sovereign AI: Verifiable Geofencing & Residency Proofs for
@@ -50,7 +50,7 @@ Status of This Memo
    time.  It is inappropriate to use Internet-Drafts as reference
    material or to cite them other than as "work in progress."
 
-   This Internet-Draft will expire on 13 March 2026.
+   This Internet-Draft will expire on 16 March 2026.
 
 Copyright Notice
 
@@ -1438,7 +1438,7 @@ Contributors
 
 
    Vijay Masilamani
-   Fidelity
+   Independent
    Email: saanvijay20@gmail.com
 
 
