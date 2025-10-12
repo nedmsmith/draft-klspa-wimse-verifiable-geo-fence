@@ -1,6 +1,6 @@
 {
   "magic": "E!vIA5L86J2I",
-  "timestamp": "2025-09-14T01:10:01.588553+00:00",
+  "timestamp": "2025-10-12T01:09:27.347802+00:00",
   "repo": "nedmsmith/draft-klspa-wimse-verifiable-geo-fence",
   "labels": [
     {
@@ -2230,7 +2230,7 @@
       "labels": [],
       "body": "added host identity (keylime etc.) interaction\r\ncleaned up spire tpm usage",
       "createdAt": "2025-09-09T11:54:58Z",
-      "updatedAt": "2025-09-09T17:04:23Z",
+      "updatedAt": "2025-10-09T14:52:44Z",
       "baseRepository": "nedmsmith/draft-klspa-wimse-verifiable-geo-fence",
       "baseRefName": "main",
       "baseRefOid": "4c850642ee9278eeb0c68e6abc7dac2f150baaab",
@@ -2277,7 +2277,7 @@
       "labels": [],
       "body": "",
       "createdAt": "2025-09-12T11:28:43Z",
-      "updatedAt": "2025-09-12T16:05:19Z",
+      "updatedAt": "2025-10-09T14:40:56Z",
       "baseRepository": "nedmsmith/draft-klspa-wimse-verifiable-geo-fence",
       "baseRefName": "main",
       "baseRefOid": "ca7fcfa1f73a45deab47569b22afa07ca6a7a9e9",
