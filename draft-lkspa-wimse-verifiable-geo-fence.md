@@ -553,26 +553,26 @@ The workload SVID can be used to convey the geolocation information to the workl
 
 The workload SVID can be conveyed in the 'Workload-Geo-ID' header field.
 
-## IPSEC Tunnel Networking Protocol
-In the IPSEC key exchange protocol (IKE), the following changes are proposed:
+## IPsec Tunnel Networking Protocol
+In the IPsec key exchange protocol (IKE), the following changes are proposed:
 * Proof of residency
-  * In the IPSEC client, in the Elliptic Curve Diffie-Hellman Ephemeral key exchange (ECDHE) phase, the Workload Identity Agent Public Key is used as the ephemeral public key.
+  * In the IPsec client, in the Elliptic Curve Diffie-Hellman Ephemeral key exchange (ECDHE) phase, the Workload Identity Agent Public Key is used as the ephemeral public key.
 * Geolocation information
-  * The IPSEC client includes the Geolocation Information in the Workload Identity Agent Geolocation Information Cache in the IPSEC IKEv2 notification payload.
+  * The IPsec client includes the Geolocation Information in the Workload Identity Agent Geolocation Information Cache in the IPsec IKEv2 notification payload.
 
-IPSEC server policy enforcement can be done in the following way:
+IPsec server policy enforcement can be done in the following way:
 * Proof of residency
-  * In the IPSEC server, from the IPSEC IKEv2 notification payload, the Workload Identity Agent Public Key is extracted. The Workload Identity Agent Public Key is checked against the configured list of allowed Workload Identity Agent IDs (IPSEC client certificates). The signature of the IPSEC client is then verified using the Workload Identity Agent Public Key. This provides a cryptographically verifiable proof of residency of the IPSEC client on the required host.
+  * In the IPsec server, from the IPsec IKEv2 notification payload, the Workload Identity Agent Public Key is extracted. The Workload Identity Agent Public Key is checked against the configured list of allowed Workload Identity Agent IDs (IPsec client certificates). The signature of the IPsec client is then verified using the Workload Identity Agent Public Key. This provides a cryptographically verifiable proof of residency of the IPsec client on the required host.
 * Geolocation policy enforcement
-  * In the IPSEC server, from the IPSEC IKEv2 notification payload, the Geolocation Information is extracted.
-  * IPSEC server connects to Composite Geolocation Manager, supply Geolocation Information/workload identity agent ID, and get attested composite location which includes mobile geolocation also. In case the mobile network location service is not use, the composite Geolocation Information is the same as the original Geolocation Information.
-  * The IPSEC server can use the composite Geolocation Information to verify that the host is within the allowed geographic boundary.
+  * In the IPsec server, from the IPsec IKEv2 notification payload, the Geolocation Information is extracted.
+  * IPsec server connects to Composite Geolocation Manager, supply Geolocation Information/workload identity agent ID, and get attested composite location which includes mobile geolocation also. In case the mobile network location service is not use, the composite Geolocation Information is the same as the original Geolocation Information.
+  * The IPsec server can use the composite Geolocation Information to verify that the host is within the allowed geographic boundary.
 
 Benefit:
-* Since IPSEC tunnel can encapsulate any IP traffic, it provides proof of residency and geolocation on the IPSEC client host for all the traffic that is tunneled through it (e.g., RDP, SCTP, NFS, SSH).
+* Since IPsec tunnel can encapsulate any IP traffic, it provides proof of residency and geolocation on the IPsec client host for all the traffic that is tunneled through it (e.g., RDP, SCTP, NFS, SSH).
 
 Challenge:
-* Location information granularity is at the IPSEC client host level and not at the individual workload level, which may be a challenge for some use cases.
+* Location information granularity is at the IPsec client host level and not at the individual workload level, which may be a challenge for some use cases.
 
 # Confidential Computing Considerations
 In confidential computing, the host operating system cannot be trusted. Instead, the platform owner must maintain and verify the relationships between three hardware identifiers:
@@ -610,8 +610,8 @@ Note: The Intel® Software Guard Extensions (Intel® SGX) Attestation Service ut
 * **Trust in Transit** challenges are addressed
   * The HTTP request signature with the Workload Identity Agent Private Key provides a cryptographically verifiable proof of residency on host and workload identity, which is verified by the intermediate proxies (e.g., API gateways, SASE firewalls) using the Workload Identity Agent Public Key. This ensures that the request is not tampered with in transit.
 
-* **IPSEC Tunnel Networking Protocol** challenges are addressed
-  * The IPSEC client uses the Workload Identity Agent Public Key as the ephemeral public key in the ECDHE phase of the IPSEC IKEv2 key exchange protocol, providing a cryptographically verifiable proof of residency on host. The Geolocation Information is included in the IPSEC IKEv2 notification payload, which is verified by the IPSEC server.
+* **IPsec Tunnel Networking Protocol** challenges are addressed
+  * The IPsec client uses the Workload Identity Agent Public Key as the ephemeral public key in the ECDHE phase of the IPsec IKEv2 key exchange protocol, providing a cryptographically verifiable proof of residency on host. The Geolocation Information is included in the IPsec IKEv2 notification payload, which is verified by the IPsec server.
 
 # Authorization Policy Implementers
 Policy implementers use attested geographic boundary from Workload to make decisions. Example implementers:
